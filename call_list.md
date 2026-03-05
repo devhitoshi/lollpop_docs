@@ -16,7 +16,6 @@
 
 ### 継承曲
 前身グループやメンバーが過去に所属していたグループの楽曲です。
-- STRAY SHEEP CLAYMORE
 - むげんの☆Lambie
 - キミノセイ、
 - END THE WORLD
@@ -27,7 +26,6 @@
 - Singularity
 - MADOROMI
 - Say Hello!!
-- ハピ☆スト-HAPPY END STORY-
 - 推し事～女の子アイドルオタクあるある〜
 - サクラロード
 - KAWAIIは正義
