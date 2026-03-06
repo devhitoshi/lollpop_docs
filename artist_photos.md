@@ -5,12 +5,52 @@
 ---
 
 ## 📸 初代アー写 (カラフル衣装 / 2024年11月公開)
+- **公開日**: 2024年11月4日
+- **公式投稿**: [グループアー写公開ポスト](https://x.com/lollipop_1116/status/1853391760879473001)
 
 ### グループ全体
-- **公開日**: 2024年11月4日
 ![初代グループ全体アー写](https://pbs.twimg.com/media/GbiR-XGbAAAJe7U.jpg)
 
-> **備考**: このバージョンの個人写真は公開条件未達成または未確認のため、グループ版のみ掲載しています。
+### 個人アー写
+
+#### 🟢 松川愛美 (緑色担当)
+> ※初代個人アー写投稿リンクは現在未確認です。
+
+#### 🟡 夏川 茉夢 (黄色担当)
+- [公式投稿リンク](https://x.com/lollipop_1116/status/1853754230307520729)
+
+![夏川 茉夢 アー写1](https://pbs.twimg.com/media/GbnbpI_acAAf98b.jpg)
+![夏川 茉夢 アー写2](https://pbs.twimg.com/media/GbnbpI9b0AE2YEe.jpg)
+
+#### 🩵 まう (水色担当)
+- [公式投稿リンク](https://x.com/lollipop_1116/status/1853754273844330810)
+
+![まう アー写1](https://pbs.twimg.com/media/GbnbrgaaIAAga8H.jpg)
+![まう アー写2](https://pbs.twimg.com/media/GbnbrgbaEAANtJ6.jpg)
+
+#### 🩷 姫杏朝香 (ピンク色担当)
+- [公式投稿リンク](https://x.com/lollipop_1116/status/1853754248309461340)
+
+![姫杏朝香 アー写1](https://pbs.twimg.com/media/GbnbqOEaMAErBgv.jpg)
+![姫杏朝香 アー写2](https://pbs.twimg.com/media/GbnbqOJbIAANO9K.jpg)
+
+#### ⚪️ 愛月まな (白色担当)
+- [公式投稿リンク](https://x.com/lollipop_1116/status/1853754285986807994)
+
+![愛月まな アー写1](https://pbs.twimg.com/media/GbnbsZkbYAAOc8O.jpg)
+![愛月まな アー写2](https://pbs.twimg.com/media/GbnbsZkaMAAQLqs.jpg)
+
+#### 🔵 苺花なつみ (青色担当)
+- [公式投稿リンク](https://x.com/lollipop_1116/status/1853754169527841179)
+
+![苺花なつみ アー写1](https://pbs.twimg.com/media/Gbnblgcb0AAm3vr.jpg)
+![苺花なつみ アー写2](https://pbs.twimg.com/media/GbnblgbbcAA2qWk.jpg)
+
+#### 🔴 やぎくるみ (赤色担当)
+- [公式投稿リンク](https://x.com/lollipop_1116/status/1853754153560092820)
+
+![やぎくるみ アー写1](https://pbs.twimg.com/media/GbnbknPa0AARuCF.jpg)
+![やぎくるみ アー写2](https://pbs.twimg.com/media/GbnbknOboAACjKl.jpg)
 
 ---
 
@@ -80,23 +120,17 @@
 ### 個人アー写
 ※個人アー写はRP+♡=300達成後に公開される仕組みで解禁されました。
 
-#### 🔵 苺花なつみ (青色担当)
-- [公式投稿リンク](https://x.com/lollipop_1116/status/1993259036926689774)
+#### 🟢 松川愛美 (緑色担当)
+- [公式投稿リンク](https://x.com/lollipop_1116/status/1993259267538010319)
 
-![苺花なつみ アー写1](https://pbs.twimg.com/media/G6l6hzHbQAANNkw.jpg)
-![苺花なつみ アー写2](https://pbs.twimg.com/media/G6l6hzKbUAAn9li.jpg)
+![松川愛美 アー写1](https://pbs.twimg.com/media/G6l6ryVbwAAr2sW.jpg)
+![松川愛美 アー写2](https://pbs.twimg.com/media/G6l6ryZbwAAP4oQ.jpg)
 
 #### 🟡 夏川 茉夢 (黄色担当)
 - [公式投稿リンク](https://x.com/lollipop_1116/status/1993259672644862210)
 
 ![夏川 茉夢 アー写1](https://pbs.twimg.com/media/G6l7GqobEAAGG05.jpg)
 ![夏川 茉夢 アー写2](https://pbs.twimg.com/media/G6l7GqhbsAAW1Oh.jpg)
-
-#### 🟢 松川愛美 (緑色担当)
-- [公式投稿リンク](https://x.com/lollipop_1116/status/1993259267538010319)
-
-![松川愛美 アー写1](https://pbs.twimg.com/media/G6l6ryVbwAAr2sW.jpg)
-![松川愛美 アー写2](https://pbs.twimg.com/media/G6l6ryZbwAAP4oQ.jpg)
 
 #### 🩵 まう (水色担当)
 - [公式投稿リンク](https://x.com/lollipop_1116/status/1993258848417988672)
@@ -115,6 +149,12 @@
 
 ![愛月まな アー写1](https://pbs.twimg.com/media/G6l6SICbsAA91gF.jpg)
 ![愛月まな アー写2](https://pbs.twimg.com/media/G6l6SICbwAM81_b.jpg)
+
+#### 🔵 苺花なつみ (青色担当)
+- [公式投稿リンク](https://x.com/lollipop_1116/status/1993259036926689774)
+
+![苺花なつみ アー写1](https://pbs.twimg.com/media/G6l6hzHbQAANNkw.jpg)
+![苺花なつみ アー写2](https://pbs.twimg.com/media/G6l6hzKbUAAn9li.jpg)
 
 #### 🔴 やぎくるみ (赤色担当)
 - [公式投稿リンク](https://x.com/lollipop_1116/status/1993258637977149942)
