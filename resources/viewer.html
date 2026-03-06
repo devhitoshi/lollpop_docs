@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ドキュメント - LOLLIPOP</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <header class="header">
+        <h1 class="logo">🍭 LOLLIPOP 🍭</h1>
+        <p class="tagline">〜公式ドキュメント＆ポータル〜</p>
+    </header>
+
+    <main class="container">
+        <section class="menu-section">
+            <a href="index.html" style="color: var(--accent-color); font-weight: bold; text-decoration: none; display: inline-block; margin-bottom: 20px;">← メニューに戻る</a>
+            
+            <div id="content">データを読み込み中...</div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 LOLLIPOP All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // URLの ?file=〇〇 の部分を取得する
+        const urlParams = new URLSearchParams(window.location.search);
+        const file = urlParams.get('file');
+
+        if (file) {
+            // 指定されたファイルを裏側で取得
+            fetch(file)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('読み込みエラー');
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    // 取得したMarkdownテキストをHTMLに変換して画面に表示
+                    document.getElementById('content').innerHTML = marked.parse(text);
+                })
+                .catch(error => {
+                    document.getElementById('content').innerHTML = '<p>ファイルの読み込みに失敗しました。</p>';
+                });
+        } else {
+            document.getElementById('content').innerHTML = '<p>ファイルが指定されていません。</p>';
+        }
+    </script>
+</body>
+</html>
