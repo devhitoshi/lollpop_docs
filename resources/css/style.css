@@ -111,3 +111,12 @@ body {
     font-size: 0.9rem;
     border-top: 2px solid var(--bg-color);
 }
+/* Markdownから変換されたコンテンツ内の画像調整 */
+#content img {
+    max-width: 100%; /* 親要素の幅を超えないようにする */
+    height: auto;    /* 縦横比を維持して縮小する */
+    display: block;  /* 画像の下の余白をなくす */
+    margin: 10px 0 20px 0; /* 上下の余白 */
+    border-radius: 10px; /* 角を少し丸くしてかわいく */
+    box-shadow: 0 4px 8px rgba(255,182,193,0.5); /* ピンク色の薄い影をつける */
+}
