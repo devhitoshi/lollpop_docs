@@ -10,12 +10,15 @@
 - **スケジュール/カレンダー (TimeTree)**: https://timetreeapp.com/public_calendars/lollipop_1116  
 
 ## 音楽配信 (TuneCore)
-- **TuneCoreページ1**: https://www.tunecore.co.jp/artists/Lollipop!!!!!!  
-  - Apple Music: https://music.apple.com/jp/artist/1798031127  
-  - Spotify: https://open.spotify.com/artist/2eCJcxtEHKck5iJveatUf4  
-- **TuneCoreページ2**: https://www.tunecore.co.jp/artists/Lollipop!!!!!!!  
-  - Apple Music: https://music.apple.com/jp/artist/1855384131  
-  - Spotify: https://open.spotify.com/artist/67QPEJULIaLRvxwxW4PO7Y  
+- **[TuneCoreアーティストページ　ろりぽっぷ!!!!!!](https://www.tunecore.co.jp/artists/Lollipop!!!!!!)**
+  - [Apple Music](https://music.apple.com/jp/artist/1798031127)
+  - [Spotify](https://open.spotify.com/artist/2eCJcxtEHKck5iJveatUf4)
+- **[TuneCoreアーティストページ　ろりぽっぷ!!!!!!!](https://www.tunecore.co.jp/artists/Lollipop!!!!!!!)**
+  - [Apple Music](https://music.apple.com/jp/artist/1855384131)
+  - [Spotify](https://open.spotify.com/artist/67QPEJULIaLRvxwxW4PO7Y)
+- **[TuneCoreアーティストページ ストクレ](https://www.tunecore.co.jp/artists?id=747584)**
+  - [Apple Music](https://music.apple.com/us/artist/stray-sheep-claymore/1562313279)
+  - [Spotify](https://open.spotify.com/artist/07sr1MtDyS64q8m0eHBNYW)
 
 ## メンバー個別Xアカウント
 - 苺花なつみ (青): https://x.com/natsumi_lpop  
