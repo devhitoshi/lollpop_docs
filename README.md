@@ -9,7 +9,8 @@
 - **2024年11月16日**: サウンドノート秋葉原にてデビューライブを開催し活動開始。
 - **2025年3月30日**: 代官山UNITにて初のワンマンライブ「始まりの宴!!!!!!!」を開催し、新メンバー（松川 愛美）の加入を発表。
 - **2025年5月4日**: 赤羽ReNY alphaにて「7人体制お披露目LIVE」を開催。
-- **2025年8月**: シンガポールの「AFA Creators Super Fest Singapore 2025」に出演。## 目次
+- **2025年8月**: シンガポールの「AFA Creators Super Fest Singapore 2025」に出演。
+## 目次
 - [全曲コール表 (call_list.md)](./call_list.md)
 - [公式ルール・現場のマナー (rules.md)](./rules.md)
 - [メンバープロフィール (members.md)](./members.md)
