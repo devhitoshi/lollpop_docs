@@ -31,7 +31,7 @@
         const file = urlParams.get('file');
 
         if (file) {
-            // 指定されたファイルを裏側で取得
+            // 指定されたファイルを裏側で取得
             fetch(file)
                 .then(response => {
                     if (!response.ok) {
@@ -41,13 +41,47 @@
                 })
                 .then(text => {
                     // 取得したMarkdownテキストをHTMLに変換して画面に表示
-                    document.getElementById('content').innerHTML = marked.parse(text);
+                    const contentDiv = document.getElementById('content');
+                    contentDiv.innerHTML = marked.parse(text);
+
+                    // --- 🌟 ここから目次（TOC）自動生成の仕組み ---
+                    const headers = contentDiv.querySelectorAll('h2, h3'); // h2とh3を集める
+                    
+                    if (headers.length > 0) {
+                        // 目次の外枠を作る
+                        const tocContainer = document.createElement('div');
+                        tocContainer.className = 'toc-box';
+                        tocContainer.innerHTML = '<p class="toc-title">🐾 目次 🐾</p><ul class="toc-list"></ul>';
+                        const tocList = tocContainer.querySelector('.toc-list');
+
+                        headers.forEach((header, index) => {
+                            // 見出しにIDがない場合は自動で付ける（リンクで飛べるようにするため）
+                            if (!header.id) {
+                                header.id = 'heading-' + index;
+                            }
+
+                            const li = document.createElement('li');
+                            // h2かh3かでデザインを変えるためのクラスを付ける
+                            li.className = header.tagName.toLowerCase() === 'h2' ? 'toc-h2' : 'toc-h3';
+
+                            const a = document.createElement('a');
+                            a.href = '#' + header.id;
+                            a.textContent = header.textContent;
+                            
+                            li.appendChild(a);
+                            tocList.appendChild(li);
+                        });
+
+                        // コンテンツの一番上（タイトルの下あたり）に目次を挿入
+                        contentDiv.insertBefore(tocContainer, contentDiv.firstChild);
+                    }
+                    // --- 🌟 目次自動生成ここまで ---
                 })
                 .catch(error => {
                     document.getElementById('content').innerHTML = '<p>ファイルの読み込みに失敗しました。</p>';
                 });
         } else {
-            document.getElementById('content').innerHTML = '<p>ファイルが指定されていません。</p>';
+            document.getElementById('content').innerHTML = '<p>ファイルが指定されていません。</p>';
         }
     </script>
 </body>
