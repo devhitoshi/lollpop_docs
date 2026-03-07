@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ドキュメント - LOLLIPOP</title>
+    <title>ドキュメント - ろりぽっぷ!!!!!!!</title>
     <link rel="stylesheet" href="./css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
+
 <body>
     <header class="header">
-        <h1 class="logo">🍭 LOLLIPOP 🍭</h1>
+        <h1 class="logo">🍭 ろりぽっぷ!!!!!!! 🍭</h1>
         <p class="tagline">〜公式ドキュメント＆ポータル〜</p>
     </header>
 
     <main class="container">
         <section class="menu-section">
-            <a href="index.html" style="color: var(--accent-color); font-weight: bold; text-decoration: none; display: inline-block; margin-bottom: 20px;">← メニューに戻る</a>
-            
+            <a href="index.html"
+                style="color: var(--accent-color); font-weight: bold; text-decoration: none; display: inline-block; margin-bottom: 20px;">←
+                メニューに戻る</a>
+
             <div id="content">データを読み込み中...</div>
         </section>
     </main>
-
-    <footer class="footer">
-        <p>&copy; 2026 LOLLIPOP All Rights Reserved.</p>
-    </footer>
 
     <script>
         // URLの ?file=〇〇 の部分を取得する
@@ -46,7 +46,7 @@
 
                     // --- 🌟 ここから目次（TOC）自動生成の仕組み ---
                     const headers = contentDiv.querySelectorAll('h2, h3'); // h2とh3を集める
-                    
+
                     if (headers.length > 0) {
                         // 目次の外枠を作る
                         const tocContainer = document.createElement('div');
@@ -67,7 +67,7 @@
                             const a = document.createElement('a');
                             a.href = '#' + header.id;
                             a.textContent = header.textContent;
-                            
+
                             li.appendChild(a);
                             tocList.appendChild(li);
                         });
@@ -85,4 +85,5 @@
         }
     </script>
 </body>
+
 </html>
