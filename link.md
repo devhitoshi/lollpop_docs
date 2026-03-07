@@ -21,31 +21,13 @@
   - [Spotify](https://open.spotify.com/artist/07sr1MtDyS64q8m0eHBNYW)
 
 ## メンバー個別リンク
-- **苺花 なつみ**  
-  - X: https://x.com/natsumi_lpop
-  - lit.link: https://lit.link/ichiih77
-  - Instagram: https://www.instagram.com/ichii_h77/
-  - TikTok: https://www.tiktok.com/@ichii_h77
-  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/2WTRNGW8JP7L1?ref_=wl_share
-
-- **夏川 茉夢**  
-  - X:　https://x.com/mayu_lpop  
-  - Instagram: https://www.instagram.com/shizuokamusume/  
-  - TikTok: https://www.tiktok.com/@omayu17
-
-- **松川 愛美**  
-  - X: https://x.com/ami_lpop
-  - lit.link: https://lit.link/CzVsBEoOXJUDOpd4lBJ24ynIZDY2
-  - Instagram: https://www.instagram.com/ami_matsukawa
-  - TikTok: https://www.tiktok.com/@ami_matsukawa
-  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/27AGP93MEZL3T?ref_=wl_share
-
-- **まう**  
-  - X: https://x.com/mau_lpop 
-  - lit.link: https://lit.link/maudayooo
-  - Instagram: https://www.instagram.com/maudayo0127/  
-  - TikTok: https://www.tiktok.com/@mautan0127  
-  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/1IQCOG06DFW7A?ref_=wl_share
+- **やぎ くるみ**  
+  - X: https://x.com/kurumi_lpop  
+  - lit.link: https://lit.link/kurumi628ssc
+  - Instagram: https://www.instagram.com/kurumi_lpop/
+  - TikTok: https://www.tiktok.com/@kurumi_chandayo
+  - TikTok: https://www.tiktok.com/@lpop_kurumi
+  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/1RLZ4ZDTQDL51?ref_=wl_share
 
 - **姫杏 朝香**  
   - X: https://x.com/asaka_lpop
@@ -54,15 +36,33 @@
   - TikTok: https://www.tiktok.com/@hime_asa.chan
   - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/RWY1R8DFOF6T?ref_=wl_share
 
+- **夏川 茉夢**  
+  - X:　https://x.com/mayu_lpop  
+  - Instagram: https://www.instagram.com/shizuokamusume/  
+  - TikTok: https://www.tiktok.com/@omayu17
+
+- **苺花 なつみ**  
+  - X: https://x.com/natsumi_lpop
+  - lit.link: https://lit.link/ichiih77
+  - Instagram: https://www.instagram.com/ichii_h77/
+  - TikTok: https://www.tiktok.com/@ichii_h77
+  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/2WTRNGW8JP7L1?ref_=wl_share
+
+- **まう**  
+  - X: https://x.com/mau_lpop 
+  - lit.link: https://lit.link/maudayooo
+  - Instagram: https://www.instagram.com/maudayo0127/  
+  - TikTok: https://www.tiktok.com/@mautan0127  
+  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/1IQCOG06DFW7A?ref_=wl_share
+
+- **松川 愛美**  
+  - X: https://x.com/ami_lpop
+  - lit.link: https://lit.link/CzVsBEoOXJUDOpd4lBJ24ynIZDY2
+  - Instagram: https://www.instagram.com/ami_matsukawa
+  - TikTok: https://www.tiktok.com/@ami_matsukawa
+  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/27AGP93MEZL3T?ref_=wl_share
+
 - **愛月 まな**  
   - X: https://x.com/mana_lpop  
   - Instagram: https://www.instagram.com/manadayoooooooo/  
   - TikTok: https://www.tiktok.com/@manadayoooooooo
-
-- **やぎ くるみ**  
-  - X: https://x.com/kurumi_lpop  
-  - lit.link: https://lit.link/kurumi628ssc
-  - Instagram: https://www.instagram.com/kurumi_lpop/
-  - TikTok: https://www.tiktok.com/@kurumi_chandayo
-  - TikTok: https://www.tiktok.com/@lpop_kurumi
-  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/1RLZ4ZDTQDL51?ref_=wl_share
