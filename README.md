@@ -1,5 +1,4 @@
 # LOLLIPOP Docs
-
 「ろりぽっぷ!!!!!!!（LOLLPOP）」のプロジェクト・ドキュメントです。各ファイルへのリンクや使い方をまとめています。
 
 ## 概要
@@ -15,3 +14,6 @@
 - [公式ルール・現場のマナー (rules.md)](./rules.md)
 - [メンバープロフィール (members.md)](./members.md)
 - [公開用メインページ (resources/index.html)](./resources/index.html)
+
+## 参照ページ
+https://devhitoshi.github.io/lollpop_docs/resources/index.html
