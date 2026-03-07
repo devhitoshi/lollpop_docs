@@ -20,46 +20,49 @@
   - [Apple Music](https://music.apple.com/us/artist/stray-sheep-claymore/1562313279)
   - [Spotify](https://open.spotify.com/artist/07sr1MtDyS64q8m0eHBNYW)
 
-## メンバー個別Xアカウント
-- 苺花なつみ (青): https://x.com/natsumi_lpop  
-- 夏川 茉夢 (黄): https://x.com/mayu_lpop  
-- 松川愛美 (緑): https://x.com/ami_lpop  
-- まう (水色): https://x.com/mau_lpop  
-- 姫杏朝香 (ピンク): https://x.com/asaka_lpop  
-- 愛月まな (白): https://x.com/mana_lpop  
-- やぎくるみ (赤): https://x.com/kurumi_lpop  
+## メンバー個別リンク
+- **苺花 なつみ**  
+  - X: https://x.com/natsumi_lpop
+  - lit.link: https://lit.link/ichiih77
+  - Instagram: https://www.instagram.com/ichii_h77/
+  - TikTok: https://www.tiktok.com/@ichii_h77
+  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/2WTRNGW8JP7L1?ref_=wl_share
 
-## メンバー個別Instagram & TikTok
-- **苺花なつみ (青)**  
-  - Instagram: 未確認（個人アカウントなし）  
-  - TikTok: 未確認  
-
-- **夏川 茉夢 (黄)**  
+- **夏川 茉夢**  
+  - X:　https://x.com/mayu_lpop  
   - Instagram: https://www.instagram.com/shizuokamusume/  
-  - TikTok: 未確認  
+  - TikTok: https://www.tiktok.com/@omayu17
 
-- **松川愛美 (緑)**  
-  - Instagram: 未確認（個人アカウントなし）  
-  - TikTok: 未確認  
+- **松川 愛美**  
+  - X: https://x.com/ami_lpop
+  - lit.link: https://lit.link/CzVsBEoOXJUDOpd4lBJ24ynIZDY2
+  - Instagram: https://www.instagram.com/ami_matsukawa
+  - TikTok: https://www.tiktok.com/@ami_matsukawa
+  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/27AGP93MEZL3T?ref_=wl_share
 
-- **まう (水色)**  
+- **まう**  
+  - X: https://x.com/mau_lpop 
+  - lit.link: https://lit.link/maudayooo
   - Instagram: https://www.instagram.com/maudayo0127/  
   - TikTok: https://www.tiktok.com/@mautan0127  
+  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/1IQCOG06DFW7A?ref_=wl_share
 
-- **姫杏朝香 (ピンク)**  
+- **姫杏 朝香**  
+  - X: https://x.com/asaka_lpop
+  - lit.link: https://lit.link/himeasa
   - Instagram: https://www.instagram.com/hime_asa.chan/  
-  - TikTok: 未確認  
+  - TikTok: https://www.tiktok.com/@hime_asa.chan
+  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/RWY1R8DFOF6T?ref_=wl_share
 
-- **愛月まな (白)**  
+- **愛月 まな**  
+  - X: https://x.com/mana_lpop  
   - Instagram: https://www.instagram.com/manadayoooooooo/  
-  - TikTok: 未確認  
+  - TikTok: https://www.tiktok.com/@manadayoooooooo
 
-- **やぎくるみ (赤)**  
-  - Instagram: 未確認（個人アカウントなし）  
-  - TikTok: 未確認  
-
-## 欲しいものリスト / その他
-- やぎくるみ Amazonほしい物リスト: https://www.amazon.co.jp/hz/wishlist/ls/3MN6J4Y5I8VNH?ref_=wl_share  
-  （他のメンバーのリストはLit.Link / X bioに明記なし）
-
-これでグループ公式・メンバー・音楽配信・ショップ・SNS（Instagram/TikTok含む）の主なリンクをすべてまとめました。最新情報は公式Xや各メンバーのbioで確認してください！
+- **やぎ くるみ**  
+  - X: https://x.com/kurumi_lpop  
+  - lit.link: https://lit.link/kurumi628ssc
+  - Instagram: https://www.instagram.com/kurumi_lpop/
+  - TikTok: https://www.tiktok.com/@kurumi_chandayo
+  - TikTok: https://www.tiktok.com/@lpop_kurumi
+  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/1RLZ4ZDTQDL51?ref_=wl_share
