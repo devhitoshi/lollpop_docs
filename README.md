@@ -21,6 +21,7 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 
   
 ## 目次
+- [はじめての方へ / スターターパック (starter_pack.md)](./starter_pack.md)
 - [全曲コール表 (songs/call_list.md)](./songs/call_list.md)
 - [公式ルール・現場のマナー (rules.md)](./rules.md)
 - [メンバープロフィール (members.md)](./members.md)

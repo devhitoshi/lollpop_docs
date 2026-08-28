@@ -32,6 +32,7 @@
     <footer class="footer">
         <div class="footer__inner">
             <ul class="footer__links">
+                <li><a href="viewer.html?file=../starter_pack.md">はじめての方へ</a></li>
                 <li><a href="viewer.html?file=../README.md">README</a></li>
                 <li><a href="viewer.html?file=../members.md">メンバー</a></li>
                 <li><a href="viewer.html?file=../songs/call_list.md">コール表</a></li>
@@ -59,20 +60,100 @@
         }
 
         // ?file=〇〇 で読み込むファイルを受け取る。
-        // 外部URLを渡して任意のHTMLを描画されないよう、同一リポジトリ内の
-        // 相対パスだけを許可する。
-        function isSafeRelativePath(path) {
+        // 外部URLを渡して任意のHTMLを描画されないよう、同一サイト内の .md だけを許可する。
+        function isSafeDocPath(path) {
             if (!path) return false;
             if (/^[a-z][a-z0-9+.-]*:/i.test(path)) return false;  // http: や javascript: など
             if (path.startsWith('//')) return false;              // プロトコル相対
             return path.endsWith('.md');
         }
 
+        // 見出しの ID を本文から作る。marked は ID を振らないので、
+        // ここで作らないとページ内リンク（#用語集）が機能しない。
+        function assignHeadingIds(root) {
+            const used = new Set();
+            root.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((h, index) => {
+                if (h.id) { used.add(h.id); return; }
+                let base = h.textContent.trim().replace(/\s+/g, '-');
+                if (!base) base = 'heading-' + index;
+                let id = base;
+                let n = 2;
+                while (used.has(id)) { id = base + '-' + n; n++; }
+                used.add(id);
+                h.id = id;
+            });
+        }
+
+        // 本文中のリンクを viewer 用に書き換える。
+        // このページは resources/ にあるので、記事に書かれた ./members.md は
+        // そのままだと resources/members.md を探しに行って404になる。
+        function rewriteLinks(root, docUrl) {
+            root.querySelectorAll('a[href]').forEach(a => {
+                const href = a.getAttribute('href');
+                if (!href || href.startsWith('#')) return;   // ページ内アンカーは触らない
+
+                let abs;
+                try {
+                    abs = new URL(href, docUrl);
+                } catch (e) {
+                    return;
+                }
+
+                if (abs.origin !== window.location.origin) {
+                    // 外部サイトは新しいタブで開く
+                    a.target = '_blank';
+                    a.rel = 'noopener';
+                    return;
+                }
+
+                if (abs.pathname.endsWith('.md')) {
+                    a.href = 'viewer.html?file=' + encodeURI(abs.pathname) + abs.hash;
+                } else {
+                    a.href = abs.href;
+                }
+            });
+        }
+
+        function buildToc(root, firstHeading) {
+            const headers = root.querySelectorAll('h2, h3');
+            if (headers.length === 0) return;
+
+            const tocContainer = document.createElement('div');
+            tocContainer.className = 'toc-box';
+
+            const tocTitle = document.createElement('p');
+            tocTitle.className = 'toc-title';
+            tocTitle.textContent = '目次';
+            tocContainer.appendChild(tocTitle);
+
+            const tocList = document.createElement('ul');
+            tocList.className = 'toc-list';
+            tocContainer.appendChild(tocList);
+
+            headers.forEach(header => {
+                const li = document.createElement('li');
+                li.className = header.tagName.toLowerCase() === 'h2' ? 'toc-h2' : 'toc-h3';
+
+                const a = document.createElement('a');
+                a.href = '#' + header.id;
+                a.textContent = header.textContent;
+
+                li.appendChild(a);
+                tocList.appendChild(li);
+            });
+
+            // 見出しの下、本文の先頭に目次を差し込む
+            const anchor = firstHeading ? firstHeading.nextSibling : root.firstChild;
+            root.insertBefore(tocContainer, anchor);
+        }
+
         const file = new URLSearchParams(window.location.search).get('file');
 
-        if (!isSafeRelativePath(file)) {
+        if (!isSafeDocPath(file)) {
             showMessage(file ? '読み込めないファイルが指定されています。' : 'ファイルが指定されていません。');
         } else {
+            const docUrl = new URL(file, window.location.href);
+
             fetch(file)
                 .then(response => {
                     if (!response.ok) throw new Error('読み込みエラー');
@@ -80,6 +161,9 @@
                 })
                 .then(text => {
                     contentEl.innerHTML = marked.parse(text);
+
+                    assignHeadingIds(contentEl);
+                    rewriteLinks(contentEl, docUrl);
 
                     // 最初の h1 をページ名として上部の帯とタブに反映する
                     const firstHeading = contentEl.querySelector('h1');
@@ -92,42 +176,15 @@
                             : name + ' - ろりぽっぷ!!!!!!!';
                     }
 
-                    // --- 目次（TOC）の自動生成 ---
-                    const headers = contentEl.querySelectorAll('h2, h3');
-                    if (headers.length === 0) return;
+                    buildToc(contentEl, firstHeading);
 
-                    const tocContainer = document.createElement('div');
-                    tocContainer.className = 'toc-box';
-
-                    const tocTitle = document.createElement('p');
-                    tocTitle.className = 'toc-title';
-                    tocTitle.textContent = '目次';
-                    tocContainer.appendChild(tocTitle);
-
-                    const tocList = document.createElement('ul');
-                    tocList.className = 'toc-list';
-                    tocContainer.appendChild(tocList);
-
-                    headers.forEach((header, index) => {
-                        // リンクで飛べるよう、IDがなければ自動で付ける
-                        if (!header.id) {
-                            header.id = 'heading-' + index;
-                        }
-
-                        const li = document.createElement('li');
-                        li.className = header.tagName.toLowerCase() === 'h2' ? 'toc-h2' : 'toc-h3';
-
-                        const a = document.createElement('a');
-                        a.href = '#' + header.id;
-                        a.textContent = header.textContent;
-
-                        li.appendChild(a);
-                        tocList.appendChild(li);
-                    });
-
-                    // 見出しの下、本文の先頭に目次を差し込む
-                    const anchor = firstHeading ? firstHeading.nextSibling : contentEl.firstChild;
-                    contentEl.insertBefore(tocContainer, anchor);
+                    // ページ内アンカー付きで開かれた場合、ID を振ったあとに改めて飛ばす
+                    if (window.location.hash) {
+                        const target = document.getElementById(
+                            decodeURIComponent(window.location.hash.slice(1))
+                        );
+                        if (target) target.scrollIntoView();
+                    }
                 })
                 .catch(() => {
                     showMessage('ファイルの読み込みに失敗しました。');
