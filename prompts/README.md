@@ -29,6 +29,23 @@
 3. プロンプト全文を貼り付けて送信する（長文なのでクリップボード経由が確実）
 4. 1回＝1チャットにする。前の指示を引きずらせないため
 
+**日付の置換とチャンク分割は自動化してあります。** 手で書き換えなくて構いません。
+
+```bash
+python3 .agent/scripts/prepare_collect.py --month 2026-08 --population <TimeTreeの出演一覧>
+```
+
+半月境界で自動的に割り、チャンクごとに置換済みの `x_collect.md` と、母集団JSONを差し込んだ
+`event_get.md` を `work/collect/` 以下に生成します。返ってきた出力を各チャンクの
+`response.md` / `response.csv` として保存すれば、結合も自動でできます。
+
+```bash
+python3 .agent/scripts/merge_collect.py  --period 20260801-20260831   # 収集データを1本に結合
+python3 .agent/scripts/merge_setlist.py  --period 20260801-20260831   # セトリCSVを data_event.csv へ
+```
+
+一連の流れは `skills/note_article/SKILL.md` にまとめてあります。
+
 ### Claude に渡すもの
 
 | ファイル | 用途 |
