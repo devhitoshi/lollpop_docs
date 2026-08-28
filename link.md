@@ -29,24 +29,10 @@
   - TikTok: https://www.tiktok.com/@lpop_kurumi
   - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/1RLZ4ZDTQDL51?ref_=wl_share
 
-- **姫杏 朝香**  
-  - X: https://x.com/asaka_lpop
-  - lit.link: https://lit.link/himeasa
-  - Instagram: https://www.instagram.com/hime_asa.chan/  
-  - TikTok: https://www.tiktok.com/@hime_asa.chan
-  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/RWY1R8DFOF6T?ref_=wl_share
-
 - **夏川 茉夢**  
   - X:　https://x.com/mayu_lpop  
   - Instagram: https://www.instagram.com/shizuokamusume/  
   - TikTok: https://www.tiktok.com/@omayu17
-
-- **苺花 なつみ**  
-  - X: https://x.com/natsumi_lpop
-  - lit.link: https://lit.link/ichiih77
-  - Instagram: https://www.instagram.com/ichii_h77/
-  - TikTok: https://www.tiktok.com/@ichii_h77
-  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/2WTRNGW8JP7L1?ref_=wl_share
 
 - **まう**  
   - X: https://x.com/mau_lpop 
@@ -66,3 +52,20 @@
   - X: https://x.com/mana_lpop  
   - Instagram: https://www.instagram.com/manadayoooooooo/  
   - TikTok: https://www.tiktok.com/@manadayoooooooo
+
+## 元メンバー個別リンク
+※卒業後のアカウント状況は各自でご確認ください。
+
+- **姫杏 朝香**（2026年4月22日卒業）
+  - X: https://x.com/asaka_lpop
+  - lit.link: https://lit.link/himeasa
+  - Instagram: https://www.instagram.com/hime_asa.chan/  
+  - TikTok: https://www.tiktok.com/@hime_asa.chan
+  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/RWY1R8DFOF6T?ref_=wl_share
+
+- **苺花 なつみ**（2026年8月15日卒業）
+  - X: https://x.com/natsumi_lpop
+  - lit.link: https://lit.link/ichiih77
+  - Instagram: https://www.instagram.com/ichii_h77/
+  - TikTok: https://www.tiktok.com/@ichii_h77
+  - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/2WTRNGW8JP7L1?ref_=wl_share
