@@ -6,31 +6,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ろりぽっぷ!!!!!!!ポータル</title>
     <meta name="description" content="アイドルグループ『ろりぽっぷ!!!!!!!』の公式情報まとめ・ドキュメントサイトです。">
-    <!-- アイドルらしい可愛いスタイルシートを読み込み -->
+    <meta name="theme-color" content="#1a1113">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
-    <header class="header">
-        <h1 class="logo">🍭 ろりぽっぷ!!!!!!!ポータル 🍭</h1>
-        <p class="tagline">〜ドキュメント＆ポータル〜</p>
-    </header>
+    <nav class="global-nav">
+        <a class="global-nav__brand" href="./index.html">🍭 ろりぽっぷ!!!!!!!</a>
+        <ul class="global-nav__links">
+            <li><a href="https://x.com/lollipop_1116" target="_blank" rel="noopener">公式X</a></li>
+            <li><a href="https://lit.link/roripopu1116" target="_blank" rel="noopener">lit.link</a></li>
+            <li><a href="https://timetreeapp.com/public_calendars/lollipop_1116" target="_blank" rel="noopener">スケジュール</a></li>
+        </ul>
+    </nav>
 
-    <main class="container">
-        <section class="menu-section">
-            <h2 class="section-title">メニュー</h2>
-            <ul class="nav-links">
-                <li><a href="viewer.html?file=../README.md">トップページ (README)</a></li>
-                <li><a href="viewer.html?file=../songs/call_list.md">🎤 コール表</a></li>
-                <li><a href="viewer.html?file=../rules.md">⚠ ルール・マナー</a></li>
-                <li><a href="viewer.html?file=../link.md">🌐 リンク集</a></li>
-                <li><a href="viewer.html?file=../members.md">✨ メンバープロフィール</a></li>
-                <li><a href="viewer.html?file=../artist_photos.md">📸 アー写履歴</a></li>
-            </ul>
-            </ul>
+    <main>
+        <!-- Hero -->
+        <section class="hero">
+            <h1 class="hero__title">ろりぽっぷ!!!!!!!</h1>
+            <p class="hero__lead">
+                楽しさ無限大。<br>
+                ポップなお祭りへようこそ!!!!!!!
+            </p>
+            <div class="color-dots" aria-hidden="true">
+                <span class="color-dots__dot" style="background-color: var(--mc-kurumi);"></span>
+                <span class="color-dots__dot" style="background-color: var(--mc-mayu);"></span>
+                <span class="color-dots__dot" style="background-color: var(--mc-mau);"></span>
+                <span class="color-dots__dot" style="background-color: var(--mc-ami);"></span>
+                <span class="color-dots__dot color-dots__dot--outline" style="background-color: var(--mc-mana);"></span>
+            </div>
+            <div class="tile__actions">
+                <a class="btn btn--primary" href="viewer.html?file=../members.md">メンバーを見る</a>
+                <a class="btn btn--ghost" href="viewer.html?file=../README.md">このサイトについて</a>
+            </div>
+        </section>
 
+        <!-- メンバー -->
+        <section class="tile tile--dark">
+            <div class="tile__inner">
+                <span class="tile__glyph" aria-hidden="true">✨</span>
+                <h2 class="tile__title">メンバー</h2>
+                <p class="tile__lead">5人体制のプロフィールと、卒業したメンバーの記録。</p>
+                <div class="tile__actions">
+                    <a class="btn btn--primary" href="viewer.html?file=../members.md">プロフィール</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- コール表 -->
+        <section class="tile tile--light">
+            <div class="tile__inner">
+                <span class="tile__glyph" aria-hidden="true">🎤</span>
+                <h2 class="tile__title">全曲コール表</h2>
+                <p class="tile__lead">現場で迷わないための、曲ごとのコールとレスポンス。</p>
+                <div class="tile__actions">
+                    <a class="btn btn--primary" href="viewer.html?file=../songs/call_list.md">コール表</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ルール -->
+        <section class="tile tile--blossom">
+            <div class="tile__inner">
+                <span class="tile__glyph" aria-hidden="true">⚠️</span>
+                <h2 class="tile__title">ルール・マナー</h2>
+                <p class="tile__lead">特典会レギュレーション、撮影ルール、ポイントカードのこと。</p>
+                <div class="tile__actions">
+                    <a class="btn btn--primary" href="viewer.html?file=../rules.md">ルールを読む</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- リンク集 -->
+        <section class="tile tile--dark-alt">
+            <div class="tile__inner">
+                <span class="tile__glyph" aria-hidden="true">🌐</span>
+                <h2 class="tile__title">リンク集</h2>
+                <p class="tile__lead">公式SNS、メンバー個人アカウント、音楽配信先をまとめて。</p>
+                <div class="tile__actions">
+                    <a class="btn btn--primary" href="viewer.html?file=../link.md">リンクを開く</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- アー写履歴 -->
+        <section class="tile tile--light">
+            <div class="tile__inner">
+                <span class="tile__glyph" aria-hidden="true">📸</span>
+                <h2 class="tile__title">アー写履歴</h2>
+                <p class="tile__lead">初代のカラフル衣装から、宴衣装、黒衣装まで。時系列の記録。</p>
+                <div class="tile__actions">
+                    <a class="btn btn--primary" href="viewer.html?file=../artist_photos.md">履歴を見る</a>
+                </div>
+            </div>
         </section>
     </main>
+
+    <footer class="footer">
+        <div class="footer__inner">
+            <ul class="footer__links">
+                <li><a href="viewer.html?file=../README.md">README</a></li>
+                <li><a href="viewer.html?file=../members.md">メンバー</a></li>
+                <li><a href="viewer.html?file=../songs/call_list.md">コール表</a></li>
+                <li><a href="viewer.html?file=../rules.md">ルール</a></li>
+                <li><a href="viewer.html?file=../link.md">リンク集</a></li>
+                <li><a href="viewer.html?file=../artist_photos.md">アー写履歴</a></li>
+            </ul>
+            <p class="footer__note">
+                ろりぽっぷ!!!!!!! は株式会社FLAP entertainment所属。
+                本サイトはファンによる非公式のドキュメントです。最新情報は公式SNSをご確認ください。
+            </p>
+        </div>
+    </footer>
 </body>
 
 </html>

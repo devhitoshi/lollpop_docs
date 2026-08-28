@@ -1,182 +1,555 @@
-/* アイドルらしい可愛いスタイルシート */
+/* =========================================================================
+   ろりぽっぷ!!!!!!! Docs — デザインシステム
+
+   Apple のデザイン言語（フルブリードのタイルを明暗交互に積む／
+   インタラクティブ色はただ一色／クロームは限りなく後退させる）を、
+   ろりぽっぷのピンクで再構成したもの。
+
+   原則:
+   - 「押せるもの」の色は --primary ただ一色。メンバーカラーは装飾専用。
+   - UI に影は使わない。セクションの区切りは面の色そのもの。
+   - 装飾グラデーションなし。境界は 1px のヘアライン。
+   - 押下は transform: scale(0.95) で統一。
+   ========================================================================= */
+
+/* ---------- Tokens ---------- */
 :root {
-    --primary-color: #ffb6c1; /* ライトピンク */
-    --secondary-color: #ffc0cb; /* ピンク */
-    --accent-color: #ff69b4; /* ホットピンク */
-    --bg-color: #fff0f5; /* ラベンダーブラッシュ（薄いピンク背景） */
-    --text-color: #555;
-    --white: #ffffff;
+    /* Accent — 唯一のインタラクティブカラー */
+    --primary: #d6006e;
+    --primary-focus: #e6006e;
+    --primary-on-dark: #ff9ecb;
+    --on-primary: #ffffff;
+
+    /* Surface */
+    --canvas: #ffffff;
+    --canvas-blossom: #fff5f9;   /* ピンク寄りのオフホワイト */
+    --surface-tile-1: #2a1a24;
+    --surface-tile-2: #32202b;
+    --surface-tile-3: #241a20;
+    --surface-black: #1a1113;
+
+    /* Text */
+    --ink: #1d1d1f;
+    --ink-muted: #6e6e73;
+    --on-dark: #ffffff;
+    --on-dark-muted: #d9c4ce;
+
+    /* Line */
+    --hairline: #f2e2ea;
+    --divider-soft: #faeef4;
+
+    /* メンバーカラー（装飾のみ。リンクやボタンには使わない）
+       asaka / natsumi は卒業した2人の色。記録として一式で残している */
+    --mc-kurumi:  #cc0000;
+    --mc-mayu:    #f5c400;
+    --mc-mau:     #7fd4e8;
+    --mc-ami:     #2e9e5b;
+    --mc-mana:    #ffffff;
+    --mc-asaka:   #f172a3;
+    --mc-natsumi: #2a6fd6;
+
+    /* Shape */
+    --r-sm: 8px;
+    --r-lg: 18px;
+    --r-pill: 9999px;
+
+    /* Spacing */
+    --s-xs: 8px;
+    --s-sm: 12px;
+    --s-md: 17px;
+    --s-lg: 24px;
+    --s-xl: 32px;
+    --s-xxl: 48px;
+    --s-section: 80px;
+
+    /* Type — SF Pro は和文を持たないので日本語フォントを後段に重ねる */
+    --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+            "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Noto Sans JP",
+            "Yu Gothic Medium", Meiryo, sans-serif;
 }
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
 
 body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
     margin: 0;
-    padding: 0;
-    line-height: 1.6;
+    background-color: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 17px;          /* 16px ではなく 17px。読ませるためのペース */
+    font-weight: 400;
+    line-height: 1.76;        /* 和文なので Apple の 1.47 より緩める */
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
 }
 
-.header {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    color: var(--white);
-    text-align: center;
-    padding: 40px 20px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    border-bottom: 5px solid var(--accent-color);
+a { color: var(--primary); }
+
+:focus-visible {
+    outline: 2px solid var(--primary-focus);
+    outline-offset: 3px;
+    border-radius: 2px;
 }
 
-.logo {
-    font-size: 2.5rem;
-    margin: 0;
-    letter-spacing: 2px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+/* ---------- Global nav ---------- */
+.global-nav {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-md);
+    height: 44px;
+    padding: 0 var(--s-lg);
+    background-color: var(--surface-black);
+    color: var(--on-dark);
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: -0.01em;
 }
 
-.tagline {
-    font-size: 1.1rem;
-    margin-top: 10px;
-    font-weight: bold;
-}
-
-.container {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 0 20px;
-}
-
-.section-title {
-    color: var(--accent-color);
-    border-bottom: 3px dashed var(--primary-color);
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
-}
-
-.menu-section {
-    background-color: var(--white);
-    border-radius: 15px;
-    padding: 30px;
-    box-shadow: 0 8px 15px rgba(255,182,193,0.3);
-    margin-bottom: 40px;
-}
-
-.nav-links {
-    list-style: none;
-    padding: 0;
-}
-
-.nav-links li {
-    margin-bottom: 15px;
-}
-
-.nav-links a {
-    display: block;
+.global-nav__brand {
+    color: var(--on-dark);
     text-decoration: none;
-    color: var(--text-color);
-    font-weight: bold;
-    padding: 12px 20px;
-    background-color: var(--bg-color);
-    border-radius: 30px;
-    border: 2px solid var(--primary-color);
-    transition: all 0.3s ease;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
 }
 
-.nav-links a:hover {
-    background-color: var(--primary-color);
-    color: var(--white);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+.global-nav__links {
+    display: flex;
+    align-items: center;
+    gap: var(--s-lg);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    min-width: 0;
 }
 
-.gallery {
+.global-nav__links a {
+    color: var(--on-dark);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.global-nav__links a:hover { color: var(--primary-on-dark); }
+
+/* ---------- Sub nav（viewer 用のすりガラス帯） ---------- */
+.sub-nav {
+    position: sticky;
+    top: 44px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-md);
+    height: 52px;
+    padding: 0 var(--s-lg);
+    background-color: rgba(255, 245, 249, 0.8);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--hairline);
+}
+
+.sub-nav__title {
+    margin: 0;
+    min-width: 0;
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.19;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.sub-nav__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+}
+
+.sub-nav__back:hover { text-decoration: underline; }
+
+/* ---------- Tile（フルブリード。面の色そのものが区切り） ---------- */
+.tile {
+    padding: var(--s-section) var(--s-lg);
     text-align: center;
 }
 
-.image-placeholder {
-    background-color: var(--primary-color);
-    color: var(--white);
-    padding: 50px 20px;
-    border-radius: 15px;
-    border: 3px dashed var(--accent-color);
-    font-weight: bold;
+.tile__inner {
+    max-width: 720px;
+    margin: 0 auto;
 }
 
-.footer {
+.tile--light     { background-color: var(--canvas);         color: var(--ink); }
+.tile--blossom   { background-color: var(--canvas-blossom); color: var(--ink); }
+.tile--dark      { background-color: var(--surface-tile-1); color: var(--on-dark); }
+.tile--dark-alt  { background-color: var(--surface-tile-2); color: var(--on-dark); }
+.tile--dark-deep { background-color: var(--surface-tile-3); color: var(--on-dark); }
+
+.tile--dark a,
+.tile--dark-alt a,
+.tile--dark-deep a { color: var(--primary-on-dark); }
+
+/* タイルの絵文字は製品写真の置き換え。文字ではなく被写体として扱う */
+.tile__glyph {
+    display: block;
+    font-size: 64px;
+    line-height: 1;
+    margin-bottom: var(--s-lg);
+}
+
+.tile__title {
+    margin: 0;
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+}
+
+.tile__lead {
+    margin: var(--s-md) 0 0;
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--ink-muted);
+}
+
+.tile--dark .tile__lead,
+.tile--dark-alt .tile__lead,
+.tile--dark-deep .tile__lead { color: var(--on-dark-muted); }
+
+.tile__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--s-sm);
+    margin-top: var(--s-xl);
+}
+
+/* ---------- Hero ---------- */
+.hero {
+    padding: 96px var(--s-lg) var(--s-section);
     text-align: center;
-    padding: 20px;
-    margin-top: 50px;
-    background-color: var(--white);
-    color: var(--primary-color);
-    font-size: 0.9rem;
-    border-top: 2px solid var(--bg-color);
+    background-color: var(--canvas-blossom);
 }
-/* Markdownから変換されたコンテンツ内の画像調整 */
-#content img {
-    max-width: 100%; /* 親要素の幅を超えないようにする */
-    height: auto;    /* 縦横比を維持して縮小する */
-    display: block;  /* 画像の下の余白をなくす */
-    margin: 10px 0 20px 0; /* 上下の余白 */
-    border-radius: 10px; /* 角を少し丸くしてかわいく */
-    box-shadow: 0 4px 8px rgba(255,182,193,0.5); /* ピンク色の薄い影をつける */
+
+.hero__title {
+    margin: 0;
+    font-size: 56px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--ink);
 }
-/* =========================================
-   自動生成される目次（TOC）のデザイン
-   ========================================= */
+
+.hero__lead {
+    max-width: 640px;
+    margin: var(--s-lg) auto 0;
+    font-size: 24px;
+    font-weight: 300;   /* 300 は意図的な軽さ。使いどころを限定する */
+    line-height: 1.55;
+    color: var(--ink-muted);
+}
+
+/* メンバーカラーの帯。装飾であってナビゲーションではない */
+.color-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: var(--s-xl);
+}
+
+.color-dots__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: var(--r-pill);
+}
+
+.color-dots__dot--outline { box-shadow: inset 0 0 0 1px #e0d3d9; }
+
+/* ---------- Buttons ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 11px 22px;
+    border: 1px solid transparent;
+    border-radius: var(--r-pill);
+    font-family: inherit;
+    font-size: 17px;
+    line-height: 1.24;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.12s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn:active { transform: scale(0.95); }
+
+.btn--primary {
+    background-color: var(--primary);
+    color: var(--on-primary);
+}
+
+.btn--primary:hover { background-color: var(--primary-focus); }
+
+.btn--ghost {
+    background-color: transparent;
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.btn--ghost:hover {
+    background-color: var(--primary);
+    color: var(--on-primary);
+}
+
+/* 暗いタイルの上では、アクセントを明るいピンクへ反転させる。
+   濃いピンクのままだと面に沈んでボタンとして読めなくなるため */
+.tile--dark .btn--primary,
+.tile--dark-alt .btn--primary,
+.tile--dark-deep .btn--primary {
+    background-color: var(--primary-on-dark);
+    color: var(--surface-tile-1);
+}
+
+.tile--dark .btn--primary:hover,
+.tile--dark-alt .btn--primary:hover,
+.tile--dark-deep .btn--primary:hover { background-color: #ffc2dd; }
+
+.tile--dark .btn--ghost,
+.tile--dark-alt .btn--ghost,
+.tile--dark-deep .btn--ghost {
+    border-color: var(--primary-on-dark);
+    color: var(--primary-on-dark);
+}
+
+.tile--dark .btn--ghost:hover,
+.tile--dark-alt .btn--ghost:hover,
+.tile--dark-deep .btn--ghost:hover {
+    background-color: var(--primary-on-dark);
+    color: var(--surface-tile-1);
+}
+
+/* ---------- Document body（marked が生成する HTML） ---------- */
+.doc {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--s-xxl) var(--s-lg) var(--s-section);
+}
+
+.doc h1 {
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    margin: 0 0 var(--s-lg);
+}
+
+.doc h2 {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+    margin: var(--s-section) 0 var(--s-md);
+    padding-top: var(--s-lg);
+    border-top: 1px solid var(--hairline);
+}
+
+.doc h3 {
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.015em;
+    margin: var(--s-xxl) 0 var(--s-xs);
+}
+
+.doc h4 {
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: var(--s-xl) 0 var(--s-xs);
+}
+
+.doc p { margin: 0 0 var(--s-md); }
+
+.doc ul, .doc ol {
+    margin: 0 0 var(--s-md);
+    padding-left: 1.4em;
+}
+
+.doc li { margin-bottom: 6px; }
+
+.doc li::marker { color: var(--primary); }
+
+.doc strong { font-weight: 600; }
+
+.doc blockquote {
+    margin: var(--s-lg) 0;
+    padding: var(--s-md) var(--s-lg);
+    background-color: var(--canvas-blossom);
+    border-radius: var(--r-lg);
+    color: var(--ink-muted);
+}
+
+.doc blockquote p:last-child { margin-bottom: 0; }
+
+.doc code {
+    padding: 2px 6px;
+    background-color: var(--divider-soft);
+    border-radius: var(--r-sm);
+    font-size: 15px;
+}
+
+.doc hr {
+    height: 1px;
+    margin: var(--s-section) 0;
+    border: 0;
+    background-color: var(--hairline);
+}
+
+.doc table {
+    width: 100%;
+    margin: var(--s-lg) 0;
+    border-collapse: collapse;
+    font-size: 15px;
+}
+
+.doc th, .doc td {
+    padding: var(--s-sm) var(--s-md);
+    border-bottom: 1px solid var(--hairline);
+    text-align: left;
+}
+
+.doc th { font-weight: 600; }
+
+/* 系内で唯一の影。被写体が面の上に乗っていることを示すためだけに使う */
+.doc img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: var(--s-lg) 0;
+    border-radius: var(--r-lg);
+    box-shadow: rgba(0, 0, 0, 0.22) 3px 5px 30px 0;
+}
+
+.doc__empty {
+    padding: var(--s-xxl) 0;
+    color: var(--ink-muted);
+    text-align: center;
+}
+
+/* ---------- 目次（自動生成） ---------- */
 .toc-box {
-    background-color: var(--white);
-    border: 2px dashed var(--accent-color); /* ピンクの点線枠 */
-    border-radius: 15px;
-    padding: 20px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 10px rgba(255,182,193,0.3);
+    margin: 0 0 var(--s-xxl);
+    padding: var(--s-lg);
+    background-color: var(--canvas-blossom);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-lg);
 }
 
 .toc-title {
-    color: var(--accent-color);
-    font-weight: bold;
-    font-size: 1.2rem;
-    margin-top: 0;
-    margin-bottom: 15px;
-    text-align: center;
+    margin: 0 0 var(--s-sm);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink-muted);
 }
 
 .toc-list {
-    list-style-type: none;
-    padding-left: 0;
     margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 15px;
+    line-height: 1.9;
 }
 
-/* h2 (大見出し) の目次デザイン */
-.toc-h2 {
-    font-weight: bold;
-    margin-top: 12px;
-}
+.toc-h2 { font-weight: 600; }
 
-.toc-h2::before {
-    content: "🎀 "; /* 可愛いアイコンをつける */
-}
-
-/* h3 (小見出し) の目次デザイン */
-.toc-h3 {
-    padding-left: 25px; /* 少し右にずらす */
-    font-size: 0.95rem;
-    margin-top: 6px;
-}
-
-.toc-h3::before {
-    content: "・ ";
-    color: var(--primary-color);
-}
+.toc-h3 { padding-left: var(--s-md); }
 
 .toc-list a {
+    color: var(--ink);
     text-decoration: none;
-    color: var(--text-color);
-    transition: color 0.2s ease, padding-left 0.2s ease;
 }
 
-/* リンクを触ったときのアニメーション */
-.toc-list a:hover {
-    color: var(--accent-color);
-    padding-left: 5px; /* 少し右に動く */
+.toc-list a:hover { color: var(--primary); }
+
+/* ---------- Footer ---------- */
+.footer {
+    padding: 64px var(--s-lg);
+    background-color: var(--canvas-blossom);
+    border-top: 1px solid var(--hairline);
+    color: var(--ink-muted);
+    font-size: 12px;
+    line-height: 1.9;
+    letter-spacing: -0.01em;
+}
+
+.footer__inner {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-md);
+    margin: 0 0 var(--s-lg);
+    padding: 0;
+    list-style: none;
+}
+
+.footer__links a { color: var(--primary); text-decoration: none; }
+
+.footer__links a:hover { text-decoration: underline; }
+
+.footer__note { margin: 0; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 833px) {
+    .hero { padding: 64px var(--s-lg); }
+    .hero__title { font-size: 40px; }
+    .hero__lead { font-size: 21px; }
+    .tile { padding: 64px var(--s-lg); }
+    .tile__title { font-size: 34px; }
+    .tile__lead { font-size: 19px; }
+    .doc h1 { font-size: 34px; }
+    .doc h2 { font-size: 24px; margin-top: 64px; }
+}
+
+@media (max-width: 640px) {
+    .global-nav { padding: 0 var(--s-md); }
+    .global-nav__links { gap: var(--s-md); }
+    .sub-nav { padding: 0 var(--s-md); }
+    .sub-nav__title { font-size: 17px; }
+    .hero__title { font-size: 34px; }
+    .tile { padding: var(--s-xxl) var(--s-md); }
+    .tile__title { font-size: 28px; }
+    .tile__glyph { font-size: 48px; }
+    .tile__actions { flex-direction: column; align-items: stretch; }
+    .doc { padding: var(--s-xl) var(--s-md) 64px; }
+    .doc h1 { font-size: 28px; }
+}
+
+@media (max-width: 419px) {
+    .hero__title { font-size: 28px; }
+    .tile__title { font-size: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+    .btn:active { transform: none; }
 }
