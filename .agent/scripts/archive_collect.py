@@ -386,7 +386,7 @@ def build_index(periods, events, member_files, reaction_files, topic_files):
 
 # --- 取り込み -----------------------------------------------------------
 
-def ingest(period, collect_dir):
+def ingest(period, collect_dir, force=False):
     """work/collect/<期間>/ の受信データを data/collected/<期間>/ に移す。"""
     src = os.path.join(collect_dir, period)
     if not os.path.isdir(src):
@@ -400,6 +400,9 @@ def ingest(period, collect_dir):
                  f'--period {period}')
 
     dest = os.path.join(COLLECTED, period)
+    if os.path.isdir(dest) and not force:
+        sys.exit(f'すでに取り込み済みです: {dest}\n'
+                 '取り直した分で上書きするなら --force を付けてください。')
     os.makedirs(dest, exist_ok=True)
     chunks = []
     for path in responses:
@@ -448,12 +451,23 @@ def main():
     p.add_argument('--collect-dir', default='work/collect')
     p.add_argument('--rebuild', action='store_true',
                    help='取り込みはせず、data/collected/ から派生ファイルを作り直す')
+    p.add_argument('--ingest-only', action='store_true',
+                   help='原本の取り込みだけを行い、派生ファイルは作り直さない。'
+                        '別セッションと並行して走らせるときに使う')
+    p.add_argument('--force', action='store_true',
+                   help='すでに取り込み済みの期間を上書きする')
     args = p.parse_args()
 
     if not args.period and not args.rebuild:
         p.error('--period か --rebuild のどちらかを指定してください')
     if args.period:
-        ingest(args.period, args.collect_dir)
+        ingest(args.period, args.collect_dir, args.force)
+    if args.ingest_only:
+        print()
+        print('--ingest-only なので派生ファイルは作り直していません。')
+        print('すべての期間が揃ってから、1つのブランチで再構築してください:')
+        print('  python3 .agent/scripts/archive_collect.py --rebuild')
+        return
 
     periods = load_collected()
     if not periods:

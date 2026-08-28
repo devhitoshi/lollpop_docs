@@ -190,6 +190,23 @@ python3 .agent/scripts/archive_collect.py --rebuild
 
 詳しくは `data/README.md`。
 
+**別セッションと並行して走らせるとき**は `--ingest-only` を付ける。
+
+```bash
+python3 .agent/scripts/archive_collect.py --period 20260817-20260823 --ingest-only
+```
+
+派生ファイルは `data/collected/` **全体**から毎回まるごと組み直すので、
+自分の期間しか持っていないセッションが再構築すると、他のセッションの分を消した状態で
+コミットしてしまう。`data/INDEX.md`・`data/members/*`・`data/reactions/*` が
+そのまま add/add の衝突になる。
+
+`--ingest-only` なら触るのは `data/collected/<自分の期間>/` だけなので、
+期間が違えばファイルが重ならず、マージで衝突しない。
+**全部の期間が揃ってから、1つのブランチで `--rebuild` を1回**やる。
+
+取り直した分で上書きするときは `--force`。付けないと既存の取り込みは上書きしない。
+
 ### 8. 記事を書く
 
 読み込むもの。
@@ -245,6 +262,29 @@ data/
 ├── reactions/            … ファンの声（月ごと）
 └── topics/               … 新曲・アナウンス（月ごと）
 ```
+
+## 複数セッションで並行して進めるとき
+
+期間ごとにセッションを分けて過去分を遡るような使い方をする場合。
+
+| 対象 | 競合するか | 理由 |
+|---|---|---|
+| `work/collect/<期間>/` | しない | 期間ごとにディレクトリが分かれる |
+| `data/collected/<期間>/` | しない | 同上。`--ingest-only` ならここしか触らない |
+| `data_event.csv` | **しにくい** | 触らない行は元の行のまま出すので、追加行だけの差分になる |
+| `data_timetree.csv` | **しにくい** | 同上 |
+| `data/INDEX.md` `data/members/` `data/reactions/` `data/topics/` `data/events/` | **する** | 原本全体から毎回組み直すため。`--ingest-only` で回避する |
+
+手順。
+
+1. セッションごとに別ブランチを切る
+2. 各セッションは `archive_collect.py --period <自分の期間> --ingest-only` まで
+3. 全部マージする
+4. マージ後のブランチで `archive_collect.py --rebuild` を1回。これで派生ファイルが揃う
+
+`data_event.csv` は期間が違えば別の行に効くので自動マージできる（先週と先々週のように
+日付が隣接していても通ることを確認済み）。ただし**同じ期間を2つのセッションで
+取りに行くと衝突する**ので、期間は重ならないように割り振ること。
 
 ## つまずきやすいところ
 
