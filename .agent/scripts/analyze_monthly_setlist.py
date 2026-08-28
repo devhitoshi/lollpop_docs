@@ -26,7 +26,12 @@ if args.months:
 canonical_songs = []
 with open('songs/楽曲一覧.md', 'r', encoding='utf-8') as f:
     for line in f:
-        m = re.match(r'^\s*-\s*\*\*(.+)\*\*', line)
+        # 「## 音楽配信先」以降は配信アカウントの名義一覧なので曲名ではない。
+        if line.startswith('## 音楽配信先'):
+            break
+        # 行頭の箇条書きだけを曲名として拾う。インデントを許すと、曲の下にぶら下がる
+        # 「作詞」「初披露」「配信先」などの見出しまで曲名として登録されてしまう。
+        m = re.match(r'^- \*\*(.+)\*\*', line)
         if m:
             canonical_songs.append(m.group(1).strip())
 
@@ -55,6 +60,11 @@ def normalize_song_name(name):
 
     for c in canonical_songs:
         if name.lower() == c.lower(): return c
+    # デビュー初期（2024年末〜）の投稿は「ShinyDays」のようにスペースを詰めた表記が混在する。
+    # 空白と大小文字を無視して照合しないと SHINY DAYS が丸ごと集計から漏れる。
+    squashed = re.sub(r'\s+', '', name).lower()
+    for c in canonical_songs:
+        if squashed == re.sub(r'\s+', '', c).lower(): return c
     for c in canonical_songs:
         if c in name: return c
     return None
