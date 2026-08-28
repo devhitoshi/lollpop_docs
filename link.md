@@ -1,6 +1,7 @@
 # ろりぽっぷ!!!!!!! リンク集
 
 ## グループ共通リンク
+- **公式サイト**: https://flapinc.jp/lollipop/about  
 - **公式X (Twitter)**: https://x.com/lollipop_1116  
 - **Lit.Link (公式リンク集)**: https://lit.link/roripopu1116  
 - **公式Instagram**: https://www.instagram.com/lollipop_official/  

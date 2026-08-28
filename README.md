@@ -13,7 +13,7 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 - **2025年8月**: シンガポールの「AFA Creators Super Fest Singapore 2025」に出演。
 - **2025年11月24日**: 1st Anniversary LIVE / 2nd ワンマンライブ 「ろりぽの挑戦!!!!!!!」を赤羽ReNY alphaにて開催
 - **2026年4月22日**: 姫杏 朝香が卒業（6人体制へ）
-- **2026年6月6日**: 3rd ワンマンライブ「全力疾走」を開催。新曲「シーソーゲーム」「メイク☆マイダンス」を初披露。
+- **2026年6月6日**: 新宿ReNYにて3rd ワンマンライブ「全力疾走」を開催。新曲「シーソーゲーム」「メイク☆マイダンス」を初披露。
 - **2026年6月25日**: EP「全力疾走」を配信開始。
 - **2026年8月15日**: 苺花 なつみが卒業（5人体制へ）
 
@@ -24,6 +24,9 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 - [公式ルール・現場のマナー (rules.md)](./rules.md)
 - [メンバープロフィール (members.md)](./members.md)
 - [公開用メインページ (resources/index.html)](./resources/index.html)
+
+## 公式サイト
+https://flapinc.jp/lollipop/about
 
 ## 参照ページ
 https://devhitoshi.github.io/lollpop_docs/resources/index.html
