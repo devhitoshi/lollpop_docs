@@ -82,10 +82,23 @@ with open('data_event.csv', 'r', encoding='utf-8') as f:
             part = re.sub(r'アンコール;?', '', part)
             items = [item.strip() for item in part.split(';') if item.strip()]
 
+            # ワンマン等のメドレーは「《①メドレー》曲A→曲B→曲C」形式で1項目に収まっている。
+            # 分解しないと先頭の1曲しか計上されず、残りが丸ごと欠落する。
+            expanded = []
+            for item in items:
+                if '→' in item:
+                    item = re.sub(r'^《.*?》', '', item)
+                    expanded.extend(p.strip() for p in item.split('→') if p.strip())
+                else:
+                    expanded.append(item)
+            items = expanded
+
             songs = []
             for item in items:
                 if re.search(r'^(SE|MC)', item) or item.startswith('MC(') or item.startswith('MC（'): continue
                 if 'ラジオ体操' in item or 'クイズ' in item: continue
+                # 【🏮宴衣装】《🍭ソロコーナー》などの区切り行。曲ではないので除外する
+                if item.startswith('【') or item.startswith('《'): continue
                 song_name = normalize_song_name(item)
                 if song_name and song_name in canonical_songs:
                     songs.append(song_name)
