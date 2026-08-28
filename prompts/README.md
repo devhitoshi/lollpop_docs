@@ -32,11 +32,13 @@
 **日付の置換とチャンク分割は自動化してあります。** 手で書き換えなくて構いません。
 
 ```bash
-python3 .agent/scripts/prepare_collect.py --month 2026-08 --population <TimeTreeの出演一覧>
+python3 .agent/scripts/prepare_collect.py --month 2026-08
 ```
 
 半月境界で自動的に割り、チャンクごとに置換済みの `x_collect.md` と、母集団JSONを差し込んだ
-`event_get.md` を `work/collect/` 以下に生成します。返ってきた出力を各チャンクの
+`event_get.md` を `work/collect/` 以下に生成します。母集団（出演イベント一覧）は
+`data_timetree.csv` に持っているので、TimeTree を毎回見に行く必要はありません。
+新しい公演が増えたときだけ `update_timetree.py` でエクスポートを取り込みます。返ってきた出力を各チャンクの
 `response.md` / `response.csv` として保存すれば、結合も自動でできます。
 
 ```bash

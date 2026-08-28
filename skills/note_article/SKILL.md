@@ -43,34 +43,51 @@ TimeTree（出演予定 ＝ 母集団）
 - 週刊 … 対象週（月曜起点の7日間）
 - 月刊 … 対象月
 
-### 2. 母集団を用意する（セトリCSVを更新するときだけ）
+### 2. 母集団を確認する
 
-記事だけを書くなら省略してよい。`event_get.md` は出演イベントのJSONを必要とするので、そのときだけ要る。
+母集団はリポジトリ内の **`data_timetree.csv`** に持っている。**毎回 TimeTree を見に行く必要はない。**
+`prepare_collect.py` は何も指定しなければこのファイルを読む。
 
-公開カレンダー: https://timetreeapp.com/public_calendars/lollipop_1116
-
-ユーザーに `.ics` / `.json` / `.csv` のいずれかで用意してもらう。JSON なら次の形。
-
-```json
-[{ "title": "単独ライブ（2部 Vol.18 夏曲お披露目公演）",
-   "start_at": "2026-08-26",
-   "venue": "中野坂上SUB TOKYO" }]
+```
+date,event,venue,source
+2026-08-26,"単独ライブ（2部 Vol.18 夏曲お披露目公演）","中野坂上SUB TOKYO","timetree"
 ```
 
-過去分のセトリを埋め直すだけなら `--population data_event.csv` を渡してもよい。
+`source` はその行の出所。`data_event`（`data_event.csv` から起こした過去分）、
+`timetree`（TimeTree のエクスポート）、`manual`（手で足した）。強い方が弱い方を上書きする。
+
+**TimeTree を取り込むのは、新しい公演が増えたときだけ。**
+
+```bash
+python3 .agent/scripts/update_timetree.py <エクスポート>            # dry-run
+python3 .agent/scripts/update_timetree.py <エクスポート> --apply
+```
+
+`.ics` / `.json` / `.csv` に対応する。公開カレンダーは
+https://timetreeapp.com/public_calendars/lollipop_1116 で、エクスポートはユーザーに用意してもらう。
+
+同じ日・同じイベント名でも会場が違えば別公演として両方残す（サーキット系で実際に起きる）。
+会場が取れていない行が同名の複数候補に当たった場合は、勝手に紐づけず報告する。
+
+記事だけを書くなら母集団は要らない。`--no-population` を付ける。
 
 ### 3. 収集プロンプトを生成する（半月刻み）
 
 ```bash
 # 月刊（自動で前半・後半の2チャンクになる）
-python3 .agent/scripts/prepare_collect.py --month 2026-08 --population <母集団ファイル>
+python3 .agent/scripts/prepare_collect.py --month 2026-08
 
 # 週刊（7日間なので1チャンクのまま。半月境界を跨いでも分割しない）
 python3 .agent/scripts/prepare_collect.py --week 2026-08-24
 
 # 任意期間
 python3 .agent/scripts/prepare_collect.py --from 2026-07-20 --to 2026-09-10
+
+# 記事だけ書く（セトリCSVは取らない）
+python3 .agent/scripts/prepare_collect.py --month 2026-08 --no-population
 ```
+
+母集団は既定で `data_timetree.csv` を読む。別のファイルを使うなら `--population <ファイル>`。
 
 分割規則は「期間が16日以内なら割らない。超えたら半月境界（1〜15日 / 16日〜月末）で割る」。
 
@@ -79,7 +96,7 @@ python3 .agent/scripts/prepare_collect.py --from 2026-07-20 --to 2026-09-10
 | ファイル | 中身 |
 |---|---|
 | `x_collect.md` | `[開始日]` `[終了日]` `[終了日+1日]` を実際の日付に置換済み |
-| `event_get.md` | 母集団JSONを差し込み済み（`--population` を渡したときのみ） |
+| `event_get.md` | 母集団JSONを差し込み済み（`--no-population` のときは作らない） |
 | `population.json` | そのチャンクの期間に入る出演イベント |
 | `chunk.json` | チャンク番号・期間（結合時に使う） |
 
@@ -198,5 +215,7 @@ work/collect/20260801-20260831/
 - `prompts/README.md` … 収集と執筆を分けている理由、Grok の使い方
 - `prompts/x_collect.md` / `prompts/event_get.md` … Grok に投げる（収集）
 - `prompts/style_ai_poppar.md` / `prompts/write_weekly.md` / `prompts/write_monthly.md` … Claude が使う（執筆）
-- `.agent/scripts/prepare_collect.py` / `merge_collect.py` / `merge_setlist.py`
+- `.agent/scripts/prepare_collect.py` / `merge_collect.py` / `merge_setlist.py` / `update_timetree.py`
+- `.agent/scripts/_population.py` … 母集団ファイル（.ics / .json / .csv）の読み込み
+- `data_timetree.csv` … 出演イベント一覧（母集団）
 - `data_event.csv` … セトリの蓄積先

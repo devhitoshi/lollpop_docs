@@ -5,18 +5,18 @@ description: 週刊/月刊 note 記事を作る。期間を半月刻みに分割
 詳細な作法は `skills/note_article/SKILL.md` を参照してください。
 
 1. 対象期間をユーザーに確認します（週刊なら対象週、月刊なら対象月）。
-   セトリCSVも更新するなら、TimeTree 由来の出演イベント一覧（`.ics` / `.json` / `.csv`）を用意してもらいます。
-   - 公開カレンダー: https://timetreeapp.com/public_calendars/lollipop_1116
+   母集団は `data_timetree.csv` に入っているので、TimeTree を毎回見に行く必要はありません。
+   対象期間に新しい公演が増えているなら、先に TimeTree のエクスポートを取り込みます。
+```bash
+python3 .agent/scripts/update_timetree.py [エクスポート] --apply
+```
 
-2. 収集プロンプトを半月刻みで生成します。
+2. 収集プロンプトを半月刻みで生成します。母集団は既定で `data_timetree.csv` を読みます。
 ```bash
 python3 .agent/scripts/prepare_collect.py --month [YYYY-MM]
 ```
-   セトリCSVも取る場合は母集団を渡します。
-```bash
-python3 .agent/scripts/prepare_collect.py --month [YYYY-MM] --population [母集団ファイル]
-```
    週刊の場合は `--week [YYYY-MM-DD]`（7日間なので1チャンクのままになります）。
+   記事だけ書いてセトリCSVは取らない場合は `--no-population` を付けます。
 
 3. 生成された各チャンクを Grok に投げてもらいます。**ここは代行しません。**
    - 1チャンク＝1新規チャット。モデルは「エキスパート」

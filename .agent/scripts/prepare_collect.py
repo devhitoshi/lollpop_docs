@@ -11,10 +11,8 @@
 """
 import argparse
 import calendar
-import csv
 import json
 import os
-import re
 import sys
 from datetime import date, datetime, timedelta
 
@@ -22,9 +20,13 @@ from datetime import date, datetime, timedelta
 script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.abspath(os.path.join(script_dir, '../../'))
 os.chdir(project_root)
+sys.path.insert(0, script_dir)
+
+from _population import load_population  # noqa: E402
 
 X_COLLECT_TEMPLATE = 'prompts/x_collect.md'
 EVENT_GET_TEMPLATE = 'prompts/event_get.md'
+DEFAULT_POPULATION = 'data_timetree.csv'
 
 
 # --- 期間の分割 ---------------------------------------------------------
@@ -74,124 +76,6 @@ def slug(start, end):
     return f"{start:%Y%m%d}-{end:%Y%m%d}"
 
 
-# --- 母集団（TimeTree 由来）の読み込み ----------------------------------
-
-def _norm_event(title, start_at, venue):
-    return {
-        'title': (title or '').strip(),
-        'start_at': start_at,
-        'venue': (venue or '').strip() or None,
-    }
-
-
-def _parse_date(value):
-    """よくある表記から YYYY-MM-DD を取り出す。取れなければ None。"""
-    if not value:
-        return None
-    value = str(value).strip()
-    m = re.search(r'(\d{4})[-/年](\d{1,2})[-/月](\d{1,2})', value)
-    if m:
-        y, mo, d = (int(g) for g in m.groups())
-        try:
-            return date(y, mo, d).isoformat()
-        except ValueError:
-            return None
-    m = re.match(r'^(\d{4})(\d{2})(\d{2})', value)
-    if m:
-        try:
-            return date(*(int(g) for g in m.groups())).isoformat()
-        except ValueError:
-            return None
-    return None
-
-
-def _pick(row, keys):
-    for k in keys:
-        for actual in row:
-            if actual and actual.strip().lower() == k:
-                return row[actual]
-    return None
-
-
-def load_population(path):
-    """TimeTree 由来の出演イベント一覧を読み込み、共通形式に正規化する。
-
-    .ics / .json / .csv に対応。いずれも {title, start_at, venue} に落とす。
-    """
-    ext = os.path.splitext(path)[1].lower()
-    with open(path, 'r', encoding='utf-8-sig') as f:
-        raw = f.read()
-
-    events = []
-    if ext == '.ics':
-        events = _load_ics(raw)
-    elif ext == '.json':
-        data = json.loads(raw)
-        if isinstance(data, dict):
-            data = data.get('events') or data.get('items') or []
-        for row in data:
-            start = _parse_date(_pick(row, ['start_at', 'date', 'start', 'dtstart']))
-            if not start:
-                continue
-            events.append(_norm_event(
-                _pick(row, ['title', 'event', 'summary', 'name']),
-                start,
-                _pick(row, ['venue', 'location', 'place']),
-            ))
-    elif ext in ('.csv', '.tsv'):
-        delim = '\t' if ext == '.tsv' else ','
-        for row in csv.DictReader(raw.splitlines(), delimiter=delim):
-            start = _parse_date(_pick(row, ['start_at', 'date', 'start']))
-            if not start:
-                continue
-            events.append(_norm_event(
-                _pick(row, ['title', 'event', 'summary', 'name']),
-                start,
-                _pick(row, ['venue', 'location', 'place']),
-            ))
-    else:
-        sys.exit(f"母集団ファイルの拡張子に対応していません: {ext}（.ics / .json / .csv）")
-
-    events.sort(key=lambda e: (e['start_at'], e['title']))
-    return events
-
-
-def _ics_unescape(value):
-    return (value.replace('\\n', '\n').replace('\\N', '\n')
-                 .replace('\\,', ',').replace('\\;', ';').replace('\\\\', '\\'))
-
-
-def _load_ics(raw):
-    # 行折り返し（次行が空白始まり）を先に畳む
-    lines = []
-    for line in raw.replace('\r\n', '\n').replace('\r', '\n').split('\n'):
-        if line[:1] in (' ', '\t') and lines:
-            lines[-1] += line[1:]
-        else:
-            lines.append(line)
-
-    events, current = [], None
-    for line in lines:
-        if line.strip() == 'BEGIN:VEVENT':
-            current = {}
-            continue
-        if line.strip() == 'END:VEVENT':
-            if current is not None:
-                start = _parse_date(current.get('dtstart'))
-                if start:
-                    events.append(_norm_event(current.get('summary'), start,
-                                              current.get('location')))
-            current = None
-            continue
-        if current is None or ':' not in line:
-            continue
-        name, value = line.split(':', 1)
-        key = name.split(';', 1)[0].strip().lower()
-        if key in ('summary', 'location', 'dtstart'):
-            current[key] = _ics_unescape(value.strip())
-    return events
-
-
 # --- プロンプト生成 -----------------------------------------------------
 
 def render_x_collect(template, start, end):
@@ -218,8 +102,11 @@ def main():
     p.add_argument('--to', dest='date_to', help='終了日 YYYY-MM-DD（--from と併用）')
     p.add_argument('--max-days', type=int, default=16,
                    help='1チャンクの上限日数（既定16。半月境界での分割が優先）')
-    p.add_argument('--population',
-                   help='TimeTree 由来の出演イベント一覧（.ics / .json / .csv）')
+    p.add_argument('--population', default=DEFAULT_POPULATION,
+                   help=f'出演イベント一覧（既定 {DEFAULT_POPULATION}）。'
+                        '.ics / .json / .csv に対応')
+    p.add_argument('--no-population', action='store_true',
+                   help='母集団を使わない（記事用の x_collect.md だけ生成する）')
     p.add_argument('--outdir', default='work/collect', help='出力先（既定 work/collect）')
     args = p.parse_args()
 
@@ -247,6 +134,13 @@ def main():
     with open(X_COLLECT_TEMPLATE, 'r', encoding='utf-8') as f:
         x_collect = f.read()
 
+    if args.no_population:
+        args.population = None
+    elif args.population == DEFAULT_POPULATION and not os.path.exists(DEFAULT_POPULATION):
+        print(f'※ {DEFAULT_POPULATION} が無いので母集団なしで生成します'
+              '（セトリCSVを取るなら --population で指定してください）')
+        args.population = None
+
     event_get = None
     if args.population:
         if not os.path.exists(EVENT_GET_TEMPLATE):
@@ -254,6 +148,8 @@ def main():
         with open(EVENT_GET_TEMPLATE, 'r', encoding='utf-8') as f:
             event_get = f.read()
 
+    if args.population and not os.path.exists(args.population):
+        sys.exit(f'母集団ファイルがありません: {args.population}')
     population = load_population(args.population) if args.population else None
 
     chunks = split_period(start, end, args.max_days)
