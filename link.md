@@ -16,6 +16,9 @@
 - **[TuneCoreアーティストページ　ろりぽっぷ!!!!!!!](https://www.tunecore.co.jp/artists/Lollipop!!!!!!!)**
   - [Apple Music](https://music.apple.com/jp/artist/1855384131)
   - [Spotify](https://open.spotify.com/artist/67QPEJULIaLRvxwxW4PO7Y)
+- **配信作品**
+  - [EP「始まりの宴!!!!!!!」（2025年11月25日配信）](https://linkco.re/NgxB7rd8?lang=ja)
+  - [EP「全力疾走」（2026年6月25日配信）](https://linkco.re/TMEz4nb9)
 - **[TuneCoreアーティストページ ストクレ](https://www.tunecore.co.jp/artists?id=747584)**
   - [Apple Music](https://music.apple.com/us/artist/stray-sheep-claymore/1562313279)
   - [Spotify](https://open.spotify.com/artist/07sr1MtDyS64q8m0eHBNYW)
