@@ -17,6 +17,8 @@ TimeTree（出演予定 ＝ 母集団）
   │
   └─→ [Grok] x_collect.md   ──→ 収集データ(Markdown)
                                     │（半月チャンクを結合）
+                                    ├─→ data/ に積み上げ（原本＋イベント/メンバー/ファンの声/話題）
+                                    │
                                     └─→ [Claude] style_ai_poppar.md
                                                  + write_weekly.md / write_monthly.md
                                                     ──→ note 記事
@@ -30,6 +32,7 @@ TimeTree（出演予定 ＝ 母集団）
 | Grok に投げて出力を得る | **ユーザー**（ブラウザ操作が必要） |
 | 複数チャンクの結合・重複除去・打ち切り検出 | Claude（スクリプト） |
 | data_event.csv へのマージ | Claude（スクリプト） |
+| 受信データをリポジトリに積み上げ、軸ごとに整理 | Claude（スクリプト） |
 | 記事の執筆 | Claude |
 
 **Grok の操作は代行しない。** プロンプトを用意したら手を止め、ユーザーが出力を保存するのを待つ。
@@ -155,11 +158,43 @@ python3 .agent/scripts/check_missing_months.py
 python3 .agent/scripts/analyze_monthly_setlist.py --months 2026-08
 ```
 
-### 7. 記事を書く
+### 7. 受信データをリポジトリに積み上げる
+
+**記事を書く前にここをやる。** Grok は同じ期間を投げ直しても同じ結果を返さないので、
+受け取った出力は原本として残す。
+
+```bash
+python3 .agent/scripts/archive_collect.py --period 20260801-20260831
+```
+
+- `work/collect/<期間>/` の受信データを `data/collected/<期間>/` に原本としてコピーする
+- そこから軸別のファイルを**毎回まるごと作り直す**
+
+| 軸 | 場所 |
+|---|---|
+| 全体（期間ごと） | `data/collected/<期間>/merged.md` |
+| イベントごと | `data/events/<年>/<日付>_<イベント名>.md` |
+| メンバーごと | `data/members/<本名>.md` |
+| ファンの声 | `data/reactions/<YYYY-MM>.md` |
+| 新曲・アナウンス | `data/topics/<YYYY-MM>.md` |
+| 索引 | `data/INDEX.md` |
+
+`data/collected/` 以外は生成物なので直接編集しない。直すなら原本を直して `--rebuild` する。
+
+```bash
+python3 .agent/scripts/archive_collect.py --rebuild
+```
+
+「メンバー表に突き合わせられなかった見出しがあります」と出たら、
+`prompts/x_collect.md` の収集対象アカウントを確認する（メンバーの増減があると出る）。
+
+詳しくは `data/README.md`。
+
+### 8. 記事を書く
 
 読み込むもの。
 
-1. `work/collect/<期間>/merged.md` … 事実データ。**ここに無いことは書かない**
+1. `data/collected/<期間>/merged.md` … 事実データ。**ここに無いことは書かない**
 2. `prompts/style_ai_poppar.md` … 書き手「AIぽっぱー」の文体
 3. `prompts/write_weekly.md` または `prompts/write_monthly.md` … 構成
 
@@ -187,6 +222,8 @@ python3 .agent/scripts/analyze_monthly_setlist.py --months 2026-08
 
 ## 置き場所
 
+`work/collect/` は作業場所（使い捨て）、`data/` が積み上げ先（Git に残す）。
+
 ```
 work/collect/20260801-20260831/
 ├── 20260801-20260815/
@@ -198,7 +235,15 @@ work/collect/20260801-20260831/
 │   └── response.csv      … Grok の出力（ユーザーが保存）
 ├── 20260816-20260831/
 │   └── （同上）
-└── merged.md             … 結合結果。執筆はこれを読む
+└── merged.md             … 結合結果
+
+data/
+├── INDEX.md              … 索引
+├── collected/20260801-20260831/   … 受信データの原本（執筆はここの merged.md を読む）
+├── events/2026/          … イベントごと
+├── members/              … メンバーごと
+├── reactions/            … ファンの声（月ごと）
+└── topics/               … 新曲・アナウンス（月ごと）
 ```
 
 ## つまずきやすいところ
@@ -215,7 +260,10 @@ work/collect/20260801-20260831/
 - `prompts/README.md` … 収集と執筆を分けている理由、Grok の使い方
 - `prompts/x_collect.md` / `prompts/event_get.md` … Grok に投げる（収集）
 - `prompts/style_ai_poppar.md` / `prompts/write_weekly.md` / `prompts/write_monthly.md` … Claude が使う（執筆）
-- `.agent/scripts/prepare_collect.py` / `merge_collect.py` / `merge_setlist.py` / `update_timetree.py`
+- `.agent/scripts/prepare_collect.py` / `merge_collect.py` / `merge_setlist.py`
+  / `update_timetree.py` / `archive_collect.py`
 - `.agent/scripts/_population.py` … 母集団ファイル（.ics / .json / .csv）の読み込み
+- `.agent/scripts/_collect_doc.py` … 収集データ Markdown の読み取り
+- `data/README.md` … 積み上げたデータの構成
 - `data_timetree.csv` … 出演イベント一覧（母集団）
 - `data_event.csv` … セトリの蓄積先

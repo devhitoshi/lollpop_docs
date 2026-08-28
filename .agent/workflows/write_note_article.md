@@ -47,10 +47,18 @@ python3 .agent/scripts/merge_setlist.py --period [YYYYMMDD-YYYYMMDD] --apply
 python3 .agent/scripts/check_missing_months.py
 ```
 
-7. `work/collect/[期間]/merged.md` と、`prompts/style_ai_poppar.md`、
+7. 受信データをリポジトリに積み上げ、軸ごとに整理し直します。記事を書く前にやります。
+```bash
+python3 .agent/scripts/archive_collect.py --period [YYYYMMDD-YYYYMMDD]
+```
+   `data/collected/` に原本が残り、`data/events/`・`data/members/`・`data/reactions/`・
+   `data/topics/`・`data/INDEX.md` が作り直されます。
+   「メンバー表に突き合わせられなかった」と出たら `prompts/x_collect.md` を確認します。
+
+8. `data/collected/[期間]/merged.md` と、`prompts/style_ai_poppar.md`、
    `prompts/write_weekly.md`（または `write_monthly.md`）を読んで記事を書きます。
    収集データに無いことは書かず、曲名・イベント名は収集データの表記のまま使います。
    `work/note_weekly_[開始日]-[終了日].md` または `work/note_monthly_[YYYY-MM].md` に保存します。
 
-8. ユーザーにレビューを依頼します。記事末尾の編集メモ（確認できなかった項目／判断に迷った点）は
+9. ユーザーにレビューを依頼します。記事末尾の編集メモ（確認できなかった項目／判断に迷った点）は
    note には載せないものだと伝えます。

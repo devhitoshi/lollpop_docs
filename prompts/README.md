@@ -46,7 +46,14 @@ python3 .agent/scripts/merge_collect.py  --period 20260801-20260831   # 収集�
 python3 .agent/scripts/merge_setlist.py  --period 20260801-20260831   # セトリCSVを data_event.csv へ
 ```
 
-一連の流れは `skills/note_article/SKILL.md` にまとめてあります。
+受け取ったデータは `data/` に積み上げます（原本＋イベント/メンバー/ファンの声/話題の軸別）。
+
+```bash
+python3 .agent/scripts/archive_collect.py --period 20260801-20260831
+```
+
+一連の流れは `skills/note_article/SKILL.md` に、積み上げ先の構成は `data/README.md` に
+まとめてあります。
 
 ### Claude に渡すもの
 
