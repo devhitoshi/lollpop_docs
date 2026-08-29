@@ -41,6 +41,9 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 - [ライブ・セットリスト記録 (data_event.csv)](./data_event.csv) — デビューから現在までの全公演セトリ
 - [月間セトリランキング (monthly_setlist_ranking.csv)](./monthly_setlist_ranking.csv) — 月ごとの披露回数集計
 
+### 記事
+- [記事一覧 (articles/)](./articles/README.md) — AIぽっぱー文体によるnote公開用記事ドラフト15本
+
 ### 制作・運用
 - [LLM用プロンプト集 (prompts/)](./prompts/README.md) — データ収集・記事執筆・なりきりプロンプト
 - [作業用ドラフト (work/)](./work/README.md) — note記事などの下書き置き場
