@@ -7,7 +7,7 @@ from collections import defaultdict
 
 # Ensure script runs from project root
 script_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.abspath(os.path.join(script_dir, '../../'))
+project_root = os.path.abspath(os.path.join(script_dir, '../../../../'))
 os.chdir(project_root)
 
 parser = argparse.ArgumentParser()

@@ -1,7 +1,7 @@
 # 月刊記事の構成
 
-`prompts/x_collect.md` で収集した事実データ（1ヶ月分）から、note 記事を書くときの構成。
-**文体は `prompts/style_ai_poppar.md` に従う。ただし後述のとおりトーンを一段落とす。** Claude 側で使う。
+`prompts/collect/x_collect.md` で収集した事実データ（1ヶ月分）から、note 記事を書くときの構成。
+**文体は `prompts/write/style_ai_poppar.md` に従う。ただし後述のとおりトーンを一段落とす。** Claude 側で使う。
 
 ## 読者
 
