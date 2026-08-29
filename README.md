@@ -8,10 +8,12 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 ## 略歴
 - **2024年10月26日**: 公式X（旧Twitter）にて結成、メンバー、ロゴを公開。
 - **2024年11月16日**: サウンドノート秋葉原にてデビューライブを開催し活動開始。
-- **2025年3月30日**: 代官山UNITにて初のワンマンライブ「始まりの宴!!!!!!!」を開催し、新メンバー（松川 愛美）の加入を発表。
+- **2025年3月30日**: 代官山UNITにて初のワンマンライブ「始まりの宴!!!!!!」を開催し、新メンバー（松川 愛美）の加入を発表。
 - **2025年5月4日**: 赤羽ReNY alphaにて「7人体制お披露目LIVE」を開催。
 - **2025年8月**: シンガポールの「AFA Creators Super Fest Singapore 2025」に出演。
 - **2025年11月24日**: 1st Anniversary LIVE / 2nd ワンマンライブ 「ろりぽの挑戦!!!!!!!」を赤羽ReNY alphaにて開催
+- **2025年11月25日**: 1st EP「始まりの宴!!!!!!!」を配信開始。
+- **2026年3月25日**: 中野坂上SUB TOKYOでの「単独ライブVol.13」にて新曲「未完成ヒロイン」を初披露。
 - **2026年4月22日**: 姫杏 朝香が卒業（6人体制へ）
 - **2026年6月6日**: 新宿ReNYにて3rd ワンマンライブ「全力疾走」を開催。新曲「シーソーゲーム」「メイク☆マイダンス」を初披露。
 - **2026年6月25日**: EP「全力疾走」を配信開始。
@@ -21,11 +23,27 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 
   
 ## 目次
-- [はじめての方へ / スターターパック (starter_pack.md)](./starter_pack.md)
-- [全曲コール表 (songs/call_list.md)](./songs/call_list.md)
-- [公式ルール・現場のマナー (rules.md)](./rules.md)
-- [メンバープロフィール (members.md)](./members.md)
+
+### はじめての方へ
+- [スターターパック (starter_pack.md)](./starter_pack.md) — 推しを決めてライブに行き、特典会で話すまでの案内
+- [公式ルール・現場のマナー (rules.md)](./rules.md) — 特典会レギュレーション、ポイントカード
 - [公開用メインページ (resources/index.html)](./resources/index.html)
+
+### メンバー・楽曲
+- [メンバープロフィール (members.md)](./members.md) — 現メンバー・元メンバーの基本情報
+- [楽曲一覧 (songs/楽曲一覧.md)](./songs/楽曲一覧.md) — 全楽曲のルーツ別解説・作詞作曲・配信リンク
+- [全曲コール表 (songs/call_list.md)](./songs/call_list.md)
+- [歌詞 (songs/lyrics/)](./songs/lyrics/)
+- [アー写履歴 (artist_photos.md)](./artist_photos.md) — 歴代アーティスト写真の記録
+
+### リンク・データ
+- [リンク集 (link.md)](./link.md) — 公式SNS、メンバー個人アカウント、音楽配信先
+- [ライブ・セットリスト記録 (data_event.csv)](./data_event.csv) — デビューから現在までの全公演セトリ
+- [月間セトリランキング (monthly_setlist_ranking.csv)](./monthly_setlist_ranking.csv) — 月ごとの披露回数集計
+
+### 制作・運用
+- [LLM用プロンプト集 (prompts/)](./prompts/README.md) — データ収集・記事執筆・なりきりプロンプト
+- [作業用ドラフト (work/)](./work/README.md) — note記事などの下書き置き場
 
 ## 公式サイト
 https://flapinc.jp/lollipop/about
