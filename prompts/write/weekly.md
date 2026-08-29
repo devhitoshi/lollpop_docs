@@ -1,7 +1,7 @@
 # 週刊まとめ記事の構成
 
-`prompts/x_collect.md` で収集した事実データから、note 記事を書くときの構成。
-**文体は `prompts/style_ai_poppar.md` に従う。** Claude 側で使う。
+`prompts/collect/x_collect.md` で収集した事実データから、note 記事を書くときの構成。
+**文体は `prompts/write/style_ai_poppar.md` に従う。** Claude 側で使う。
 
 ## 読者
 

@@ -27,6 +27,35 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 - [メンバープロフィール (members.md)](./members.md)
 - [公開用メインページ (resources/index.html)](./resources/index.html)
 
+## リポジトリ構成
+
+読み物と、それを作るための道具を分けています。
+
+### 読み物（公開する資料）
+
+| パス | 内容 |
+| --- | --- |
+| `starter_pack.md` | はじめての方へ |
+| `members.md` | メンバープロフィール（基本情報の正） |
+| `rules.md` / `link.md` / `artist_photos.md` | ルール・リンク集・アー写履歴 |
+| `songs/` | 楽曲一覧、コール表、歌詞（`songs/lyrics/`） |
+| `resources/` | GitHub Pages で公開しているポータル |
+
+### データ
+
+| パス | 内容 |
+| --- | --- |
+| `members/` | メンバーのパーソナリティデータ（人物像・口調・SNS発信の傾向） |
+| `data_event.csv` | 公演ごとの日付・会場・セトリ |
+| `work/` | 生成物・作業中のファイル（月次セトリ集計の出力など） |
+
+### 道具
+
+| パス | 内容 |
+| --- | --- |
+| `prompts/` | note 記事を作るためのLLM用プロンプト（`collect/` = Grok、`write/` = Claude） |
+| `.claude/skills/` | 繰り返す作業の手順書（歌詞ドキュメント作成、月次セトリ集計） |
+
 ## 公式サイト
 https://flapinc.jp/lollipop/about
 

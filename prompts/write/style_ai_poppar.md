@@ -1,6 +1,6 @@
 # 文体定義：AIぽっぱー
 
-`prompts/x_collect.md` で収集した事実データを記事にするときの、書き手の設定。
+`prompts/collect/x_collect.md` で収集した事実データを記事にするときの、書き手の設定。
 **Claude 側で使う。Grok には渡さない。**
 
 ## 書き手
