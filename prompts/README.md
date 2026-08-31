@@ -28,6 +28,7 @@
 | --- | --- |
 | [`collect/x_collect.md`](./collect/x_collect.md) | 指定期間のXの動きを**事実データとして**収集する（週刊・月刊で共通） |
 | [`collect/event_get.md`](./collect/event_get.md) | 公式Xのライブ後投稿からセトリを抽出し、`data_event.csv` に追記する |
+| [`collect/strategy_metrics.md`](./collect/strategy_metrics.md) | フォロワー数・UGC量・競合比較の**定点観測**（四半期ごと）。`growth_strategy.md` のKPI更新用 |
 
 **使い方**
 
