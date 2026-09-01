@@ -16,7 +16,7 @@
 
 ## 歌詞考察シリーズ（進行中）
 
-- 置き場と現状の正: [`work/note_歌詞考察/README.md`](./work/note_歌詞考察/README.md)。
+- 置き場と現状の正: [`articles/歌詞考察/README.md`](./articles/歌詞考察/README.md)。
 - 方針: **1曲1記事**（ルーツ曲も歌詞資料が揃ったものから対象）＋数曲ごとに**横断考察記事**。
 - 済（2026年9月時点）: オリジナル曲9曲の単独記事、ルーツ曲編第1回「♀︎正解の方程式♂︎」、「横断考察01_主人公の系譜」。
 - 待ち: 「未完成ヒロイン」「夏色ラムネ」の歌詞資料。揃ったら単独記事を追加し、横断考察02（候補はシリーズREADME参照）を検討する。
@@ -25,7 +25,7 @@
 
 ## 週刊・月刊まとめ記事（進行中）
 
-- 置き場と現状の正: [`work/note_週刊まとめ/README.md`](./work/note_週刊まとめ/README.md)、[`work/note_月刊まとめ/README.md`](./work/note_月刊まとめ/README.md)。
+- 置き場と現状の正: [`articles/週刊まとめ/README.md`](./articles/週刊まとめ/README.md)、[`articles/月刊まとめ/README.md`](./articles/月刊まとめ/README.md)。
 - 2026年8月分まで作成済み。8月の全16公演は `events/data_event.csv` 追記済み・集計反映済み。X収集（x_collect）の結果待ちの節がある（詳細は各READMEの「未解決」参照）。
 
 ## 実行環境の注意（Claude Code リモート環境）
