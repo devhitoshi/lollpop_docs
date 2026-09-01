@@ -12,3 +12,18 @@
 *.aac
 *.ogg
 *.opus
+
+# twitterapi.io の APIキー。.claude/skills/x-account-fetch のスクリプトが読む。
+# キーは絶対にコミットしない。
+.env
+
+# X から取得した投稿データ。他人の著作物なので手元だけに置き、
+# ここから起こした記事本文だけをコミットする。
+work/probe_raw.jsonl
+work/*.jsonl
+work/**/*.jsonl
+work/x_fetch/
+
+# Python の中間生成物
+__pycache__/
+*.pyc
