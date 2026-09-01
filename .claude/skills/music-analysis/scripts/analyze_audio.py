@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""音源を解析して songs/analysis/[曲名].md と work/song_features.csv を作る。
+"""音源を解析して songs/analysis/[曲名].md と songs/analysis/song_features.csv を作る。
 
 購入した音源ファイルを audio/ に置いて実行する。音源そのものはリポジトリに入れない
 （.gitignore で除外済み）。出力されるのは数値だけ。
@@ -21,7 +21,7 @@ project_root = Path(__file__).resolve().parents[4]
 
 AUDIO_DIR = project_root / "audio"
 ANALYSIS_DIR = project_root / "songs" / "analysis"
-FEATURES_CSV = project_root / "work" / "song_features.csv"
+FEATURES_CSV = project_root / "songs" / "analysis" / "song_features.csv"
 
 # librosa が soundfile 経由で直接読める拡張子。それ以外は ffmpeg で wav に変換する。
 NATIVE_SUFFIXES = {".wav", ".flac", ".ogg", ".aiff", ".aif", ".mp3"}

@@ -3,7 +3,7 @@
 曲調解析（`.claude/skills/music-analysis/`）に使う音源を置くフォルダです。
 
 **このフォルダの音源ファイルは `.gitignore` で除外されています。**
-リポジトリに入るのは解析して得た数値（`songs/analysis/`、`work/song_features.csv`）だけです。
+リポジトリに入るのは解析して得た数値（`songs/analysis/` 配下の md と `songs/analysis/song_features.csv`）だけです。
 
 ## 音源の入手先
 

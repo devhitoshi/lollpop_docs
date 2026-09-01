@@ -29,7 +29,7 @@
 | ファイル | 用途 |
 | --- | --- |
 | [`collect/x_collect.md`](./collect/x_collect.md) | 指定期間のXの動きを**事実データとして**収集する（週刊・月刊で共通） |
-| [`collect/event_get.md`](./collect/event_get.md) | 公式Xのライブ後投稿からセトリを抽出し、`data_event.csv` に追記する |
+| [`collect/event_get.md`](./collect/event_get.md) | 公式Xのライブ後投稿からセトリを抽出し、`events/data_event.csv` に追記する |
 | [`collect/music_listen.md`](./collect/music_listen.md) | 音源を聴いて曲調を言語化する（**Gemini など音声入力に対応したLLM**に、音源を添付して投げる） |
 | [`collect/strategy_metrics.md`](./collect/strategy_metrics.md) | フォロワー数・UGC量・競合比較の**定点観測**（四半期ごと）。`growth_strategy.md` のKPI更新用 |
 

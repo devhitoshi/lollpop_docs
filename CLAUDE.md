@@ -26,7 +26,7 @@
 ## 週刊・月刊まとめ記事（進行中）
 
 - 置き場と現状の正: [`work/note_週刊まとめ/README.md`](./work/note_週刊まとめ/README.md)、[`work/note_月刊まとめ/README.md`](./work/note_月刊まとめ/README.md)。
-- 2026年8月分まで作成済み。8月の全16公演は `data_event.csv` 追記済み・集計反映済み。X収集（x_collect）の結果待ちの節がある（詳細は各READMEの「未解決」参照）。
+- 2026年8月分まで作成済み。8月の全16公演は `events/data_event.csv` 追記済み・集計反映済み。X収集（x_collect）の結果待ちの節がある（詳細は各READMEの「未解決」参照）。
 
 ## 実行環境の注意（Claude Code リモート環境）
 

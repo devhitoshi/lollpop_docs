@@ -1,7 +1,7 @@
 # ろりぽっぷ!!!!!!! が売れるために — 市場・競合分析と成長戦略（2026年8月版）
 
 ファン視点でまとめた**非公式**の分析ドキュメントです。
-手元の公演データ（`data_event.csv`・323公演分）の集計と、公開情報のWeb調査（2026年8月31日実施、計5本）に基づいています。
+手元の公演データ（`events/data_event.csv`・323公演分）の集計と、公開情報のWeb調査（2026年8月31日実施、計5本）に基づいています。
 
 この文書は、経営の現場で実際に使われる分析の道具（フレームワーク）を順番に使って書いています。
 ただし**予備知識は要りません**。道具が出てくるたびに「これは何を測る道具か」を一言で説明してから使います。
@@ -292,6 +292,6 @@ SHOWROOM審査→ブロック大会→TIF本戦という手順は同期が実証
 - 競合: [ガルポ！（メリーパレード）](https://galpo.info/feature/list/8643)／[TIF全国選抜LIVE公式](http://www.idolfes.com/2025/senbatsu/)／[IDOL REPORT（ストロボグリッター）](https://idol-report.com/2025/09/09/strobeglitter-kurosakihyona-will-graduate-from-the-group-on-november-30-2025.html)／[株式会社UK（踊れ！神風）](https://ukinc-official.com/)
 - 海外: [Creators Super Fest 2026公式](https://www.creatorssuperfest.com/guests/)／[地下アイドル戦線（台湾）](https://liveidol.blog/taiwan/)
 - ファン行動: [日経（推し活疲れ）](https://www.nikkei.com/article/DGXZQOUC05DCU0V00C23A4000000/)／[GeNiE調査（金銭理由の離脱）](https://prtimes.jp/main/html/rd/p/000000035.000132069.html)／[ネオマーケティング（布教）](https://corp.neo-m.jp/report/investigation/entertainment_004/)
-- 内部データ: 本リポジトリ `data_event.csv`（323公演）、`rules.md`、`starter_pack.md`
+- 内部データ: 本リポジトリ `events/data_event.csv`（323公演）、`rules.md`、`starter_pack.md`
 
 *最終更新: 2026-09-01（ファンによる非公式分析。X関連の数値を第1回Grok定点観測の実測値に更新）。定点観測の手順は [`prompts/collect/strategy_metrics.md`](./prompts/collect/strategy_metrics.md)、第1回データは [`work/strategy_metrics_2026-09-01.md`](./work/strategy_metrics_2026-09-01.md) を参照。*

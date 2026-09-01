@@ -1,11 +1,11 @@
 ---
 name: setlist-analysis
-description: 「ろりぽっぷ!!!!!!!」のセットリストを月ごとに集計し、楽曲別の披露回数ランキングを作る。data_event.csv から work/monthly_setlist_ranking.csv を更新する。セトリの集計、披露回数の確認、月次ランキングの更新を依頼されたときに使う。
+description: 「ろりぽっぷ!!!!!!!」のセットリストを月ごとに集計し、楽曲別の披露回数ランキングを作る。events/data_event.csv から events/monthly_setlist_ranking.csv を更新する。セトリの集計、披露回数の確認、月次ランキングの更新を依頼されたときに使う。
 ---
 
 # 月次セットリスト集計
 
-`data_event.csv`（公演ごとのセトリ）を集計し、`work/monthly_setlist_ranking.csv`（年月×楽曲の披露回数）を更新する。
+`events/data_event.csv`（公演ごとのセトリ）を集計し、`events/monthly_setlist_ranking.csv`（年月×楽曲の披露回数）を更新する。
 
 ## 手順
 
@@ -37,15 +37,15 @@ description: 「ろりぽっぷ!!!!!!!」のセットリストを月ごとに集
    ```
 
 4. **結果を伝える**
-   `work/monthly_setlist_ranking.csv` が更新されたことをユーザーに伝える。
+   `events/monthly_setlist_ranking.csv` が更新されたことをユーザーに伝える。
 
 ## 入出力
 
 | パス | 役割 |
 | --- | --- |
-| `data_event.csv` | 入力。公演ごとの日付・イベント名・会場・セトリ |
+| `events/data_event.csv` | 入力。公演ごとの日付・イベント名・会場・セトリ |
 | `songs/楽曲一覧.md` | 入力。曲名の正表記（表記ゆれの名寄せに使う） |
-| `work/monthly_setlist_ranking.csv` | 出力。年月ごとの披露回数ランキング |
+| `events/monthly_setlist_ranking.csv` | 出力。年月ごとの披露回数ランキング |
 
 ## 注意
 
@@ -53,4 +53,4 @@ description: 「ろりぽっぷ!!!!!!!」のセットリストを月ごとに集
   ただしスクリプトを移動した場合は、両ファイル冒頭の `project_root` の階層数を直すこと。
 - セトリの表記ゆれは `analyze_monthly_setlist.py` の `normalize_song_name()` で吸収している。
   新曲を追加したら、まず `songs/楽曲一覧.md` に正表記を追加し、必要なら名寄せルールを足す。
-- `data_event.csv` の `setlist` が空、または「セトリ投稿確認」を含む行は集計対象外。
+- `events/data_event.csv` の `setlist` が空、または「セトリ投稿確認」を含む行は集計対象外。

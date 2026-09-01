@@ -66,7 +66,7 @@ description: 「ろりぽっぷ!!!!!!!」の楽曲の曲調を解析する。aud
 | `audio/[曲名].flac` など | 入力。購入した音源（リポジトリには入らない） |
 | `songs/lyrics/[曲名].md` | 入力。構成の名前を対応させるために読む |
 | `songs/analysis/[曲名].md` | 出力。1曲分の曲調データ |
-| `work/song_features.csv` | 出力。全曲比較用（BPM・キー・尺・ダイナミクスレンジ） |
+| `songs/analysis/song_features.csv` | 出力。全曲比較用（BPM・キー・尺・ダイナミクスレンジ） |
 
 ## 数値の読み方
 

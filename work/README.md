@@ -22,10 +22,7 @@
 | `ろりぽっぷスターターパック.md` | スターターパックの旧ドラフト | [starter_pack.md](../starter_pack.md) |
 | `ろりぽっぷリンク集.md` | リンク集の旧ドラフト | [link.md](../link.md) |
 | `ろりぽっぷルール.md` | ルールまとめの旧ドラフト | [rules.md](../rules.md) |
-| `monthly_setlist_ranking.csv` | 月間セトリランキング（集計スクリプトの出力先） | [monthly_setlist_ranking.csv](../monthly_setlist_ranking.csv) |
-
 ## monthly_setlist_ranking.csv について
 
-`.claude/skills/setlist-analysis` の集計スクリプトは `data_event.csv` を集計し、
-`work/monthly_setlist_ranking.csv` と ルートの `monthly_setlist_ranking.csv` の**両方に同じ内容を出力**します。
-手動でどちらか一方だけを編集しないでください（再集計で上書きされます）。
+月間セトリランキングは `events/monthly_setlist_ranking.csv` に移設しました。
+`.claude/skills/setlist-analysis` の集計スクリプトは `events/data_event.csv` を集計し、そこへ**一本だけ**出力します。

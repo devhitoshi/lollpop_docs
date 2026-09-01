@@ -49,14 +49,14 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 | `songs/` | 楽曲一覧、コール表、歌詞（`songs/lyrics/`）、曲調データ（`songs/analysis/`） |
 | `articles/` | AIぽっぱー文体の note 用記事ドラフト（索引は `articles/README.md`） |
 | `resources/` | GitHub Pages で公開しているポータル |
-| `resources/setlist_analysis.html` | セトリ白書（セットリスト分析記事。`data_event.csv` から集計したグラフ付き） |
+| `resources/setlist_analysis.html` | セトリ白書（セットリスト分析記事。`events/data_event.csv` から集計したグラフ付き） |
 
 ### データ
 
 | パス | 内容 |
 | --- | --- |
 | `members/` | メンバーのパーソナリティデータ（人物像・口調・SNS発信の傾向） |
-| `data_event.csv` | 公演ごとの日付・会場・セトリ |
+| `events/data_event.csv` | 公演ごとの日付・会場・セトリ |
 | `audio/` | 曲調解析に使う音源の置き場（音源自体はリポジトリに入りません） |
 | `work/` | 生成物・作業中のファイル（月次セトリ集計、全曲の曲調比較表など。案内は `work/README.md`） |
 
