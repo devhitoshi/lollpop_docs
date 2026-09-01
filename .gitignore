@@ -20,3 +20,7 @@
 # 検証で取得した X の生JSON。他人の投稿なので手元だけに置く。
 work/probe_raw.jsonl
 work/*.jsonl
+
+# Python の中間生成物
+__pycache__/
+*.pyc
