@@ -11,7 +11,7 @@
 
 - **表記**: 曲名・イベント名は資料の表記をそのまま使う（「!」の数、「☆」「★」を正規化しない）。グループ名は「ろりぽっぷ!!!!!!!」（!が7個）。
 - **文体**: note 用記事は [`prompts/write/style_ai_poppar.md`](./prompts/write/style_ai_poppar.md)（AIぽっぱー）に従う。note は表組み不可・見出しは2階層まで。
-- **メンバー情報**: 基本情報の正は [`members.md`](./members.md)。人物像は [`members/`](./members/) のデータに根拠がある範囲だけ書く。卒業メンバーの卒業後の活動・私生活には踏み込まない。運営の意図・体調・人間関係の推測は書かない。
+- **メンバー情報**: 基本情報の正は [`members/members.md`](./members/members.md)。人物像は [`members/`](./members/) のデータに根拠がある範囲だけ書く。卒業メンバーの卒業後の活動・私生活には踏み込まない。運営の意図・体調・人間関係の推測は書かない。
 - **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計は `.claude/skills/setlist-analysis`、曲調解析は `.claude/skills/music-analysis` の手順に従う。
 
 ## 歌詞考察シリーズ（進行中）

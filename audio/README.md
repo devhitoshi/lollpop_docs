@@ -18,7 +18,7 @@
 | iTunes Store | AAC 256kbps (.m4a) | Mac なら最速 |
 | レコチョク | AAC | アプリ前提で PC に取り出しにくいことがある |
 
-各作品の購入先は [`../link.md`](../link.md) の配信リンクから辿れます。
+各作品の購入先は [`../guide/link.md`](../guide/link.md) の配信リンクから辿れます。
 
 ## ファイル名
 

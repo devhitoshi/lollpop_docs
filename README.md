@@ -23,14 +23,14 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 
   
 ## 目次
-- [はじめての方へ / スターターパック (starter_pack.md)](./starter_pack.md)
+- [はじめての方へ / スターターパック (guide/starter_pack.md)](./guide/starter_pack.md)
 - [楽曲一覧 (songs/楽曲一覧.md)](./songs/楽曲一覧.md)
-- [市場・競合分析と成長戦略 (growth_strategy.md)](./growth_strategy.md) ／ [解説HTML版 (resources/growth_strategy.html)](./resources/growth_strategy.html)
+- [市場・競合分析と成長戦略 (strategy/growth_strategy.md)](./strategy/growth_strategy.md) ／ [解説HTML版 (resources/growth_strategy.html)](./resources/growth_strategy.html)
 - [全曲コール表 (songs/call_list.md)](./songs/call_list.md)
-- [公式ルール・現場のマナー (rules.md)](./rules.md)
-- [メンバープロフィール (members.md)](./members.md)
-- [リンク集 (link.md)](./link.md)
-- [アー写履歴 (artist_photos.md)](./artist_photos.md)
+- [公式ルール・現場のマナー (guide/rules.md)](./guide/rules.md)
+- [メンバープロフィール (members/members.md)](./members/members.md)
+- [リンク集 (guide/link.md)](./guide/link.md)
+- [アー写履歴 (members/artist_photos.md)](./members/artist_photos.md)
 - [記事一覧 (articles/)](./articles/README.md)
 - [セトリ白書 — セットリスト分析記事 (resources/setlist_analysis.html)](./resources/setlist_analysis.html)
 - [公開用メインページ (resources/index.html)](./resources/index.html)
@@ -43,9 +43,9 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 
 | パス | 内容 |
 | --- | --- |
-| `starter_pack.md` | はじめての方へ |
-| `members.md` | メンバープロフィール（基本情報の正） |
-| `rules.md` / `link.md` / `artist_photos.md` | ルール・リンク集・アー写履歴 |
+| `guide/starter_pack.md` | はじめての方へ |
+| `members/members.md` | メンバープロフィール（基本情報の正） |
+| `guide/rules.md` / `guide/link.md` / `members/artist_photos.md` | ルール・リンク集・アー写履歴 |
 | `songs/` | 楽曲一覧、コール表、歌詞（`songs/lyrics/`）、曲調データ（`songs/analysis/`） |
 | `articles/` | AIぽっぱー文体の note 用記事ドラフト（索引は `articles/README.md`） |
 | `resources/` | GitHub Pages で公開しているポータル |

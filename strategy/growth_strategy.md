@@ -9,7 +9,7 @@
 
 先にお断りを3つ。
 
-- Xのフォロワー数は**2026年9月1日にGrokで実測した値**に更新済みです（第1回定点観測、生データは [`work/strategy_metrics_2026-09-01.md`](./work/strategy_metrics_2026-09-01.md)）。Instagramは検索スニペット経由の推定のまま、TikTok・YouTubeの数値は未取得です。計測には [`prompts/collect/strategy_metrics.md`](./prompts/collect/strategy_metrics.md)（Grokで実行する定点観測プロンプト）を使います
+- Xのフォロワー数は**2026年9月1日にGrokで実測した値**に更新済みです（第1回定点観測、生データは [`strategy/metrics_2026-09-01.md`](./metrics_2026-09-01.md)）。Instagramは検索スニペット経由の推定のまま、TikTok・YouTubeの数値は未取得です。計測には [`prompts/collect/strategy_metrics.md`](../prompts/collect/strategy_metrics.md)（Grokで実行する定点観測プロンプト）を使います
 - 「推定」「言説」と書いたもの以外は参照元を付けています
 - 競合として名前を挙げるグループを下げる意図はありません。市場の中での位置の整理です
 
@@ -236,7 +236,7 @@ SHOWROOM審査→ブロック大会→TIF本戦という手順は同期が実証
 
 | 指標 | ベースライン（2026-09-01実測） | 12ヶ月後の目安 | 計測方法 |
 |---|---|---|---|
-| 公式Xフォロワー | **1,385** | 5,000 | [`strategy_metrics.md`](./prompts/collect/strategy_metrics.md)（Grok定点観測・四半期） |
+| 公式Xフォロワー | **1,385** | 5,000 | [`strategy_metrics.md`](../prompts/collect/strategy_metrics.md)（Grok定点観測・四半期） |
 | メンバー個人X合計 | 10,473（くるみ4,666） | 公式との差が縮まる方向 | 同上 |
 | ファン投稿（UGC）数/月 | 下限20件（メディア付き15件+） | 前回比増 | 同上 |
 | 初見らしき反応/月 | 5件 | 前回比増 | 同上 |
@@ -244,7 +244,7 @@ SHOWROOM審査→ブロック大会→TIF本戦という手順は同期が実証
 | 大型フェス出演 | 0 | 公募枠含め1以上 | — |
 | ワンマン | 新宿ReNY | 400人箱の宣言→完売 | — |
 
-第1回の観測データ全文は [`work/strategy_metrics_2026-09-01.md`](./work/strategy_metrics_2026-09-01.md)。次回は2026年12月頃に同じプロンプトで実行し、このファイルの隣に保存して比較する。
+第1回の観測データ全文は [`strategy/metrics_2026-09-01.md`](./metrics_2026-09-01.md)。次回は2026年12月頃に同じプロンプトで実行し、このファイルの隣に保存して比較する。
 
 ---
 
@@ -292,6 +292,6 @@ SHOWROOM審査→ブロック大会→TIF本戦という手順は同期が実証
 - 競合: [ガルポ！（メリーパレード）](https://galpo.info/feature/list/8643)／[TIF全国選抜LIVE公式](http://www.idolfes.com/2025/senbatsu/)／[IDOL REPORT（ストロボグリッター）](https://idol-report.com/2025/09/09/strobeglitter-kurosakihyona-will-graduate-from-the-group-on-november-30-2025.html)／[株式会社UK（踊れ！神風）](https://ukinc-official.com/)
 - 海外: [Creators Super Fest 2026公式](https://www.creatorssuperfest.com/guests/)／[地下アイドル戦線（台湾）](https://liveidol.blog/taiwan/)
 - ファン行動: [日経（推し活疲れ）](https://www.nikkei.com/article/DGXZQOUC05DCU0V00C23A4000000/)／[GeNiE調査（金銭理由の離脱）](https://prtimes.jp/main/html/rd/p/000000035.000132069.html)／[ネオマーケティング（布教）](https://corp.neo-m.jp/report/investigation/entertainment_004/)
-- 内部データ: 本リポジトリ `events/data_event.csv`（323公演）、`rules.md`、`starter_pack.md`
+- 内部データ: 本リポジトリ `events/data_event.csv`（323公演）、`guide/rules.md`、`guide/starter_pack.md`
 
-*最終更新: 2026-09-01（ファンによる非公式分析。X関連の数値を第1回Grok定点観測の実測値に更新）。定点観測の手順は [`prompts/collect/strategy_metrics.md`](./prompts/collect/strategy_metrics.md)、第1回データは [`work/strategy_metrics_2026-09-01.md`](./work/strategy_metrics_2026-09-01.md) を参照。*
+*最終更新: 2026-09-01（ファンによる非公式分析。X関連の数値を第1回Grok定点観測の実測値に更新）。定点観測の手順は [`prompts/collect/strategy_metrics.md`](../prompts/collect/strategy_metrics.md)、第1回データは [`strategy/metrics_2026-09-01.md`](./metrics_2026-09-01.md) を参照。*
