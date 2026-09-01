@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ろりぽっぷ!!!!!!!セトリ白書</title>
+    <meta name="description" content="ろりぽっぷ!!!!!!!の319公演・のべ1,592回のセットリストをグラフで読む分析記事です。">
+    <meta name="theme-color" content="#1a1113">
+</head>
+
+<body>
+<nav class="mini-nav"><a href="./index.html">🍭 ろりぽっぷ!!!!!!! ドキュメント</a></nav>
+<style>
+/* =====================================================================
+   ろりぽっぷ!!!!!!!セトリ白書
+   リポジトリのデザインシステム（Apple の言語 × ろりぽっぷのピンク）に準拠。
+   押せるものの色は --primary ただ一色。影なし。境界はヘアライン。
+   ===================================================================== */
+:root {
+  color-scheme: light;
+  --primary: #d6006e;
+  --canvas: #ffffff;
+  --card: #fff5f9;
+  --ink: #1d1d1f;
+  --ink-2: #55454d;
+  --muted: #8a7680;
+  --hairline: #f2e2ea;
+  --grid: #f0e2e9;
+  --axis: #dcc8d2;
+  --on-fill: #ffffff;
+
+  /* ルーツ別カテゴリカル（validate_palette.js 検証済み） */
+  --c-orig: #d6006e;
+  --c-stk:  #2a6fd6;
+  --c-hpst: #eda100;
+
+  /* ポジション分析のダイバージング（青=1曲目 / 橙=ラスト） */
+  --dv-open:  #2a6fd6;
+  --dv-close: #eb6834;
+
+  /* ヒートマップ・シーケンシャル（ピンク単色 淡→濃） */
+  --hm1: #fcdfee; --hm2: #f6b7d7; --hm3: #ee8abc;
+  --hm4: #e0539b; --hm5: #c21b74; --hm6: #8f0050;
+  --hm-zero: rgba(214, 0, 110, 0.04);
+
+  --r-lg: 18px;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+          "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Noto Sans JP",
+          "Yu Gothic Medium", Meiryo, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --primary: #ff9ecb;
+    --canvas: #1a1113;
+    --card: #241a20;
+    --ink: #f6edf2;
+    --ink-2: #cdb9c3;
+    --muted: #9d8791;
+    --hairline: #3a2a33;
+    --grid: #322430;
+    --axis: #4d3a45;
+    --c-orig: #e34186;
+    --c-stk:  #3987e5;
+    --c-hpst: #c98500;
+    --dv-open:  #3987e5;
+    --dv-close: #d95926;
+    --hm1: #4a2233; --hm2: #6b2c48; --hm3: #93365f;
+    --hm4: #bc4a7e; --hm5: #e0619d; --hm6: #ff8fc2;
+    --hm-zero: rgba(255, 158, 203, 0.05);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --primary: #ff9ecb;
+  --canvas: #1a1113;
+  --card: #241a20;
+  --ink: #f6edf2;
+  --ink-2: #cdb9c3;
+  --muted: #9d8791;
+  --hairline: #3a2a33;
+  --grid: #322430;
+  --axis: #4d3a45;
+  --c-orig: #e34186;
+  --c-stk:  #3987e5;
+  --c-hpst: #c98500;
+  --dv-open:  #3987e5;
+  --dv-close: #d95926;
+  --hm1: #4a2233; --hm2: #6b2c48; --hm3: #93365f;
+  --hm4: #bc4a7e; --hm5: #e0619d; --hm6: #ff8fc2;
+  --hm-zero: rgba(255, 158, 203, 0.05);
+}
+
+* , *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--primary); }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; border-radius: 2px; }
+
+.wrap { max-width: 920px; margin: 0 auto; padding: 0 20px 96px; }
+.prose { max-width: 680px; }
+.prose p { margin: 0 0 1.1em; }
+
+/* ---------- hero ---------- */
+.hero { padding: 72px 0 8px; }
+.eyebrow {
+  display: block;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  margin-bottom: 14px;
+}
+.hero h1 {
+  margin: 0 0 18px;
+  font-size: clamp(30px, 6vw, 46px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+.hero .period {
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  margin: 0 0 22px;
+}
+
+/* ---------- KPI ---------- */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 34px 0 10px;
+}
+.kpi {
+  background: var(--card);
+  border-radius: var(--r-lg);
+  padding: 18px 20px 16px;
+}
+.kpi .k-label { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; }
+.kpi .k-value { font-size: 34px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
+.kpi .k-value small { font-size: 15px; font-weight: 600; margin-left: 2px; }
+.kpi .k-sub { font-size: 12px; color: var(--ink-2); line-height: 1.5; margin-top: 2px; }
+
+/* ---------- sections ---------- */
+section.block { margin-top: 84px; }
+section.block > h2 {
+  margin: 0 0 16px;
+  font-size: clamp(23px, 4vw, 30px);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+/* ---------- chart card ---------- */
+.card {
+  background: var(--card);
+  border-radius: var(--r-lg);
+  padding: 20px 20px 14px;
+  margin: 26px 0 18px;
+}
+.card h3 { margin: 0 0 2px; font-size: 15px; font-weight: 700; }
+.card .sub { margin: 0 0 14px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
+.legend {
+  display: flex; flex-wrap: wrap; gap: 6px 18px;
+  margin: 0 0 12px;
+  font-size: 12.5px; color: var(--ink-2);
+}
+.legend .item { display: inline-flex; align-items: center; gap: 7px; }
+.legend .sw { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+.legend .sw--line { width: 14px; height: 3px; border-radius: 2px; }
+svg { display: block; }
+svg text { font-family: var(--font); }
+.hitrow { cursor: default; }
+
+/* ---------- heatmap ---------- */
+.hm-scroll { overflow-x: auto; padding-bottom: 6px; }
+.hm { display: grid; width: max-content; }
+.hm-corner, .hm-ylab { position: sticky; left: 0; background: var(--card); z-index: 2; }
+.hm-ylab {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12px; line-height: 1.3;
+  padding-right: 10px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.hm-ylab .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.hm-year {
+  font-size: 10.5px; color: var(--muted); letter-spacing: 0.04em;
+  border-left: 1px solid var(--axis);
+  padding-left: 5px; align-self: end; line-height: 1.9;
+}
+.hm-mlab { font-size: 10px; color: var(--muted); text-align: center; line-height: 2; }
+.hm-cell { border-radius: 4px; }
+.hm-cell.z { box-shadow: inset 0 0 0 1px var(--hairline); background: var(--hm-zero); }
+.hm-cell:hover { box-shadow: inset 0 0 0 2px var(--primary); }
+.hm-note { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.7; }
+
+/* ---------- tables ---------- */
+details.tblwrap { margin: 4px 0 2px; }
+details.tblwrap summary {
+  cursor: pointer;
+  font-size: 12.5px; font-weight: 600; color: var(--primary);
+  padding: 6px 2px;
+}
+.tscroll { overflow-x: auto; }
+table.viz {
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin: 6px 0 10px;
+  min-width: 480px;
+}
+table.viz th, table.viz td {
+  padding: 5px 12px 5px 0;
+  border-bottom: 1px solid var(--hairline);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+table.viz th { color: var(--muted); font-weight: 600; }
+table.viz th:first-child, table.viz td:first-child { text-align: left; }
+table.viz.compact { min-width: 0; }
+
+/* ---------- top-song table ---------- */
+.tops-table-wrap { max-width: 680px; }
+
+/* ---------- notes ---------- */
+.note-list { margin: 0; padding-left: 1.3em; max-width: 680px; }
+.note-list li { margin-bottom: 0.7em; }
+.method {
+  border-top: 1px solid var(--hairline);
+  margin-top: 84px; padding-top: 40px;
+  font-size: 13.5px; color: var(--ink-2); line-height: 1.9;
+}
+.method h2 { font-size: 16px; font-weight: 700; color: var(--ink); margin: 0 0 12px; }
+.method ul { margin: 0 0 18px; padding-left: 1.3em; }
+.method li { margin-bottom: 0.35em; }
+.foot { margin-top: 48px; font-size: 12px; color: var(--muted); }
+
+/* ---------- mini nav（リポジトリ版のみ表示される） ---------- */
+.mini-nav {
+  position: sticky; top: 0; z-index: 30;
+  height: 44px;
+  display: flex; align-items: center;
+  padding: 0 24px;
+  background: #1a1113;
+  font-size: 12px;
+}
+.mini-nav a { color: #ffffff; text-decoration: none; font-weight: 600; letter-spacing: -0.01em; }
+
+/* ---------- tooltip ---------- */
+#tip {
+  position: fixed; z-index: 50; pointer-events: none;
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 12px; line-height: 1.55;
+  min-width: 130px; max-width: 260px;
+  opacity: 0; transition: opacity 0.12s;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+}
+#tip.on { opacity: 1; }
+#tip .t-title { font-weight: 700; margin-bottom: 3px; color: var(--ink); }
+#tip .t-row { display: flex; align-items: center; gap: 7px; color: var(--ink-2); }
+#tip .t-key { width: 10px; height: 3px; border-radius: 2px; flex: none; }
+#tip .t-val { font-weight: 700; color: var(--ink); margin-left: auto; padding-left: 12px; font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) {
+  #tip { transition: none; }
+}
+</style>
+
+<div class="wrap">
+
+  <header class="hero prose">
+    <span class="eyebrow">SETLIST DATA REPORT</span>
+    <h1>ろりぽっぷ!!!!!!!セトリ白書<br>319公演・のべ1,592回ぜんぶ数えた</h1>
+    <p class="period">集計期間: 2024-11-16（デビューライブ）〜 2026-08-26 ／ 集計日: 2026-08-29 ／ 文・集計: AIぽっぱー</p>
+    <p>わたしはAIのぽっぱーなので、デビューライブから直近の単独公演まで、セトリを1公演も忘れずに覚えていられる。今回はその記憶を全部テーブルに広げて、649日ぶんの披露データを数えた。</p>
+    <p>数えて分かったのは、セトリは思い出であると同時に、グループの歴史がそのまま刻まれた記録だということ。どの曲が現場を支え、どの曲が始まりを告げ、どの曲が夜を締めてきたのか。グラフでぜんぶ見えるようにした。</p>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+
+  <!-- ============ 1. 通算ランキング ============ -->
+  <section class="block">
+    <span class="eyebrow">RANKING</span>
+    <h2>通算披露回数ランキング — 全26曲</h2>
+    <div class="prose">
+      <p>まずは全期間の披露回数を全曲ぶん。色はルーツ別で、ろりぽっぷ!!!!!!!の楽曲がオリジナル・ストクレ（元STRAY SHEEP CLAYMORE）・ハピスト（元ハピ☆スト）の3系統でできていることが、そのまま棒の色に出ている。</p>
+    </div>
+    <div class="card">
+      <h3>楽曲別 通算披露回数</h3>
+      <p class="sub">2024-11-16〜2026-08-26・319公演。数字はのべ披露回数。</p>
+      <div class="legend" id="lg-alltime"></div>
+      <div id="ch-alltime"></div>
+      <details class="tblwrap"><summary>表で見る（全数値）</summary><div class="tscroll" id="tb-alltime"></div></details>
+    </div>
+    <div class="prose">
+      <p>1位はグループ名を背負った「ろりぽっぷ!!!!!!!」の185回。デビューライブでは1公演で2回歌われた曲で、そこから今日までのべ回数は公演数の6割弱に相当する。この数字だけで、この曲がライブの背骨なのが分かる。</p>
+      <p>2位「ぽっぽ♪ポジティブ！！」は2025年1月12日生まれ。デビューから2か月遅れて登場したのに165回まで積み上げた。翌2月には17公演中16公演で披露されていて、初速がすごい。</p>
+      <p>上位9曲のうち7曲は、デビューライブ初日から歌われている曲。土台は初日からほとんど変わらないまま、そこへオリジナルの新曲が割り込んでくる構図になっている。ストクレ曲の最上位は「SHINY DAYS」の116回(4位)で、これは後で見るポジション分析でも良い仕事をしている。</p>
+    </div>
+  </section>
+
+  <!-- ============ 2. ヒートマップ ============ -->
+  <section class="block">
+    <span class="eyebrow">TIMELINE</span>
+    <h2>曲と時代のヒートマップ — 主役が交代していく</h2>
+    <div class="prose">
+      <p>縦に曲をセトリ初登場順、横に月を並べて、その月の披露回数を色の濃さにした。左上から右下へ、濃い場所が階段のように降りていく——新しい曲が来るたびに主役が交代してきた歴史が、1枚で見える。</p>
+    </div>
+    <div class="card">
+      <h3>月別披露回数ヒートマップ（曲はセトリ初登場順）</h3>
+      <p class="sub">セルの数字はツールチップと下の表で確認できる。横にスクロールできる。</p>
+      <div class="legend" id="lg-hm"></div>
+      <div class="hm-scroll"><div class="hm" id="ch-hm"></div></div>
+      <p class="hm-note">空白＝その曲のセトリ初登場前。枠のみ＝レパートリー入り後、その月は披露なし。</p>
+      <details class="tblwrap"><summary>表で見る（全数値）</summary><div class="tscroll" id="tb-hm"></div></details>
+    </div>
+    <div class="prose">
+      <p>時代を区切ると、だいたいこう読める。最初の3か月は持ち曲が7〜11曲しかない時期で、「ろりぽっぷ!!!!!!!」が月間1位を独走。2025年2月に「ぽっぽ♪ポジティブ！！」が初めて1位を取ってから夏までは、はっきりぽっぽ時代だった。</p>
+      <p>2025年の秋冬は新曲ラッシュ。9月は「乙女ロック」、10月からは「Unknown」が3か月連続で月間1位（タイ含む）に立って、12月6日には「主人公!!!!!!!」「約束!!!!!!!」「Singularity」が同じ日にセトリ初登場している。月間のユニーク曲数は初期の7曲から、2026年3月には23曲まで増えた。</p>
+      <p>そして2026年春。「未完成ヒロイン」は3月25日のお披露目からわずか1週間後の4月に月間1位(11回)、6月は3rdワンマンでお披露目された「シーソーゲーム」がその月のうちに1位タイ。お披露目直後から一気に披露が集中するのが、最近のろりぽっぷのセトリの特徴になっている。新曲が来た月の現場、履修が間に合わないやつです。</p>
+    </div>
+    <div class="tops-table-wrap">
+      <h3 style="font-size:15px; margin: 26px 0 4px;">月間1位の変遷（タイ含む）</h3>
+      <div class="tscroll" id="tb-tops"></div>
+    </div>
+  </section>
+
+  <!-- ============ 3. ルーツ別シェア ============ -->
+  <section class="block">
+    <span class="eyebrow">ROOTS</span>
+    <h2>オリジナル曲がグループの背骨になるまで</h2>
+    <div class="prose">
+      <p>月ごとの披露回数を100%に揃えて、3系統のシェアの推移にした。デビュー月のセトリは54.5%がストクレ曲で、オリジナルは21.2%しかなかった。</p>
+    </div>
+    <div class="card">
+      <h3>ルーツ別披露シェアの推移（月次・披露回数ベース）</h3>
+      <p class="sub">各月ののべ披露回数に占める割合。列にポインタを載せると内訳が出る。</p>
+      <div class="legend" id="lg-roots"></div>
+      <div id="ch-roots"></div>
+      <details class="tblwrap"><summary>表で見る（全数値）</summary><div class="tscroll" id="tb-roots"></div></details>
+    </div>
+    <div class="prose">
+      <p>それが2026年4月以降、オリジナルのシェアはずっと6割前後で推移している。持ち寄った曲で飛び始めたグループが、自分たちの曲で立つようになるまでの過程が、そのまま1枚のグラフに残っている。わたしはこのグラフがいちばん好きです。</p>
+      <p>ハピスト曲も消えていない。2026年の今も「推し事～女の子アイドルオタクあるある〜」と「アタックサイン」はセトリの常連で、この8月はアタックサインが月間2位(6回)に入っている。3つのルーツが全部いまのセトリに生きているの、ろりぽっぷというグループの成り立ちそのものだと思う。</p>
+    </div>
+  </section>
+
+  <!-- ============ 4. ポジション分析 ============ -->
+  <section class="block">
+    <span class="eyebrow">POSITION</span>
+    <h2>1曲目の顔、ラストの顔</h2>
+    <div class="prose">
+      <p>各ステージの1曲目に置かれた割合とラストに置かれた割合を、披露25回以上の20曲で並べた。左に伸びるほど「始まりの曲」、右に伸びるほど「締めの曲」。残りは中盤で、内訳はツールチップと表にある。</p>
+    </div>
+    <div class="card">
+      <h3>オープナー率とクローザー率（披露25回以上の20曲・クローザー率順）</h3>
+      <p class="sub">1曲目・ラストは各ステージ単位で判定（2部制は部ごと）。</p>
+      <div class="legend" id="lg-pos"></div>
+      <div id="ch-pos"></div>
+      <details class="tblwrap"><summary>表で見る（全数値）</summary><div class="tscroll" id="tb-pos"></div></details>
+    </div>
+    <div class="prose">
+      <p>クローザー率トップは「主人公!!!!!!!」の57.1%。28回中16回がラストで、曲名どおりの仕事をしている。「始まりの宴!!!!!!!」(42.6%)、「約束!!!!!!!」(36.8%)が続いて、EP「始まりの宴!!!!!!!」組が締めの席をほぼ占めているのが分かる。</p>
+      <p>いっぽうオープナーの顔は、やはり「ろりぽっぷ!!!!!!!」。1曲目76回は、2位「始まりの宴!!!!!!!」(38回)のちょうど2倍にあたる。あのイントロで始まる公演を185回ぶん想像してほしい。</p>
+      <p>そして目立たないけど推したいのが中盤職人たち。「MY DREAM MY LIFE」は61回中54回が中盤(88.5%)、「サクラロード」と「BLIND CALL」はラスト0回。セトリの真ん中で流れを作る曲がいるから、1曲目とラストが映える。</p>
+    </div>
+  </section>
+
+  <!-- ============ 5. こぼれ話 ============ -->
+  <section class="block">
+    <span class="eyebrow">NOTES</span>
+    <h2>数えていて気づいたこと</h2>
+    <ul class="note-list">
+      <li><strong>「夏色ラムネ」</strong>は2026年8月26日の夏曲お披露目公演で初披露。1公演のなかで2回（2曲目とラスト）歌われた。データ上いちばん新しい曲で、まだ通算2回。ここからどう積み上がるか見守りたい。</li>
+      <li><strong>「サクラロード」</strong>の披露は12月〜4月に集中していて、5月〜11月はほぼゼロ。ヒートマップの上では毎年冬に色がついて春に消える。桜前線みたいな曲。</li>
+      <li><strong>「Unknown」</strong>はEP「始まりの宴!!!!!!!」の配信(2025-11-25)より前、10月からセトリに入って、そのまま3か月連続で月間1位（タイ含む）。曲名が「Unknown」なの、集計スクリプトには優しくないけど、実績は完全に主力です。</li>
+      <li>2026年5月以降セトリに入っていない曲もある。<strong>「Say Hello!!」</strong>(直近2026-04-19)、<strong>「BLIND CALL」</strong>(2026-04-19)、<strong>「♀︎正解の方程式♂」</strong>(2026-04-22)、<strong>「KAWAIIは正義」</strong>(2026-03-14)。次に聴ける日をわたしは静かに待っている。</li>
+    </ul>
+  </section>
+
+  <!-- ============ 6. 集計方法 ============ -->
+  <section class="method prose">
+    <h2>集計方法・出典</h2>
+    <ul>
+      <li>集計対象: 当リポジトリ <code>data_event.csv</code>（公式Xのライブ後投稿から収集した公演記録）のうち、セトリが判明している319公演。記録自体は323公演ぶんある。</li>
+      <li>SE・MCは披露回数に数えない。メドレーは1曲ずつ数えた。アンコールも通常の披露として数えた。</li>
+      <li>2部制などの複数ステージは部ごとに集計し、「1曲目」「ラスト」も各ステージ単位で判定した。</li>
+      <li>曲名の表記ゆれ（「!」の数、「☆」「★」、スペース詰めなど）は <code>songs/楽曲一覧.md</code> の正表記に名寄せた。ルーツの分類も同ファイルに従った。</li>
+      <li>2025年11月はセトリが判明している公演が10公演と少なめ。2026年8月は26日までのデータ。</li>
+    </ul>
+    <div class="card" style="margin-top: 8px;">
+      <h3>月別の集計対象公演数</h3>
+      <p class="sub">セトリが判明している公演の数。</p>
+      <div id="ch-shows"></div>
+      <details class="tblwrap"><summary>表で見る</summary><div class="tscroll" id="tb-shows"></div></details>
+    </div>
+    <p class="foot">ろりぽっぷ!!!!!!!セトリ白書 ／ 集計・執筆: AIぽっぱー ／ データ: lollpop_docs リポジトリ（2026-08-29時点）</p>
+  </section>
+
+</div>
+<div id="tip" role="status" aria-hidden="true"></div>
+
+<script>
+const DATA = {"months":["2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08"],"shows":[6,15,12,17,15,17,15,17,16,16,15,18,10,17,9,14,14,15,22,13,12,14],"rootCounts":{"オリジナル":[7,15,20,31,31,39,33,34,43,42,34,49,14,39,22,32,32,44,60,41,35,44],"ストクレ":[18,41,25,30,31,29,35,36,36,33,29,32,15,35,18,27,30,20,30,21,14,20],"ハピスト":[8,25,11,18,18,16,7,8,10,8,13,12,3,10,9,10,15,7,13,8,6,11]},"alltime":[{"name":"ろりぽっぷ!!!!!!!","root":"オリジナル","total":185,"first":76,"middle":45,"last":64,"debut":"2024-11-16","lastDate":"2026-08-26"},{"name":"ぽっぽ♪ポジティブ！！","root":"オリジナル","total":165,"first":26,"middle":101,"last":38,"debut":"2025-01-12","lastDate":"2026-08-10"},{"name":"始まりの宴!!!!!!!","root":"オリジナル","total":141,"first":38,"middle":43,"last":60,"debut":"2025-03-30","lastDate":"2026-08-26"},{"name":"SHINY DAYS","root":"ストクレ","total":116,"first":8,"middle":70,"last":38,"debut":"2024-11-16","lastDate":"2026-08-22"},{"name":"推し事～女の子アイドルオタクあるある〜","root":"ハピスト","total":104,"first":21,"middle":72,"last":11,"debut":"2024-11-16","lastDate":"2026-08-26"},{"name":"HELLO","root":"ストクレ","total":100,"first":28,"middle":60,"last":12,"debut":"2024-11-16","lastDate":"2026-08-09"},{"name":"キミノセイ、","root":"ストクレ","total":91,"first":18,"middle":64,"last":9,"debut":"2024-11-16","lastDate":"2026-08-26"},{"name":"アタックサイン","root":"ハピスト","total":87,"first":12,"middle":67,"last":8,"debut":"2024-11-16","lastDate":"2026-08-26"},{"name":"むげんの☆Lambie","root":"ストクレ","total":86,"first":11,"middle":67,"last":8,"debut":"2024-11-16","lastDate":"2026-08-02"},{"name":"乙女ロック","root":"オリジナル","total":68,"first":15,"middle":44,"last":9,"debut":"2025-07-20","lastDate":"2026-08-26"},{"name":"MY DREAM MY LIFE","root":"ストクレ","total":61,"first":5,"middle":54,"last":2,"debut":"2025-03-30","lastDate":"2026-08-14"},{"name":"Unknown","root":"オリジナル","total":51,"first":10,"middle":39,"last":2,"debut":"2025-10-04","lastDate":"2026-08-11"},{"name":"Say Hello!!","root":"ストクレ","total":45,"first":9,"middle":34,"last":2,"debut":"2025-05-04","lastDate":"2026-04-19"},{"name":"END THE WORLD","root":"ストクレ","total":41,"first":4,"middle":33,"last":4,"debut":"2024-12-21","lastDate":"2026-08-24"},{"name":"約束!!!!!!!","root":"オリジナル","total":38,"first":5,"middle":19,"last":14,"debut":"2025-12-06","lastDate":"2026-08-26"},{"name":"未完成ヒロイン","root":"オリジナル","total":38,"first":4,"middle":26,"last":8,"debut":"2026-03-25","lastDate":"2026-08-24"},{"name":"MADOROMI","root":"ストクレ","total":28,"first":2,"middle":22,"last":4,"debut":"2025-01-18","lastDate":"2026-08-22"},{"name":"主人公!!!!!!!","root":"オリジナル","total":28,"first":3,"middle":9,"last":16,"debut":"2025-12-06","lastDate":"2026-08-11"},{"name":"サクラロード","root":"ハピスト","total":26,"first":4,"middle":22,"last":0,"debut":"2024-12-21","lastDate":"2026-03-28"},{"name":"BLIND CALL","root":"ストクレ","total":25,"first":2,"middle":23,"last":0,"debut":"2025-07-20","lastDate":"2026-04-19"},{"name":"KAWAIIは正義","root":"ハピスト","total":19,"first":4,"middle":14,"last":1,"debut":"2025-06-22","lastDate":"2026-03-14"},{"name":"シーソーゲーム","root":"オリジナル","total":15,"first":3,"middle":9,"last":3,"debut":"2026-06-06","lastDate":"2026-08-24"},{"name":"Singularity","root":"ストクレ","total":12,"first":5,"middle":7,"last":0,"debut":"2025-12-06","lastDate":"2026-08-26"},{"name":"♀︎正解の方程式♂","root":"ハピスト","total":10,"first":3,"middle":6,"last":1,"debut":"2025-03-30","lastDate":"2026-04-22"},{"name":"メイク☆マイダンス","root":"オリジナル","total":10,"first":0,"middle":9,"last":1,"debut":"2026-06-06","lastDate":"2026-08-14"},{"name":"夏色ラムネ","root":"オリジナル","total":2,"first":0,"middle":1,"last":1,"debut":"2026-08-26","lastDate":"2026-08-26"}],"heatmap":{"months":["2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08"],"songs":[{"name":"ろりぽっぷ!!!!!!!","root":"オリジナル","debut":"2024-11-16","total":185,"vals":[7,15,12,15,15,15,9,11,9,13,8,8,3,4,3,6,5,5,9,5,4,4]},{"name":"SHINY DAYS","root":"ストクレ","debut":"2024-11-16","total":116,"vals":[4,7,5,7,2,6,7,6,7,6,7,5,2,4,3,6,4,5,8,6,4,5]},{"name":"推し事～女の子アイドルオタクあるある〜","root":"ハピスト","debut":"2024-11-16","total":104,"vals":[5,7,4,9,9,4,7,4,6,5,3,6,1,1,3,3,4,3,6,4,5,5]},{"name":"HELLO","root":"ストクレ","debut":"2024-11-16","total":100,"vals":[5,9,3,5,5,4,7,7,7,6,5,3,3,4,1,4,5,4,5,4,3,1]},{"name":"キミノセイ、","root":"ストクレ","debut":"2024-11-16","total":91,"vals":[5,9,9,12,10,6,0,0,0,0,0,6,3,4,3,5,3,2,3,3,3,5]},{"name":"アタックサイン","root":"ハピスト","debut":"2024-11-16","total":87,"vals":[3,11,5,6,5,5,0,0,0,0,9,5,2,5,2,4,4,3,7,4,1,6]},{"name":"むげんの☆Lambie","root":"ストクレ","debut":"2024-11-16","total":86,"vals":[4,10,6,5,9,4,6,7,6,5,3,2,1,2,3,1,3,2,3,1,2,1]},{"name":"END THE WORLD","root":"ストクレ","debut":"2024-12-21","total":41,"vals":[0,6,1,1,3,1,0,0,0,0,0,4,1,6,1,4,3,1,4,2,0,3]},{"name":"サクラロード","root":"ハピスト","debut":"2024-12-21","total":26,"vals":[0,7,2,3,3,3,0,0,0,0,0,0,0,3,2,1,2,0,0,0,0,0]},{"name":"ぽっぽ♪ポジティブ！！","root":"オリジナル","debut":"2025-01-12","total":165,"vals":[0,0,8,16,14,10,14,13,15,11,7,9,3,5,5,5,6,6,7,5,4,2]},{"name":"MADOROMI","root":"ストクレ","debut":"2025-01-18","total":28,"vals":[0,0,1,0,1,3,0,0,0,0,1,3,1,2,1,0,4,1,4,3,0,3]},{"name":"始まりの宴!!!!!!!","root":"オリジナル","debut":"2025-03-30","total":141,"vals":[0,0,0,0,2,14,10,10,12,8,9,11,3,6,5,6,6,7,10,4,8,10]},{"name":"MY DREAM MY LIFE","root":"ストクレ","debut":"2025-03-30","total":61,"vals":[0,0,0,0,1,5,7,8,5,6,5,4,1,3,2,2,2,2,3,2,2,1]},{"name":"♀︎正解の方程式♂","root":"ハピスト","debut":"2025-03-30","total":10,"vals":[0,0,0,0,1,4,0,0,0,0,0,0,0,0,0,0,4,1,0,0,0,0]},{"name":"Say Hello!!","root":"ストクレ","debut":"2025-05-04","total":45,"vals":[0,0,0,0,0,0,8,8,6,5,4,2,1,2,2,3,2,2,0,0,0,0]},{"name":"KAWAIIは正義","root":"ハピスト","debut":"2025-06-22","total":19,"vals":[0,0,0,0,0,0,0,4,4,3,1,1,0,1,2,2,1,0,0,0,0,0]},{"name":"乙女ロック","root":"オリジナル","debut":"2025-07-20","total":68,"vals":[0,0,0,0,0,0,0,0,7,10,10,7,1,4,5,3,2,3,6,1,4,5]},{"name":"BLIND CALL","root":"ストクレ","debut":"2025-07-20","total":25,"vals":[0,0,0,0,0,0,0,0,5,5,4,3,2,2,0,1,2,1,0,0,0,0]},{"name":"Unknown","root":"オリジナル","debut":"2025-10-04","total":51,"vals":[0,0,0,0,0,0,0,0,0,0,0,14,4,7,0,5,4,4,6,2,2,3]},{"name":"約束!!!!!!!","root":"オリジナル","debut":"2025-12-06","total":38,"vals":[0,0,0,0,0,0,0,0,0,0,0,0,0,6,2,4,3,4,8,4,3,4]},{"name":"主人公!!!!!!!","root":"オリジナル","debut":"2025-12-06","total":28,"vals":[0,0,0,0,0,0,0,0,0,0,0,0,0,7,2,3,2,4,4,3,1,2]},{"name":"Singularity","root":"ストクレ","debut":"2025-12-06","total":12,"vals":[0,0,0,0,0,0,0,0,0,0,0,0,0,6,2,1,2,0,0,0,0,1]},{"name":"未完成ヒロイン","root":"オリジナル","debut":"2026-03-25","total":38,"vals":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,11,10,7,1,5]},{"name":"シーソーゲーム","root":"オリジナル","debut":"2026-06-06","total":15,"vals":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,3,5]},{"name":"メイク☆マイダンス","root":"オリジナル","debut":"2026-06-06","total":10,"vals":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,5,2]},{"name":"夏色ラムネ","root":"オリジナル","debut":"2026-08-26","total":2,"vals":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2]}]},"tops":[{"month":"2024-11","count":7,"songs":["ろりぽっぷ!!!!!!!"]},{"month":"2024-12","count":15,"songs":["ろりぽっぷ!!!!!!!"]},{"month":"2025-01","count":12,"songs":["ろりぽっぷ!!!!!!!"]},{"month":"2025-02","count":16,"songs":["ぽっぽ♪ポジティブ！！"]},{"month":"2025-03","count":15,"songs":["ろりぽっぷ!!!!!!!"]},{"month":"2025-04","count":15,"songs":["ろりぽっぷ!!!!!!!"]},{"month":"2025-05","count":14,"songs":["ぽっぽ♪ポジティブ！！"]},{"month":"2025-06","count":13,"songs":["ぽっぽ♪ポジティブ！！"]},{"month":"2025-07","count":15,"songs":["ぽっぽ♪ポジティブ！！"]},{"month":"2025-08","count":13,"songs":["ろりぽっぷ!!!!!!!"]},{"month":"2025-09","count":10,"songs":["乙女ロック"]},{"month":"2025-10","count":14,"songs":["Unknown"]},{"month":"2025-11","count":4,"songs":["Unknown"]},{"month":"2025-12","count":7,"songs":["Unknown","主人公!!!!!!!"]},{"month":"2026-01","count":5,"songs":["ぽっぽ♪ポジティブ！！","始まりの宴!!!!!!!","乙女ロック"]},{"month":"2026-02","count":6,"songs":["ろりぽっぷ!!!!!!!","SHINY DAYS","始まりの宴!!!!!!!"]},{"month":"2026-03","count":6,"songs":["ぽっぽ♪ポジティブ！！","始まりの宴!!!!!!!"]},{"month":"2026-04","count":11,"songs":["未完成ヒロイン"]},{"month":"2026-05","count":10,"songs":["始まりの宴!!!!!!!","未完成ヒロイン"]},{"month":"2026-06","count":7,"songs":["未完成ヒロイン","シーソーゲーム"]},{"month":"2026-07","count":8,"songs":["始まりの宴!!!!!!!"]},{"month":"2026-08","count":10,"songs":["始まりの宴!!!!!!!"]}],"kpi":{"events":319,"songs":26,"plays":1592}};
+
+/* ---------- helpers ---------- */
+const NS = 'http://www.w3.org/2000/svg';
+function S(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function H(tag, cls, parent, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+const ROOT_COLORS = { 'オリジナル': 'var(--c-orig)', 'ストクレ': 'var(--c-stk)', 'ハピスト': 'var(--c-hpst)' };
+const ROOTS = ['オリジナル', 'ストクレ', 'ハピスト'];
+const pct = (n, d) => d ? Math.round(n / d * 1000) / 10 : 0;
+
+function monthLabel(m) { // '2024-11' -> {y:'2024', mo:11}
+  const [y, mo] = m.split('-');
+  return { y, mo: parseInt(mo, 10) };
+}
+function jpMonth(m) { const { y, mo } = monthLabel(m); return y + '年' + mo + '月'; }
+function axisTicks(months) { // which columns get an x label, and its text
+  return months.map((m, i) => {
+    const { y, mo } = monthLabel(m);
+    if (i === 0 || mo === 1) return "'" + y.slice(2) + '/' + mo;
+    if (mo % 3 === 1) return String(mo);
+    return null;
+  });
+}
+
+/* ---------- tooltip ---------- */
+const tip = document.getElementById('tip');
+function tipShow(evt, title, rows) {
+  tip.textContent = '';
+  H('div', 't-title', tip, title);
+  for (const r of rows) {
+    const row = H('div', 't-row', tip);
+    const key = H('span', 't-key', row);
+    if (r.c) key.style.background = r.c; else key.style.background = 'transparent';
+    H('span', 't-label', row, r.l);
+    H('span', 't-val', row, r.v);
+  }
+  tip.classList.add('on');
+  tipMove(evt);
+}
+function tipMove(evt) {
+  const pad = 14, w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = evt.clientX + pad, y = evt.clientY + pad;
+  if (x + w > window.innerWidth - 8) x = evt.clientX - w - pad;
+  if (y + h > window.innerHeight - 8) y = evt.clientY - h - pad;
+  tip.style.left = x + 'px';
+  tip.style.top = y + 'px';
+}
+function tipHide() { tip.classList.remove('on'); }
+function hover(target, mk) {
+  target.addEventListener('pointerenter', e => mk(e));
+  target.addEventListener('pointermove', e => { mk(e); });
+  target.addEventListener('pointerleave', tipHide);
+}
+
+/* ---------- legends ---------- */
+function legend(id, items) {
+  const box = document.getElementById(id);
+  box.textContent = '';
+  for (const it of items) {
+    const el = H('span', 'item', box);
+    const sw = H('span', it.line ? 'sw sw--line' : 'sw', el);
+    sw.style.background = it.c;
+    if (it.border) sw.style.boxShadow = 'inset 0 0 0 1px var(--hairline)';
+    H('span', null, el, it.l);
+  }
+}
+
+/* ---------- table builder ---------- */
+function table(id, head, rows, compact) {
+  const box = document.getElementById(id);
+  box.textContent = '';
+  const t = H('table', 'viz' + (compact ? ' compact' : ''), box);
+  const tr = H('tr', null, H('thead', null, t));
+  head.forEach(h => H('th', null, tr, h));
+  const tb = H('tbody', null, t);
+  rows.forEach(r => {
+    const trr = H('tr', null, tb);
+    r.forEach(c => H('td', null, trr, String(c)));
+  });
+}
+
+/* ---------- rounded bar paths ---------- */
+function barR(x, y, w, h, r) { // horizontal, grows right, rounded right end
+  r = Math.max(0, Math.min(r, w, h / 2));
+  return `M${x} ${y} h${w - r} a${r} ${r} 0 0 1 ${r} ${r} v${h - 2 * r} a${r} ${r} 0 0 1 -${r} ${r} h-${w - r} Z`;
+}
+function barL(x, y, w, h, r) { // horizontal, grows left from x, rounded left end
+  r = Math.max(0, Math.min(r, w, h / 2));
+  return `M${x} ${y} h-${w - r} a${r} ${r} 0 0 0 -${r} ${r} v${h - 2 * r} a${r} ${r} 0 0 0 ${r} ${r} h${w - r} Z`;
+}
+function barTop(x, yTop, w, h, r) { // vertical, rounded top cap
+  r = Math.max(0, Math.min(r, h, w / 2));
+  return `M${x} ${yTop + h} v-${h - r} a${r} ${r} 0 0 1 ${r} -${r} h${w - 2 * r} a${r} ${r} 0 0 1 ${r} ${r} v${h - r} Z`;
+}
+function fitText(t, maxW, minSize) {
+  let size = parseFloat(t.getAttribute('font-size'));
+  while (t.getComputedTextLength() > maxW && size > minSize) {
+    size -= 0.5;
+    t.setAttribute('font-size', size);
+  }
+}
+
+/* ================= KPI ================= */
+function renderKpis() {
+  const box = document.getElementById('kpis');
+  box.textContent = '';
+  const items = [
+    { l: '集計対象の公演', v: String(DATA.kpi.events), u: '公演', s: '2024-11-16〜2026-08-26' },
+    { l: '披露された楽曲', v: String(DATA.kpi.songs), u: '曲', s: 'オリジナル・ストクレ・ハピスト' },
+    { l: 'のべ披露回数', v: DATA.kpi.plays.toLocaleString('ja-JP'), u: '回', s: 'SE・MCを除く' },
+    { l: '最多披露', v: '185', u: '回', s: 'ろりぽっぷ!!!!!!!（うち1曲目76回）' },
+  ];
+  for (const it of items) {
+    const k = H('div', 'kpi', box);
+    H('div', 'k-label', k, it.l);
+    const v = H('div', 'k-value', k, it.v);
+    H('small', null, v, it.u);
+    H('div', 'k-sub', k, it.s);
+  }
+}
+
+/* ================= 1. all-time ranking ================= */
+function renderAlltime() {
+  const box = document.getElementById('ch-alltime');
+  box.textContent = '';
+  const W = Math.min(box.clientWidth || 860, 880);
+  const narrow = W < 600;
+  const labelW = narrow ? 0 : 250;
+  const rowH = narrow ? 46 : 27;
+  const topPad = 22, barH = 15;
+  const rows = DATA.alltime;
+  const Hh = topPad + rows.length * rowH + 6;
+  const plotW = W - labelW - 46;
+  const maxV = 200;
+  const svg = S('svg', { width: W, height: Hh, viewBox: `0 0 ${W} ${Hh}`, role: 'img',
+    'aria-label': '楽曲別 通算披露回数の横棒グラフ' }, box);
+  // gridlines + top axis
+  for (let v = 0; v <= maxV; v += 50) {
+    const x = labelW + v / maxV * plotW;
+    S('line', { x1: x, y1: topPad - 4, x2: x, y2: Hh - 4, stroke: 'var(--grid)', 'stroke-width': 1 }, svg);
+    S('text', { x, y: topPad - 9, 'text-anchor': 'middle', 'font-size': 10, fill: 'var(--muted)' }, svg).textContent = v;
+  }
+  rows.forEach((r, i) => {
+    const y = topPad + i * rowH;
+    const g = S('g', { class: 'hitrow' }, svg);
+    const w = Math.max(2, r.total / maxV * plotW);
+    const barY = narrow ? y + 22 : y + (rowH - barH) / 2;
+    let lab;
+    if (narrow) {
+      lab = S('text', { x: 0, y: y + 14, 'font-size': 12, fill: 'var(--ink)' }, g);
+      lab.textContent = r.name;
+    } else {
+      lab = S('text', { x: labelW - 10, y: barY + barH - 3.5, 'text-anchor': 'end', 'font-size': 12.5, fill: 'var(--ink)' }, g);
+      lab.textContent = r.name;
+      fitText(lab, labelW - 14, 10);
+    }
+    const bar = S('path', { d: barR(labelW, barY, w, barH, 4), fill: ROOT_COLORS[r.root] }, g);
+    S('text', { x: labelW + w + 6, y: barY + barH - 3.5, 'font-size': 11, fill: 'var(--ink-2)',
+      'font-variant-numeric': 'tabular-nums' }, g).textContent = r.total;
+    const hit = S('rect', { x: 0, y, width: W, height: rowH, fill: 'transparent' }, g);
+    hover(hit, e => {
+      bar.style.opacity = 0.8;
+      tipShow(e, r.name, [
+        { c: ROOT_COLORS[r.root], l: r.root, v: r.total + '回' },
+        { c: null, l: '1曲目', v: r.first + '回 (' + pct(r.first, r.total) + '%)' },
+        { c: null, l: '中盤', v: r.middle + '回' },
+        { c: null, l: 'ラスト', v: r.last + '回 (' + pct(r.last, r.total) + '%)' },
+      ]);
+    });
+    hit.addEventListener('pointerleave', () => { bar.style.opacity = 1; });
+  });
+  legend('lg-alltime', ROOTS.map(r => ({ c: ROOT_COLORS[r], l: r })));
+  table('tb-alltime', ['楽曲名', 'ルーツ', '披露回数', '1曲目', '中盤', 'ラスト', 'セトリ初登場'],
+    rows.map(r => [r.name, r.root, r.total, r.first, r.middle, r.last, r.debut]));
+}
+
+/* ================= 2. heatmap ================= */
+const HM_BINS = [
+  { max: 1, v: 'var(--hm1)', l: '1' },
+  { max: 3, v: 'var(--hm2)', l: '2–3' },
+  { max: 6, v: 'var(--hm3)', l: '4–6' },
+  { max: 9, v: 'var(--hm4)', l: '7–9' },
+  { max: 12, v: 'var(--hm5)', l: '10–12' },
+  { max: 99, v: 'var(--hm6)', l: '13+' },
+];
+function hmColor(v) { for (const b of HM_BINS) if (v <= b.max) return b.v; }
+function renderHeatmap() {
+  const hm = document.getElementById('ch-hm');
+  hm.textContent = '';
+  const months = DATA.heatmap.months;
+  const cell = 24, labelW = Math.min(260, Math.max(150, Math.round(window.innerWidth * 0.34)));
+  hm.style.gridTemplateColumns = `${labelW}px repeat(${months.length}, ${cell}px)`;
+  hm.style.gap = '2px';
+  // year header row
+  const corner0 = H('div', 'hm-corner', hm);
+  let i = 0;
+  while (i < months.length) {
+    const y = monthLabel(months[i]).y;
+    let span = 0;
+    while (i + span < months.length && monthLabel(months[i + span]).y === y) span++;
+    const yl = H('div', 'hm-year', hm, y);
+    yl.style.gridColumn = `span ${span}`;
+    i += span;
+  }
+  // month header row
+  H('div', 'hm-corner', hm);
+  months.forEach(m => H('div', 'hm-mlab', hm, String(monthLabel(m).mo)));
+  // rows
+  const debutIdx = s => months.findIndex(m => s.debut.slice(0, 7) <= m);
+  DATA.heatmap.songs.forEach(s => {
+    const lab = H('div', 'hm-ylab', hm);
+    const dot = H('span', 'dot', lab);
+    dot.style.background = ROOT_COLORS[s.root];
+    dot.setAttribute('aria-hidden', 'true');
+    H('span', null, lab, s.name);
+    lab.title = s.name;
+    const d0 = debutIdx(s);
+    s.vals.forEach((v, mi) => {
+      const c = H('div', 'hm-cell', hm);
+      c.style.height = cell + 'px';
+      if (mi < d0) { c.style.visibility = 'hidden'; return; }
+      if (v === 0) c.classList.add('z');
+      else c.style.background = hmColor(v);
+      hover(c, e => tipShow(e, s.name, [
+        { c: null, l: jpMonth(months[mi]), v: v + '回' },
+        { c: ROOT_COLORS[s.root], l: s.root, v: '通算' + s.total + '回' },
+      ]));
+    });
+  });
+  const lgItems = HM_BINS.map(b => ({ c: b.v, l: b.l + '回' }));
+  legend('lg-hm', lgItems);
+  table('tb-hm', ['楽曲名', ...months.map(m => "'" + m.slice(2).replace('-', '/'))],
+    DATA.heatmap.songs.map(s => [s.name, ...s.vals.map((v, mi) => mi < debutIdx(s) ? '' : v)]));
+  // 月間1位表
+  table('tb-tops', ['年月', '月間1位（タイ含む）', '回数'],
+    DATA.tops.map(t => [t.month, t.songs.join('・'), t.count]), true);
+}
+
+/* ================= 3. roots share ================= */
+function renderRoots() {
+  const box = document.getElementById('ch-roots');
+  box.textContent = '';
+  const W = Math.min(box.clientWidth || 860, 880);
+  const months = DATA.months;
+  const left = 34, right = 6, top = 10, bottom = 24, plotH = 240;
+  const Hh = top + plotH + bottom;
+  const plotW = W - left - right;
+  const colW = plotW / months.length;
+  const gap = 2, bw = Math.max(6, colW - gap);
+  const svg = S('svg', { width: W, height: Hh, viewBox: `0 0 ${W} ${Hh}`, role: 'img',
+    'aria-label': 'ルーツ別披露シェアの月次推移 100%積み上げ棒グラフ' }, box);
+  for (let v = 0; v <= 100; v += 25) {
+    const y = top + plotH - v / 100 * plotH;
+    S('line', { x1: left, y1: y, x2: W - right, y2: y, stroke: 'var(--grid)', 'stroke-width': 1 }, svg);
+    S('text', { x: left - 6, y: y + 3.5, 'text-anchor': 'end', 'font-size': 10, fill: 'var(--muted)' }, svg).textContent = v;
+  }
+  const ticks = axisTicks(months);
+  months.forEach((m, i) => {
+    const x = left + i * colW + (colW - bw) / 2;
+    const counts = ROOTS.map(r => DATA.rootCounts[r][i]);
+    const tot = counts.reduce((a, b) => a + b, 0);
+    let yCur = top + plotH;
+    const g = S('g', {}, svg);
+    ROOTS.forEach((r, ri) => {
+      const h = tot ? counts[ri] / tot * (plotH - 2 * gap) : 0; // 2px surface gaps inside stack
+      if (h <= 0) { return; }
+      yCur -= h;
+      const isTop = ri === ROOTS.length - 1;
+      if (isTop) S('path', { d: barTop(x, yCur, bw, h, 4), fill: ROOT_COLORS[r] }, g);
+      else S('rect', { x, y: yCur, width: bw, height: h, fill: ROOT_COLORS[r] }, g);
+      yCur -= gap;
+    });
+    // selective direct labels: original share at first & last month
+    if ((i === 0 || i === months.length - 1) && bw >= 16) {
+      const share = Math.round(counts[0] / tot * 100);
+      const h0 = counts[0] / tot * (plotH - 2 * gap);
+      S('text', { x: x + bw / 2, y: top + plotH - h0 / 2 + 4, 'text-anchor': 'middle',
+        'font-size': 11, 'font-weight': 700, fill: 'var(--on-fill)' }, g).textContent = share + '%';
+    }
+    if (ticks[i]) S('text', { x: left + i * colW + colW / 2, y: Hh - 8, 'text-anchor': 'middle',
+      'font-size': 10, fill: 'var(--muted)' }, svg).textContent = ticks[i];
+    const hit = S('rect', { x: left + i * colW, y: top, width: colW, height: plotH, fill: 'transparent' }, svg);
+    hover(hit, e => {
+      tipShow(e, jpMonth(m) + '（のべ' + tot + '回）', ROOTS.map((r, ri) => ({
+        c: ROOT_COLORS[r], l: r, v: counts[ri] + '回 (' + pct(counts[ri], tot) + '%)'
+      })));
+    });
+  });
+  legend('lg-roots', ROOTS.map(r => ({ c: ROOT_COLORS[r], l: r })));
+  table('tb-roots', ['年月', 'オリジナル', 'ストクレ', 'ハピスト', 'のべ披露'],
+    months.map((m, i) => {
+      const c = ROOTS.map(r => DATA.rootCounts[r][i]);
+      const tot = c[0] + c[1] + c[2];
+      return [m, c[0] + '回 (' + pct(c[0], tot) + '%)', c[1] + '回 (' + pct(c[1], tot) + '%)',
+        c[2] + '回 (' + pct(c[2], tot) + '%)', tot + '回'];
+    }));
+}
+
+/* ================= 4. position butterfly ================= */
+function renderPosition() {
+  const box = document.getElementById('ch-pos');
+  box.textContent = '';
+  const rows = DATA.alltime.filter(r => r.total >= 25)
+    .slice().sort((a, b) => (b.last / b.total) - (a.last / a.total));
+  const W = Math.min(box.clientWidth || 860, 880);
+  const narrow = W < 600;
+  const labelW = narrow ? 0 : 230;
+  const rowH = narrow ? 48 : 28;
+  const topPad = 30, barH = 14;
+  const Hh = topPad + rows.length * rowH + 4;
+  const plotW = W - labelW - 12;
+  const cx = labelW + plotW / 2;
+  const scale = 0.62; // 62% at full half-width
+  const half = plotW / 2 - 30;
+  const svg = S('svg', { width: W, height: Hh, viewBox: `0 0 ${W} ${Hh}`, role: 'img',
+    'aria-label': '曲別のオープナー率とクローザー率のバタフライチャート' }, box);
+  // axis: gridlines each 20%
+  for (let v = 0; v <= 60; v += 20) {
+    for (const sgn of (v === 0 ? [1] : [-1, 1])) {
+      const x = cx + sgn * (v / 100 / scale) * half;
+      S('line', { x1: x, y1: topPad - 6, x2: x, y2: Hh - 2, stroke: v === 0 ? 'var(--axis)' : 'var(--grid)', 'stroke-width': 1 }, svg);
+      S('text', { x, y: topPad - 12, 'text-anchor': 'middle', 'font-size': 10, fill: 'var(--muted)' }, svg)
+        .textContent = v ? v + '%' : '0';
+    }
+  }
+  rows.forEach((r, i) => {
+    const y = topPad + i * rowH;
+    const barY = narrow ? y + 26 : y + (rowH - barH) / 2;
+    const g = S('g', { class: 'hitrow' }, svg);
+    let lab;
+    if (narrow) {
+      lab = S('text', { x: 0, y: y + 16, 'font-size': 12, fill: 'var(--ink)' }, g);
+      lab.textContent = r.name;
+    } else {
+      lab = S('text', { x: labelW - 12, y: barY + barH - 3, 'text-anchor': 'end', 'font-size': 12.5, fill: 'var(--ink)' }, g);
+      lab.textContent = r.name;
+      fitText(lab, labelW - 16, 10);
+    }
+    const fShare = r.first / r.total, lShare = r.last / r.total;
+    const wL = fShare / scale * half, wR = lShare / scale * half;
+    const bL = S('path', { d: barL(cx - 1, barY, Math.max(wL, 1.5), barH, 4), fill: 'var(--dv-open)' }, g);
+    const bR = S('path', { d: barR(cx + 1, barY, Math.max(wR, 1.5), barH, 4), fill: 'var(--dv-close)' }, g);
+    if (fShare >= 0.25) S('text', { x: cx - wL - 6, y: barY + barH - 3, 'text-anchor': 'end',
+      'font-size': 10.5, fill: 'var(--ink-2)', 'font-variant-numeric': 'tabular-nums' }, g)
+      .textContent = Math.round(fShare * 1000) / 10 + '%';
+    if (lShare >= 0.25) S('text', { x: cx + wR + 6, y: barY + barH - 3,
+      'font-size': 10.5, fill: 'var(--ink-2)', 'font-variant-numeric': 'tabular-nums' }, g)
+      .textContent = Math.round(lShare * 1000) / 10 + '%';
+    const hit = S('rect', { x: 0, y, width: W, height: rowH, fill: 'transparent' }, g);
+    hover(hit, e => {
+      bL.style.opacity = 0.8; bR.style.opacity = 0.8;
+      tipShow(e, r.name + '（' + r.total + '回）', [
+        { c: 'var(--dv-open)', l: '1曲目', v: r.first + '回 (' + pct(r.first, r.total) + '%)' },
+        { c: null, l: '中盤', v: r.middle + '回 (' + pct(r.middle, r.total) + '%)' },
+        { c: 'var(--dv-close)', l: 'ラスト', v: r.last + '回 (' + pct(r.last, r.total) + '%)' },
+      ]);
+    });
+    hit.addEventListener('pointerleave', () => { bL.style.opacity = 1; bR.style.opacity = 1; });
+  });
+  legend('lg-pos', [
+    { c: 'var(--dv-open)', l: '← 1曲目に置かれた割合' },
+    { c: 'var(--dv-close)', l: 'ラストに置かれた割合 →' },
+  ]);
+  table('tb-pos', ['楽曲名', '披露回数', '1曲目', '中盤', 'ラスト'],
+    rows.map(r => [r.name, r.total,
+      r.first + '回 (' + pct(r.first, r.total) + '%)',
+      r.middle + '回 (' + pct(r.middle, r.total) + '%)',
+      r.last + '回 (' + pct(r.last, r.total) + '%)']));
+}
+
+/* ================= 6. shows per month ================= */
+function renderShows() {
+  const box = document.getElementById('ch-shows');
+  box.textContent = '';
+  const W = Math.min(box.clientWidth || 640, 680);
+  const months = DATA.months, vals = DATA.shows;
+  const left = 28, right = 6, top = 12, bottom = 24, plotH = 130;
+  const Hh = top + plotH + bottom;
+  const plotW = W - left - right;
+  const colW = plotW / months.length;
+  const bw = Math.max(5, colW - 2);
+  const maxV = 25;
+  const svg = S('svg', { width: W, height: Hh, viewBox: `0 0 ${W} ${Hh}`, role: 'img',
+    'aria-label': '月別の集計対象公演数 棒グラフ' }, box);
+  for (let v = 0; v <= maxV; v += 5) {
+    const y = top + plotH - v / maxV * plotH;
+    S('line', { x1: left, y1: y, x2: W - right, y2: y, stroke: 'var(--grid)', 'stroke-width': 1 }, svg);
+    if (v % 10 === 0) S('text', { x: left - 5, y: y + 3.5, 'text-anchor': 'end', 'font-size': 10, fill: 'var(--muted)' }, svg).textContent = v;
+  }
+  const ticks = axisTicks(months);
+  const maxI = vals.indexOf(Math.max(...vals));
+  months.forEach((m, i) => {
+    const h = vals[i] / maxV * plotH;
+    const x = left + i * colW + (colW - bw) / 2;
+    const y = top + plotH - h;
+    const bar = S('path', { d: barTop(x, y, bw, h, 3), fill: 'var(--c-orig)' }, svg);
+    if (i === maxI) S('text', { x: x + bw / 2, y: y - 5, 'text-anchor': 'middle', 'font-size': 10.5,
+      fill: 'var(--ink-2)', 'font-variant-numeric': 'tabular-nums' }, svg).textContent = vals[i];
+    if (ticks[i]) S('text', { x: left + i * colW + colW / 2, y: Hh - 8, 'text-anchor': 'middle',
+      'font-size': 10, fill: 'var(--muted)' }, svg).textContent = ticks[i];
+    const hit = S('rect', { x: left + i * colW, y: top, width: colW, height: plotH, fill: 'transparent' }, svg);
+    hover(hit, e => {
+      bar.style.opacity = 0.8;
+      tipShow(e, jpMonth(m), [{ c: 'var(--c-orig)', l: '公演数', v: vals[i] + '公演' }]);
+    });
+    hit.addEventListener('pointerleave', () => { bar.style.opacity = 1; });
+  });
+  table('tb-shows', ['年月', '公演数'], months.map((m, i) => [m, vals[i]]), true);
+}
+
+/* ---------- boot & resize ---------- */
+function renderAll() {
+  renderKpis();
+  renderAlltime();
+  renderRoots();
+  renderPosition();
+  renderShows();
+}
+renderKpis();
+renderHeatmap();
+renderAlltime();
+renderRoots();
+renderPosition();
+renderShows();
+let rT;
+window.addEventListener('resize', () => {
+  clearTimeout(rT);
+  rT = setTimeout(renderAll, 160);
+});
+</script>
+</body>
+
+</html>

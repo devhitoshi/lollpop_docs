@@ -26,6 +26,7 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 - [全曲コール表 (songs/call_list.md)](./songs/call_list.md)
 - [公式ルール・現場のマナー (rules.md)](./rules.md)
 - [メンバープロフィール (members.md)](./members.md)
+- [セトリ白書 — セットリスト分析記事 (resources/setlist_analysis.html)](./resources/setlist_analysis.html)
 - [公開用メインページ (resources/index.html)](./resources/index.html)
 
 ## リポジトリ構成
@@ -39,8 +40,9 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 | `starter_pack.md` | はじめての方へ |
 | `members.md` | メンバープロフィール（基本情報の正） |
 | `rules.md` / `link.md` / `artist_photos.md` | ルール・リンク集・アー写履歴 |
-| `songs/` | 楽曲一覧、コール表、歌詞（`songs/lyrics/`） |
+| `songs/` | 楽曲一覧、コール表、歌詞（`songs/lyrics/`）、曲調データ（`songs/analysis/`） |
 | `resources/` | GitHub Pages で公開しているポータル |
+| `resources/setlist_analysis.html` | セトリ白書（セットリスト分析記事。`data_event.csv` から集計したグラフ付き） |
 
 ### データ
 
@@ -48,14 +50,15 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 | --- | --- |
 | `members/` | メンバーのパーソナリティデータ（人物像・口調・SNS発信の傾向） |
 | `data_event.csv` | 公演ごとの日付・会場・セトリ |
-| `work/` | 生成物・作業中のファイル（月次セトリ集計の出力など） |
+| `audio/` | 曲調解析に使う音源の置き場（音源自体はリポジトリに入りません） |
+| `work/` | 生成物・作業中のファイル（月次セトリ集計、全曲の曲調比較表など） |
 
 ### 道具
 
 | パス | 内容 |
 | --- | --- |
-| `prompts/` | note 記事を作るためのLLM用プロンプト（`collect/` = Grok、`write/` = Claude） |
-| `.claude/skills/` | 繰り返す作業の手順書（歌詞ドキュメント作成、月次セトリ集計） |
+| `prompts/` | note 記事を作るためのLLM用プロンプト（`collect/` = Grok・Gemini、`write/` = Claude） |
+| `.claude/skills/` | 繰り返す作業の手順書（歌詞ドキュメント作成、月次セトリ集計、曲調解析） |
 
 ## 公式サイト
 https://flapinc.jp/lollipop/about
