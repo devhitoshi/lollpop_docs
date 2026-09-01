@@ -70,7 +70,7 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 | パス | 内容 |
 | --- | --- |
 | `prompts/` | note 記事を作るためのLLM用プロンプト（`collect/` = Grok・Gemini、`write/` = Claude） |
-| `.claude/skills/` | 繰り返す作業の手順書（歌詞ドキュメント作成、月次セトリ集計、曲調解析） |
+| `.claude/skills/` | 繰り返す作業の手順書（歌詞ドキュメント作成、月次セトリ集計、曲調解析、X投稿の取得） |
 
 ## 公式サイト
 https://flapinc.jp/lollipop/about

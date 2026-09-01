@@ -12,7 +12,7 @@
 - **表記**: 曲名・イベント名は資料の表記をそのまま使う（「!」の数、「☆」「★」を正規化しない）。グループ名は「ろりぽっぷ!!!!!!!」（!が7個）。
 - **文体**: note 用記事は [`prompts/write/style_ai_poppar.md`](./prompts/write/style_ai_poppar.md)（AIぽっぱー）に従う。note は表組み不可・見出しは2階層まで。
 - **メンバー情報**: 基本情報の正は [`members/members.md`](./members/members.md)。人物像は [`members/`](./members/) のデータに根拠がある範囲だけ書く。卒業メンバーの卒業後の活動・私生活には踏み込まない。運営の意図・体調・人間関係の推測は書かない。
-- **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計は `.claude/skills/setlist-analysis`、曲調解析は `.claude/skills/music-analysis` の手順に従う。
+- **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計は `.claude/skills/setlist-analysis`、曲調解析は `.claude/skills/music-analysis`、公式・メンバーのX投稿取得は `.claude/skills/x-account-fetch` の手順に従う。
 - **デザイン**: `resources/` のHTMLを触るときは [`design.md`](./design.md)（色・タイポ・バンド構成の正）に従う。実装は `resources/css/style.css`。単一ファイル完結のHTML（セトリ白書・成長戦略）には同じトークン値が転記されている。
 
 ## 資源配置ルール（何をどこに置くか）
@@ -49,9 +49,11 @@
 ## 週刊・月刊まとめ記事（進行中）
 
 - 置き場と現状の正: [`articles/週刊まとめ/README.md`](./articles/週刊まとめ/README.md)、[`articles/月刊まとめ/README.md`](./articles/月刊まとめ/README.md)。
-- 2026年8月分まで作成済み。8月の全16公演は `events/data_event.csv` 追記済み・集計反映済み。X収集（x_collect）の結果待ちの節がある（詳細は各READMEの「未解決」参照）。
+- 2026年8月分まで作成済み。8月の全17公演は `events/data_event.csv` 追記済み・集計反映済み。
+- **X収集は2ルートに分かれた（2026-09-01〜）。** 公式・メンバーの投稿は `.claude/skills/x-account-fetch`（twitterapi.io・全件取得）、エゴサーチ（周囲の反応）は従来どおり `prompts/collect/x_collect.md` の手順2をGrokで実行する。前者は完了済み、**後者が未実施**（詳細は各READMEの「未解決」参照）。
 
 ## 実行環境の注意（Claude Code リモート環境）
 
+- **twitterapi.io は環境によって到達可否が変わる。** 信頼モードでは403、フルアクセス環境では到達可能（2026-09-01確認）。APIキーは環境変数 `TWITTERAPI_IO_KEY` かルートの `.env`（`.gitignore` 済み）から読む。**キーをチャットに貼らせない。** 取得した投稿データ（`work/x_fetch/`）は他人の著作物なのでコミットしない（`.gitignore` 済み）。
 - **linkco.re（TuneCore配信ページ）はネットワークポリシーで到達不可。** 歌詞はユーザーにスクリーンショットかテキストで貼ってもらい、転記する。原文の表記揺れは正規化せず、歌詞ファイル末尾のHTMLコメント（転記メモ）に記録して、ユーザーにレビューを依頼する。
 - **記事系のPRは、作成後そのままマージしてよい**（オーナー方針・2026年9月確認）。マージ後は作業ブランチを origin/main に揃え直す。
