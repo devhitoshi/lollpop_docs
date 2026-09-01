@@ -213,5 +213,21 @@ X収集ルートの結論を待たずに片づく作業がある。
 
 ---
 
+## 追記（2026-09-01・その後の進捗）
+
+- **twitterapi.io のアカウントを取得済み。** APIキー発行まで完了
+- ダッシュボードのcURL例から、**ベースURL `https://api.twitterapi.io`、認証ヘッダ `x-api-key`、
+  `/twitter/user/info?userName=` は確認できた**（それまでは引き継ぎ文書の記載のみだった）
+- **Claude Code のリモート環境からは twitterapi.io に到達できない。**
+  `api.twitterapi.io`・`docs.twitterapi.io` ともネットワークポリシーで 403（CONNECT拒否）。
+  linkco.re と同じ扱いなので、検証も将来の収集も**手元のマシンで実行する**前提になる
+- 検証スクリプトを `work/x_ugc_probe.py`、手順を `work/x_ugc_probe.md` に用意した。
+  **判断待ち**なのは変わらない。実行して件数が出たら、上の「選択肢」から選ぶ
+
+未検証のまま残っているのは、検索エンドポイント `/twitter/tweet/advanced_search` と
+パラメータ名、および単価。スクリプトはそこを外から差し替えられるようにしてある。
+
+---
+
 *このメモは未決の検討であり、`work/` に置いている。方針が決まったら、
 運用手順は `prompts/` へ、KPIの取り扱いに関する結論は `strategy/` へ移す。*
