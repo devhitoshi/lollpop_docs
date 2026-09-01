@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ろりぽっぷ成長戦略ノート</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+  :root{
+    --bg:#FDF7F9; --surface:#FFFFFF; --surface2:#F8EEF3;
+    --ink:#2A1F2D; --ink2:#5C4F60; --muted:#8A7C8E;
+    --accent:#C2255C; --accent-ink:#A11C4C; --accent-soft:#F9E3EC;
+    --line:#EBDDE4; --bar-ctx:#8E8391;
+    --good:#2E7D4F; --warn:#B45309;
+    --chip-r:#E5484D; --chip-y:#D99000; --chip-b:#2CA3D9; --chip-g:#3BA55D;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#211A22; --surface:#2B2330; --surface2:#332938;
+      --ink:#F3EBF1; --ink2:#CDC1CF; --muted:#9C8FA3;
+      --accent:#F06795; --accent-ink:#F27FA6; --accent-soft:#452436;
+      --line:#3E3342; --bar-ctx:#9C8FA3;
+      --good:#6FBF8F; --warn:#E0A34E;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#211A22; --surface:#2B2330; --surface2:#332938;
+    --ink:#F3EBF1; --ink2:#CDC1CF; --muted:#9C8FA3;
+    --accent:#F06795; --accent-ink:#F27FA6; --accent-soft:#452436;
+    --line:#3E3342; --bar-ctx:#9C8FA3;
+    --good:#6FBF8F; --warn:#E0A34E;
+  }
+  *{box-sizing:border-box}
+  body{
+    background:var(--bg); color:var(--ink); margin:0;
+    font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+    font-size:15.5px; line-height:1.95; letter-spacing:.01em;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:0 22px 96px}
+  h1,h2,h3{font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif; line-height:1.4; text-wrap:balance; margin:0}
+  p{margin:.6em 0}
+  a{color:var(--accent-ink); text-decoration-thickness:1px; text-underline-offset:3px}
+  .num{font-variant-numeric:tabular-nums}
+
+  /* hero */
+  header{padding:64px 0 8px}
+  .eyebrow{font-size:12px; font-weight:700; letter-spacing:.14em; color:var(--accent-ink); text-transform:uppercase}
+  h1{font-size:clamp(30px,6vw,44px); font-weight:900; margin:.25em 0 .1em}
+  h1 .bang{color:var(--accent)}
+  .lede{color:var(--ink2); font-size:16.5px; max-width:38em}
+  .thesis{
+    margin:26px 0 0; padding:22px 24px; border-radius:14px;
+    background:var(--surface); border:1.5px solid var(--line);
+    border-left:5px solid var(--accent);
+  }
+  .thesis b{font-size:17.5px}
+  .memberdots{display:inline-flex; gap:5px; vertical-align:middle; margin-left:8px}
+  .memberdots i{width:10px;height:10px;border-radius:50%;display:inline-block}
+
+  /* stat tiles */
+  .tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:26px 0 0}
+  .tile{background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:14px 16px}
+  .tile .v{font-family:"Zen Maru Gothic",sans-serif; font-weight:900; font-size:26px; line-height:1.2; color:var(--ink)}
+  .tile .v em{font-style:normal; color:var(--accent)}
+  .tile .k{font-size:12px; color:var(--muted); font-weight:700; letter-spacing:.06em; margin-top:2px}
+  .tile .s{font-size:12px; color:var(--ink2)}
+
+  /* sections */
+  section{margin-top:64px}
+  .stepchip{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12px; font-weight:700; letter-spacing:.12em; color:var(--accent-ink);
+  }
+  .stepchip::before{content:""; width:22px; height:3px; border-radius:2px; background:var(--accent)}
+  h2{font-size:24px; font-weight:900; margin:.35em 0 .2em}
+  .whatis{
+    margin:14px 0 18px; padding:13px 18px; border-radius:12px;
+    background:var(--surface2); border:1px dashed var(--line);
+    font-size:14px; color:var(--ink2);
+  }
+  .whatis b{color:var(--ink)}
+  .whatis .q{font-weight:900; color:var(--accent-ink); font-family:"Zen Maru Gothic",sans-serif; margin-right:.5em}
+
+  .card{background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:18px 20px; margin:14px 0}
+  .card h3{font-size:16.5px; font-weight:700}
+  .keybox{
+    background:var(--accent-soft); border:1.5px solid var(--accent); border-radius:14px;
+    padding:18px 22px; margin:20px 0;
+  }
+  .keybox .kicker{font-size:12px; font-weight:900; letter-spacing:.1em; color:var(--accent-ink)}
+
+  /* pipeline */
+  .pipe{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:16px 0}
+  .pipe .p{
+    background:var(--surface); border:1.5px solid var(--line); border-radius:999px;
+    padding:6px 14px; font-size:13px; font-weight:700; white-space:nowrap;
+  }
+  .pipe .p small{display:block; font-weight:500; font-size:11px; color:var(--muted); line-height:1.3}
+  .pipe .arr{color:var(--muted); font-weight:700}
+
+  /* charts */
+  .fig{background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:18px 20px 14px; margin:18px 0}
+  .fig .title{font-weight:700; font-size:14.5px}
+  .fig .sub{font-size:12px; color:var(--muted); margin-bottom:14px}
+  .bars{display:grid; gap:10px}
+  .brow{display:grid; grid-template-columns:9.5em 1fr; gap:10px; align-items:center; font-size:13px}
+  .brow .lbl{text-align:right; color:var(--ink2); line-height:1.35}
+  .brow .lbl small{display:block; color:var(--muted); font-size:11px}
+  .track{position:relative; height:22px; background:var(--surface2); border-radius:6px}
+  .bar{position:absolute; inset:0 auto 0 0; border-radius:6px 4px 4px 6px; background:var(--bar-ctx); min-width:2px}
+  .bar.hero{background:var(--accent)}
+  .bar .val{
+    position:absolute; left:calc(100% + 8px); top:50%; transform:translateY(-50%);
+    font-size:12px; font-weight:700; color:var(--ink2); white-space:nowrap;
+  }
+  .goal{position:absolute; top:-6px; bottom:-6px; width:0; border-left:2px dashed var(--accent-ink); opacity:.75}
+  .goal span{position:absolute; top:-1.4em; left:6px; font-size:11px; color:var(--accent-ink); white-space:nowrap; font-weight:700}
+
+  .cols{display:grid; grid-template-columns:repeat(12,1fr); gap:8px; align-items:end; height:170px; padding:6px 4px 0}
+  .col{grid-column:span 1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:6px; height:100%}
+  .col .stick{width:100%; max-width:34px; background:var(--bar-ctx); border-radius:5px 5px 2px 2px}
+  .col.hero .stick{background:var(--accent)}
+  .col .cv{font-size:11px; font-weight:700; color:var(--ink2)}
+  .col .cx{font-size:10.5px; color:var(--muted); line-height:1.2; text-align:center}
+  .fig details{margin-top:10px}
+  .fig summary{font-size:12px; color:var(--muted); cursor:pointer}
+  .fig table{border-collapse:collapse; font-size:12.5px; margin-top:8px; width:100%}
+  .fig td,.fig th{border-top:1px solid var(--line); padding:5px 8px; text-align:left}
+  .fig th{color:var(--muted); font-weight:700}
+
+  /* five forces */
+  .forces{display:grid; gap:10px; margin:16px 0}
+  .force{background:var(--surface); border:1.5px solid var(--line); border-radius:12px; padding:12px 16px; display:grid; grid-template-columns:1fr auto; gap:6px 14px; align-items:center}
+  .force .fn{font-weight:700; font-size:14.5px}
+  .force .fd{grid-column:1 / -1; font-size:13.5px; color:var(--ink2); line-height:1.75}
+  .meter{display:flex; align-items:center; gap:8px; font-size:12px; font-weight:900}
+  .meter .mtrack{width:72px; height:8px; border-radius:4px; background:var(--surface2); overflow:hidden}
+  .meter .mfill{height:100%; border-radius:4px; background:var(--accent)}
+  .meter.mid .mfill{width:55%; background:var(--warn)}
+  .meter.strong .mfill{width:100%}
+  .meter.strong{color:var(--accent-ink)} .meter.mid{color:var(--warn)}
+
+  /* competitor cards */
+  .rivals{display:grid; gap:12px}
+  .rival{background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:16px 18px}
+  .rival .tag{display:inline-block; font-size:11px; font-weight:900; letter-spacing:.06em; border-radius:999px; padding:2px 10px; background:var(--surface2); color:var(--ink2); margin-left:8px; vertical-align:2px}
+  .rival p{font-size:14px; color:var(--ink2); margin:.4em 0}
+  .rival .lesson{font-size:13.5px; margin-top:8px; padding:8px 12px; border-radius:9px; background:var(--accent-soft); color:var(--ink)}
+  .rival .lesson b{color:var(--accent-ink)}
+
+  /* VRIO table */
+  .vrio{overflow-x:auto}
+  .vrio table{border-collapse:collapse; width:100%; font-size:13px; min-width:560px}
+  .vrio th{font-size:12px; color:var(--muted); font-weight:700; text-align:left; padding:8px 10px; border-bottom:2px solid var(--line)}
+  .vrio td{padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top}
+  .vrio td.c{text-align:center; font-weight:900}
+  .ok{color:var(--good)} .ng{color:var(--accent-ink)} .so{color:var(--warn)}
+  .vrio .res{font-weight:700}
+  .vrio .verdict{font-size:12px; color:var(--ink2)}
+
+  /* funnel */
+  .funnelfig svg{display:block; width:100%; height:auto}
+  .fnote{font-size:13px; color:var(--ink2)}
+
+  /* cross swot */
+  .swot{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0}
+  @media (max-width:620px){ .swot{grid-template-columns:1fr} }
+  .swot .q{background:var(--surface); border:1.5px solid var(--line); border-radius:12px; padding:14px 16px}
+  .swot .q h3{font-size:14px}
+  .swot .q h3 span{color:var(--accent-ink)}
+  .swot .q p{font-size:13.5px; color:var(--ink2); margin:.4em 0 0}
+
+  /* strategy */
+  .northstar{
+    background:linear-gradient(0deg, var(--accent-soft), var(--accent-soft)); border:2px solid var(--accent);
+    border-radius:16px; padding:22px 24px; margin:18px 0; text-align:center;
+  }
+  .northstar .k{font-size:12px; letter-spacing:.16em; font-weight:900; color:var(--accent-ink)}
+  .northstar .g{font-family:"Zen Maru Gothic",sans-serif; font-weight:900; font-size:21px; margin-top:6px}
+  .northstar .m{font-size:13px; color:var(--ink2); margin-top:6px}
+  .moves{counter-reset:mv; display:grid; gap:12px}
+  .move{background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:16px 18px 16px 58px; position:relative}
+  .move::before{
+    counter-increment:mv; content:counter(mv);
+    position:absolute; left:16px; top:16px; width:28px; height:28px; border-radius:50%;
+    background:var(--accent); color:#fff; font-weight:900; font-size:14px;
+    display:flex; align-items:center; justify-content:center; font-family:"Zen Maru Gothic",sans-serif;
+  }
+  .move h3{font-size:15.5px}
+  .move p{font-size:14px; color:var(--ink2); margin:.35em 0 0}
+  .move .from{display:inline-block; font-size:11px; font-weight:700; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:1px 9px; margin-left:8px; vertical-align:2px}
+
+  /* fan cards */
+  .fans{display:grid; gap:12px}
+  .fan{background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:16px 18px}
+  .fan .stage{display:inline-block; font-size:11px; font-weight:900; color:var(--accent-ink); background:var(--accent-soft); border-radius:999px; padding:2px 10px; margin-left:8px; vertical-align:2px}
+  .fan p{font-size:14px; color:var(--ink2); margin:.4em 0 0}
+  .fan.dont{border-style:dashed}
+
+  .fineprint{font-size:13px; color:var(--muted); line-height:1.8}
+  footer{margin-top:70px; border-top:1.5px solid var(--line); padding-top:18px; font-size:12.5px; color:var(--muted)}
+  details.src summary{cursor:pointer; font-weight:700; color:var(--ink2); font-size:13.5px}
+  details.src ul{font-size:13px; color:var(--ink2); line-height:2}
+
+  /* tooltip */
+  #tip{
+    position:fixed; z-index:10; pointer-events:none; display:none;
+    background:var(--ink); color:var(--bg); font-size:12px; font-weight:700;
+    padding:5px 10px; border-radius:8px; white-space:nowrap;
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .bar,.stick{transition:filter .15s}
+    .bar:hover,.col:hover .stick{filter:brightness(1.08)}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">非公式ファン分析 — 2026年8月版</div>
+  <h1>ろりぽっぷ<span class="bang">!!!!!!!</span><br>成長戦略ノート</h1>
+  <p class="lede">323公演分の記録と5本のWeb調査をもとに、経営分析の道具を順番に使って「売れるために何が必要か」を調べた記録です。道具が出てくるたびに一言で説明するので、予備知識はいりません。
+    <span class="memberdots" aria-hidden="true"><i style="background:var(--chip-r)"></i><i style="background:var(--chip-y)"></i><i style="background:var(--chip-b)"></i><i style="background:var(--chip-g)"></i><i style="background:var(--surface);border:1.5px solid var(--line)"></i></span>
+  </p>
+  <div class="thesis">
+    <b>結論: ろりぽっぷは、接客も味も良いのに看板を出していないお店。</b>
+    <p style="margin:.5em 0 0; color:var(--ink2); font-size:14.5px">お客さんを受け止める力(現場・特典会・楽曲)は業界水準以上なのに、知ってもらう力(動画・検索・メディア)だけが極端に細い。だから戦略は「新しい武器を作る」ではなく、<b>持っている武器を外から見える場所に並べ直す</b>こと。</p>
+  </div>
+  <div class="tiles">
+    <div class="tile"><div class="v num">月<em>15</em>本</div><div class="k">ライブ頻度</div><div class="s">2〜3日に1回ステージへ</div></div>
+    <div class="tile"><div class="v num">約<em>1,257</em></div><div class="k">公式Xフォロワー(推定)</div><div class="s">目標ライン5,000の1/4</div></div>
+    <div class="tile"><div class="v num"><em>0</em>本</div><div class="k">YouTube公式動画</div><div class="s">主要競合4組で唯一の未開設</div></div>
+    <div class="tile"><div class="v num"><em>2</em>年連続</div><div class="k">海外イベント出演</div><div class="s">同格帯で他に例なし</div></div>
+  </div>
+</header>
+
+<section>
+  <div class="stepchip">分析の地図</div>
+  <h2>6つの道具を、この順番で使う</h2>
+  <p>ビジネス分析は道具の使う順番が決まっています。外側(世の中)から内側(自分たち)へ、最後に掛け算で打ち手を出す流れです。</p>
+  <div class="pipe">
+    <span class="p">PEST<small>世の中の風向き</small></span><span class="arr">→</span>
+    <span class="p">ファイブフォース<small>業界の儲けやすさ</small></span><span class="arr">→</span>
+    <span class="p">3C<small>市場・競合・自社</small></span><span class="arr">→</span>
+    <span class="p">VRIO<small>強みは本物か</small></span><span class="arr">→</span>
+    <span class="p">ファネル<small>弱みはどこで効くか</small></span><span class="arr">→</span>
+    <span class="p">クロスSWOT<small>戦略に変換</small></span>
+  </div>
+</section>
+
+<section>
+  <div class="stepchip">材料</div>
+  <h2>まず、数字で現状を見る</h2>
+  <p>手元の公演データ(2024年11月〜2026年8月、323公演)から。いちばん大事な変化はこれです。</p>
+  <div class="fig">
+    <div class="title">セットリストに占めるオリジナル曲の割合</div>
+    <div class="sub">四半期ごと。前身グループの曲頼みから、自分たちの曲へ移行が進んでいる</div>
+    <div class="cols" id="ratioChart" role="img" aria-label="オリジナル曲比率は2024年Q4の19%から2026年Q3の59%まで上昇"></div>
+    <details><summary>数値を表で見る</summary>
+      <table><tr><th>四半期</th><th>24Q4</th><th>25Q1</th><th>25Q2</th><th>25Q3</th><th>25Q4</th><th>26Q1</th><th>26Q2</th><th>26Q3</th></tr>
+      <tr><td>比率</td><td class="num">19%</td><td class="num">37%</td><td class="num">43%</td><td class="num">46%</td><td class="num">48%</td><td class="num">41%</td><td class="num">55%</td><td class="num">59%</td></tr></table>
+    </details>
+  </div>
+  <div class="card">
+    <h3>そのほかの事実</h3>
+    <p style="font-size:14px; color:var(--ink2)">公演の79%は対バン(複数グループ出演のイベント)。特典会はチェキ1,500円・写メ1,000円で業界相場ど真ん中、<b>初回写メ無料×ワンコイン公演×撮影OK</b>という軽い入口を持つ。一方で、YouTube検索では別団体(名古屋の同名アイドル・仙台の幼稚園)が上位を占め、配信も「!」6個と7個の2名義に分裂——<b>気になって検索した人を入口で取りこぼす構造</b>になっている。イベント名に「⚠️動員重要ライブ⚠️」が登場するのは、動員数が出演枠の維持に直結している兆候。</p>
+  </div>
+</section>
+
+<section>
+  <div class="stepchip">STEP 1 — PEST分析</div>
+  <h2>世の中は味方か、敵か</h2>
+  <div class="whatis"><span class="q">この道具はなに？</span>自分では変えられない大きな流れを、<b>政治(P)・経済(E)・社会(S)・技術(T)</b>の4方向から点検する道具。最初に「時代は追い風か」を確かめます。</div>
+  <div class="card"><h3>P 政治・制度 — おおむね中立</h3><p style="font-size:14px;color:var(--ink2)">推し活の高額課金が社会問題化し規制議論の芽はあるが、健全なルール運用はむしろ信頼の資産になる。</p></div>
+  <div class="card"><h3>E 経済 — 追い風</h3><p style="font-size:14px;color:var(--ink2)">推し活支出は物価高でも底堅い(「影響なし」54%)。円安はアジアからの需要と海外展開に有利。</p></div>
+  <div class="card"><h3>S 社会 — 追い風、ただし条件つき</h3><p style="font-size:14px;color:var(--ink2)">推し活人口は1,400万〜2,000万人規模へ拡大中。ただし「推し活疲れ」経験者は7割。ファンを疲れさせない設計と、若い女性ファンを取り込めるかが分かれ目。</p></div>
+  <div class="card"><h3>T 技術 — 本来は最大の追い風</h3><p style="font-size:14px;color:var(--ink2)">認知の主戦場はTikTok等のショート動画に移り、ファンが撮った動画からバズが生まれる時代。<b>撮影OK文化を持つろりぽっぷには追い風のはずだが、受け皿(公式チャンネル等)が未整備。</b></p></div>
+  <div class="keybox"><div class="kicker">PESTの結論</div>時代そのものは味方。問題は、追い風を受ける「帆」を張っていないこと。</div>
+</section>
+
+<section>
+  <div class="stepchip">STEP 2 — ファイブフォース分析</div>
+  <h2>この業界は、儲かる場所なのか</h2>
+  <div class="whatis"><span class="q">この道具はなに？</span>業界の「儲けやすさ」を、<b>5方向からかかる圧力</b>で測る道具。圧力が強いほど、普通に頑張っても儲からない業界だということ。</div>
+  <div class="forces">
+    <div class="force"><div class="fn">① ライブハウス・主催者の力</div><div class="meter mid"><span>中</span><span class="mtrack"><span class="mfill"></span></span></div>
+      <div class="fd">動員が少ないうちはノルマやチケット買取でリスクを負わされる。受付の「お目当て申告」で各グループの動員は主催者に丸見えで、次のオファーはそれで決まる。<b>動員が増えると立場は逆転する。</b></div></div>
+    <div class="force"><div class="fn">② ファンの力</div><div class="meter strong"><span>強</span><span class="mtrack"><span class="mfill"></span></span></div>
+      <div class="fd">収益の過半〜9割がチェキで、支えるのは少数の太いファン。しかも同じ会場に約3,000組の選択肢が並び、乗り換えは一瞬。</div></div>
+    <div class="force"><div class="fn">③ 代替品の脅威</div><div class="meter strong"><span>強</span><span class="mtrack"><span class="mfill"></span></span></div>
+      <div class="fd">同じ「推すお金と時間」を、VTuber(市場1,050億円・年3割成長)、コンカフェ、メンズ地下、2.5次元、投げ銭が奪い合う。</div></div>
+    <div class="force"><div class="fn">④ 新規参入の脅威</div><div class="meter strong"><span>強</span><span class="mtrack"><span class="mfill"></span></span></div>
+      <div class="fd">60万〜120万円と外注パッケージで誰でもグループを作れる。毎年150〜250組規模が新しく生まれていると推定。</div></div>
+    <div class="force"><div class="fn">⑤ 同業者との競争</div><div class="meter strong"><span>強</span><span class="mtrack"><span class="mfill"></span></span></div>
+      <div class="fd">全国約3,000組が毎日の対バンで直接比較される。2024年だけで約206組が解散したという集計(非公式)もある高回転市場。</div></div>
+  </div>
+  <div class="keybox"><div class="kicker">ファイブフォースの結論</div>5つのうち4つが「強」＝構造的に儲けにくい業界。それでも勝てているのは2種類だけ——<b>(a) 動員実績で主催者への立場を逆転させたグループ</b>と、<b>(b) ファンが作る動画で宣伝費ゼロのまま認知を広げたグループ</b>。どちらも原動力はファンの行動。だから最後の「ファンにできること」の章は、おまけではなく本編です。</div>
+</section>
+
+<section>
+  <div class="stepchip">STEP 3 — 3C分析</div>
+  <h2>市場・競合・自分たちを、同じテーブルに載せる</h2>
+  <div class="whatis"><span class="q">この道具はなに？</span><b>お客さん(Customer)・競合(Competitor)・自分たち(Company)</b>の3つを並べて「勝てる場所」を探す道具。</div>
+
+  <h3 style="font-size:17px; margin-top:20px">Customer — お客さんの実像</h3>
+  <p style="font-size:14.5px; color:var(--ink2)">推し活の年間支出は<b>平均21万円・中央値4万円</b>。5倍の開き＝少数の太いファンが売上の大半を支えている。新規がアイドルを知る経路は「対バンの回遊」「ショート動画」「友人の布教」に集中。離脱理由の筆頭はお金の疲弊(経験者7割)と推しの卒業・解散。</p>
+
+  <h3 style="font-size:17px; margin-top:26px">Competitor — 追加調査で分かった競合の実像</h3>
+  <div class="fig">
+    <div class="title">公式Xフォロワー数(推定・2026年8月31日)</div>
+    <div class="sub">同じ活動圏のグループとの比較。点線は「メンバー数×1,000」の経験則ライン</div>
+    <div class="bars" id="followerChart"></div>
+    <details><summary>数値を表で見る</summary>
+      <table><tr><th>グループ</th><th>フォロワー(推定)</th><th>備考</th></tr>
+      <tr><td>ろりぽっぷ!!!!!!!</td><td class="num">約1,257</td><td>—</td></tr>
+      <tr><td>踊れ！神風</td><td class="num">約1,731</td><td>ほぼ同期・お祭り系</td></tr>
+      <tr><td>ゆえない</td><td class="num">約2,103</td><td>2026年6月に現体制終了の模様</td></tr>
+      <tr><td>ストロボグリッター</td><td class="num">約3,420</td><td>2026年7月に現体制終了</td></tr></table>
+    </details>
+  </div>
+  <div class="rivals">
+    <div class="rival"><h3>踊れ！神風<span class="tag">ほぼ同期・お祭り系</span></h3>
+      <p>「2年でZepp宣言」の正体は、SNSバズではなく<b>資本と物量</b>。フォロワーは約1,731とろりぽっぷとほぼ同水準。専業運営会社がMV・CD流通・月次ペースの配信(1年半で11作以上)を初年度から整備し、Zeppワンマンを1年以上前に「宣言」する興行設計。</p>
+      <div class="lesson"><b>学び:</b> 資本は真似できないが、月次リリース・記念日ワンマンの宣言・MV初期装備・グッズ着用ポイントは運用で真似できる。</div></div>
+    <div class="rival"><h3>ストロボグリッター<span class="tag">同期 → 2026年7月 現体制終了</span></h3>
+      <p>フォロワー約3,420、<b>TIF2025全国選抜LIVE優勝→TIF本戦出演</b>まで到達したが、デビューから1年8ヶ月で全員卒業。</p>
+      <div class="lesson"><b>学び:</b> 公募枠の攻略手順(SHOWROOM審査→ブロック優勝→本戦)という再現可能な地図を遺した。そして、SNSと序列で先行しても続くとは限らない——<b>「2024年末デビュー組の生き残り」という信用は、いまやろりぽっぷの静かな武器</b>。</div></div>
+    <div class="rival"><h3>メリーパレード<span class="tag">最良のお手本</span></h3>
+      <p>ワンマン動員を<b>230人(半年)→満員→437人(2年半・渋谷ストリームホール約700キャパ)</b>と一段ずつ積み上げ。手段は、無料の定期公演・メンバー日替わりの毎日ショート動画・ワンマン前のYouTube生配信「決起会」という低コスト運用パッケージ。</p>
+      <div class="lesson"><b>学び:</b> 小規模事務所でも再現できる現実的な階段。本戦略の手本。</div></div>
+    <div class="rival"><h3>FES☆TIVE / Appare!<span class="tag">お祭り系の天井</span></h3>
+      <p>FES☆TIVEは初ワンマン60人→TOKYO DOME CITY HALLまで11年。Appare!は小箱→武道館まで8年、転機はTikTok関連再生1.7億回のファン発バズ。</p>
+      <div class="lesson"><b>学び:</b> お祭り系の天井は高い。時間を縮める装置は「ファン発の動画バズ」か「資本」の2つだけで、ろりぽっぷが選べるのは前者。</div></div>
+  </div>
+  <div class="keybox"><div class="kicker">3Cの結論</div>資本型(神風)とは戦わない。運用型(メリパレ)を手本にし、UGC型(Appare!の初期)の仕込みをする。現場資産はそのままに、デジタルの欠落だけを埋める。</div>
+</section>
+
+<section>
+  <div class="stepchip">STEP 4 — VRIO分析</div>
+  <h2>その「強み」は本物か、4つの関門にかける</h2>
+  <div class="whatis"><span class="q">この道具はなに？</span>強みと呼んでいるものを<b>価値がある(V)・珍しい(R)・真似されにくい(I)・活かす仕組みがある(O)</b>の4関門に通す道具。4つ揃って初めて長く効く武器。</div>
+  <div class="vrio">
+    <table>
+      <tr><th>資産</th><th>V<br>価値</th><th>R<br>希少</th><th>I<br>真似困難</th><th>O<br>活用</th><th>判定</th></tr>
+      <tr><td class="res">月15本の現場運用力</td><td class="c ok">○</td><td class="c so">△</td><td class="c ok">○</td><td class="c ok">○</td><td class="verdict">強い土台</td></tr>
+      <tr><td class="res">参加型の楽曲設計<br><span style="font-weight:400;font-size:12px;color:var(--muted)">「ぽ！」だけで入れるぽっぽ♪ポジティブ！！ 等</span></td><td class="c ok">○</td><td class="c ok">○</td><td class="c so">△</td><td class="c ng">✕</td><td class="verdict"><b>宝の持ち腐れ</b>(下記)</td></tr>
+      <tr><td class="res">入口の軽さ3点セット<br><span style="font-weight:400;font-size:12px;color:var(--muted)">ワンコイン×初回無料×撮影OK</span></td><td class="c ok">○</td><td class="c ok">○</td><td class="c ng">✕</td><td class="c ok">○</td><td class="verdict">今だけの優位。真似される前に認知へ</td></tr>
+      <tr><td class="res">海外実績(シンガポール2年連続)</td><td class="c so">△</td><td class="c ok">◎</td><td class="c ok">○</td><td class="c ng">✕</td><td class="verdict">未活用の希少資源</td></tr>
+      <tr><td class="res">続いていること<br><span style="font-weight:400;font-size:12px;color:var(--muted)">2024年末デビュー組の生き残り</span></td><td class="c ok">○</td><td class="c ok">○</td><td class="c ok">◎</td><td class="c ok">○</td><td class="verdict">最も真似されない武器</td></tr>
+      <tr><td class="res">キャラの立ったメンバー</td><td class="c ok">○</td><td class="c so">△</td><td class="c ok">○</td><td class="c so">△</td><td class="verdict">磨けば効く</td></tr>
+      <tr><td class="res">ファン製ドキュメント<br><span style="font-weight:400;font-size:12px;color:var(--muted)">スターターパック・コール表・323公演の記録</span></td><td class="c ok">○</td><td class="c ok">○</td><td class="c ok">○</td><td class="c so">△</td><td class="verdict">検索に届く場所へ置けば効く</td></tr>
+    </table>
+  </div>
+  <div class="keybox"><div class="kicker">VRIOが教える一番大事なこと</div>最重要資産は<b>参加型の楽曲設計</b>。武道館まで行ったiLiFE!の武器(コールをアイドル自身が教える曲)と同じ構造を、すでに持っている。欠けているのは「外の人に見せる仕組み(O)」だけ。<b>新しい武器を作る必要はなく、持っている武器を陳列することが課題</b>。</div>
+</section>
+
+<section>
+  <div class="stepchip">STEP 5 — ファネル分析</div>
+  <h2>弱みは、どこで効いているのか</h2>
+  <div class="whatis"><span class="q">この道具はなに？</span>お客さんが「知る→調べる→初めて来る→また来る→常連になる」と進む流れを<b>じょうご(ファネル)</b>に見立て、どの段階で人がこぼれているかを探す道具。</div>
+  <div class="fig funnelfig">
+    <div class="title">ろりぽっぷのファネル診断</div>
+    <div class="sub">幅＝その段階の通りやすさ(定性評価)。上だけが極端に細い</div>
+    <svg viewBox="0 0 700 330" aria-label="ファネル図: 認知が細く、興味はやや細く、初回来場・リピート・常連は太い">
+      <g font-family="'Zen Kaku Gothic New',sans-serif">
+        <!-- stage bars, centered -->
+        <rect x="287" y="10"  width="126" height="46" rx="9" fill="var(--accent)"/>
+        <rect x="210" y="66"  width="280" height="46" rx="9" fill="var(--accent)" opacity="0.75"/>
+        <rect x="55"  y="122" width="590" height="46" rx="9" fill="var(--bar-ctx)"/>
+        <rect x="70"  y="178" width="560" height="46" rx="9" fill="var(--bar-ctx)"/>
+        <rect x="120" y="234" width="460" height="46" rx="9" fill="var(--bar-ctx)"/>
+        <!-- stage labels -->
+        <text x="350" y="39"  text-anchor="middle" font-size="15" font-weight="700" fill="var(--bg)">認知</text>
+        <text x="350" y="95"  text-anchor="middle" font-size="15" font-weight="700" fill="var(--bg)">興味</text>
+        <text x="350" y="151" text-anchor="middle" font-size="15" font-weight="700" fill="var(--bg)">初回来場</text>
+        <text x="350" y="207" text-anchor="middle" font-size="15" font-weight="700" fill="var(--bg)">リピート</text>
+        <text x="350" y="263" text-anchor="middle" font-size="15" font-weight="700" fill="var(--bg)">常連・太客</text>
+        <!-- annotations -->
+        <text x="425" y="27" font-size="12.5" fill="var(--accent-ink)" font-weight="700">← ほぼ閉じている</text>
+        <text x="425" y="43" font-size="11.5" fill="var(--ink2)">YouTubeなし・TikTok極小・メディア0・フェス0</text>
+        <text x="502" y="83" font-size="12.5" fill="var(--accent-ink)" font-weight="700">← 取りこぼし</text>
+        <text x="502" y="99" font-size="11.5" fill="var(--ink2)">検索の名称衝突・配信2名義</text>
+        <text x="350" y="310" text-anchor="middle" font-size="12.5" fill="var(--ink2)">下半分は業界トップ級: ワンコイン＋初回無料＋月15本＋通過制ポイントカード</text>
+      </g>
+    </svg>
+  </div>
+  <div class="keybox"><div class="kicker">ファネルの結論(朗報)</div>下が細いグループは接客や現場体験という時間のかかる改善が必要。でもろりぽっぷは<b>上が細いだけ</b>なので、「露出の配管工事」で直せる。流し込んだ新規は、業界水準以上の受け皿が待っている。</div>
+</section>
+
+<section>
+  <div class="stepchip">STEP 6 — クロスSWOT</div>
+  <h2>分析を、打ち手に変換する</h2>
+  <div class="whatis"><span class="q">この道具はなに？</span>強み(S)・弱み(W)・追い風(O)・向かい風(T)を<b>掛け算</b>して打ち手を出す道具。SWOTは表を作って終わりにされがちだが、本来はこの掛け算が本体。</div>
+  <div class="swot">
+    <div class="q"><h3><span>S×O</span> 攻め</h3><p>参加型楽曲 × 撮影OK × ショート動画時代 ＝ ファン発のバズが起きうる状態を常時つくる。海外実績 × アジア市場 ＝ 台湾・タイへ横展開。</p></div>
+    <div class="q"><h3><span>W×O</span> 補強</h3><p>YouTube不在 × 動画時代 ＝ 最優先の配管工事。フェス未出演 × 公募枠 ＝ ストログリが遺した攻略手順をなぞる。</p></div>
+    <div class="q"><h3><span>S×T</span> 守り</h3><p>「生き残り」の信用 × 淘汰圧 ＝ 動員重要ライブを確実に固め、主催者への信用を守る。入口の軽さ × 代替品 ＝ 初回体験の質で現場の楽しさを守る。</p></div>
+    <div class="q"><h3><span>W×T</span> 回避</h3><p>チェキ依存 × 推し活疲れ ＝ 月数千円で参加できる軽い応援手段(配信・デジタル)を用意し、太客の燃え尽きに備える。</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="stepchip">戦略</div>
+  <h2>12〜18ヶ月の設計図</h2>
+  <div class="northstar">
+    <div class="k">北極星 — 目指す一点</div>
+    <div class="g">2027年内に、400人箱のワンマンを成功させる</div>
+    <div class="m">メリーパレードが実証済みの現実的な階段。中間指標はXフォロワー5,000と単独動員の右肩上がり。武道館の話はこの階段を上ってから。</div>
+  </div>
+  <div class="moves">
+    <div class="move"><h3>デジタルの配管工事<span class="from">ファネル / W×O</span></h3><p>YouTube公式チャンネル開設(ライブ映像・コール講座)。検索の名称衝突対策に「ろりぽっぷ!!!!!!!【アイドル】」表記。配信2名義の統一。主要競合4組で未着手なのはここだけ。</p></div>
+    <div class="move"><h3>毎日ショート動画の当番制<span class="from">メリパレ式</span></h3><p>メンバー日替わり(月〜土)でまとめ撮り運用。追加費用ほぼゼロ。餃子・グミ・群馬——キャラのフックは既に立っている。</p></div>
+    <div class="move"><h3>バズの在庫戦略<span class="from">VRIO</span></h3><p>バズ候補曲を「ぽっぽ♪ポジティブ！！」に固定し、対バンの動画撮影指定曲もこの曲に。「サビ15秒＋この振りを真似して」という参加の型を公式が明示。倍倍FIGHT!はリリース1年後に発火した——在庫が資産。</p></div>
+    <div class="move"><h3>TIF全国選抜LIVEの計画的攻略<span class="from">競合分析</span></h3><p>SHOWROOM審査→ブロック大会→本戦、の手順は同期が実証済み。あわせて周年をフックにアイドルメディアへの露出ゼロを解消。「2つの解散グループからの再出発と生き残り」は売れる物語。</p></div>
+    <div class="move"><h3>記念日ワンマンの階段と事前宣言<span class="from">神風から抽出</span></h3><p>「次のワンマンの日付と箱」を早めに宣言して締切を作る(背伸びは1段まで)。ワンマン前はYouTube生配信「決起会」。グッズ着用でポイント+1は既存のポイントカードにそのまま足せる。</p></div>
+    <div class="move"><h3>海外資産の複利運用<span class="from">S×O</span></h3><p>シンガポール2年連続を営業材料に、台湾・タイへ横展開。海外現場では英語字幕付き自己紹介・コール講座でフォローの取りこぼしを防ぐ。</p></div>
+    <div class="move"><h3>軽い応援手段の整備<span class="from">W×T</span></h3><p>チェキは維持しつつ、月数千円で参加できる手段(配信・デジタル特典・EC)を育てる。太客一極依存は、金銭疲弊が直撃したとき一気に崩れる。</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="stepchip">あなたへ</div>
+  <h2>ファンにできること</h2>
+  <p>ファイブフォースの結論を思い出してください。この業界の勝ち筋は2つで、<b>どちらも原動力はファンの行動</b>です。じょうごのどこを太らせる行動かも添えて、効く順に。</p>
+  <div class="fans">
+    <div class="fan"><h3>① 動画と写真を上げ続ける<span class="stage">認知</span></h3><p>撮影OKという武器を拡散に変換できるのはファンだけ。サビ15秒・コールの熱が伝わる画角で、タグを付けてXとTikTokへ。TikTokはフォロワーゼロでも新規に届く唯一の場所。Appare!を武道館に運んだ1.7億再生の大半はファン発の動画。すぐ伸びなくても在庫が資産になる。</p></div>
+    <div class="fan"><h3>② 新規がつまずく石を取り除く<span class="stage">興味</span></h3><p>スターターパックとコール表はまさにこれ。次の一手は、検索した人に届く場所(note等)への公開と、コール表の拡充(24曲中3曲→演奏回数の多い順に)。323公演のセトリ記録は外部に類例のない一次資料。</p></div>
+    <div class="fan"><h3>③ 人を連れて行く<span class="stage">初回来場</span></h3><p>「500円＋ドリンク代で、ライブを見てメンバーと話すところまで」は最強の誘い文句。布教は身近な友人相手がいちばん成功しやすい、という調査結果もある。</p></div>
+    <div class="fan"><h3>④ 「⚠️動員重要ライブ⚠️」にこそ行く<span class="stage">業界での立場</span></h3><p>対バンの出演枠は、受付の「お目当て申告」で主催者に丸見えの動員実績で決まる。行く現場を選べる日はここを優先。出演権のかかった投票・企画も同じ理屈で直接効く。</p></div>
+    <div class="fan"><h3>⑤ 数字の初速を付ける<span class="stage">認知の補助</span></h3><p>サブスクは両名義(!6個/!7個)をフォローしてプレイリストで普段聴き。公式の新しい動画・投稿には24時間以内に反応する。おすすめに載るかは初速で決まる。</p></div>
+    <div class="fan"><h3>⑥ お金の使い方を少しだけ設計する<span class="stage">継続</span></h3><p>無理のない範囲が大前提(金銭疲弊は離脱理由の筆頭——長く現場にいることが一番の貢献)。そのうえで、グッズを現場の外で身につける・音源を人に贈るなど「新規を生む消費」はレバレッジが違う。</p></div>
+    <div class="fan dont"><h3>⑦ やらないほうがいいこと</h3><p>新規への門番行動(コールの指摘・最前の固定化・古参アピール)は、せっかく太い「初回来場の受け皿」を自分の手で細らせる行為。競合を下げる発信も、対バン文化圏では巡り巡ってブッキングを狭める。</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="stepchip">正直な留保</div>
+  <h2>この分析の限界</h2>
+  <p class="fineprint">X・Instagramのフォロワー数は検索エンジン経由の推定値で、TikTok・YouTube・動員の実数は外部から取得できていない(実測用にGrok定点観測プロンプト <code>prompts/collect/strategy_metrics.md</code> を用意済み)。業界全体で卒業・解散サイクルは速く、戦略は「続く運営体制」が前提。バズは計画できない——本戦略は「バズが起きうる状態を安く維持し、起きたら受け止められる現場を保つ」設計であり、受け皿は既にある。競合として名前を挙げたグループを下げる意図はない。</p>
+  <details class="src">
+    <summary>主要な参照元</summary>
+    <ul>
+      <li>市場: 矢野経済研究所「オタク市場に関する調査」/ CDG×Oshicoco 推し活実態調査 / 財務省広報誌ファイナンス(2025) / ぴあ総研(2025)</li>
+      <li>業界構造: Business Insider Japan「チェキで100億経済圏」/ エンタメクロス(ノルマ相場) / 矢野経済研究所(VTuber市場)</li>
+      <li>ブレイク事例: Real Sound「TikTokでバズるアイドルの方程式」(2025) / 日経クロストレンド(CANDY TUNE) / Billboard JAPAN(Appare!武道館)</li>
+      <li>競合: ガルポ！(メリーパレード) / TIF全国選抜LIVE公式 / IDOL REPORT(ストロボグリッター) / 株式会社UK(踊れ！神風)</li>
+      <li>内部データ: lollpop_docs リポジトリ data_event.csv(323公演)ほか。URL付きの完全な出典リストはリポジトリの growth_strategy.md 付録を参照</li>
+    </ul>
+  </details>
+</section>
+
+<footer>
+  ろりぽっぷ!!!!!!! 成長戦略ノート — ファンによる非公式分析(2026年8月31日時点)。最新のルール・料金は公式X(@lollipop_1116)と公式サイトを確認してください。
+</footer>
+</div>
+
+<div id="tip" role="presentation"></div>
+
+<script>
+(function(){
+  var tip = document.getElementById('tip');
+  function showTip(e, text){
+    tip.textContent = text; tip.style.display = 'block';
+    var x = Math.min(e.clientX + 14, window.innerWidth - tip.offsetWidth - 8);
+    tip.style.left = x + 'px'; tip.style.top = (e.clientY + 14) + 'px';
+  }
+  function hideTip(){ tip.style.display = 'none'; }
+
+  // quarterly original-ratio column chart
+  var ratio = [["24Q4",19],["25Q1",37],["25Q2",43],["25Q3",46],["25Q4",48],["26Q1",41],["26Q2",55],["26Q3",59]];
+  var rc = document.getElementById('ratioChart');
+  rc.style.gridTemplateColumns = 'repeat(' + ratio.length + ',1fr)';
+  ratio.forEach(function(d, i){
+    var col = document.createElement('div');
+    col.className = 'col' + (i === ratio.length - 1 ? ' hero' : '');
+    var showVal = (i === 0 || i === ratio.length - 1);
+    col.innerHTML = (showVal ? '<div class="cv num">' + d[1] + '%</div>' : '<div class="cv">&nbsp;</div>')
+      + '<div class="stick" style="height:' + (d[1] / 65 * 100) + '%"></div>'
+      + '<div class="cx">' + d[0] + '</div>';
+    var stick = col.querySelector('.stick');
+    stick.addEventListener('mousemove', function(e){ showTip(e, d[0] + '：オリジナル曲 ' + d[1] + '%'); });
+    stick.addEventListener('mouseleave', hideTip);
+    rc.appendChild(col);
+  });
+
+  // follower comparison horizontal bars
+  var groups = [
+    ["ろりぽっぷ!!!!!!!", 1257, true,  ""],
+    ["踊れ！神風",        1731, false, "ほぼ同期"],
+    ["ゆえない",          2103, false, "現体制終了の模様"],
+    ["ストロボグリッター", 3420, false, "2026年7月 現体制終了"]
+  ];
+  var MAX = 5400, GOAL = 5000;
+  var fc = document.getElementById('followerChart');
+  groups.forEach(function(g, gi){
+    var row = document.createElement('div'); row.className = 'brow';
+    row.innerHTML = '<div class="lbl">' + g[0] + (g[3] ? '<small>' + g[3] + '</small>' : '') + '</div>'
+      + '<div class="track"><span class="bar' + (g[2] ? ' hero' : '') + '" style="width:' + (g[1] / MAX * 100) + '%">'
+      + '<span class="val num">約' + g[1].toLocaleString() + '</span></span>'
+      + '<span class="goal" style="left:' + (GOAL / MAX * 100) + '%">' + (gi === 0 ? '<span>目標 5,000</span>' : '') + '</span></div>';
+    var bar = row.querySelector('.bar');
+    bar.addEventListener('mousemove', function(e){ showTip(e, g[0] + '：約' + g[1].toLocaleString() + ' フォロワー(推定)'); });
+    bar.addEventListener('mouseleave', hideTip);
+    fc.appendChild(row);
+  });
+})();
+</script>
+</body>
+</html>
