@@ -23,42 +23,47 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 
   
 ## 目次
-- [はじめての方へ / スターターパック (starter_pack.md)](./starter_pack.md)
+- [はじめての方へ / スターターパック (guide/starter_pack.md)](./guide/starter_pack.md)
 - [楽曲一覧 (songs/楽曲一覧.md)](./songs/楽曲一覧.md)
-- [市場・競合分析と成長戦略 (growth_strategy.md)](./growth_strategy.md) ／ [解説HTML版 (resources/growth_strategy.html)](./resources/growth_strategy.html)
+- [市場・競合分析と成長戦略 (strategy/growth_strategy.md)](./strategy/growth_strategy.md) ／ [解説HTML版 (resources/growth_strategy.html)](./resources/growth_strategy.html)
 - [全曲コール表 (songs/call_list.md)](./songs/call_list.md)
-- [公式ルール・現場のマナー (rules.md)](./rules.md)
-- [メンバープロフィール (members.md)](./members.md)
-- [リンク集 (link.md)](./link.md)
-- [アー写履歴 (artist_photos.md)](./artist_photos.md)
-- [記事一覧 (articles/)](./articles/README.md)
+- [公式ルール・現場のマナー (guide/rules.md)](./guide/rules.md)
+- [メンバープロフィール (members/members.md)](./members/members.md)
+- [リンク集 (guide/link.md)](./guide/link.md)
+- [アー写履歴 (members/artist_photos.md)](./members/artist_photos.md)
+- [note記事のホーム (articles/)](./articles/README.md)
 - [セトリ白書 — セットリスト分析記事 (resources/setlist_analysis.html)](./resources/setlist_analysis.html)
+- [デザインシステム定義 (design.md)](./design.md)
 - [公開用メインページ (resources/index.html)](./resources/index.html)
 
 ## リポジトリ構成
 
-読み物と、それを作るための道具を分けています。
+**ドメイン（何についての資料か）でディレクトリを分けています。**
+迷ったら「公演→`events/`、曲→`songs/`、人→`members/`、入口→`guide/`、戦略→`strategy/`、
+記事→`articles/`、一時作業→`work/`、旧版→`archive/`」。
 
-### 読み物（公開する資料）
-
-| パス | 内容 |
-| --- | --- |
-| `starter_pack.md` | はじめての方へ |
-| `members.md` | メンバープロフィール（基本情報の正） |
-| `rules.md` / `link.md` / `artist_photos.md` | ルール・リンク集・アー写履歴 |
-| `songs/` | 楽曲一覧、コール表、歌詞（`songs/lyrics/`）、曲調データ（`songs/analysis/`） |
-| `articles/` | AIぽっぱー文体の note 用記事ドラフト（索引は `articles/README.md`） |
-| `resources/` | GitHub Pages で公開しているポータル |
-| `resources/setlist_analysis.html` | セトリ白書（セットリスト分析記事。`data_event.csv` から集計したグラフ付き） |
-
-### データ
+### ドメイン別ディレクトリ
 
 | パス | 内容 |
 | --- | --- |
-| `members/` | メンバーのパーソナリティデータ（人物像・口調・SNS発信の傾向） |
-| `data_event.csv` | 公演ごとの日付・会場・セトリ |
+| `guide/` | ファン向けの入口ドキュメント（スターターパック・ルール・リンク集） |
+| `members/` | メンバードメイン。基本情報の正 `members.md`、アー写履歴、パーソナリティデータ（人物像・口調・SNS傾向） |
+| `songs/` | 曲ドメイン。楽曲一覧・コール表・歌詞（`lyrics/`）・曲調データ（`analysis/`、全曲比較は `analysis/song_features.csv`＝未生成） |
+| `events/` | 公演ドメイン。一次データ `data_event.csv`（日付・会場・セトリ）と集計 `monthly_setlist_ranking.csv` |
+| `strategy/` | 運用戦略。`growth_strategy.md` と四半期の定点観測 `metrics_YYYY-MM-DD.md` |
+| `articles/` | **note記事のホーム**（全シリーズ＋単発。索引と置き方は `articles/README.md`） |
 | `audio/` | 曲調解析に使う音源の置き場（音源自体はリポジトリに入りません） |
-| `work/` | 生成物・作業中のファイル（月次セトリ集計、全曲の曲調比較表など。案内は `work/README.md`） |
+| `work/` | 汎用の一時作業場。**中身は空が正常**（案内は `work/README.md`） |
+| `archive/` | 役目を終えた旧版ドラフト |
+
+### 公開面と標準文書
+
+| パス | 内容 |
+| --- | --- |
+| `resources/` | GitHub Pages で公開しているサイト一式（ポータル・ビューア・セトリ白書・成長戦略ノート・CSS） |
+| `design.md` | デザインシステム定義（色・タイポ・バンド構成の正。`resources/css/style.css` が実装） |
+| `README.md` | この文書。リポジトリの地図 |
+| `CLAUDE.md` | Claude Code 用の作業ルールと資源配置ルール |
 
 ### 道具
 

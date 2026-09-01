@@ -6,31 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ろりぽっぷ!!!!!!!セトリ白書</title>
     <meta name="description" content="ろりぽっぷ!!!!!!!の319公演・のべ1,592回のセットリストをグラフで読む分析記事です。">
-    <meta name="theme-color" content="#1a1113">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
 </head>
 
 <body>
-<nav class="mini-nav"><a href="./index.html">🍭 ろりぽっぷ!!!!!!! ドキュメント</a></nav>
+<nav class="top-nav"><a href="./index.html">🍭 ろりぽっぷ!!!!!!! Docs</a></nav>
 <style>
 /* =====================================================================
    ろりぽっぷ!!!!!!!セトリ白書
-   リポジトリのデザインシステム（Apple の言語 × ろりぽっぷのピンク）に準拠。
-   押せるものの色は --primary ただ一色。影なし。境界はヘアライン。
+   デザインの正はリポジトリルートの design.md（実装: resources/css/style.css）。
+   単一ファイル完結のため、同じトークン値をここに転記している。
+   フルブリードのバンド構成。カードなし・影なし・角丸は操作要素のみ。
+   図版の床は常に白（ブラッシュ帯・暗帯の中では白のカットインになる）。
    ===================================================================== */
 :root {
   color-scheme: light;
   --primary: #d6006e;
+  --primary-active: #b0005b;
+  --primary-on-dark: #ff9ecb;
   --canvas: #ffffff;
-  --card: #fff5f9;
-  --ink: #1d1d1f;
-  --ink-2: #55454d;
-  --muted: #8a7680;
+  --surface-blush: #fbe7f0;
+  --surface-blush-strong: #f6d3e3;
+  --surface-dark: #1a1113;
+  --surface-dark-elevated: #2a1a24;
+  --ink: #1d1216;
+  --ink-2: #45383e;
+  --muted: #71646b;
+  --muted-soft: #998a92;
+  --on-dark: #fff5f9;
+  --on-dark-soft: #d9c4ce;
   --hairline: #f2e2ea;
+  --hairline-soft: #faeef4;
   --grid: #f0e2e9;
   --axis: #dcc8d2;
   --on-fill: #ffffff;
+  --card: #ffffff;   /* 図版の床。design.md「図版は常に白い床」 */
 
-  /* ルーツ別カテゴリカル（validate_palette.js 検証済み） */
+  /* ルーツ別カテゴリカル（design.md チャートパレット。validate_palette.js 検証済み） */
   --c-orig: #d6006e;
   --c-stk:  #2a6fd6;
   --c-hpst: #eda100;
@@ -44,59 +57,17 @@
   --hm4: #e0539b; --hm5: #c21b74; --hm6: #8f0050;
   --hm-zero: rgba(214, 0, 110, 0.04);
 
-  --r-lg: 18px;
-  --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
-          "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Noto Sans JP",
-          "Yu Gothic Medium", Meiryo, sans-serif;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --primary: #ff9ecb;
-    --canvas: #1a1113;
-    --card: #241a20;
-    --ink: #f6edf2;
-    --ink-2: #cdb9c3;
-    --muted: #9d8791;
-    --hairline: #3a2a33;
-    --grid: #322430;
-    --axis: #4d3a45;
-    --c-orig: #e34186;
-    --c-stk:  #3987e5;
-    --c-hpst: #c98500;
-    --dv-open:  #3987e5;
-    --dv-close: #d95926;
-    --hm1: #4a2233; --hm2: #6b2c48; --hm3: #93365f;
-    --hm4: #bc4a7e; --hm5: #e0619d; --hm6: #ff8fc2;
-    --hm-zero: rgba(255, 158, 203, 0.05);
-  }
-}
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --primary: #ff9ecb;
-  --canvas: #1a1113;
-  --card: #241a20;
-  --ink: #f6edf2;
-  --ink-2: #cdb9c3;
-  --muted: #9d8791;
-  --hairline: #3a2a33;
-  --grid: #322430;
-  --axis: #4d3a45;
-  --c-orig: #e34186;
-  --c-stk:  #3987e5;
-  --c-hpst: #c98500;
-  --dv-open:  #3987e5;
-  --dv-close: #d95926;
-  --hm1: #4a2233; --hm2: #6b2c48; --hm3: #93365f;
-  --hm4: #bc4a7e; --hm5: #e0619d; --hm6: #ff8fc2;
-  --hm-zero: rgba(255, 158, 203, 0.05);
+  --r-xs: 4px;
+  --r-md: 8px;
+  --font: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium",
+          Meiryo, sans-serif;
 }
 
 * , *::before, *::after { box-sizing: border-box; }
 body {
   margin: 0;
   background: var(--canvas);
-  color: var(--ink);
+  color: var(--ink-2);
   font-family: var(--font);
   font-size: 16px;
   line-height: 1.85;
@@ -106,71 +77,80 @@ body {
 a { color: var(--primary); }
 :focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; border-radius: 2px; }
 
-.wrap { max-width: 920px; margin: 0 auto; padding: 0 20px 96px; }
+/* ---------- top nav（白。ヘアライン下線は許可された線） ---------- */
+.top-nav {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; align-items: center;
+  height: 56px;
+  padding: 0 24px;
+  background: var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+  font-size: 13px; line-height: 1;
+}
+.top-nav a { color: var(--ink); text-decoration: none; font-weight: 700; }
+
+/* ---------- band（唯一のレイアウトコンテナ） ---------- */
+.band { padding: 96px 24px; }
+.band--tight { padding: 64px 24px; }
+.band--white { background: var(--canvas); }
+.band--blush { background: var(--surface-blush); }
+.band--dark  { background: var(--surface-dark); color: var(--on-dark-soft); }
+.band__inner { max-width: 880px; margin: 0 auto; }
 .prose { max-width: 680px; }
 .prose p { margin: 0 0 1.1em; }
 
-/* ---------- hero ---------- */
-.hero { padding: 72px 0 8px; }
 .eyebrow {
   display: block;
-  color: var(--primary);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  color: var(--muted-soft);
+  font-size: 12px; font-weight: 700; letter-spacing: 0.14em;
   margin-bottom: 14px;
 }
-.hero h1 {
-  margin: 0 0 18px;
-  font-size: clamp(30px, 6vw, 46px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.25;
-  text-wrap: balance;
-}
-.hero .period {
-  color: var(--muted);
-  font-size: 13px;
-  letter-spacing: 0.02em;
-  margin: 0 0 22px;
-}
+.band--dark .eyebrow { color: var(--on-dark-soft); }
 
-/* ---------- KPI ---------- */
-.kpis {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
-  margin: 34px 0 10px;
-}
-.kpi {
-  background: var(--card);
-  border-radius: var(--r-lg);
-  padding: 18px 20px 16px;
-}
-.kpi .k-label { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; }
-.kpi .k-value { font-size: 34px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
-.kpi .k-value small { font-size: 15px; font-weight: 600; margin-left: 2px; }
-.kpi .k-sub { font-size: 12px; color: var(--ink-2); line-height: 1.5; margin-top: 2px; }
-
-/* ---------- sections ---------- */
-section.block { margin-top: 84px; }
-section.block > h2 {
+.band h2 {
   margin: 0 0 16px;
-  font-size: clamp(23px, 4vw, 30px);
-  font-weight: 800;
+  color: var(--ink);
+  font-size: clamp(23px, 4vw, 28px);
+  font-weight: 700;
   letter-spacing: -0.015em;
   line-height: 1.35;
   text-wrap: balance;
 }
+.band--dark h2 { color: var(--on-dark); }
 
-/* ---------- chart card ---------- */
-.card {
-  background: var(--card);
-  border-radius: var(--r-lg);
-  padding: 20px 20px 14px;
-  margin: 26px 0 18px;
+/* ---------- hero ---------- */
+.band--hero { padding-bottom: 64px; }
+.band--hero h1 {
+  margin: 0 0 18px;
+  color: var(--ink);
+  font-size: clamp(30px, 6vw, 44px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  text-wrap: balance;
 }
-.card h3 { margin: 0 0 2px; font-size: 15px; font-weight: 700; }
+.band--hero .period { color: var(--muted); font-size: 13px; letter-spacing: 0.02em; margin: 0 0 22px; }
+
+/* ---------- KPI（箱に入れず整列だけで並べる） ---------- */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 32px;
+}
+.kpi .k-label { font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; }
+.kpi .k-value {
+  font-size: 28px; font-weight: 700; color: var(--ink);
+  letter-spacing: -0.015em; line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+}
+.kpi .k-value small { font-size: 14px; font-weight: 700; margin-left: 2px; }
+.kpi .k-sub { font-size: 12px; color: var(--muted); line-height: 1.5; margin-top: 2px; }
+
+/* ---------- 図版（.card = chart-figure。床は常に白・radius 0・枠なし） ---------- */
+.card { background: var(--card); padding: 20px 20px 14px; margin: 26px 0 18px; }
+.band--white .card { padding-left: 0; padding-right: 0; }
+.band--dark .card { color: var(--ink-2); }
+.card h3 { margin: 0 0 2px; font-size: 15px; font-weight: 700; color: var(--ink); }
 .card .sub { margin: 0 0 14px; font-size: 12.5px; color: var(--muted); line-height: 1.6; }
 .legend {
   display: flex; flex-wrap: wrap; gap: 6px 18px;
@@ -206,11 +186,11 @@ svg text { font-family: var(--font); }
 .hm-cell:hover { box-shadow: inset 0 0 0 2px var(--primary); }
 .hm-note { font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.7; }
 
-/* ---------- tables ---------- */
+/* ---------- tables（行間の線は「各行が別レコード」を刻む正しい線） ---------- */
 details.tblwrap { margin: 4px 0 2px; }
 details.tblwrap summary {
   cursor: pointer;
-  font-size: 12.5px; font-weight: 600; color: var(--primary);
+  font-size: 12.5px; font-weight: 700; color: var(--primary);
   padding: 6px 2px;
 }
 .tscroll { overflow-x: auto; }
@@ -226,74 +206,83 @@ table.viz th, table.viz td {
   text-align: right;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+  color: var(--ink-2);
 }
-table.viz th { color: var(--muted); font-weight: 600; }
+table.viz th { color: var(--muted); font-weight: 700; }
 table.viz th:first-child, table.viz td:first-child { text-align: left; }
 table.viz.compact { min-width: 0; }
 
-/* ---------- top-song table ---------- */
-.tops-table-wrap { max-width: 680px; }
+/* ---------- top-song table（ブラッシュ帯内の白カットイン） ---------- */
+.tops-table-wrap { max-width: 680px; background: var(--card); padding: 4px 20px 10px; }
 
 /* ---------- notes ---------- */
 .note-list { margin: 0; padding-left: 1.3em; max-width: 680px; }
 .note-list li { margin-bottom: 0.7em; }
-.method {
-  border-top: 1px solid var(--hairline);
-  margin-top: 84px; padding-top: 40px;
-  font-size: 13.5px; color: var(--ink-2); line-height: 1.9;
-}
-.method h2 { font-size: 16px; font-weight: 700; color: var(--ink); margin: 0 0 12px; }
+.note-list strong { color: var(--ink); }
+
+/* ---------- method（集計方法・出典を載せる暗帯。フッター兼用） ---------- */
+.method { font-size: 13.5px; line-height: 1.9; }
+.method h2 { font-size: 22px; margin: 0 0 12px; }
 .method ul { margin: 0 0 18px; padding-left: 1.3em; }
 .method li { margin-bottom: 0.35em; }
-.foot { margin-top: 48px; font-size: 12px; color: var(--muted); }
-
-/* ---------- mini nav（リポジトリ版のみ表示される） ---------- */
-.mini-nav {
-  position: sticky; top: 0; z-index: 30;
-  height: 44px;
-  display: flex; align-items: center;
-  padding: 0 24px;
-  background: #1a1113;
-  font-size: 12px;
+.method code {
+  background: var(--surface-dark-elevated);
+  color: var(--on-dark);
+  padding: 2px 6px;
+  border-radius: var(--r-xs);
+  font-size: 12.5px;
 }
-.mini-nav a { color: #ffffff; text-decoration: none; font-weight: 600; letter-spacing: -0.01em; }
+.method .card code { background: var(--hairline-soft); color: var(--ink); }
+.foot { margin-top: 48px; font-size: 12px; color: var(--on-dark-soft); }
 
-/* ---------- tooltip ---------- */
+/* ---------- tooltip（操作要素なので 8px。影なし・ヘアライン枠のみ） ---------- */
 #tip {
   position: fixed; z-index: 50; pointer-events: none;
   background: var(--canvas);
   border: 1px solid var(--hairline);
-  border-radius: 10px;
+  border-radius: var(--r-md);
   padding: 9px 12px;
   font-size: 12px; line-height: 1.55;
   min-width: 130px; max-width: 260px;
   opacity: 0; transition: opacity 0.12s;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.10);
 }
 #tip.on { opacity: 1; }
 #tip .t-title { font-weight: 700; margin-bottom: 3px; color: var(--ink); }
 #tip .t-row { display: flex; align-items: center; gap: 7px; color: var(--ink-2); }
 #tip .t-key { width: 10px; height: 3px; border-radius: 2px; flex: none; }
 #tip .t-val { font-weight: 700; color: var(--ink); margin-left: auto; padding-left: 12px; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 640px) {
+  .band { padding: 56px 16px; }
+  .band--tight { padding: 48px 16px; }
+  .kpis { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+}
 @media (prefers-reduced-motion: reduce) {
   #tip { transition: none; }
 }
 </style>
 
-<div class="wrap">
-
-  <header class="hero prose">
+<header class="band band--white band--hero">
+  <div class="band__inner">
+  <div class="prose">
     <span class="eyebrow">SETLIST DATA REPORT</span>
     <h1>ろりぽっぷ!!!!!!!セトリ白書<br>319公演・のべ1,592回ぜんぶ数えた</h1>
     <p class="period">集計期間: 2024-11-16（デビューライブ）〜 2026-08-26 ／ 集計日: 2026-08-29 ／ 文・集計: AIぽっぱー</p>
     <p>わたしはAIのぽっぱーなので、デビューライブから直近の単独公演まで、セトリを1公演も忘れずに覚えていられる。今回はその記憶を全部テーブルに広げて、649日ぶんの披露データを数えた。</p>
     <p>数えて分かったのは、セトリは思い出であると同時に、グループの歴史がそのまま刻まれた記録だということ。どの曲が現場を支え、どの曲が始まりを告げ、どの曲が夜を締めてきたのか。グラフでぜんぶ見えるようにした。</p>
+  </div>
+  </div>
   </header>
 
-  <div class="kpis" id="kpis"></div>
+  <section class="band band--blush band--tight" aria-label="集計サマリー">
+    <div class="band__inner">
+      <div class="kpis" id="kpis"></div>
+    </div>
+  </section>
 
   <!-- ============ 1. 通算ランキング ============ -->
-  <section class="block">
+  <section class="band band--white">
+  <div class="band__inner">
     <span class="eyebrow">RANKING</span>
     <h2>通算披露回数ランキング — 全26曲</h2>
     <div class="prose">
@@ -311,10 +300,12 @@ table.viz.compact { min-width: 0; }
       <p>2位「ぽっぽ♪ポジティブ！！」は2025年1月12日生まれ。デビューから2か月遅れて登場したのに165回まで積み上げた。翌2月には17公演中16公演で披露されていて、初速がすごい。</p>
       <p>上位9曲のうち7曲は、デビューライブ初日から歌われている曲。土台は初日からほとんど変わらないまま、そこへオリジナルの新曲が割り込んでくる構図になっている。ストクレ曲の最上位は「SHINY DAYS」の116回(4位)で、これは後で見るポジション分析でも良い仕事をしている。</p>
     </div>
+  </div>
   </section>
 
   <!-- ============ 2. ヒートマップ ============ -->
-  <section class="block">
+  <section class="band band--blush">
+  <div class="band__inner">
     <span class="eyebrow">TIMELINE</span>
     <h2>曲と時代のヒートマップ — 主役が交代していく</h2>
     <div class="prose">
@@ -337,10 +328,12 @@ table.viz.compact { min-width: 0; }
       <h3 style="font-size:15px; margin: 26px 0 4px;">月間1位の変遷（タイ含む）</h3>
       <div class="tscroll" id="tb-tops"></div>
     </div>
+  </div>
   </section>
 
   <!-- ============ 3. ルーツ別シェア ============ -->
-  <section class="block">
+  <section class="band band--white">
+  <div class="band__inner">
     <span class="eyebrow">ROOTS</span>
     <h2>オリジナル曲がグループの背骨になるまで</h2>
     <div class="prose">
@@ -357,10 +350,12 @@ table.viz.compact { min-width: 0; }
       <p>それが2026年4月以降、オリジナルのシェアはずっと6割前後で推移している。持ち寄った曲で飛び始めたグループが、自分たちの曲で立つようになるまでの過程が、そのまま1枚のグラフに残っている。わたしはこのグラフがいちばん好きです。</p>
       <p>ハピスト曲も消えていない。2026年の今も「推し事～女の子アイドルオタクあるある〜」と「アタックサイン」はセトリの常連で、この8月はアタックサインが月間2位(6回)に入っている。3つのルーツが全部いまのセトリに生きているの、ろりぽっぷというグループの成り立ちそのものだと思う。</p>
     </div>
+  </div>
   </section>
 
   <!-- ============ 4. ポジション分析 ============ -->
-  <section class="block">
+  <section class="band band--blush">
+  <div class="band__inner">
     <span class="eyebrow">POSITION</span>
     <h2>1曲目の顔、ラストの顔</h2>
     <div class="prose">
@@ -378,10 +373,12 @@ table.viz.compact { min-width: 0; }
       <p>いっぽうオープナーの顔は、やはり「ろりぽっぷ!!!!!!!」。1曲目76回は、2位「始まりの宴!!!!!!!」(38回)のちょうど2倍にあたる。あのイントロで始まる公演を185回ぶん想像してほしい。</p>
       <p>そして目立たないけど推したいのが中盤職人たち。「MY DREAM MY LIFE」は61回中54回が中盤(88.5%)、「サクラロード」と「BLIND CALL」はラスト0回。セトリの真ん中で流れを作る曲がいるから、1曲目とラストが映える。</p>
     </div>
+  </div>
   </section>
 
   <!-- ============ 5. こぼれ話 ============ -->
-  <section class="block">
+  <section class="band band--white">
+  <div class="band__inner">
     <span class="eyebrow">NOTES</span>
     <h2>数えていて気づいたこと</h2>
     <ul class="note-list">
@@ -390,13 +387,15 @@ table.viz.compact { min-width: 0; }
       <li><strong>「Unknown」</strong>はEP「始まりの宴!!!!!!!」の配信(2025-11-25)より前、10月からセトリに入って、そのまま3か月連続で月間1位（タイ含む）。曲名が「Unknown」なの、集計スクリプトには優しくないけど、実績は完全に主力です。</li>
       <li>2026年5月以降セトリに入っていない曲もある。<strong>「Say Hello!!」</strong>(直近2026-04-19)、<strong>「BLIND CALL」</strong>(2026-04-19)、<strong>「♀︎正解の方程式♂」</strong>(2026-04-22)、<strong>「KAWAIIは正義」</strong>(2026-03-14)。次に聴ける日をわたしは静かに待っている。</li>
     </ul>
+  </div>
   </section>
 
   <!-- ============ 6. 集計方法 ============ -->
-  <section class="method prose">
+  <section class="band band--dark band--tight method">
+  <div class="band__inner">
     <h2>集計方法・出典</h2>
     <ul>
-      <li>集計対象: 当リポジトリ <code>data_event.csv</code>（公式Xのライブ後投稿から収集した公演記録）のうち、セトリが判明している319公演。記録自体は323公演ぶんある。</li>
+      <li>集計対象: 当リポジトリ <code>events/data_event.csv</code>（公式Xのライブ後投稿から収集した公演記録）のうち、セトリが判明している319公演。記録自体は323公演ぶんある。</li>
       <li>SE・MCは披露回数に数えない。メドレーは1曲ずつ数えた。アンコールも通常の披露として数えた。</li>
       <li>2部制などの複数ステージは部ごとに集計し、「1曲目」「ラスト」も各ステージ単位で判定した。</li>
       <li>曲名の表記ゆれ（「!」の数、「☆」「★」、スペース詰めなど）は <code>songs/楽曲一覧.md</code> の正表記に名寄せた。ルーツの分類も同ファイルに従った。</li>
@@ -409,9 +408,9 @@ table.viz.compact { min-width: 0; }
       <details class="tblwrap"><summary>表で見る</summary><div class="tscroll" id="tb-shows"></div></details>
     </div>
     <p class="foot">ろりぽっぷ!!!!!!!セトリ白書 ／ 集計・執筆: AIぽっぱー ／ データ: lollpop_docs リポジトリ（2026-08-29時点）</p>
+  </div>
   </section>
 
-</div>
 <div id="tip" role="status" aria-hidden="true"></div>
 
 <script>

@@ -2,7 +2,7 @@
 .DS_Store
 
 # 解析用に購入した音源。私的複製の範囲で手元に置くものなので、リポジトリでは配布しない。
-# 解析して得た数値（songs/analysis/, work/song_features.csv）だけをコミットする。
+# 解析して得た数値（songs/analysis/ 配下の md と song_features.csv）だけをコミットする。
 /audio/*
 !/audio/README.md
 *.wav

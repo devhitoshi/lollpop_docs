@@ -57,8 +57,8 @@
 ## データの出どころ
 
 - 歌詞・クレジット: `songs/lyrics/`
-- 曲調（BPM・キー・構成・音量推移）: `songs/analysis/`、全曲比較は `work/song_features.csv`
+- 曲調（BPM・キー・構成・音量推移）: `songs/analysis/`、全曲比較は `songs/analysis/song_features.csv`
 - 初披露日・配信日・作家情報: `songs/楽曲一覧.md`
-- 披露回数・セトリ内の位置: `work/monthly_setlist_ranking.csv`
+- 披露回数・セトリ内の位置: `events/monthly_setlist_ranking.csv`
 - メンバーの人物像・発言の引用: `members/`
 - コール: `songs/call_list.md`

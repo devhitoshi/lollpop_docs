@@ -6,14 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ろりぽっぷ!!!!!!!ポータル</title>
     <meta name="description" content="アイドルグループ『ろりぽっぷ!!!!!!!』の公式情報まとめ・ドキュメントサイトです。">
-    <meta name="theme-color" content="#1a1113">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
-    <nav class="global-nav">
-        <a class="global-nav__brand" href="./index.html">🍭 ろりぽっぷ!!!!!!!</a>
-        <ul class="global-nav__links">
+    <nav class="top-nav">
+        <a class="top-nav__brand" href="./index.html">🍭 ろりぽっぷ!!!!!!! Docs</a>
+        <ul class="top-nav__links">
             <li><a href="https://x.com/lollipop_1116" target="_blank" rel="noopener">公式X</a></li>
             <li><a href="https://lit.link/roripopu1116" target="_blank" rel="noopener">lit.link</a></li>
             <li><a href="https://timetreeapp.com/public_calendars/lollipop_1116" target="_blank" rel="noopener">スケジュール</a></li>
@@ -21,106 +22,151 @@
     </nav>
 
     <main>
-        <!-- Hero -->
-        <section class="hero">
-            <h1 class="hero__title">ろりぽっぷ!!!!!!!</h1>
-            <p class="hero__lead">
-                楽しさ無限大。<br>
-                ポップなお祭りへようこそ!!!!!!!
-            </p>
-            <div class="color-dots" aria-hidden="true">
-                <span class="color-dots__dot" style="background-color: var(--mc-kurumi);"></span>
-                <span class="color-dots__dot" style="background-color: var(--mc-mayu);"></span>
-                <span class="color-dots__dot" style="background-color: var(--mc-mau);"></span>
-                <span class="color-dots__dot" style="background-color: var(--mc-ami);"></span>
-                <span class="color-dots__dot color-dots__dot--outline" style="background-color: var(--mc-mana);"></span>
-            </div>
-            <div class="tile__actions">
-                <a class="btn btn--primary" href="viewer.html?file=../starter_pack.md">はじめての方へ</a>
-                <a class="btn btn--ghost" href="viewer.html?file=../members.md">メンバーを見る</a>
-            </div>
-        </section>
-
-        <!-- スターターパック -->
-        <section class="tile tile--dark">
-            <div class="tile__inner">
-                <span class="tile__glyph" aria-hidden="true">🍭</span>
-                <h2 class="tile__title">はじめての方へ</h2>
-                <p class="tile__lead">推しを決めて、ライブに行って、特典会で話すまで。これ1本で足ります。</p>
-                <div class="tile__actions">
-                    <a class="btn btn--primary" href="viewer.html?file=../starter_pack.md">スターターパック</a>
+        <!-- 白: ヒーロー -->
+        <section class="band band--white hero">
+            <div class="band__inner">
+                <h1 class="band__title">ろりぽっぷ!!!!!!!</h1>
+                <p class="band__lead">
+                    楽しさ無限大。<br>
+                    ポップなお祭りへようこそ!!!!!!!
+                </p>
+                <div class="member-dots" aria-hidden="true">
+                    <span class="member-dots__dot" style="background-color: var(--mc-kurumi);"></span>
+                    <span class="member-dots__dot" style="background-color: var(--mc-mayu);"></span>
+                    <span class="member-dots__dot" style="background-color: var(--mc-mau);"></span>
+                    <span class="member-dots__dot" style="background-color: var(--mc-ami);"></span>
+                    <span class="member-dots__dot member-dots__dot--outline" style="background-color: var(--mc-mana);"></span>
+                </div>
+                <div class="band__actions">
+                    <a class="btn btn--primary" href="viewer.html?file=../guide/starter_pack.md">はじめての方へ</a>
+                    <a class="btn btn--secondary" href="viewer.html?file=../members/members.md">メンバーを見る</a>
                 </div>
             </div>
         </section>
 
-        <!-- メンバー -->
-        <section class="tile tile--light">
-            <div class="tile__inner">
-                <span class="tile__glyph" aria-hidden="true">✨</span>
-                <h2 class="tile__title">メンバー</h2>
-                <p class="tile__lead">5人体制のプロフィールと、卒業したメンバーの記録。</p>
-                <div class="tile__actions">
-                    <a class="btn btn--primary" href="viewer.html?file=../members.md">プロフィール</a>
+        <!-- ブラッシュ: はじめてガイド -->
+        <section class="band band--blush">
+            <div class="band__inner">
+                <span class="band__eyebrow">GUIDE</span>
+                <h2 class="band__title">はじめてガイド</h2>
+                <p class="band__lead">推しを決めて、ライブに行って、特典会で話すまで。ここから始められます。</p>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <span class="glyph" aria-hidden="true">🍭</span>
+                        <h3 class="feature-item__title">スターターパック</h3>
+                        <p class="feature-item__desc">初めての現場までに知っておきたいことを、これ1本にまとめました。</p>
+                        <a class="feature-item__link" href="viewer.html?file=../guide/starter_pack.md">読んでみる →</a>
+                    </div>
+                    <div class="feature-item">
+                        <span class="glyph" aria-hidden="true">🎤</span>
+                        <h3 class="feature-item__title">全曲コール表</h3>
+                        <p class="feature-item__desc">現場で迷わないための、曲ごとのコールとレスポンス。</p>
+                        <a class="feature-item__link" href="viewer.html?file=../songs/call_list.md">コール表を開く →</a>
+                    </div>
+                    <div class="feature-item">
+                        <span class="glyph" aria-hidden="true">⚠️</span>
+                        <h3 class="feature-item__title">ルール・マナー</h3>
+                        <p class="feature-item__desc">特典会レギュレーション、撮影ルール、ポイントカードのこと。</p>
+                        <a class="feature-item__link" href="viewer.html?file=../guide/rules.md">ルールを読む →</a>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- セトリ白書 -->
-        <section class="tile tile--dark">
-            <div class="tile__inner">
-                <span class="tile__glyph" aria-hidden="true">📊</span>
-                <h2 class="tile__title">セトリ白書</h2>
-                <p class="tile__lead">319公演・のべ1,592回のセットリストをグラフで読む分析記事。</p>
-                <div class="tile__actions">
-                    <a class="btn btn--primary" href="setlist_analysis.html">白書を読む</a>
+        <!-- プラム黒: データで読む -->
+        <section class="band band--dark">
+            <div class="band__inner">
+                <span class="band__eyebrow">DATA</span>
+                <h2 class="band__title">データで読む</h2>
+                <p class="band__lead">セトリの記録と公開情報を、グラフと数字で読み解いた分析記事。</p>
+                <div class="stat-row">
+                    <div class="stat">
+                        <div class="stat__value">319<small>公演</small></div>
+                        <div class="stat__label">集計したライブ</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat__value">1,592<small>回</small></div>
+                        <div class="stat__label">数えた披露回数</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat__value">26<small>曲</small></div>
+                        <div class="stat__label">持ち曲ぜんぶ</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat__value">649<small>日</small></div>
+                        <div class="stat__label">デビューからの記録</div>
+                    </div>
+                </div>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <h3 class="feature-item__title">📊 セトリ白書</h3>
+                        <p class="feature-item__desc">通算ランキング、月別ヒートマップ、ルーツ別シェア、曲順ポジション。セトリの全部をグラフに。</p>
+                        <a class="feature-item__link" href="setlist_analysis.html">白書を読む →</a>
+                    </div>
+                    <div class="feature-item">
+                        <h3 class="feature-item__title">📈 成長戦略ノート</h3>
+                        <p class="feature-item__desc">市場・競合分析のフレームワークで、グループのいまと伸びしろをファン目線で整理。</p>
+                        <a class="feature-item__link" href="growth_strategy.html">ノートを読む →</a>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- コール表 -->
-        <section class="tile tile--blossom">
-            <div class="tile__inner">
-                <span class="tile__glyph" aria-hidden="true">🎤</span>
-                <h2 class="tile__title">全曲コール表</h2>
-                <p class="tile__lead">現場で迷わないための、曲ごとのコールとレスポンス。</p>
-                <div class="tile__actions">
-                    <a class="btn btn--primary" href="viewer.html?file=../songs/call_list.md">コール表</a>
+        <!-- 白: メンバー -->
+        <section class="band band--white hero">
+            <div class="band__inner">
+                <span class="glyph" aria-hidden="true">✨</span>
+                <h2 class="band__title">メンバー</h2>
+                <p class="band__lead">5人体制のプロフィールと、卒業したメンバーの記録。</p>
+                <div class="member-dots" aria-hidden="true">
+                    <span class="member-dots__dot" style="background-color: var(--mc-kurumi);"></span>
+                    <span class="member-dots__dot" style="background-color: var(--mc-mayu);"></span>
+                    <span class="member-dots__dot" style="background-color: var(--mc-mau);"></span>
+                    <span class="member-dots__dot" style="background-color: var(--mc-ami);"></span>
+                    <span class="member-dots__dot member-dots__dot--outline" style="background-color: var(--mc-mana);"></span>
+                </div>
+                <div class="band__actions">
+                    <a class="btn btn--primary" href="viewer.html?file=../members/members.md">プロフィールを見る</a>
                 </div>
             </div>
         </section>
 
-        <!-- ルール -->
-        <section class="tile tile--dark-alt">
-            <div class="tile__inner">
-                <span class="tile__glyph" aria-hidden="true">⚠️</span>
-                <h2 class="tile__title">ルール・マナー</h2>
-                <p class="tile__lead">特典会レギュレーション、撮影ルール、ポイントカードのこと。</p>
-                <div class="tile__actions">
-                    <a class="btn btn--primary" href="viewer.html?file=../rules.md">ルールを読む</a>
+        <!-- ブラッシュ: 資料室 -->
+        <section class="band band--blush">
+            <div class="band__inner">
+                <span class="band__eyebrow">ARCHIVE</span>
+                <h2 class="band__title">資料室</h2>
+                <p class="band__lead">リンクも、写真の歴史も、曲のデータも。知りたくなったら全部ここに。</p>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <span class="glyph" aria-hidden="true">🌐</span>
+                        <h3 class="feature-item__title">リンク集</h3>
+                        <p class="feature-item__desc">公式SNS、メンバー個人アカウント、音楽配信先をまとめて。</p>
+                        <a class="feature-item__link" href="viewer.html?file=../guide/link.md">リンクを開く →</a>
+                    </div>
+                    <div class="feature-item">
+                        <span class="glyph" aria-hidden="true">📸</span>
+                        <h3 class="feature-item__title">アー写履歴</h3>
+                        <p class="feature-item__desc">初代のカラフル衣装から、宴衣装、黒衣装まで。時系列の記録。</p>
+                        <a class="feature-item__link" href="viewer.html?file=../members/artist_photos.md">履歴を見る →</a>
+                    </div>
+                    <div class="feature-item">
+                        <span class="glyph" aria-hidden="true">🎵</span>
+                        <h3 class="feature-item__title">楽曲一覧</h3>
+                        <p class="feature-item__desc">全曲の正式表記・ルーツ・作詞作曲クレジット・配信リンク。</p>
+                        <a class="feature-item__link" href="viewer.html?file=../songs/楽曲一覧.md">一覧を見る →</a>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- リンク集 -->
-        <section class="tile tile--light">
-            <div class="tile__inner">
-                <span class="tile__glyph" aria-hidden="true">🌐</span>
-                <h2 class="tile__title">リンク集</h2>
-                <p class="tile__lead">公式SNS、メンバー個人アカウント、音楽配信先をまとめて。</p>
-                <div class="tile__actions">
-                    <a class="btn btn--primary" href="viewer.html?file=../link.md">リンクを開く</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- アー写履歴 -->
-        <section class="tile tile--dark-deep">
-            <div class="tile__inner">
-                <span class="tile__glyph" aria-hidden="true">📸</span>
-                <h2 class="tile__title">アー写履歴</h2>
-                <p class="tile__lead">初代のカラフル衣装から、宴衣装、黒衣装まで。時系列の記録。</p>
-                <div class="tile__actions">
-                    <a class="btn btn--primary" href="viewer.html?file=../artist_photos.md">履歴を見る</a>
+        <!-- ピンク: ページ唯一のCTAの瞬間 -->
+        <section class="band band--pink band--tight hero">
+            <div class="band__inner">
+                <h2 class="band__title">現場はいつでも初見歓迎!!!!!!!</h2>
+                <p class="band__lead">予習はスターターパック1本でじゅうぶん。あとは会場で楽しむだけ。</p>
+                <div class="band__actions">
+                    <a class="btn btn--inverse" href="viewer.html?file=../guide/starter_pack.md">スターターパックを読む</a>
                 </div>
             </div>
         </section>
@@ -128,15 +174,17 @@
 
     <footer class="footer">
         <div class="footer__inner">
+            <p class="footer__brand">🍭 ろりぽっぷ!!!!!!! Docs</p>
             <ul class="footer__links">
-                <li><a href="viewer.html?file=../starter_pack.md">はじめての方へ</a></li>
+                <li><a href="viewer.html?file=../guide/starter_pack.md">はじめての方へ</a></li>
                 <li><a href="viewer.html?file=../README.md">README</a></li>
-                <li><a href="viewer.html?file=../members.md">メンバー</a></li>
+                <li><a href="viewer.html?file=../members/members.md">メンバー</a></li>
                 <li><a href="setlist_analysis.html">セトリ白書</a></li>
+                <li><a href="growth_strategy.html">成長戦略ノート</a></li>
                 <li><a href="viewer.html?file=../songs/call_list.md">コール表</a></li>
-                <li><a href="viewer.html?file=../rules.md">ルール</a></li>
-                <li><a href="viewer.html?file=../link.md">リンク集</a></li>
-                <li><a href="viewer.html?file=../artist_photos.md">アー写履歴</a></li>
+                <li><a href="viewer.html?file=../guide/rules.md">ルール</a></li>
+                <li><a href="viewer.html?file=../guide/link.md">リンク集</a></li>
+                <li><a href="viewer.html?file=../members/artist_photos.md">アー写履歴</a></li>
             </ul>
             <p class="footer__note">
                 ろりぽっぷ!!!!!!! は株式会社FLAP entertainment所属。

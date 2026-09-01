@@ -5,15 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ドキュメント - ろりぽっぷ!!!!!!!</title>
-    <meta name="theme-color" content="#1a1113">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
     <link rel="stylesheet" href="./css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 
 <body>
-    <nav class="global-nav">
-        <a class="global-nav__brand" href="./index.html">🍭 ろりぽっぷ!!!!!!!</a>
-        <ul class="global-nav__links">
+    <nav class="top-nav">
+        <a class="top-nav__brand" href="./index.html">🍭 ろりぽっぷ!!!!!!! Docs</a>
+        <ul class="top-nav__links">
             <li><a href="https://x.com/lollipop_1116" target="_blank" rel="noopener">公式X</a></li>
             <li><a href="https://lit.link/roripopu1116" target="_blank" rel="noopener">lit.link</a></li>
             <li><a href="https://timetreeapp.com/public_calendars/lollipop_1116" target="_blank" rel="noopener">スケジュール</a></li>
@@ -31,14 +32,15 @@
 
     <footer class="footer">
         <div class="footer__inner">
+            <p class="footer__brand">🍭 ろりぽっぷ!!!!!!! Docs</p>
             <ul class="footer__links">
-                <li><a href="viewer.html?file=../starter_pack.md">はじめての方へ</a></li>
+                <li><a href="viewer.html?file=../guide/starter_pack.md">はじめての方へ</a></li>
                 <li><a href="viewer.html?file=../README.md">README</a></li>
-                <li><a href="viewer.html?file=../members.md">メンバー</a></li>
+                <li><a href="viewer.html?file=../members/members.md">メンバー</a></li>
                 <li><a href="viewer.html?file=../songs/call_list.md">コール表</a></li>
-                <li><a href="viewer.html?file=../rules.md">ルール</a></li>
-                <li><a href="viewer.html?file=../link.md">リンク集</a></li>
-                <li><a href="viewer.html?file=../artist_photos.md">アー写履歴</a></li>
+                <li><a href="viewer.html?file=../guide/rules.md">ルール</a></li>
+                <li><a href="viewer.html?file=../guide/link.md">リンク集</a></li>
+                <li><a href="viewer.html?file=../members/artist_photos.md">アー写履歴</a></li>
             </ul>
             <p class="footer__note">
                 ろりぽっぷ!!!!!!! は株式会社FLAP entertainment所属。
@@ -58,6 +60,17 @@
             p.textContent = text;
             contentEl.appendChild(p);
         }
+
+        // 2026-09 のドメイン別再配置より前に共有された旧URLを、新しい置き場へ読み替える。
+        // ここを消すと過去に配られたリンクが全部切れるので、追加はしても削除はしないこと。
+        const LEGACY_PATHS = {
+            '../starter_pack.md': '../guide/starter_pack.md',
+            '../rules.md': '../guide/rules.md',
+            '../link.md': '../guide/link.md',
+            '../members.md': '../members/members.md',
+            '../artist_photos.md': '../members/artist_photos.md',
+            '../growth_strategy.md': '../strategy/growth_strategy.md'
+        };
 
         // ?file=〇〇 で読み込むファイルを受け取る。
         // 外部URLを渡して任意のHTMLを描画されないよう、同一サイト内の .md だけを許可する。
@@ -147,7 +160,8 @@
             root.insertBefore(tocContainer, anchor);
         }
 
-        const file = new URLSearchParams(window.location.search).get('file');
+        let file = new URLSearchParams(window.location.search).get('file');
+        if (file && LEGACY_PATHS[file]) file = LEGACY_PATHS[file];
 
         if (!isSafeDocPath(file)) {
             showMessage(file ? '読み込めないファイルが指定されています。' : 'ファイルが指定されていません。');

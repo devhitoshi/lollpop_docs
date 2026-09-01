@@ -3,7 +3,7 @@
 曲調解析（`.claude/skills/music-analysis/`）に使う音源を置くフォルダです。
 
 **このフォルダの音源ファイルは `.gitignore` で除外されています。**
-リポジトリに入るのは解析して得た数値（`songs/analysis/`、`work/song_features.csv`）だけです。
+リポジトリに入るのは解析して得た数値（`songs/analysis/` 配下の md と `songs/analysis/song_features.csv`）だけです。
 
 ## 音源の入手先
 
@@ -18,7 +18,7 @@
 | iTunes Store | AAC 256kbps (.m4a) | Mac なら最速 |
 | レコチョク | AAC | アプリ前提で PC に取り出しにくいことがある |
 
-各作品の購入先は [`../link.md`](../link.md) の配信リンクから辿れます。
+各作品の購入先は [`../guide/link.md`](../guide/link.md) の配信リンクから辿れます。
 
 ## ファイル名
 
