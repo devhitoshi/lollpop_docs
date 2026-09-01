@@ -1,2 +1,14 @@
 # macOS がフォルダごとに作るメタデータ。リポジトリには不要。
 .DS_Store
+
+# 解析用に購入した音源。私的複製の範囲で手元に置くものなので、リポジトリでは配布しない。
+# 解析して得た数値（songs/analysis/, work/song_features.csv）だけをコミットする。
+/audio/*
+!/audio/README.md
+*.wav
+*.flac
+*.mp3
+*.m4a
+*.aac
+*.ogg
+*.opus
