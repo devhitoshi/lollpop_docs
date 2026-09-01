@@ -26,6 +26,12 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+# 既存スキル（setlist-analysis）と同じ流儀で、どこから実行してもリポジトリルートを基準にする。
+# スクリプトを別階層へ移した場合はこの階層数を直すこと。
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.abspath(os.path.join(script_dir, '../../../../'))
+os.chdir(project_root)
+
 BASE_URL = "https://api.twitterapi.io"
 SEARCH_PATH = "/twitter/tweet/advanced_search"
 QUERY_PARAM = "query"
@@ -66,6 +72,10 @@ def load_api_key(env_path):
     )
 
 
+class OutOfCredits(Exception):
+    """クレジット切れ。取得は打ち切るが、ここまでに取れた分は保存してドラフトまで出す。"""
+
+
 def request_json(path, params, api_key, max_retries=5):
     url = f"{BASE_URL}{path}?{urllib.parse.urlencode(params)}"
     for attempt in range(max_retries):
@@ -77,6 +87,8 @@ def request_json(path, params, api_key, max_retries=5):
             body = e.read().decode("utf-8", "replace")[:400]
             if e.code in (401, 403):
                 sys.exit(f"認証エラー {e.code}: APIキーを確認してください。\n{body}")
+            if e.code == 402:
+                raise OutOfCredits(body)
             if e.code == 404:
                 sys.exit(f"404: エンドポイント {path} が見つかりません。\n{body}")
             if e.code != 429 and e.code < 500:
@@ -271,12 +283,11 @@ def main():
     p.add_argument("--accounts", default=None,
                    help="handle:ラベル のカンマ区切り（例 lollipop_1116:公式,mana_lpop:愛月まな）。"
                         "省略時は現メンバー5人+公式")
-    p.add_argument("--out-dir", default=os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))),
-        "work", "x_fetch"))
-    p.add_argument("--env", default=os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), ".env"))
+    p.add_argument("--out-dir", default=os.path.join("work", "x_fetch"))
+    p.add_argument("--env", default=".env")
     p.add_argument("--yes", action="store_true", help="事前確認を省略する")
+    p.add_argument("--draft-only", action="store_true",
+                   help="APIを叩かず、取得済みのJSONLからドラフトだけ作り直す（課金なし）")
     args = p.parse_args()
 
     if args.max_tweets_per_account <= 0:
@@ -292,8 +303,25 @@ def main():
                 handle, label = item, item
             accounts.append((handle.strip().lstrip("@"), label.strip()))
 
-    api_key = load_api_key(args.env)
     os.makedirs(args.out_dir, exist_ok=True)
+
+    if args.draft_only:
+        # 課金なし。クレジット切れで途中終了したときなど、取得済み分だけで作り直すため。
+        results = {}
+        for handle, _ in accounts:
+            path = os.path.join(args.out_dir, f"{handle}.jsonl")
+            got = 0
+            if os.path.exists(path):
+                with open(path, encoding="utf-8") as f:
+                    got = sum(1 for _ in f)
+            results[handle] = (path, got, 0, 0)
+        draft_path = write_draft(args.out_dir, args.since, args.until, accounts, results)
+        for handle, label in accounts:
+            print(f"  @{handle}（{label}）: {results[handle][1]}件")
+        print(f"\nドラフト: {draft_path}（APIは叩いていません）")
+        return
+
+    api_key = load_api_key(args.env)
 
     est_calls_per_account = max(1, -(-args.max_tweets_per_account // 20))
     est_calls = est_calls_per_account * len(accounts)
@@ -315,10 +343,24 @@ def main():
     results = {}
     total_calls = 0
     total_new = 0
+    incomplete = []
     for i, (handle, label) in enumerate(accounts):
-        out_path, total, new_count, calls = fetch_account(
-            handle, args.since, args.until, args.max_tweets_per_account, args.out_dir, api_key
-        )
+        try:
+            out_path, total, new_count, calls = fetch_account(
+                handle, args.since, args.until, args.max_tweets_per_account, args.out_dir, api_key
+            )
+        except OutOfCredits:
+            # 残高切れ。ここまでに保存できた分は活かし、残りは未取得として報告する。
+            print(f"\n  クレジット残高が尽きました。@{handle} は取得途中、以降のアカウントは未取得です。")
+            incomplete = [h for h, _ in accounts[i:]]
+            for h, _ in accounts[i:]:
+                path = os.path.join(args.out_dir, f"{h}.jsonl")
+                got = 0
+                if os.path.exists(path):
+                    with open(path, encoding="utf-8") as f:
+                        got = sum(1 for _ in f)
+                results.setdefault(h, (path, got, 0, 0))
+            break
         results[handle] = (out_path, total, new_count, calls)
         total_calls += calls
         total_new += new_count
@@ -335,6 +377,9 @@ def main():
     print(f"コール数計           : {total_calls}")
     print(f"概算コスト           : {spent:,}クレジット = 約${usd(spent):.4f}")
     print(f"ドラフト             : {draft_path}")
+    if incomplete:
+        print(f"\n未完了（クレジット切れ）: {', '.join('@' + h for h in incomplete)}")
+        print("残高を足したうえで同じコマンドを再実行すると、取得済みはスキップして続きから取れます。")
     print("=" * 56)
 
 

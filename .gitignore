@@ -13,13 +13,16 @@
 *.ogg
 *.opus
 
-# twitterapi.io の APIキー。検証用スクリプト work/x_ugc_probe.py が読む。
+# twitterapi.io の APIキー。.claude/skills/x-account-fetch のスクリプトが読む。
 # キーは絶対にコミットしない。
 .env
 
-# 検証で取得した X の生JSON。他人の投稿なので手元だけに置く。
+# X から取得した投稿データ。他人の著作物なので手元だけに置き、
+# ここから起こした記事本文だけをコミットする。
 work/probe_raw.jsonl
 work/*.jsonl
+work/**/*.jsonl
+work/x_fetch/
 
 # Python の中間生成物
 __pycache__/
