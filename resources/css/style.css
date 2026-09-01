@@ -616,8 +616,9 @@ a { color: var(--primary); }
 }
 
 @media (max-width: 640px) {
-    .top-nav { padding: 0 var(--s-md); }
-    .top-nav__links { gap: var(--s-md); }
+    .top-nav { padding: 0 var(--s-md); gap: var(--s-xs); }
+    /* リンク列が折り返せない幅では、ページ全体を広げずに列側をスクロールさせる */
+    .top-nav__links { gap: var(--s-md); overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .sub-nav { padding: 0 var(--s-md); }
     .band { padding: 56px var(--s-md); }
     .band--tight { padding: var(--s-xxl) var(--s-md); }
