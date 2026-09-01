@@ -56,16 +56,24 @@ python3 work/x_ugc_probe.py --max-tweets 400 --query \
 「`--max-tweets` に達して打ち切りました」と出たら、実数はもっと多い。
 上限を上げて再実行すれば取得済みはスキップされる（中断・再開対応）。
 
+## 検証済み（2026-09-01・フルアクセス環境で `docs.twitterapi.io` を確認）
+
+- 検索エンドポイント `/twitter/tweet/advanced_search`、パラメータ名 `query`（必須）、
+  `queryType`（必須・Latest/Top）、`cursor` — いずれもスクリプトの既定値と一致。修正不要
+- 単価（$0.15/1,000ツイート、$1=100,000クレジット、最低課金15クレジット/リクエスト）も
+  公式ドキュメントと一致。スクリプトの定数は正しかった
+- 残高照会エンドポイントは存在する。`GET /oapi/my/info` → `{"recharge_credits": <int>}`
+  （スクリプトはまだこれを叩いていない。残高はダッシュボードで見る運用のまま）
+- ベースURL `https://api.twitterapi.io` と認証ヘッダ `x-api-key`、
+  `/twitter/user/info?userName=` はダッシュボードのcURL例で確認済み（変更なし）
+
 ## 未検証な点
 
-- **検索エンドポイント `/twitter/tweet/advanced_search` とパラメータ名 `query` は未確認。**
-  引き継ぎ文書の記載をそのまま使っている。404 が出たら `docs.twitterapi.io/llms.txt` を見て
-  `--search-path` / `--query-param` で上書きする
-- ベースURL `https://api.twitterapi.io` と認証ヘッダ `x-api-key`、
-  `/twitter/user/info?userName=` はダッシュボードのcURL例で確認済み
-- 単価（$0.15/1,000ツイート、$1=100,000クレジット）は引き継ぎ文書の記載。
-  表示される概算コストもこの前提。**実際の消費はダッシュボードの残高で突き合わせること**
-- 残高取得APIは未検証なので叩いていない。残高はダッシュボードで見る
+- **クエリの日付指定構文。** ドキュメントは `since_time:`/`until_time:`（UNIX時刻）を推奨し、
+  アンダースコア＋時刻つきの `since:..._UTC` 形式は「非対応」と明記している。
+  このスクリプトの例クエリが使う `since:2026-08-30 until:2026-09-02`（空白区切り・時刻なし）が
+  実際に効くかは未確認。0件やエラーが出たらまずここを疑う
+- 詳しくは `work/x収集ルートの検討.md` の「フルアクセス環境でのエンドポイント確認」を参照
 
 ## 守っていること
 

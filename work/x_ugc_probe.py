@@ -26,12 +26,12 @@ BASE_URL = "https://api.twitterapi.io"
 # ダッシュボードのcURL例で確認済み: 認証は x-api-key ヘッダ、user/info は userName クエリ。
 USER_INFO_PATH = "/twitter/user/info"
 
-# 未検証。引き継ぎ文書の記載をそのまま使っている。
-# 404 が返ったら docs.twitterapi.io/llms.txt を見て --search-path / --query-param で上書きする。
+# 2026-09-01、docs.twitterapi.io/llms.txt で確認済み。
 DEFAULT_SEARCH_PATH = "/twitter/tweet/advanced_search"
 DEFAULT_QUERY_PARAM = "query"
 
-# 課金レート（引き継ぎ文書より・未検証）。$1 = 100,000クレジット、$0.15/1,000ツイート。
+# 課金レート。2026-09-01、docs.twitterapi.io/introduction.md で確認済み。
+# $1 = 100,000クレジット、$0.15/1,000ツイート、最低課金 $0.00015/リクエスト(=15クレジット)。
 CREDITS_PER_TWEET = 15
 CREDITS_PER_USD = 100_000
 MIN_CREDITS_PER_CALL = 15
@@ -138,9 +138,9 @@ def main():
                    help="生JSONの保存先（JSONL）")
     p.add_argument("--env", default=os.path.join(os.path.dirname(here), ".env"))
     p.add_argument("--search-path", default=DEFAULT_SEARCH_PATH,
-                   help=f"検索エンドポイント（既定 {DEFAULT_SEARCH_PATH}・未検証）")
+                   help=f"検索エンドポイント（既定 {DEFAULT_SEARCH_PATH}・確認済み）")
     p.add_argument("--query-param", default=DEFAULT_QUERY_PARAM,
-                   help=f"クエリのパラメータ名（既定 {DEFAULT_QUERY_PARAM}・未検証）")
+                   help=f"クエリのパラメータ名（既定 {DEFAULT_QUERY_PARAM}・確認済み）")
     p.add_argument("--check-user", metavar="USERNAME",
                    help="検索の前に user/info を1回叩いて疎通とキーを確認する（例 lollipop_1116）")
     p.add_argument("--yes", action="store_true", help="事前確認を省略する")
