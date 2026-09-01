@@ -1,44 +1,73 @@
 /* =========================================================================
-   ろりぽっぷ!!!!!!! Docs — デザインシステム
+   ろりぽっぷ!!!!!!! Docs — デザインシステム実装
 
-   Apple のデザイン言語（フルブリードのタイルを明暗交互に積む／
-   インタラクティブ色はただ一色／クロームは限りなく後退させる）を、
-   ろりぽっぷのピンクで再構成したもの。
+   トークンと原則の正はリポジトリルートの design.md。
+   ここはその実装であり、値を変えるときは design.md を先に直す。
 
-   原則:
-   - 「押せるもの」の色は --primary ただ一色。メンバーカラーは装飾専用。
-   - UI に影は使わない。セクションの区切りは面の色そのもの。
-   - 装飾グラデーションなし。境界は 1px のヘアライン。
-   - 押下は transform: scale(0.95) で統一。
+   原則(design.md の要約):
+   - 純白の床に、角丸のないフルブリード水平バンドを積む。
+     面は白/ブラッシュ/プラム黒/ピンクの4つで、同じ面を2連続させない。
+   - カードなし・影なし。グルーピングは余白と整列が担う。
+   - 角丸は操作要素のみ(8px 以下+バッジの pill)。
+   - 線は情報を刻む場所だけ: top-nav 下・sub-nav 下・レコード行・チャートの軸。
+   - 押せるものの色は --primary ただ一色。メンバーカラーは装飾専用。
+   - タイポは全部 Noto Sans JP。700 の見出しと 400 の本文のウェイト差が階層を作る。
    ========================================================================= */
 
-/* ---------- Tokens ---------- */
+/* ---------- Tokens (design.md: colors / typography / rounded / spacing) ---------- */
 :root {
+    color-scheme: light;
+
     /* Accent — 唯一のインタラクティブカラー */
     --primary: #d6006e;
-    --primary-focus: #e6006e;
+    --primary-active: #b0005b;
+    --primary-disabled: #f5cce1;
     --primary-on-dark: #ff9ecb;
     --on-primary: #ffffff;
 
     /* Surface */
     --canvas: #ffffff;
-    --canvas-blossom: #fff5f9;   /* ピンク寄りのオフホワイト */
-    --surface-tile-1: #2a1a24;
-    --surface-tile-2: #32202b;
-    --surface-tile-3: #241a20;
-    --surface-black: #1a1113;
+    --surface-soft: #fff5f9;
+    --surface-blush: #fbe7f0;
+    --surface-blush-strong: #f6d3e3;
+    --surface-dark: #1a1113;
+    --surface-dark-elevated: #2a1a24;
+    --surface-dark-soft: #241a20;
 
     /* Text */
-    --ink: #1d1d1f;
-    --ink-muted: #6e6e73;
-    --on-dark: #ffffff;
-    --on-dark-muted: #d9c4ce;
+    --ink: #1d1216;
+    --body: #45383e;
+    --body-strong: #2a2026;
+    --muted: #71646b;
+    --muted-soft: #998a92;
+    --on-dark: #fff5f9;
+    --on-dark-soft: #d9c4ce;
 
     /* Line */
     --hairline: #f2e2ea;
-    --divider-soft: #faeef4;
+    --hairline-soft: #faeef4;
 
-    /* メンバーカラー（装飾のみ。リンクやボタンには使わない）
+    /* Semantic */
+    --success: #2e9e5b;
+    --warning: #b45309;
+    --error: #cf3a3a;
+
+    /* チャートパレット(図版の床は必ず白。design.md「チャートパレット」参照) */
+    --chart-orig: #d6006e;
+    --chart-stk: #2a6fd6;
+    --chart-hpst: #eda100;
+    --chart-open: #2a6fd6;
+    --chart-close: #eb6834;
+    --chart-seq-1: #fcdfee;
+    --chart-seq-2: #f6b7d7;
+    --chart-seq-3: #ee8abc;
+    --chart-seq-4: #e0539b;
+    --chart-seq-5: #c21b74;
+    --chart-seq-6: #8f0050;
+    --chart-grid: #f0e2e9;
+    --chart-axis: #dcc8d2;
+
+    /* メンバーカラー(装飾のみ。リンクやボタンには使わない)
        asaka / natsumi は卒業した2人の色。記録として一式で残している */
     --mc-kurumi:  #cc0000;
     --mc-mayu:    #f5c400;
@@ -48,24 +77,27 @@
     --mc-asaka:   #f172a3;
     --mc-natsumi: #2a6fd6;
 
-    /* Shape */
-    --r-sm: 8px;
-    --r-lg: 18px;
+    /* Shape — 8px で止まる。それ以上の radius はカードを意味し、カードは無い */
+    --r-xs: 4px;
+    --r-sm: 6px;
+    --r-md: 8px;
     --r-pill: 9999px;
 
     /* Spacing */
+    --s-xxs: 4px;
     --s-xs: 8px;
     --s-sm: 12px;
-    --s-md: 17px;
+    --s-md: 16px;
     --s-lg: 24px;
     --s-xl: 32px;
     --s-xxl: 48px;
-    --s-section: 80px;
+    --s-band: 64px;
+    --s-section: 96px;
 
-    /* Type — SF Pro は和文を持たないので日本語フォントを後段に重ねる */
-    --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
-            "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Noto Sans JP",
-            "Yu Gothic Medium", Meiryo, sans-serif;
+    /* Type */
+    --font: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium",
+            Meiryo, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 /* ---------- Base ---------- */
@@ -76,11 +108,11 @@ html { -webkit-text-size-adjust: 100%; }
 body {
     margin: 0;
     background-color: var(--canvas);
-    color: var(--ink);
+    color: var(--body);
     font-family: var(--font);
-    font-size: 17px;          /* 16px ではなく 17px。読ませるためのペース */
+    font-size: 16px;
     font-weight: 400;
-    line-height: 1.76;        /* 和文なので Apple の 1.47 より緩める */
+    line-height: 1.85;
     letter-spacing: 0.01em;
     -webkit-font-smoothing: antialiased;
 }
@@ -88,13 +120,13 @@ body {
 a { color: var(--primary); }
 
 :focus-visible {
-    outline: 2px solid var(--primary-focus);
+    outline: 2px solid var(--primary);
     outline-offset: 3px;
     border-radius: 2px;
 }
 
-/* ---------- Global nav ---------- */
-.global-nav {
+/* ---------- Top nav(白。ヘアライン下線は許可された線のひとつ) ---------- */
+.top-nav {
     position: sticky;
     top: 0;
     z-index: 30;
@@ -102,24 +134,23 @@ a { color: var(--primary); }
     align-items: center;
     justify-content: space-between;
     gap: var(--s-md);
-    height: 44px;
+    height: 56px;
     padding: 0 var(--s-lg);
-    background-color: var(--surface-black);
-    color: var(--on-dark);
-    font-size: 12px;
+    background-color: var(--canvas);
+    border-bottom: 1px solid var(--hairline);
+    font-size: 13px;
+    font-weight: 500;
     line-height: 1;
-    letter-spacing: -0.01em;
 }
 
-.global-nav__brand {
-    color: var(--on-dark);
+.top-nav__brand {
+    color: var(--ink);
     text-decoration: none;
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-weight: 700;
     white-space: nowrap;
 }
 
-.global-nav__links {
+.top-nav__links {
     display: flex;
     align-items: center;
     gap: var(--s-lg);
@@ -129,18 +160,18 @@ a { color: var(--primary); }
     min-width: 0;
 }
 
-.global-nav__links a {
-    color: var(--on-dark);
+.top-nav__links a {
+    color: var(--ink);
     text-decoration: none;
     white-space: nowrap;
 }
 
-.global-nav__links a:hover { color: var(--primary-on-dark); }
+.top-nav__links a:active { color: var(--primary-active); }
 
-/* ---------- Sub nav（viewer 用のすりガラス帯） ---------- */
+/* ---------- Sub nav(viewer 用。Docs 例外として下線を許可) ---------- */
 .sub-nav {
     position: sticky;
-    top: 44px;
+    top: 56px;
     z-index: 20;
     display: flex;
     align-items: center;
@@ -148,19 +179,16 @@ a { color: var(--primary); }
     gap: var(--s-md);
     height: 52px;
     padding: 0 var(--s-lg);
-    background-color: rgba(255, 245, 249, 0.8);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    background-color: var(--canvas);
     border-bottom: 1px solid var(--hairline);
 }
 
 .sub-nav__title {
     margin: 0;
     min-width: 0;
-    font-size: 21px;
-    font-weight: 600;
-    line-height: 1.19;
-    letter-spacing: -0.02em;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.2;
     color: var(--ink);
     overflow: hidden;
     text-overflow: ellipsis;
@@ -173,177 +201,242 @@ a { color: var(--primary); }
     gap: 6px;
     color: var(--primary);
     text-decoration: none;
-    font-size: 14px;
-    letter-spacing: -0.01em;
+    font-size: 13px;
+    font-weight: 500;
     white-space: nowrap;
 }
 
-.sub-nav__back:hover { text-decoration: underline; }
-
-/* ---------- Tile（フルブリード。面の色そのものが区切り） ---------- */
-.tile {
+/* ---------- Band(唯一のレイアウトコンテナ) ---------- */
+.band {
     padding: var(--s-section) var(--s-lg);
-    text-align: center;
 }
 
-.tile__inner {
-    max-width: 720px;
+.band--tight { padding: var(--s-band) var(--s-lg); }
+
+.band__inner {
+    max-width: 1200px;
     margin: 0 auto;
 }
 
-.tile--light     { background-color: var(--canvas);         color: var(--ink); }
-.tile--blossom   { background-color: var(--canvas-blossom); color: var(--ink); }
-.tile--dark      { background-color: var(--surface-tile-1); color: var(--on-dark); }
-.tile--dark-alt  { background-color: var(--surface-tile-2); color: var(--on-dark); }
-.tile--dark-deep { background-color: var(--surface-tile-3); color: var(--on-dark); }
+.band__inner--narrow { max-width: 720px; }
 
-.tile--dark a,
-.tile--dark-alt a,
-.tile--dark-deep a { color: var(--primary-on-dark); }
+.band--white  { background-color: var(--canvas);        color: var(--body); }
+.band--blush  { background-color: var(--surface-blush); color: var(--body); }
+.band--dark   { background-color: var(--surface-dark);  color: var(--on-dark); }
+.band--pink   { background-color: var(--primary);       color: var(--on-primary); }
 
-/* タイルの絵文字は製品写真の置き換え。文字ではなく被写体として扱う */
-.tile__glyph {
+.band--dark a { color: var(--primary-on-dark); }
+
+/* アイブロウ: バンドの中身に名前が要るときだけ */
+.band__eyebrow {
     display: block;
-    font-size: 64px;
-    line-height: 1;
-    margin-bottom: var(--s-lg);
+    margin: 0 0 var(--s-sm);
+    color: var(--muted-soft);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    line-height: 1.4;
 }
 
-.tile__title {
-    margin: 0;
-    font-size: 40px;
-    font-weight: 600;
-    line-height: 1.15;
-    letter-spacing: -0.025em;
+.band--dark .band__eyebrow,
+.band--pink .band__eyebrow { color: var(--on-dark-soft); }
+.band--pink .band__eyebrow { color: var(--surface-blush); }
+
+.band__title {
+    margin: 0 0 var(--s-md);
+    color: var(--ink);
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
 }
 
-.tile__lead {
-    margin: var(--s-md) 0 0;
-    font-size: 21px;
+.band--dark .band__title { color: var(--on-dark); }
+.band--pink .band__title { color: var(--on-primary); }
+
+.band__lead {
+    margin: 0 0 var(--s-xl);
+    max-width: 40em;
+    color: var(--muted);
+    font-size: 20px;
     font-weight: 400;
-    line-height: 1.5;
-    color: var(--ink-muted);
+    line-height: 1.6;
 }
 
-.tile--dark .tile__lead,
-.tile--dark-alt .tile__lead,
-.tile--dark-deep .tile__lead { color: var(--on-dark-muted); }
+.band--dark .band__lead { color: var(--on-dark-soft); }
+.band--pink .band__lead { color: var(--surface-blush); }
 
-.tile__actions {
+.band__actions {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: var(--s-sm);
     margin-top: var(--s-xl);
 }
 
 /* ---------- Hero ---------- */
-.hero {
-    padding: 96px var(--s-lg) var(--s-section);
-    text-align: center;
-    background-color: var(--canvas-blossom);
-}
+.hero { text-align: center; }
 
-.hero__title {
+.hero .band__title {
     margin: 0;
-    font-size: 56px;
-    font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-    color: var(--ink);
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
 }
 
-.hero__lead {
-    max-width: 640px;
+.hero .band__lead {
+    max-width: 32em;
     margin: var(--s-lg) auto 0;
-    font-size: 24px;
-    font-weight: 300;   /* 300 は意図的な軽さ。使いどころを限定する */
-    line-height: 1.55;
-    color: var(--ink-muted);
+}
+
+.hero .band__actions { justify-content: center; }
+
+/* 絵文字は文字ではなく被写体として扱う */
+.glyph {
+    display: block;
+    font-size: 48px;
+    line-height: 1;
+    margin-bottom: var(--s-md);
 }
 
 /* メンバーカラーの帯。装飾であってナビゲーションではない */
-.color-dots {
+.member-dots {
     display: flex;
     justify-content: center;
     gap: 10px;
     margin-top: var(--s-xl);
 }
 
-.color-dots__dot {
+.member-dots__dot {
     width: 12px;
     height: 12px;
     border-radius: var(--r-pill);
 }
 
-.color-dots__dot--outline { box-shadow: inset 0 0 0 1px #e0d3d9; }
+/* 白(まな)のドットだけ輪郭が要る */
+.member-dots__dot--outline { box-shadow: inset 0 0 0 1px var(--hairline); }
 
-/* ---------- Buttons ---------- */
+/* ---------- Feature grid(カードの列ではなくグリッドの列) ---------- */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s-xxl) var(--s-xl);
+    margin-top: var(--s-xxl);
+}
+
+.feature-item__title {
+    margin: 0 0 var(--s-xxs);
+    color: var(--ink);
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.band--dark .feature-item__title { color: var(--on-dark); }
+
+.feature-item__desc {
+    margin: 0 0 var(--s-sm);
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.band--dark .feature-item__desc { color: var(--on-dark-soft); }
+
+.feature-item__link {
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.feature-item__link:active { color: var(--primary-active); }
+
+/* ---------- Stat(KPI。箱に入れず整列だけで並べる) ---------- */
+.stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--s-xl);
+    margin-top: var(--s-xl);
+}
+
+.stat__value {
+    color: var(--ink);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+    font-variant-numeric: tabular-nums;
+}
+
+.stat__value small { font-size: 15px; font-weight: 700; margin-left: 2px; }
+
+.band--dark .stat__value { color: var(--on-dark); }
+
+.stat__label {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.band--dark .stat__label { color: var(--on-dark-soft); }
+
+/* ---------- Buttons(操作要素なので角丸 8px を持つ) ---------- */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     min-height: 44px;
-    padding: 11px 22px;
+    padding: 12px 20px;
     border: 1px solid transparent;
-    border-radius: var(--r-pill);
+    border-radius: var(--r-md);
     font-family: inherit;
-    font-size: 17px;
-    line-height: 1.24;
-    letter-spacing: -0.01em;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1;
     text-decoration: none;
     cursor: pointer;
-    transition: transform 0.12s ease, background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
-
-.btn:active { transform: scale(0.95); }
 
 .btn--primary {
     background-color: var(--primary);
     color: var(--on-primary);
 }
 
-.btn--primary:hover { background-color: var(--primary-focus); }
+.btn--primary:active { background-color: var(--primary-active); }
 
-.btn--ghost {
+/* 操作要素には輪郭が要る。ライト面で唯一の枠線 */
+.btn--secondary {
     background-color: transparent;
-    border-color: var(--primary);
-    color: var(--primary);
+    border-color: var(--hairline);
+    color: var(--ink);
 }
 
-.btn--ghost:hover {
-    background-color: var(--primary);
-    color: var(--on-primary);
+.btn--secondary:active { border-color: var(--primary); color: var(--primary); }
+
+.btn--inverse {
+    background-color: var(--canvas);
+    color: var(--ink);
 }
 
-/* 暗いタイルの上では、アクセントを明るいピンクへ反転させる。
+.btn--inverse:active { background-color: var(--surface-blush); }
+
+/* 暗帯の上では、アクセントを明るいピンクへ反転させる。
    濃いピンクのままだと面に沈んでボタンとして読めなくなるため */
-.tile--dark .btn--primary,
-.tile--dark-alt .btn--primary,
-.tile--dark-deep .btn--primary {
+.band--dark .btn--primary {
     background-color: var(--primary-on-dark);
-    color: var(--surface-tile-1);
+    color: var(--surface-dark);
 }
 
-.tile--dark .btn--primary:hover,
-.tile--dark-alt .btn--primary:hover,
-.tile--dark-deep .btn--primary:hover { background-color: #ffc2dd; }
-
-.tile--dark .btn--ghost,
-.tile--dark-alt .btn--ghost,
-.tile--dark-deep .btn--ghost {
-    border-color: var(--primary-on-dark);
-    color: var(--primary-on-dark);
+.band--dark .btn--secondary {
+    background-color: var(--surface-dark-elevated);
+    border-color: transparent;
+    color: var(--on-dark);
 }
 
-.tile--dark .btn--ghost:hover,
-.tile--dark-alt .btn--ghost:hover,
-.tile--dark-deep .btn--ghost:hover {
-    background-color: var(--primary-on-dark);
-    color: var(--surface-tile-1);
-}
-
-/* ---------- Document body（marked が生成する HTML） ---------- */
+/* ---------- Document body(marked が生成する HTML) ---------- */
 .doc {
     max-width: 720px;
     margin: 0 auto;
@@ -351,35 +444,37 @@ a { color: var(--primary); }
 }
 
 .doc h1 {
-    font-size: 40px;
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: -0.025em;
+    color: var(--ink);
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
     margin: 0 0 var(--s-lg);
+    text-wrap: balance;
 }
 
+/* h2 は罫線ではなく余白で切る */
 .doc h2 {
+    color: var(--ink);
     font-size: 28px;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.35;
-    letter-spacing: -0.02em;
-    margin: var(--s-section) 0 var(--s-md);
-    padding-top: var(--s-lg);
-    border-top: 1px solid var(--hairline);
+    letter-spacing: -0.015em;
+    margin: 80px 0 var(--s-md);
 }
 
 .doc h3 {
-    font-size: 21px;
-    font-weight: 600;
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 700;
     line-height: 1.4;
-    letter-spacing: -0.015em;
     margin: var(--s-xxl) 0 var(--s-xs);
 }
 
 .doc h4 {
+    color: var(--ink);
     font-size: 17px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    font-weight: 700;
     margin: var(--s-xl) 0 var(--s-xs);
 }
 
@@ -394,23 +489,24 @@ a { color: var(--primary); }
 
 .doc li::marker { color: var(--primary); }
 
-.doc strong { font-weight: 600; }
+.doc strong { color: var(--body-strong); font-weight: 700; }
 
+/* 引用は色面。radius 0、左罫線なし。面の色だけが強調 */
 .doc blockquote {
     margin: var(--s-lg) 0;
     padding: var(--s-md) var(--s-lg);
-    background-color: var(--canvas-blossom);
-    border-radius: var(--r-lg);
-    color: var(--ink-muted);
+    background-color: var(--surface-blush);
+    color: var(--body);
 }
 
 .doc blockquote p:last-child { margin-bottom: 0; }
 
 .doc code {
     padding: 2px 6px;
-    background-color: var(--divider-soft);
-    border-radius: var(--r-sm);
-    font-size: 15px;
+    background-color: var(--hairline-soft);
+    border-radius: var(--r-xs);
+    font-family: var(--font-mono);
+    font-size: 14px;
 }
 
 .doc hr {
@@ -420,11 +516,12 @@ a { color: var(--primary); }
     background-color: var(--hairline);
 }
 
+/* 表の行間の線は「各行が別レコード」を刻む正しい線 */
 .doc table {
     width: 100%;
     margin: var(--s-lg) 0;
     border-collapse: collapse;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .doc th, .doc td {
@@ -433,123 +530,109 @@ a { color: var(--primary); }
     text-align: left;
 }
 
-.doc th { font-weight: 600; }
+.doc th { color: var(--ink); font-weight: 700; }
 
-/* 系内で唯一の影。被写体が面の上に乗っていることを示すためだけに使う */
+/* 画像は radius 0・影なしで列に揃える */
 .doc img {
     display: block;
     max-width: 100%;
     height: auto;
     margin: var(--s-lg) 0;
-    border-radius: var(--r-lg);
-    box-shadow: rgba(0, 0, 0, 0.22) 3px 5px 30px 0;
 }
 
 .doc__empty {
     padding: var(--s-xxl) 0;
-    color: var(--ink-muted);
+    color: var(--muted);
     text-align: center;
 }
 
-/* ---------- 目次（自動生成） ---------- */
-.toc-box {
-    margin: 0 0 var(--s-xxl);
-    padding: var(--s-lg);
-    background-color: var(--canvas-blossom);
-    border: 1px solid var(--hairline);
-    border-radius: var(--r-lg);
-}
+/* ---------- 目次(自動生成。箱に入れない) ---------- */
+.toc-box { margin: 0 0 var(--s-xxl); }
 
 .toc-title {
-    margin: 0 0 var(--s-sm);
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--ink-muted);
+    margin: 0 0 var(--s-xs);
+    color: var(--muted-soft);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
 }
 
 .toc-list {
     margin: 0;
     padding: 0;
     list-style: none;
-    font-size: 15px;
-    line-height: 1.9;
+    font-size: 14px;
+    line-height: 2;
 }
 
-.toc-h2 { font-weight: 600; }
+.toc-h2 { font-weight: 700; }
 
-.toc-h3 { padding-left: var(--s-md); }
+.toc-h3 { padding-left: var(--s-md); font-weight: 400; }
 
 .toc-list a {
     color: var(--ink);
     text-decoration: none;
 }
 
-.toc-list a:hover { color: var(--primary); }
+.toc-list a:active { color: var(--primary); }
 
-/* ---------- Footer ---------- */
+/* ---------- Footer(プラム黒の帯でページを閉じる) ---------- */
 .footer {
-    padding: 64px var(--s-lg);
-    background-color: var(--canvas-blossom);
-    border-top: 1px solid var(--hairline);
-    color: var(--ink-muted);
-    font-size: 12px;
-    line-height: 1.9;
-    letter-spacing: -0.01em;
+    padding: var(--s-band) var(--s-lg);
+    background-color: var(--surface-dark);
+    color: var(--on-dark-soft);
+    font-size: 14px;
+    line-height: 1.8;
 }
 
 .footer__inner {
-    max-width: 720px;
+    max-width: 1200px;
     margin: 0 auto;
+}
+
+.footer__brand {
+    margin: 0 0 var(--s-lg);
+    color: var(--on-dark);
+    font-size: 15px;
+    font-weight: 700;
 }
 
 .footer__links {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--s-md);
+    gap: var(--s-xs) var(--s-lg);
     margin: 0 0 var(--s-lg);
     padding: 0;
     list-style: none;
 }
 
-.footer__links a { color: var(--primary); text-decoration: none; }
+.footer__links a { color: var(--primary-on-dark); text-decoration: none; }
 
-.footer__links a:hover { text-decoration: underline; }
+.footer__note { margin: 0; font-size: 12px; }
 
-.footer__note { margin: 0; }
-
-/* ---------- Responsive ---------- */
-@media (max-width: 833px) {
-    .hero { padding: 64px var(--s-lg); }
-    .hero__title { font-size: 40px; }
-    .hero__lead { font-size: 21px; }
-    .tile { padding: 64px var(--s-lg); }
-    .tile__title { font-size: 34px; }
-    .tile__lead { font-size: 19px; }
-    .doc h1 { font-size: 34px; }
-    .doc h2 { font-size: 24px; margin-top: 64px; }
+/* ---------- Responsive(面は常にフルブリード。応答するのは中の列だけ) ---------- */
+@media (max-width: 1024px) {
+    .feature-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 640px) {
-    .global-nav { padding: 0 var(--s-md); }
-    .global-nav__links { gap: var(--s-md); }
+    .top-nav { padding: 0 var(--s-md); }
+    .top-nav__links { gap: var(--s-md); }
     .sub-nav { padding: 0 var(--s-md); }
-    .sub-nav__title { font-size: 17px; }
-    .hero__title { font-size: 34px; }
-    .tile { padding: var(--s-xxl) var(--s-md); }
-    .tile__title { font-size: 28px; }
-    .tile__glyph { font-size: 48px; }
-    .tile__actions { flex-direction: column; align-items: stretch; }
-    .doc { padding: var(--s-xl) var(--s-md) 64px; }
+    .band { padding: 56px var(--s-md); }
+    .band--tight { padding: var(--s-xxl) var(--s-md); }
+    .band__title { font-size: 28px; }
+    .band__lead { font-size: 17px; }
+    .hero .band__title { font-size: 30px; }
+    .glyph { font-size: 40px; }
+    .feature-grid { grid-template-columns: 1fr; gap: var(--s-xxl); }
+    .band__actions { flex-direction: column; align-items: stretch; }
+    .hero .band__actions { align-items: center; }
+    .doc { padding: var(--s-xl) var(--s-md) var(--s-band); }
     .doc h1 { font-size: 28px; }
-}
-
-@media (max-width: 419px) {
-    .hero__title { font-size: 28px; }
-    .tile__title { font-size: 24px; }
+    .doc h2 { font-size: 24px; margin-top: var(--s-band); }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .btn { transition: none; }
-    .btn:active { transform: none; }
 }
