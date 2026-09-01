@@ -25,6 +25,7 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 - [全曲コール表 (songs/call_list.md)](./songs/call_list.md)
 - [公式ルール・現場のマナー (rules.md)](./rules.md)
 - [メンバープロフィール (members.md)](./members.md)
+- [セトリ白書 — セットリスト分析記事 (resources/setlist_analysis.html)](./resources/setlist_analysis.html)
 - [公開用メインページ (resources/index.html)](./resources/index.html)
 
 ## リポジトリ構成
@@ -40,6 +41,7 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 | `rules.md` / `link.md` / `artist_photos.md` | ルール・リンク集・アー写履歴 |
 | `songs/` | 楽曲一覧、コール表、歌詞（`songs/lyrics/`）、曲調データ（`songs/analysis/`） |
 | `resources/` | GitHub Pages で公開しているポータル |
+| `resources/setlist_analysis.html` | セトリ白書（セットリスト分析記事。`data_event.csv` から集計したグラフ付き） |
 
 ### データ
 
