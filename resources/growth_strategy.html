@@ -4,221 +4,251 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ろりぽっぷ成長戦略ノート</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
 <style>
-  :root{
-    --bg:#FDF7F9; --surface:#FFFFFF; --surface2:#F8EEF3;
-    --ink:#2A1F2D; --ink2:#5C4F60; --muted:#8A7C8E;
-    --accent:#C2255C; --accent-ink:#A11C4C; --accent-soft:#F9E3EC;
-    --line:#EBDDE4; --bar-ctx:#8E8391;
-    --good:#2E7D4F; --warn:#B45309;
-    --chip-r:#E5484D; --chip-y:#D99000; --chip-b:#2CA3D9; --chip-g:#3BA55D;
-  }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --bg:#211A22; --surface:#2B2330; --surface2:#332938;
-      --ink:#F3EBF1; --ink2:#CDC1CF; --muted:#9C8FA3;
-      --accent:#F06795; --accent-ink:#F27FA6; --accent-soft:#452436;
-      --line:#3E3342; --bar-ctx:#9C8FA3;
-      --good:#6FBF8F; --warn:#E0A34E;
-    }
-  }
-  :root[data-theme="dark"]{
-    --bg:#211A22; --surface:#2B2330; --surface2:#332938;
-    --ink:#F3EBF1; --ink2:#CDC1CF; --muted:#9C8FA3;
-    --accent:#F06795; --accent-ink:#F27FA6; --accent-soft:#452436;
-    --line:#3E3342; --bar-ctx:#9C8FA3;
-    --good:#6FBF8F; --warn:#E0A34E;
-  }
-  *{box-sizing:border-box}
-  body{
-    background:var(--bg); color:var(--ink); margin:0;
-    font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
-    font-size:15.5px; line-height:1.95; letter-spacing:.01em;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{max-width:760px; margin:0 auto; padding:0 22px 96px}
-  h1,h2,h3{font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif; line-height:1.4; text-wrap:balance; margin:0}
-  p{margin:.6em 0}
-  a{color:var(--accent-ink); text-decoration-thickness:1px; text-underline-offset:3px}
-  .num{font-variant-numeric:tabular-nums}
+/* =====================================================================
+   ろりぽっぷ成長戦略ノート
+   デザインの正はリポジトリルートの design.md（実装: resources/css/style.css）。
+   単一ファイル完結のため、同じトークン値をここに転記している。
+   フルブリードのバンド構成。カードなし・影なし・角丸は操作要素のみ。
+   旧変数名(--accent 等)は新トークン値へのエイリアスとして残し、
+   チャート生成JSとファネルSVGを無改変のまま再配色している。
+   ===================================================================== */
+:root{
+  color-scheme: light;
+  --bg:#ffffff;              /* canvas。ファネルSVGのラベル色も兼ねる */
+  --surface:#ffffff;         /* 図版の床。design.md「図版は常に白い床」 */
+  --surface2:#fbe7f0;        /* surface-blush。バーのトラック等 */
+  --strong:#f6d3e3;          /* surface-blush-strong。カットイン・タグ */
+  --dark:#1a1113;            /* surface-dark */
+  --dark2:#2a1a24;           /* surface-dark-elevated */
+  --ink:#1d1216; --ink2:#45383e; --muted:#71646b; --muted-soft:#998a92;
+  --on-dark:#fff5f9; --on-dark-soft:#d9c4ce; --pink-on-dark:#ff9ecb;
+  --accent:#d6006e;          /* primary */
+  --accent-ink:#b0005b;      /* primary-active */
+  --accent-soft:#f6d3e3;     /* blush-strong(旧 keybox の地) */
+  --on-primary:#ffffff;
+  --line:#f2e2ea;            /* hairline */
+  --bar-ctx:#998a92;         /* 文脈系列のグレー(muted-soft) */
+  --good:#2e9e5b; --warn:#b45309;
+  --chip-r:#cc0000; --chip-y:#f5c400; --chip-b:#7fd4e8; --chip-g:#2e9e5b;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink2); margin:0;
+  font-family:"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic Medium",Meiryo,sans-serif;
+  font-size:15.5px; line-height:1.95; letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{line-height:1.4; text-wrap:balance; margin:0; color:var(--ink); font-weight:700}
+p{margin:.6em 0}
+a{color:var(--accent); text-decoration-thickness:1px; text-underline-offset:3px}
+.num{font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
 
-  /* hero */
-  header{padding:64px 0 8px}
-  .eyebrow{font-size:12px; font-weight:700; letter-spacing:.14em; color:var(--accent-ink); text-transform:uppercase}
-  h1{font-size:clamp(30px,6vw,44px); font-weight:900; margin:.25em 0 .1em}
-  h1 .bang{color:var(--accent)}
-  .lede{color:var(--ink2); font-size:16.5px; max-width:38em}
-  .thesis{
-    margin:26px 0 0; padding:22px 24px; border-radius:14px;
-    background:var(--surface); border:1.5px solid var(--line);
-    border-left:5px solid var(--accent);
-  }
-  .thesis b{font-size:17.5px}
-  .memberdots{display:inline-flex; gap:5px; vertical-align:middle; margin-left:8px}
-  .memberdots i{width:10px;height:10px;border-radius:50%;display:inline-block}
+/* top nav（白。ヘアライン下線は許可された線） */
+.top-nav{
+  position:sticky; top:0; z-index:30;
+  display:flex; align-items:center; height:56px; padding:0 24px;
+  background:var(--bg); border-bottom:1px solid var(--line);
+  font-size:13px; line-height:1;
+}
+.top-nav a{color:var(--ink); text-decoration:none; font-weight:700}
 
-  /* stat tiles */
-  .tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:26px 0 0}
-  .tile{background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:14px 16px}
-  .tile .v{font-family:"Zen Maru Gothic",sans-serif; font-weight:900; font-size:26px; line-height:1.2; color:var(--ink)}
-  .tile .v em{font-style:normal; color:var(--accent)}
-  .tile .k{font-size:12px; color:var(--muted); font-weight:700; letter-spacing:.06em; margin-top:2px}
-  .tile .s{font-size:12px; color:var(--ink2)}
+/* band（唯一のレイアウトコンテナ） */
+.band{padding:96px 24px}
+.band--tight{padding:64px 24px}
+.band--white{background:var(--bg)}
+.band--blush{background:var(--surface2)}
+.band--pink{background:var(--accent); color:var(--on-primary)}
+.band--dark{background:var(--dark); color:var(--on-dark-soft)}
+.band__inner{max-width:760px; margin:0 auto}
 
-  /* sections */
-  section{margin-top:64px}
-  .stepchip{
-    display:inline-flex; align-items:center; gap:8px;
-    font-size:12px; font-weight:700; letter-spacing:.12em; color:var(--accent-ink);
-  }
-  .stepchip::before{content:""; width:22px; height:3px; border-radius:2px; background:var(--accent)}
-  h2{font-size:24px; font-weight:900; margin:.35em 0 .2em}
-  .whatis{
-    margin:14px 0 18px; padding:13px 18px; border-radius:12px;
-    background:var(--surface2); border:1px dashed var(--line);
-    font-size:14px; color:var(--ink2);
-  }
-  .whatis b{color:var(--ink)}
-  .whatis .q{font-weight:900; color:var(--accent-ink); font-family:"Zen Maru Gothic",sans-serif; margin-right:.5em}
+/* hero */
+.band--hero{padding-bottom:64px}
+.eyebrow{font-size:12px; font-weight:700; letter-spacing:.14em; color:var(--muted-soft)}
+h1{font-size:clamp(30px,6vw,44px); font-weight:700; letter-spacing:-.02em; margin:.25em 0 .1em}
+h1 .bang{color:var(--accent)}
+.lede{color:var(--ink2); font-size:16.5px; max-width:38em}
+.thesis{margin:26px 0 0; padding:22px 24px; background:var(--strong); color:var(--ink)}
+.thesis b{font-size:17.5px}
+.memberdots{display:inline-flex; gap:5px; vertical-align:middle; margin-left:8px}
+.memberdots i{width:10px;height:10px;border-radius:50%;display:inline-block}
 
-  .card{background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:18px 20px; margin:14px 0}
-  .card h3{font-size:16.5px; font-weight:700}
-  .keybox{
-    background:var(--accent-soft); border:1.5px solid var(--accent); border-radius:14px;
-    padding:18px 22px; margin:20px 0;
-  }
-  .keybox .kicker{font-size:12px; font-weight:900; letter-spacing:.1em; color:var(--accent-ink)}
+/* stat（箱に入れず整列だけで並べる） */
+.tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:32px; margin:32px 0 0}
+.tile .v{font-weight:700; font-size:26px; line-height:1.2; color:var(--ink); letter-spacing:-.015em}
+.tile .v em{font-style:normal; color:var(--accent)}
+.tile .k{font-size:12px; color:var(--muted); font-weight:700; letter-spacing:.06em; margin-top:2px}
+.tile .s{font-size:12px; color:var(--ink2)}
 
-  /* pipeline */
-  .pipe{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:16px 0}
-  .pipe .p{
-    background:var(--surface); border:1.5px solid var(--line); border-radius:999px;
-    padding:6px 14px; font-size:13px; font-weight:700; white-space:nowrap;
-  }
-  .pipe .p small{display:block; font-weight:500; font-size:11px; color:var(--muted); line-height:1.3}
-  .pipe .arr{color:var(--muted); font-weight:700}
+/* sections */
+.stepchip{font-size:12px; font-weight:700; letter-spacing:.12em; color:var(--muted-soft)}
+h2{font-size:clamp(22px,4vw,28px); font-weight:700; letter-spacing:-.015em; margin:.35em 0 .2em}
+.whatis{margin:14px 0 18px; padding:13px 18px; background:var(--strong); font-size:14px; color:var(--ink2)}
+.band--white .whatis{background:var(--surface2)}
+.whatis b{color:var(--ink)}
+.whatis .q{font-weight:700; color:var(--accent-ink); margin-right:.5em}
 
-  /* charts */
-  .fig{background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:18px 20px 14px; margin:18px 0}
-  .fig .title{font-weight:700; font-size:14.5px}
-  .fig .sub{font-size:12px; color:var(--muted); margin-bottom:14px}
-  .bars{display:grid; gap:10px}
-  .brow{display:grid; grid-template-columns:9.5em 1fr; gap:10px; align-items:center; font-size:13px}
-  .brow .lbl{text-align:right; color:var(--ink2); line-height:1.35}
-  .brow .lbl small{display:block; color:var(--muted); font-size:11px}
-  .track{position:relative; height:22px; background:var(--surface2); border-radius:6px}
-  .bar{position:absolute; inset:0 auto 0 0; border-radius:6px 4px 4px 6px; background:var(--bar-ctx); min-width:2px}
-  .bar.hero{background:var(--accent)}
-  .bar .val{
-    position:absolute; left:calc(100% + 8px); top:50%; transform:translateY(-50%);
-    font-size:12px; font-weight:700; color:var(--ink2); white-space:nowrap;
-  }
-  .goal{position:absolute; top:-6px; bottom:-6px; width:0; border-left:2px dashed var(--accent-ink); opacity:.75}
-  .goal span{position:absolute; top:-1.4em; left:6px; font-size:11px; color:var(--accent-ink); white-space:nowrap; font-weight:700}
+/* 旧カードは箱を外し、余白と整列でグルーピングする */
+.card{margin:20px 0}
+.card h3{font-size:16px}
+.keybox{background:var(--strong); padding:18px 22px; margin:24px 0; color:var(--ink2)}
+.band--white .keybox{background:var(--surface2)}
+.keybox b{color:var(--ink)}
+.keybox .kicker{font-size:12px; font-weight:700; letter-spacing:.1em; color:var(--accent-ink)}
 
-  .cols{display:grid; grid-template-columns:repeat(12,1fr); gap:8px; align-items:end; height:170px; padding:6px 4px 0}
-  .col{grid-column:span 1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:6px; height:100%}
-  .col .stick{width:100%; max-width:34px; background:var(--bar-ctx); border-radius:5px 5px 2px 2px}
-  .col.hero .stick{background:var(--accent)}
-  .col .cv{font-size:11px; font-weight:700; color:var(--ink2)}
-  .col .cx{font-size:10.5px; color:var(--muted); line-height:1.2; text-align:center}
-  .fig details{margin-top:10px}
-  .fig summary{font-size:12px; color:var(--muted); cursor:pointer}
-  .fig table{border-collapse:collapse; font-size:12.5px; margin-top:8px; width:100%}
-  .fig td,.fig th{border-top:1px solid var(--line); padding:5px 8px; text-align:left}
-  .fig th{color:var(--muted); font-weight:700}
+/* pipeline */
+.pipe{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:16px 0}
+.pipe .p{
+  background:var(--surface); border-radius:9999px;
+  padding:6px 14px; font-size:13px; font-weight:700; white-space:nowrap; color:var(--ink);
+}
+.band--white .pipe .p{background:var(--surface2)}
+.pipe .p small{display:block; font-weight:500; font-size:11px; color:var(--muted); line-height:1.3}
+.pipe .arr{color:var(--muted); font-weight:700}
 
-  /* five forces */
-  .forces{display:grid; gap:10px; margin:16px 0}
-  .force{background:var(--surface); border:1.5px solid var(--line); border-radius:12px; padding:12px 16px; display:grid; grid-template-columns:1fr auto; gap:6px 14px; align-items:center}
-  .force .fn{font-weight:700; font-size:14.5px}
-  .force .fd{grid-column:1 / -1; font-size:13.5px; color:var(--ink2); line-height:1.75}
-  .meter{display:flex; align-items:center; gap:8px; font-size:12px; font-weight:900}
-  .meter .mtrack{width:72px; height:8px; border-radius:4px; background:var(--surface2); overflow:hidden}
-  .meter .mfill{height:100%; border-radius:4px; background:var(--accent)}
-  .meter.mid .mfill{width:55%; background:var(--warn)}
-  .meter.strong .mfill{width:100%}
-  .meter.strong{color:var(--accent-ink)} .meter.mid{color:var(--warn)}
+/* charts（.fig = chart-figure。床は常に白・radius 0・枠なし） */
+.fig{background:var(--surface); padding:18px 20px 14px; margin:18px 0}
+.band--white .fig{padding-left:0; padding-right:0}
+.fig .title{font-weight:700; font-size:14.5px; color:var(--ink)}
+.fig .sub{font-size:12px; color:var(--muted); margin-bottom:14px}
+.bars{display:grid; gap:10px}
+.brow{display:grid; grid-template-columns:9.5em 1fr; gap:10px; align-items:center; font-size:13px}
+.brow .lbl{text-align:right; color:var(--ink2); line-height:1.35}
+.brow .lbl small{display:block; color:var(--muted); font-size:11px}
+.track{position:relative; height:22px; background:var(--surface2); border-radius:4px}
+.bar{position:absolute; inset:0 auto 0 0; border-radius:4px; background:var(--bar-ctx); min-width:2px}
+.bar.hero{background:var(--accent)}
+.bar .val{
+  position:absolute; left:calc(100% + 8px); top:50%; transform:translateY(-50%);
+  font-size:12px; font-weight:700; color:var(--ink2); white-space:nowrap;
+}
+.goal{position:absolute; top:-6px; bottom:-6px; width:0; border-left:2px dashed var(--accent-ink); opacity:.75}
+.goal span{position:absolute; top:-1.4em; left:6px; font-size:11px; color:var(--accent-ink); white-space:nowrap; font-weight:700}
 
-  /* competitor cards */
-  .rivals{display:grid; gap:12px}
-  .rival{background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:16px 18px}
-  .rival .tag{display:inline-block; font-size:11px; font-weight:900; letter-spacing:.06em; border-radius:999px; padding:2px 10px; background:var(--surface2); color:var(--ink2); margin-left:8px; vertical-align:2px}
-  .rival p{font-size:14px; color:var(--ink2); margin:.4em 0}
-  .rival .lesson{font-size:13.5px; margin-top:8px; padding:8px 12px; border-radius:9px; background:var(--accent-soft); color:var(--ink)}
-  .rival .lesson b{color:var(--accent-ink)}
+.cols{display:grid; grid-template-columns:repeat(12,1fr); gap:8px; align-items:end; height:170px; padding:6px 4px 0}
+.col{grid-column:span 1; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; gap:6px; height:100%}
+.col .stick{width:100%; max-width:34px; background:var(--bar-ctx); border-radius:4px 4px 0 0}
+.col.hero .stick{background:var(--accent)}
+.col .cv{font-size:11px; font-weight:700; color:var(--ink2)}
+.col .cx{font-size:10.5px; color:var(--muted); line-height:1.2; text-align:center}
+.fig details{margin-top:10px}
+.fig summary{font-size:12px; color:var(--muted); cursor:pointer}
+.fig table{border-collapse:collapse; font-size:12.5px; margin-top:8px; width:100%}
+.fig td,.fig th{border-top:1px solid var(--line); padding:5px 8px; text-align:left}
+.fig th{color:var(--muted); font-weight:700}
 
-  /* VRIO table */
-  .vrio{overflow-x:auto}
-  .vrio table{border-collapse:collapse; width:100%; font-size:13px; min-width:560px}
-  .vrio th{font-size:12px; color:var(--muted); font-weight:700; text-align:left; padding:8px 10px; border-bottom:2px solid var(--line)}
-  .vrio td{padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top}
-  .vrio td.c{text-align:center; font-weight:900}
-  .ok{color:var(--good)} .ng{color:var(--accent-ink)} .so{color:var(--warn)}
-  .vrio .res{font-weight:700}
-  .vrio .verdict{font-size:12px; color:var(--ink2)}
+/* five forces（枠を外し、行間のヘアラインでレコードを刻む） */
+.forces{display:grid; margin:16px 0}
+.force{padding:14px 0; border-bottom:1px solid var(--line); display:grid; grid-template-columns:1fr auto; gap:6px 14px; align-items:center}
+.force:last-child{border-bottom:0}
+.force .fn{font-weight:700; font-size:14.5px; color:var(--ink)}
+.force .fd{grid-column:1 / -1; font-size:13.5px; color:var(--ink2); line-height:1.75}
+.force .fd b{color:var(--ink)}
+.meter{display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700}
+.meter .mtrack{width:72px; height:8px; border-radius:4px; background:var(--surface2); overflow:hidden}
+.meter .mfill{height:100%; border-radius:4px; background:var(--accent)}
+.meter.mid .mfill{width:55%; background:var(--warn)}
+.meter.strong .mfill{width:100%}
+.meter.strong{color:var(--accent-ink)} .meter.mid{color:var(--warn)}
 
-  /* funnel */
-  .funnelfig svg{display:block; width:100%; height:auto}
-  .fnote{font-size:13px; color:var(--ink2)}
+/* competitor items（箱なし。白カットインの学びだけ色面） */
+.rivals{display:grid; gap:28px; margin:18px 0}
+.rival h3{font-size:16px}
+.rival .tag{display:inline-block; font-size:11px; font-weight:700; letter-spacing:.06em; border-radius:9999px; padding:2px 10px; background:var(--surface); color:var(--ink2); margin-left:8px; vertical-align:2px}
+.rival p{font-size:14px; color:var(--ink2); margin:.4em 0}
+.rival p b{color:var(--ink)}
+.rival .lesson{font-size:13.5px; margin-top:8px; padding:8px 12px; background:var(--surface); color:var(--ink)}
+.rival .lesson b{color:var(--accent-ink)}
 
-  /* cross swot */
-  .swot{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0}
-  @media (max-width:620px){ .swot{grid-template-columns:1fr} }
-  .swot .q{background:var(--surface); border:1.5px solid var(--line); border-radius:12px; padding:14px 16px}
-  .swot .q h3{font-size:14px}
-  .swot .q h3 span{color:var(--accent-ink)}
-  .swot .q p{font-size:13.5px; color:var(--ink2); margin:.4em 0 0}
+/* VRIO table（行間の線は「各行が別レコード」を刻む正しい線） */
+.vrio{overflow-x:auto}
+.vrio table{border-collapse:collapse; width:100%; font-size:13px; min-width:560px}
+.vrio th{font-size:12px; color:var(--muted); font-weight:700; text-align:left; padding:8px 10px; border-bottom:1px solid var(--line)}
+.vrio td{padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top}
+.vrio td.c{text-align:center; font-weight:700}
+.ok{color:var(--good)} .ng{color:var(--accent-ink)} .so{color:var(--warn)}
+.vrio .res{font-weight:700; color:var(--ink)}
+.vrio .verdict{font-size:12px; color:var(--ink2)}
 
-  /* strategy */
-  .northstar{
-    background:linear-gradient(0deg, var(--accent-soft), var(--accent-soft)); border:2px solid var(--accent);
-    border-radius:16px; padding:22px 24px; margin:18px 0; text-align:center;
-  }
-  .northstar .k{font-size:12px; letter-spacing:.16em; font-weight:900; color:var(--accent-ink)}
-  .northstar .g{font-family:"Zen Maru Gothic",sans-serif; font-weight:900; font-size:21px; margin-top:6px}
-  .northstar .m{font-size:13px; color:var(--ink2); margin-top:6px}
-  .moves{counter-reset:mv; display:grid; gap:12px}
-  .move{background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:16px 18px 16px 58px; position:relative}
-  .move::before{
-    counter-increment:mv; content:counter(mv);
-    position:absolute; left:16px; top:16px; width:28px; height:28px; border-radius:50%;
-    background:var(--accent); color:#fff; font-weight:900; font-size:14px;
-    display:flex; align-items:center; justify-content:center; font-family:"Zen Maru Gothic",sans-serif;
-  }
-  .move h3{font-size:15.5px}
-  .move p{font-size:14px; color:var(--ink2); margin:.35em 0 0}
-  .move .from{display:inline-block; font-size:11px; font-weight:700; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:1px 9px; margin-left:8px; vertical-align:2px}
+/* funnel */
+.funnelfig svg{display:block; width:100%; height:auto}
+.fnote{font-size:13px; color:var(--ink2)}
 
-  /* fan cards */
-  .fans{display:grid; gap:12px}
-  .fan{background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:16px 18px}
-  .fan .stage{display:inline-block; font-size:11px; font-weight:900; color:var(--accent-ink); background:var(--accent-soft); border-radius:999px; padding:2px 10px; margin-left:8px; vertical-align:2px}
-  .fan p{font-size:14px; color:var(--ink2); margin:.4em 0 0}
-  .fan.dont{border-style:dashed}
+/* cross swot（箱なしの2×2。余白と整列がグルーピング） */
+.swot{display:grid; grid-template-columns:1fr 1fr; gap:28px 32px; margin:20px 0}
+@media (max-width:620px){ .swot{grid-template-columns:1fr} }
+.swot .q h3{font-size:14px}
+.swot .q h3 span{color:var(--accent-ink)}
+.swot .q p{font-size:13.5px; color:var(--ink2); margin:.4em 0 0}
 
-  .fineprint{font-size:13px; color:var(--muted); line-height:1.8}
-  footer{margin-top:70px; border-top:1.5px solid var(--line); padding-top:18px; font-size:12.5px; color:var(--muted)}
-  details.src summary{cursor:pointer; font-weight:700; color:var(--ink2); font-size:13.5px}
-  details.src ul{font-size:13px; color:var(--ink2); line-height:2}
+/* 北極星（ページ唯一のピンクの瞬間） */
+.northstar .band__inner{text-align:center}
+.northstar .k{font-size:12px; letter-spacing:.16em; font-weight:700; color:var(--strong)}
+.northstar .g{font-weight:700; font-size:clamp(22px,4vw,28px); margin-top:6px; color:var(--on-primary); letter-spacing:-.01em}
+.northstar .m{font-size:13px; color:var(--strong); margin-top:8px}
 
-  /* tooltip */
-  #tip{
-    position:fixed; z-index:10; pointer-events:none; display:none;
-    background:var(--ink); color:var(--bg); font-size:12px; font-weight:700;
-    padding:5px 10px; border-radius:8px; white-space:nowrap;
-  }
-  @media (prefers-reduced-motion: no-preference){
-    .bar,.stick{transition:filter .15s}
-    .bar:hover,.col:hover .stick{filter:brightness(1.08)}
-  }
+/* moves（番号付きのレコード行） */
+.moves{counter-reset:mv; display:grid; margin-top:18px}
+.move{padding:16px 0 16px 44px; position:relative; border-bottom:1px solid var(--line)}
+.move:last-child{border-bottom:0}
+.move::before{
+  counter-increment:mv; content:counter(mv);
+  position:absolute; left:0; top:18px; width:28px; height:28px; border-radius:50%;
+  background:var(--accent); color:#fff; font-weight:700; font-size:14px;
+  display:flex; align-items:center; justify-content:center;
+}
+.move h3{font-size:15.5px}
+.move p{font-size:14px; color:var(--ink2); margin:.35em 0 0}
+.move p b{color:var(--ink)}
+.move .from{display:inline-block; font-size:11px; font-weight:700; color:var(--muted); border:1px solid var(--line); border-radius:9999px; padding:1px 9px; margin-left:8px; vertical-align:2px}
+
+/* fan items（レコード行。ステージはバッジ） */
+.fans{display:grid; margin-top:6px}
+.fan{padding:16px 0; border-bottom:1px solid var(--line)}
+.fan:last-child{border-bottom:0}
+.fan h3{font-size:15.5px}
+.fan .stage{display:inline-block; font-size:11px; font-weight:700; color:var(--accent-ink); background:var(--surface); border-radius:9999px; padding:2px 10px; margin-left:8px; vertical-align:2px}
+.fan p{font-size:14px; color:var(--ink2); margin:.4em 0 0}
+.fan p b{color:var(--ink)}
+
+.fineprint{font-size:13px; color:var(--muted); line-height:1.8}
+details.src{margin-top:16px}
+details.src summary{cursor:pointer; font-weight:700; color:var(--ink2); font-size:13.5px}
+details.src ul{font-size:13px; color:var(--ink2); line-height:2}
+
+/* footer（プラム黒の帯でページを閉じる） */
+footer.band{font-size:12.5px}
+footer.band code{color:var(--on-dark)}
+
+/* method系のコード表記(限界セクションは白帯) */
+.fineprint code{background:#faeef4; color:var(--ink); padding:2px 6px; border-radius:4px; font-size:12px}
+
+/* tooltip（影なし・ヘアライン枠・8px） */
+#tip{
+  position:fixed; z-index:10; pointer-events:none; display:none;
+  background:var(--bg); color:var(--ink); font-size:12px; font-weight:700;
+  border:1px solid var(--line);
+  padding:5px 10px; border-radius:8px; white-space:nowrap;
+}
+@media (prefers-reduced-motion: no-preference){
+  .bar,.stick{transition:filter .15s}
+  .bar:hover,.col:hover .stick{filter:brightness(1.08)}
+}
+@media (max-width:640px){
+  .band{padding:56px 16px}
+  .band--tight{padding:48px 16px}
+  .tiles{gap:24px; grid-template-columns:repeat(2,1fr)}
+}
 </style>
 </head>
 <body>
 
-<div class="wrap">
-<header>
+<nav class="top-nav"><a href="./index.html">🍭 ろりぽっぷ!!!!!!! Docs</a></nav>
+
+<header class="band band--white band--hero">
+<div class="band__inner">
   <div class="eyebrow">非公式ファン分析 — 2026年8月版</div>
   <h1>ろりぽっぷ<span class="bang">!!!!!!!</span><br>成長戦略ノート</h1>
   <p class="lede">323公演分の記録と5本のWeb調査をもとに、経営分析の道具を順番に使って「売れるために何が必要か」を調べた記録です。道具が出てくるたびに一言で説明するので、予備知識はいりません。
@@ -234,9 +264,11 @@
     <div class="tile"><div class="v num"><em>0</em>本</div><div class="k">YouTube公式動画</div><div class="s">主要競合4組で唯一の未開設</div></div>
     <div class="tile"><div class="v num"><em>2</em>年連続</div><div class="k">海外イベント出演</div><div class="s">同格帯で他に例なし</div></div>
   </div>
+</div>
 </header>
 
-<section>
+<section class="band band--blush">
+<div class="band__inner">
   <div class="stepchip">分析の地図</div>
   <h2>6つの道具を、この順番で使う</h2>
   <p>ビジネス分析は道具の使う順番が決まっています。外側(世の中)から内側(自分たち)へ、最後に掛け算で打ち手を出す流れです。</p>
@@ -248,9 +280,11 @@
     <span class="p">ファネル<small>弱みはどこで効くか</small></span><span class="arr">→</span>
     <span class="p">クロスSWOT<small>戦略に変換</small></span>
   </div>
+</div>
 </section>
 
-<section>
+<section class="band band--white">
+<div class="band__inner">
   <div class="stepchip">材料</div>
   <h2>まず、数字で現状を見る</h2>
   <p>手元の公演データ(2024年11月〜2026年8月、323公演)から。いちばん大事な変化はこれです。</p>
@@ -282,9 +316,11 @@
     <h3>そのほかの事実</h3>
     <p style="font-size:14px; color:var(--ink2)">公演の79%は対バン(複数グループ出演のイベント)。特典会はチェキ1,500円・写メ1,000円で業界相場ど真ん中、<b>初回写メ無料×ワンコイン公演×撮影OK</b>という軽い入口を持つ。一方で、YouTube検索では別団体(名古屋の同名アイドル・仙台の幼稚園)が上位を占め、配信も「!」6個と7個の2名義に分裂——<b>気になって検索した人を入口で取りこぼす構造</b>になっている。イベント名に「⚠️動員重要ライブ⚠️」が登場するのは、動員数が出演枠の維持に直結している兆候。</p>
   </div>
+</div>
 </section>
 
-<section>
+<section class="band band--blush">
+<div class="band__inner">
   <div class="stepchip">STEP 1 — PEST分析</div>
   <h2>世の中は味方か、敵か</h2>
   <div class="whatis"><span class="q">この道具はなに？</span>自分では変えられない大きな流れを、<b>政治(P)・経済(E)・社会(S)・技術(T)</b>の4方向から点検する道具。最初に「時代は追い風か」を確かめます。</div>
@@ -293,9 +329,11 @@
   <div class="card"><h3>S 社会 — 追い風、ただし条件つき</h3><p style="font-size:14px;color:var(--ink2)">推し活人口は1,400万〜2,000万人規模へ拡大中。ただし「推し活疲れ」経験者は7割。ファンを疲れさせない設計と、若い女性ファンを取り込めるかが分かれ目。</p></div>
   <div class="card"><h3>T 技術 — 本来は最大の追い風</h3><p style="font-size:14px;color:var(--ink2)">認知の主戦場はTikTok等のショート動画に移り、ファンが撮った動画からバズが生まれる時代。<b>撮影OK文化を持つろりぽっぷには追い風のはずだが、受け皿(公式チャンネル等)が未整備。</b></p></div>
   <div class="keybox"><div class="kicker">PESTの結論</div>時代そのものは味方。問題は、追い風を受ける「帆」を張っていないこと。</div>
+</div>
 </section>
 
-<section>
+<section class="band band--white">
+<div class="band__inner">
   <div class="stepchip">STEP 2 — ファイブフォース分析</div>
   <h2>この業界は、儲かる場所なのか</h2>
   <div class="whatis"><span class="q">この道具はなに？</span>業界の「儲けやすさ」を、<b>5方向からかかる圧力</b>で測る道具。圧力が強いほど、普通に頑張っても儲からない業界だということ。</div>
@@ -312,9 +350,11 @@
       <div class="fd">全国約3,000組が毎日の対バンで直接比較される。2024年だけで約206組が解散したという集計(非公式)もある高回転市場。</div></div>
   </div>
   <div class="keybox"><div class="kicker">ファイブフォースの結論</div>5つのうち4つが「強」＝構造的に儲けにくい業界。それでも勝てているのは2種類だけ——<b>(a) 動員実績で主催者への立場を逆転させたグループ</b>と、<b>(b) ファンが作る動画で宣伝費ゼロのまま認知を広げたグループ</b>。どちらも原動力はファンの行動。だから最後の「ファンにできること」の章は、おまけではなく本編です。</div>
+</div>
 </section>
 
-<section>
+<section class="band band--blush">
+<div class="band__inner">
   <div class="stepchip">STEP 3 — 3C分析</div>
   <h2>市場・競合・自分たちを、同じテーブルに載せる</h2>
   <div class="whatis"><span class="q">この道具はなに？</span><b>お客さん(Customer)・競合(Competitor)・自分たち(Company)</b>の3つを並べて「勝てる場所」を探す道具。</div>
@@ -352,9 +392,11 @@
       <div class="lesson"><b>学び:</b> お祭り系の天井は高い。時間を縮める装置は「ファン発の動画バズ」か「資本」の2つだけで、ろりぽっぷが選べるのは前者。</div></div>
   </div>
   <div class="keybox"><div class="kicker">3Cの結論</div>資本型(神風)とは戦わない。運用型(メリパレ)を手本にし、UGC型(Appare!の初期)の仕込みをする。現場資産はそのままに、デジタルの欠落だけを埋める。</div>
+</div>
 </section>
 
-<section>
+<section class="band band--white">
+<div class="band__inner">
   <div class="stepchip">STEP 4 — VRIO分析</div>
   <h2>その「強み」は本物か、4つの関門にかける</h2>
   <div class="whatis"><span class="q">この道具はなに？</span>強みと呼んでいるものを<b>価値がある(V)・珍しい(R)・真似されにくい(I)・活かす仕組みがある(O)</b>の4関門に通す道具。4つ揃って初めて長く効く武器。</div>
@@ -371,9 +413,11 @@
     </table>
   </div>
   <div class="keybox"><div class="kicker">VRIOが教える一番大事なこと</div>最重要資産は<b>参加型の楽曲設計</b>。武道館まで行ったiLiFE!の武器(コールをアイドル自身が教える曲)と同じ構造を、すでに持っている。欠けているのは「外の人に見せる仕組み(O)」だけ。<b>新しい武器を作る必要はなく、持っている武器を陳列することが課題</b>。</div>
+</div>
 </section>
 
-<section>
+<section class="band band--blush">
+<div class="band__inner">
   <div class="stepchip">STEP 5 — ファネル分析</div>
   <h2>弱みは、どこで効いているのか</h2>
   <div class="whatis"><span class="q">この道具はなに？</span>お客さんが「知る→調べる→初めて来る→また来る→常連になる」と進む流れを<b>じょうご(ファネル)</b>に見立て、どの段階で人がこぼれているかを探す道具。</div>
@@ -381,7 +425,7 @@
     <div class="title">ろりぽっぷのファネル診断</div>
     <div class="sub">幅＝その段階の通りやすさ(定性評価)。上だけが極端に細い</div>
     <svg viewBox="0 0 700 330" aria-label="ファネル図: 認知が細く、興味はやや細く、初回来場・リピート・常連は太い">
-      <g font-family="'Zen Kaku Gothic New',sans-serif">
+      <g font-family="'Noto Sans JP',sans-serif">
         <!-- stage bars, centered -->
         <rect x="287" y="10"  width="126" height="46" rx="9" fill="var(--accent)"/>
         <rect x="210" y="66"  width="280" height="46" rx="9" fill="var(--accent)" opacity="0.75"/>
@@ -404,9 +448,11 @@
     </svg>
   </div>
   <div class="keybox"><div class="kicker">ファネルの結論(朗報)</div>下が細いグループは接客や現場体験という時間のかかる改善が必要。でもろりぽっぷは<b>上が細いだけ</b>なので、「露出の配管工事」で直せる。流し込んだ新規は、業界水準以上の受け皿が待っている。</div>
+</div>
 </section>
 
-<section>
+<section class="band band--white">
+<div class="band__inner">
   <div class="stepchip">STEP 6 — クロスSWOT</div>
   <h2>分析を、打ち手に変換する</h2>
   <div class="whatis"><span class="q">この道具はなに？</span>強み(S)・弱み(W)・追い風(O)・向かい風(T)を<b>掛け算</b>して打ち手を出す道具。SWOTは表を作って終わりにされがちだが、本来はこの掛け算が本体。</div>
@@ -416,16 +462,21 @@
     <div class="q"><h3><span>S×T</span> 守り</h3><p>「生き残り」の信用 × 淘汰圧 ＝ 動員重要ライブを確実に固め、主催者への信用を守る。入口の軽さ × 代替品 ＝ 初回体験の質で現場の楽しさを守る。</p></div>
     <div class="q"><h3><span>W×T</span> 回避</h3><p>チェキ依存 × 推し活疲れ ＝ 月数千円で参加できる軽い応援手段(配信・デジタル)を用意し、太客の燃え尽きに備える。</p></div>
   </div>
+</div>
 </section>
 
-<section>
+<section class="band band--pink band--tight northstar">
+<div class="band__inner">
+  <div class="k">北極星 — 目指す一点</div>
+  <div class="g">2027年内に、400人箱のワンマンを成功させる</div>
+  <div class="m">メリーパレードが実証済みの現実的な階段。中間指標はXフォロワー5,000と単独動員の右肩上がり。武道館の話はこの階段を上ってから。</div>
+</div>
+</section>
+
+<section class="band band--white">
+<div class="band__inner">
   <div class="stepchip">戦略</div>
   <h2>12〜18ヶ月の設計図</h2>
-  <div class="northstar">
-    <div class="k">北極星 — 目指す一点</div>
-    <div class="g">2027年内に、400人箱のワンマンを成功させる</div>
-    <div class="m">メリーパレードが実証済みの現実的な階段。中間指標はXフォロワー5,000と単独動員の右肩上がり。武道館の話はこの階段を上ってから。</div>
-  </div>
   <div class="moves">
     <div class="move"><h3>デジタルの配管工事<span class="from">ファネル / W×O</span></h3><p>YouTube公式チャンネル開設(ライブ映像・コール講座)。検索の名称衝突対策に「ろりぽっぷ!!!!!!!【アイドル】」表記。配信2名義の統一。主要競合4組で未着手なのはここだけ。</p></div>
     <div class="move"><h3>毎日ショート動画の当番制＋個人リーチの束ね直し<span class="from">メリパレ式・実測データ</span></h3><p>メンバー日替わり(月〜土)でまとめ撮り運用。追加費用ほぼゼロ。餃子・グミ・群馬——キャラのフックは既に立っている。あわせて「個人合計10,473 > 公式1,385」の逆転を解消: 個人のプロフィール・固定ポストに公式とグループ名を明記し、公式は個人のバズ投稿を引用で束ねる。<b>既にいるフォロワーをグループに接続するのが一番安い施策。</b></p></div>
@@ -435,9 +486,11 @@
     <div class="move"><h3>海外資産の複利運用<span class="from">S×O</span></h3><p>シンガポール2年連続を営業材料に、台湾・タイへ横展開。海外現場では英語字幕付き自己紹介・コール講座でフォローの取りこぼしを防ぐ。</p></div>
     <div class="move"><h3>軽い応援手段の整備<span class="from">W×T</span></h3><p>チェキは維持しつつ、月数千円で参加できる手段(配信・デジタル特典・EC)を育てる。太客一極依存は、金銭疲弊が直撃したとき一気に崩れる。</p></div>
   </div>
+</div>
 </section>
 
-<section>
+<section class="band band--blush">
+<div class="band__inner">
   <div class="stepchip">あなたへ</div>
   <h2>ファンにできること</h2>
   <p>ファイブフォースの結論を思い出してください。この業界の勝ち筋は2つで、<b>どちらも原動力はファンの行動</b>です。じょうごのどこを太らせる行動かも添えて、効く順に。</p>
@@ -450,9 +503,11 @@
     <div class="fan"><h3>⑥ お金の使い方を少しだけ設計する<span class="stage">継続</span></h3><p>無理のない範囲が大前提(金銭疲弊は離脱理由の筆頭——長く現場にいることが一番の貢献)。そのうえで、グッズを現場の外で身につける・音源を人に贈るなど「新規を生む消費」はレバレッジが違う。</p></div>
     <div class="fan dont"><h3>⑦ やらないほうがいいこと</h3><p>新規への門番行動(コールの指摘・最前の固定化・古参アピール)は、せっかく太い「初回来場の受け皿」を自分の手で細らせる行為。競合を下げる発信も、対バン文化圏では巡り巡ってブッキングを狭める。</p></div>
   </div>
+</div>
 </section>
 
-<section>
+<section class="band band--white">
+<div class="band__inner">
   <div class="stepchip">正直な留保</div>
   <h2>この分析の限界</h2>
   <p class="fineprint">Xのフォロワー数は2026年9月1日のGrok定点観測(第1回)による実測値。UGC件数は検索取得上限のため下限値で、実数はもっと多い可能性がある。Instagramは推定、TikTok・YouTube・動員の実数は未取得(計測手順は <code>prompts/collect/strategy_metrics.md</code>、第1回データは <code>strategy/metrics_2026-09-01.md</code>)。業界全体で卒業・解散サイクルは速く、戦略は「続く運営体制」が前提。バズは計画できない——本戦略は「バズが起きうる状態を安く維持し、起きたら受け止められる現場を保つ」設計であり、受け皿は既にある。競合として名前を挙げたグループを下げる意図はない。</p>
@@ -466,12 +521,14 @@
       <li>内部データ: lollpop_docs リポジトリ events/data_event.csv(323公演)ほか。URL付きの完全な出典リストはリポジトリの growth_strategy.md 付録を参照</li>
     </ul>
   </details>
+</div>
 </section>
 
-<footer>
+<footer class="band band--dark band--tight">
+<div class="band__inner">
   ろりぽっぷ!!!!!!! 成長戦略ノート — ファンによる非公式分析(2026年9月1日更新・X関連は第1回Grok定点観測の実測値)。最新のルール・料金は公式X(@lollipop_1116)と公式サイトを確認してください。
-</footer>
 </div>
+</footer>
 
 <div id="tip" role="presentation"></div>
 
