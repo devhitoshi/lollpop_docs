@@ -1,0 +1,4 @@
+# 曲調解析に必要なライブラリ。
+#     python3 -m pip install -r .claude/skills/music-analysis/scripts/requirements.txt
+librosa>=0.10
+soundfile>=0.12
