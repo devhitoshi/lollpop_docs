@@ -36,6 +36,8 @@ def parse_args():
     p.add_argument('--orientation', choices=['縦', '横', '正方形'])
     p.add_argument('--type', dest='mtype', choices=['photo', 'video'])
     p.add_argument('--source', choices=['公式', 'メンバー', '他人'], help='この出どころだけ')
+    p.add_argument('--date', help='この日付だけ YYYY-MM-DD（カンマ区切りで複数可）')
+    p.add_argument('--post-id', help='この投稿だけ（カンマ区切りで複数可）。1本の動画を狙って落とすとき用')
     p.add_argument('--limit', type=int, help='件数の上限（試すとき用）')
     p.add_argument('--max-total-mb', type=int, default=2000,
                    help='今回の実行で落とす合計サイズの上限 MB（既定 2000）。超えたら打ち切る。'
@@ -97,11 +99,28 @@ def ext_for(row):
     return m.group(1) if m else ('mp4' if row['type'] == 'video' else 'jpg')
 
 
+class EmptyDownload(Exception):
+    """0バイト、または Content-Length に足りない応答。成功扱いにしない。"""
+
+
 def download(url, path):
+    """1件を落とす。中身が空・途中で切れたものは例外にして、壊れたファイルを残さない。"""
     req = urllib.request.Request(url, headers={'User-Agent': UA})
-    with urllib.request.urlopen(req, timeout=120) as r, open(path, 'wb') as f:
-        f.write(r.read())
-    return os.path.getsize(path)
+    with urllib.request.urlopen(req, timeout=300) as r, open(path, 'wb') as f:
+        expected = r.headers.get('Content-Length')
+        expected = int(expected) if expected and expected.isdigit() else None
+        got = 0
+        while True:
+            chunk = r.read(1024 * 256)
+            if not chunk:
+                break
+            f.write(chunk)
+            got += len(chunk)
+    if got == 0:
+        raise EmptyDownload('応答が空（0バイト）')
+    if expected is not None and got < expected:
+        raise EmptyDownload(f'途中で切れた（{got}/{expected} バイト）')
+    return got
 
 
 def main():
@@ -117,6 +136,12 @@ def main():
         rows = [r for r in rows if r['type'] == args.mtype]
     if args.source:
         rows = [r for r in rows if r['source'] == args.source]
+    if args.date:
+        days = set(args.date.split(','))
+        rows = [r for r in rows if r['date'] in days]
+    if args.post_id:
+        ids = set(args.post_id.split(','))
+        rows = [r for r in rows if r['post_url'].rsplit('/', 1)[-1] in ids]
 
     permitted = [r for r in rows if r['author'].lower() in ok]
     skipped = [r for r in rows if r['author'].lower() not in ok]
@@ -162,8 +187,14 @@ def main():
         seq[pid] = seq.get(pid, 0) + 1
         name = f"{r['date']}_{r['author']}_{pid}_{seq[pid]}.{ext_for(r)}"
         path = os.path.join(args.out, name)
-        if name in have or os.path.exists(path):
+        if name in have:
             skip_n += 1
+            continue
+        if os.path.exists(path):
+            # 落とし直さないが、出典の対応表には残す（クレジットの根拠を欠かさない）
+            skip_n += 1
+            new_rows.append({**{k: r.get(k, '') for k in fields if k in r}, 'file': name,
+                             '許諾': 'permissions.md'})
             continue
         url = r['best_mp4'] or r['media_url']
         if r['type'] == 'photo' and r['media_url']:
@@ -173,7 +204,7 @@ def main():
             ok_n += 1
             total_bytes += size
             print(f"  取得 {name}  {size/1024/1024:.1f} MB（累計 {total_bytes/1024/1024:.0f} MB）")
-        except (urllib.error.URLError, urllib.error.HTTPError, OSError) as e:
+        except (urllib.error.URLError, urllib.error.HTTPError, OSError, EmptyDownload) as e:
             fail_n += 1
             print(f"  失敗 {name}: {e}")
             if os.path.exists(path):

@@ -36,9 +36,10 @@
    ├─ setlist-analysis       : 公式のセトリ投稿と events/data_event.csv の突き合わせ
    └─ x-media-collect        : 縦型動画の素材（画像・動画）
         ├─ build_media_index → data/x/media_index_<期間>.csv（追跡。URL と寸法だけ）
-        └─ fetch_media       → work/x_media/（許諾済みのみ。コミットしない）
-             ├─ 許諾の判断は data/x/media_permissions.md の「OK」の行だけ
-             └─ manifest.csv に出典が残る（クレジット表記に使う）
+        ├─ fetch_media       → work/x_media/（許諾済みのみ。コミットしない）
+        │    ├─ 許諾の判断は data/x/media_permissions.md の「OK」の行だけ
+        │    └─ manifest.csv に出典が残る（クレジット表記に使う）
+        └─ make_vertical     → work/x_media/vertical_*.mp4（書き出しもコミットしない）
 
  セッション終了（session-handoff の手順）
    ├─ x-data-sync push : work/x_fetch/*.jsonl → lollpop_data/x/*.jsonl.gz（項目を絞って圧縮・commit・push）
