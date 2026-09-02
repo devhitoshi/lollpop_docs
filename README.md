@@ -53,7 +53,8 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 | `strategy/` | 運用戦略。`growth_strategy.md` と四半期の定点観測 `metrics_YYYY-MM-DD.md` |
 | `articles/` | **note記事のホーム**（全シリーズ＋単発。索引と置き方は `articles/README.md`） |
 | `audio/` | 曲調解析に使う音源の置き場（音源自体はリポジトリに入りません） |
-| `work/` | 汎用の一時作業場。**中身は空が正常**（案内は `work/README.md`） |
+| `data/` | 機械が作る成果物（エゴサーチの判定・件数・要約）。追跡する。他人の投稿の原文は置かない（`data/README.md`） |
+| `work/` | 汎用の一時作業場。**中身は空が正常**（案内は `work/README.md`）。`work/x_fetch/` の取得データは非公開リポジトリ `lollpop_data` に退避する |
 | `archive/` | 役目を終えた旧版ドラフト |
 
 ### 公開面と標準文書
@@ -70,7 +71,9 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 | パス | 内容 |
 | --- | --- |
 | `prompts/` | note 記事を作るためのLLM用プロンプト（`collect/` = Grok・Gemini、`write/` = Claude） |
-| `.claude/skills/` | 繰り返す作業の手順書（歌詞ドキュメント作成、月次セトリ集計、曲調解析、X投稿の取得） |
+| `.claude/skills/` | 繰り返す作業の手順書（歌詞ドキュメント作成、月次セトリ集計・整合性チェック・白書の図表、曲調解析、X投稿の取得とエゴサーチ、週刊・月刊の下書き、記事の公開前レビュー、戦略の定点観測、Web 調査、メンバー人物像の更新、セッション引き継ぎ） |
+| `.claude/agents/` | Claude Code のサブエージェント。`article-review` は記事を直さず校閲レポートだけを返す読み取り専用の校閲係 |
+| `.claude/hooks/` + `.claude/settings.json` | Claude Code の自動処理。起動時サマリ、秘密情報・取得データのコミット防止、公演CSV編集後の自動集計 |
 
 ## 公式サイト
 https://flapinc.jp/lollipop/about

@@ -24,12 +24,12 @@ work/*.jsonl
 work/**/*.jsonl
 work/x_fetch/
 
-# エゴサーチ（.claude/skills/x-account-fetch/scripts/fetch_egosearch.py）の永続ローカルキャッシュ。
-# work/ と違い意図的に掃除しない（同じ期間・クエリの再取得を避けるため）が、
-# 本文を含む他人の著作物なのでコミットはしない。README.md だけ例外。
-/x_cache/*
-!/x_cache/README.md
-
 # Python の中間生成物
 __pycache__/
 *.pyc
+
+# セトリ白書の図表の確認用出力（render_charts.py の既定の出力先）。白書に反映するときは articles/セトリ白書/img へ
+work/charts/
+
+# ダウンロードした画像・動画（許諾済みでも他人の著作物。リポジトリには入れない）
+work/x_media/

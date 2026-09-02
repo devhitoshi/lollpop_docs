@@ -23,51 +23,11 @@ target_months = []
 if args.months:
     target_months = args.months.split(',')
 
-canonical_songs = []
-with open('songs/楽曲一覧.md', 'r', encoding='utf-8') as f:
-    for line in f:
-        # 「## 音楽配信先」以降は配信アカウントの名義一覧なので曲名ではない。
-        if line.startswith('## 音楽配信先'):
-            break
-        # 行頭の箇条書きだけを曲名として拾う。インデントを許すと、曲の下にぶら下がる
-        # 「作詞」「初披露」「配信先」などの見出しまで曲名として登録されてしまう。
-        m = re.match(r'^- \*\*(.+)\*\*', line)
-        if m:
-            canonical_songs.append(m.group(1).strip())
+sys.path.insert(0, script_dir)
+from song_names import load_canonical_songs, normalize_song_name, is_non_song_item, split_setlist  # noqa: E402
 
-def normalize_song_name(name):
-    name = name.strip()
-    name = re.sub(r'^[0-9]+[\s\.]*', '', name)
-    name = re.sub(r'🆕✨?', '', name)
-    name = re.sub(r'❤️\s*', '', name)
-    name = re.sub(r'🍭\s*', '', name)
-    name = re.sub(r'💙\s*', '', name)
-    name = re.sub(r'（.*?）', '', name)
-    name = re.sub(r'\(.*?\)', '', name)
-    name = name.replace('飴入れ', '').replace('飴投げ', '')
-    name = name.strip()
-
-    if 'ろりぽっぷ' in name and '単独' not in name: return next((c for c in canonical_songs if 'ろりぽっぷ' in c), None)
-    if '始まりの宴' in name: return next((c for c in canonical_songs if '始まりの宴' in c), None)
-    if '主人公' in name: return next((c for c in canonical_songs if '主人公' in c), None)
-    if '約束' in name: return next((c for c in canonical_songs if '約束' in c), None)
-    if 'ぽっぽ' in name and 'ポジティブ' in name: return next((c for c in canonical_songs if 'ぽっぽ' in c), None)
-    if 'Lambie' in name: return next((c for c in canonical_songs if 'Lambie' in c), None)
-    if 'Say Hello' in name: return next((c for c in canonical_songs if 'Say Hello' in c), None)
-    if '推し事' in name: return next((c for c in canonical_songs if '推し事' in c), None)
-    if '正解の方程式' in name: return next((c for c in canonical_songs if '正解の方程式' in c), None)
-    if 'キミノセイ' in name: return next((c for c in canonical_songs if 'キミノセイ' in c), None)
-
-    for c in canonical_songs:
-        if name.lower() == c.lower(): return c
-    # デビュー初期（2024年末〜）の投稿は「ShinyDays」のようにスペースを詰めた表記が混在する。
-    # 空白と大小文字を無視して照合しないと SHINY DAYS が丸ごと集計から漏れる。
-    squashed = re.sub(r'\s+', '', name).lower()
-    for c in canonical_songs:
-        if squashed == re.sub(r'\s+', '', c).lower(): return c
-    for c in canonical_songs:
-        if c in name: return c
-    return None
+# 曲名の正表記と名寄せルールは song_names.py に集約（check_event_consistency.py と共用）
+canonical_songs = load_canonical_songs()
 
 month_data = defaultdict(lambda: defaultdict(lambda: {'total': 0, 'first': 0, 'middle': 0, 'last': 0}))
 
@@ -86,33 +46,14 @@ with open('events/data_event.csv', 'r', encoding='utf-8') as f:
         if not args.all and ym not in target_months:
             continue
 
-        parts = setlist_str.split('|')
-        for part in parts:
-            part = re.sub(r'\d+部:\s*', '', part)
-            part = re.sub(r'アンコール;?', '', part)
-            items = [item.strip() for item in part.split(';') if item.strip()]
-
-            # ワンマン等のメドレーは「《①メドレー》曲A→曲B→曲C」形式で1項目に収まっている。
-            # 分解しないと先頭の1曲しか計上されず、残りが丸ごと欠落する。
-            expanded = []
-            for item in items:
-                if '→' in item:
-                    item = re.sub(r'^《.*?》', '', item)
-                    expanded.extend(p.strip() for p in item.split('→') if p.strip())
-                else:
-                    expanded.append(item)
-            items = expanded
-
+        for items in split_setlist(setlist_str):
             songs = []
             for item in items:
-                if re.search(r'^(SE|MC)', item) or item.startswith('MC(') or item.startswith('MC（'): continue
-                if 'ラジオ体操' in item or 'クイズ' in item: continue
-                # 【🏮宴衣装】《🍭ソロコーナー》などの区切り行。曲ではないので除外する
-                if item.startswith('【') or item.startswith('《'): continue
-                song_name = normalize_song_name(item)
+                if is_non_song_item(item): continue
+                song_name = normalize_song_name(item, canonical_songs)
                 if song_name and song_name in canonical_songs:
                     songs.append(song_name)
-                    
+
             n = len(songs)
             for i, song in enumerate(songs):
                 month_data[ym][song]['total'] += 1
