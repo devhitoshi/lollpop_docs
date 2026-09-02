@@ -12,7 +12,8 @@
 - **表記**: 曲名・イベント名は資料の表記をそのまま使う（「!」の数、「☆」「★」を正規化しない）。グループ名は「ろりぽっぷ!!!!!!!」（!が7個）。
 - **文体**: note 用記事は [`prompts/write/style_ai_poppar.md`](./prompts/write/style_ai_poppar.md)（AIぽっぱー）に従う。note は表組み不可・見出しは2階層まで。
 - **メンバー情報**: 基本情報の正は [`members/members.md`](./members/members.md)。人物像は [`members/`](./members/) のデータに根拠がある範囲だけ書く。卒業メンバーの卒業後の活動・私生活には踏み込まない。運営の意図・体調・人間関係の推測は書かない。
-- **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計と公演データの整合性チェックは `.claude/skills/setlist-analysis`、曲調解析は `.claude/skills/music-analysis`、公式・メンバーのX投稿取得は `.claude/skills/x-account-fetch`、週刊・月刊の下書きは `.claude/skills/weekly-monthly-draft` の手順に従う。
+- **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計・公演データの整合性チェック・セトリ白書の図表は `.claude/skills/setlist-analysis`、曲調解析は `.claude/skills/music-analysis`、公式・メンバーのX投稿取得は `.claude/skills/x-account-fetch`、周囲の反応（エゴサーチ）は `.claude/skills/x-egosearch`、週刊・月刊の下書きは `.claude/skills/weekly-monthly-draft`、メンバーの人物像の更新は `.claude/skills/member-profile-refresh` の手順に従う。
+- **調査・分析**: 戦略の定点観測（フォロワー数・UGC・公式の発信量）は `.claude/skills/strategy-metrics`、Web 調査（市場・競合・業界）は `.claude/skills/web-research`。出典と確認日を付け、評価語を書かない。
 - **記事の公開前レビュー**: note 記事を書き終えたら、PR を作る前に `.claude/skills/article-review`（機械チェック＋読み取り専用エージェント `article-review`）を通す。手戻りの多い「公演の抜け」「公演数の誤り」「表記ゆれ」「文体の崩れ」を資料と突き合わせて拾う。
 - **セッションの終わり**: `.claude/skills/session-handoff` の手順で、各シリーズ README の「未解決」と CLAUDE.md の進行中セクションを更新してからコミット・push する。
 - **デザイン**: `resources/` のHTMLを触るときは [`design.md`](./design.md)（色・タイポ・バンド構成の正）に従う。実装は `resources/css/style.css`。単一ファイル完結のHTML（セトリ白書・成長戦略）には同じトークン値が転記されている。
@@ -52,7 +53,7 @@
 
 - 置き場と現状の正: [`articles/週刊まとめ/README.md`](./articles/週刊まとめ/README.md)、[`articles/月刊まとめ/README.md`](./articles/月刊まとめ/README.md)。
 - 2026年8月分まで作成済み。8月の全17公演は `events/data_event.csv` 追記済み・集計反映済み。
-- **X収集は2ルートに分かれた（2026-09-01〜）。** 公式・メンバーの投稿は `.claude/skills/x-account-fetch`（twitterapi.io・全件取得）、エゴサーチ（周囲の反応）は従来どおり `prompts/collect/x_collect.md` の手順2をGrokで実行する。前者は完了済み、**後者が未実施**（詳細は各READMEの「未解決」参照）。
+- **X収集は API に一本化した（2026-09-02〜）。** 公式・メンバーの投稿は `.claude/skills/x-account-fetch`、周囲の反応（エゴサーチ）は `.claude/skills/x-egosearch`（全件取得→機械仕分け→Claude が判定）。Grok 版の `prompts/collect/x_collect.md` は API が使えない環境の予備。8月分は両方とも完了し、週刊8/25-8/31号と月刊8月号に反映済み。取得データは `work/x_fetch/`（コミットしない）にあり、コンテナが変わると消えるので再取得が要る。
 - **執筆の入口は `.claude/skills/weekly-monthly-draft`**（2026-09-02〜）。取得済み投稿と `events/data_event.csv` から素材ファイル（`work/x_fetch/draft_material_*.md`、コミットしない）を組み立て、`prompts/write/` の文体・構成で書き、`article-review` でレビューしてから README を更新する。
 
 ## 実行環境の注意（Claude Code リモート環境）

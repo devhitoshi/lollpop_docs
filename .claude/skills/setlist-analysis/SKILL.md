@@ -51,6 +51,17 @@ description: 「ろりぽっぷ!!!!!!!」のセットリストを月ごとに集
 5. **結果を伝える**
    `events/monthly_setlist_ranking.csv` が更新されたこと、整合性チェックで見つかった候補をユーザーに伝える。
 
+6. **（白書を更新するときだけ）図表を再生成する**
+
+   ```bash
+   python3 .claude/skills/setlist-analysis/scripts/render_charts.py --out work/charts      # 確認用
+   python3 .claude/skills/setlist-analysis/scripts/render_charts.py --out articles/セトリ白書/img --until YYYY-MM-DD
+   ```
+
+   `design.md` の色トークンで 01_ranking / 02_heatmap / 03_roots / 04_position / 05_shows を描く。
+   matplotlib と日本語フォントが要る（`python3 -m pip install matplotlib`。フォントは `--font` で指定）。
+   白書の本文にある数字（公演数・回数）は図と一緒に更新する。
+
 ## 入出力
 
 | パス | 役割 |

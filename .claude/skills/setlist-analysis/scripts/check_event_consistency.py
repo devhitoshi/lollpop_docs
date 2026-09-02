@@ -139,8 +139,16 @@ SETLIST_HINT = re.compile(r'(セトリ|setlist|set\s*list)', re.I)
 NUMBERED_LINE = re.compile(r'^\s*(SE|M\d|0?\d{1,2})[\s\.．:：、)）]', re.M)
 
 
+ANNOUNCE_HINT = re.compile(r'ライブ情報|出演情報|出演決定|チケット|予約|OPEN|START', re.I)
+
+
 def looks_like_setlist(text):
-    """ライブ後のセトリ投稿らしさ。「SE」「01 曲名」形式の行が3つ以上、または「セトリ」の語。"""
+    """ライブ後のセトリ投稿らしさ。「SE」「01 曲名」形式の行が3つ以上、または「セトリ」の語。
+
+    告知（ライブ情報・チケット・OPEN/START）は、番号付きの出演順や「セトリ」の語を含んでも対象外。
+    """
+    if ANNOUNCE_HINT.search(text) and not re.search(r'ありがとう|お疲れ|楽しかった|セトリ|setlist', text, re.I):
+        return False
     if SETLIST_HINT.search(text):
         return True
     return len(NUMBERED_LINE.findall(text)) >= 3

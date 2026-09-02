@@ -28,10 +28,10 @@
 
 | ファイル | 用途 |
 | --- | --- |
-| [`collect/x_collect.md`](./collect/x_collect.md) | 指定期間のXの動きを**事実データとして**収集する（週刊・月刊で共通） |
+| [`collect/x_collect.md`](./collect/x_collect.md) | 指定期間のXの動きを**事実データとして**収集する（週刊・月刊で共通）。手順1は `x-account-fetch`、手順2は `x-egosearch` スキルで API 化済み。API が使えない環境の予備 |
 | [`collect/event_get.md`](./collect/event_get.md) | 公式Xのライブ後投稿からセトリを抽出し、`events/data_event.csv` に追記する |
 | [`collect/music_listen.md`](./collect/music_listen.md) | 音源を聴いて曲調を言語化する（**Gemini など音声入力に対応したLLM**に、音源を添付して投げる） |
-| [`collect/strategy_metrics.md`](./collect/strategy_metrics.md) | フォロワー数・UGC量・競合比較の**定点観測**（四半期ごと）。`strategy/growth_strategy.md` のKPI更新用 |
+| [`collect/strategy_metrics.md`](./collect/strategy_metrics.md) | フォロワー数・UGC量・競合比較の**定点観測**（四半期ごと）。`strategy/growth_strategy.md` のKPI更新用。API 版は `.claude/skills/strategy-metrics`（こちらが既定） |
 
 **使い方**
 
