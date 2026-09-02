@@ -58,6 +58,19 @@
 - **X収集は API に一本化した（2026-09-02〜）。** 公式・メンバーの投稿は `.claude/skills/x-account-fetch`、周囲の反応（エゴサーチ）は `.claude/skills/x-egosearch`（全件取得→機械仕分け→Claude が判定）。Grok 版の `prompts/collect/x_collect.md` は API が使えない環境の予備。8月分は両方とも完了し、週刊8/25-8/31号と月刊8月号に反映済み。取得データは `work/x_fetch/`（コミットしない）にあり、コンテナが変わると消える。**消える前に `.claude/skills/x-data-sync` で非公開リポジトリ `lollpop_data` へ退避し、次のセッションの始めに復元する**（起動時 hook が自動で試みる。リモート環境ではセッションの範囲に lollpop_data が要る）。判定ファイルは `data/x/` にコミット済みなので、再取得しても再判定は要らない。
 - **執筆の入口は `.claude/skills/weekly-monthly-draft`**（2026-09-02〜）。取得済み投稿と `events/data_event.csv` から素材ファイル（`work/x_fetch/draft_material_*.md`、コミットしない）を組み立て、`prompts/write/` の文体・構成で書き、`article-review` でレビューしてから README を更新する。
 
+## 縦型動画の素材（進行中・2026-09-02〜）
+
+- 目的: 告知・周知を縦型動画（TikTok・Reels・Shorts）ベースにする。そのための素材集め。
+- 手順は `.claude/skills/x-media-collect`、データの流れは [`data/README.md`](./data/README.md)。
+- 済: 8月分の索引（`data/x/media_index_2026-08-01_2026-08-31.csv`・882件）。許諾の記録（`data/x/media_permissions.md`）。
+  許諾済みは公式・メンバー5人・ファン5アカウントで **456件がダウンロード可能**。
+- 制約: **他人の素材は `data/x/media_permissions.md` に「OK」がある分だけ。** 記録に無いものは落とせない作りにしてある。
+  @Bf1pR（しゃけさん）は都度依頼。ファン素材は上位10人で58%・上位20人で73%なので、増やすならそこから。
+- 容量: 許諾済み456件を全部落とすと約12.5GB（動画12.2GB・写真175MB。4Kが31本）。`--dry-run` で概算を見てから落とす。
+- 素材の偏り: 縦型の動画は6件しかない。**横動画は上下にテロップを入れて 9:16 に載せる**方針。
+  自分で縦持ちで撮るのがいちばん強く、主催・単独は動画全編可・掲載可（`guide/rules.md`）。
+- 待ち: 楽曲は TikTok のライブラリにあると確認済み。運営・メンバーの許諾の範囲（改変・クレジット・期限）は未確認。
+
 ## 実行環境の注意（Claude Code リモート環境）
 
 - **twitterapi.io は環境によって到達可否が変わる。** 信頼モードでは403、フルアクセス環境では到達可能（2026-09-01確認）。APIキーは環境変数 `TWITTERAPI_IO_KEY` かルートの `.env`（`.gitignore` 済み）から読む。**キーをチャットに貼らせない。** 取得した投稿データ（`work/x_fetch/`）は他人の著作物なのでコミットしない（`.gitignore` 済み）。
