@@ -34,6 +34,25 @@ DATA_SUB = 'x'
 # 保存する項目。下流のスクリプト（build_material / triage / profile_stats / check_event_consistency / collect_metrics）が読むもの
 KEEP = ('id', 'url', 'text', 'createdAt', 'likeCount', 'retweetCount', 'replyCount', 'quoteCount', 'viewCount',
         'bookmarkCount', 'isReply', 'inReplyToId', 'lang', '_queries')
+# メディアは slim_media() で URL・寸法・動画の変種まで残す（x-media-collect の索引を作り直せるように）
+
+
+def slim_media(m):
+    """メディアは x-media-collect の索引に要る項目まで残す（URL・寸法・動画の変種・長さ）。
+
+    画像や動画そのものは保存しない。素材探しは索引でやり、実物は必要になったときに取りに行く。
+    """
+    oi = m.get('original_info') or {}
+    vi = m.get('video_info') or {}
+    out = {'type': m.get('type'), 'media_url_https': m.get('media_url_https'),
+           'original_info': {'width': oi.get('width'), 'height': oi.get('height')},
+           'allow_download_status': m.get('allow_download_status')}
+    if vi:
+        mp4 = [v for v in (vi.get('variants') or []) if v.get('content_type') == 'video/mp4']
+        best = max(mp4, key=lambda v: v.get('bitrate') or 0) if mp4 else None
+        out['video_info'] = {'duration_millis': vi.get('duration_millis'), 'aspect_ratio': vi.get('aspect_ratio'),
+                             'variants': [best] if best else []}
+    return out
 
 
 def slim(t):
@@ -41,7 +60,7 @@ def slim(t):
     s = {k: t.get(k) for k in KEEP if k in t}
     s['author'] = {'userName': a.get('userName'), 'name': a.get('name'), 'id': a.get('id')}
     media = (t.get('extendedEntities') or {}).get('media') or []
-    s['media'] = [{'type': m.get('type')} for m in media]
+    s['media'] = [slim_media(m) for m in media]
     s['is_rt'] = bool(t.get('retweeted_tweet'))
     return s
 
@@ -49,7 +68,7 @@ def slim(t):
 def fat(s):
     """復元: 既存スクリプトが参照する形（author, extendedEntities.media, retweeted_tweet）に戻す。"""
     t = dict(s)
-    t['extendedEntities'] = {'media': [{'type': m.get('type'), 'restored': True} for m in s.get('media') or []]}
+    t['extendedEntities'] = {'media': [dict(m, restored=True) for m in s.get('media') or []]}
     if s.get('is_rt'):
         t['retweeted_tweet'] = {'restored': True}
     t.pop('media', None)
@@ -145,7 +164,8 @@ def cmd_pull(args):
         print(f"  復元 {name:50s} {n:>6} 件")
     if not restored:
         print("復元するものが無い（既にある、またはデータ側が空。--force で上書き）")
-    print("注意: 復元したデータは項目を絞った版。author の詳細や media の URL は含まない")
+    print("注意: 復元したデータは項目を絞った版。本文・日時・投稿者・反応数・メディアの URL と寸法は残るが、"
+          "\n      プロフィールの詳細と、動画の低ビットレート版は含まない")
 
 
 def main():
