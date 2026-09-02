@@ -23,7 +23,7 @@ API 版はフォロワー数と公式の発信量を確定値で取り、UGC は
    python3 .claude/skills/x-egosearch/scripts/fetch_egosearch.py --since <30日前> --until <基準日> --max-tweets-per-query 1500 --yes
    ```
 
-   候補を読んで判定し、`work/x_fetch/egosearch_<since>_<until>_reactions.md` を作る（x-egosearch の手順3〜4）。
+   候補を読んで判定し、`data/x/egosearch_<since>_<until>_reactions.md` を作る（x-egosearch の手順3〜4）。
    先頭に「採用 N 件／除外 M 件」の行を必ず書く（このスキルがそこを読む）。初見らしき投稿には要旨に「初見」の語を残す。
    時間が無ければこの手順を飛ばしてもよい。その場合 UGC は「未判定の上限値」として出る。
 

@@ -16,6 +16,7 @@ fetch_egosearch.py の JSONL を読み、投稿ごとに「ろりぽっぷ!!!!!!
     python3 ... --decisions work/x_fetch/egosearch_decisions_2026-08-01_2026-08-31.txt   # Claude の判定を反映して最終リストを出す
 
 --decisions のファイルは1行1件「<id> adopt|reject [メモ]」。要判定のうち書かれていないものは除外扱い（迷ったら除外）。
+判定ファイルと集計は data/x/（追跡）に置く。生データが消えても、復元（x-data-sync）→ このスクリプトで採用リストが戻る。
 """
 import argparse
 import json
@@ -35,7 +36,8 @@ JST = timezone(timedelta(hours=9))
 OWN = {h for h, _ in DEFAULT_ACCOUNTS} | {'asaka_lpop', 'natsumi_lpop'}
 # 本人と見られる別ハンドル（投稿内容から判断。2026-08 の判定で @Ichii_h77 は苺花なつみ本人の生誕祭告知・お礼を投稿していた）
 OWN |= {'Ichii_h77'}
-OUT_DIR = 'work/x_fetch'
+OUT_DIR = 'work/x_fetch'   # 生データと、原文を含む中間ファイル（コミットしない）
+DATA_DIR = 'data/x'        # 判定・件数など自分の成果物（コミットする）
 
 # 強い手がかり（+3）: 正式表記・公式/メンバーの固有タグ・公式ハンドル
 STRONG = re.compile(r'ろりぽっぷ\s*[!！‼︎]{2,}|#ろりぽっぷ\b|#ろりぽっぷ(?![ぁ-ん])|lollipop_1116|_lpop\b|#ぽっぱー|#くるみるく|#くるみんとKP|#餃子のおまゆ|#まんてんあみてん|#まなてぃータイム|#まうだよ|#苺花庭園|#苺花なつみ生誕祭')
@@ -57,7 +59,7 @@ def parse_args():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('--since', required=True)
     p.add_argument('--until', required=True)
-    p.add_argument('--decisions', help='Claude の判定ファイル（1行「<id> adopt|reject [メモ]」）')
+    p.add_argument('--decisions', help='Claude の判定ファイル（1行「<id> adopt|reject [メモ]」）。省略時は data/x/egosearch_decisions_<since>_<until>.txt があればそれ')
     p.add_argument('--snippet', type=int, default=110, help='要判定リストの本文の長さ')
     return p.parse_args()
 
@@ -118,8 +120,10 @@ def main():
     review = [t for t in posts if 0 <= t['_score'] <= 2 and has_group_signal(t)]
 
     decisions = {}
-    if args.decisions and os.path.exists(args.decisions):
-        for l in open(args.decisions, encoding='utf-8'):
+    dec_path = args.decisions or os.path.join(DATA_DIR, f"egosearch_decisions_{args.since}_{args.until}.txt")
+    if os.path.exists(dec_path):
+        print(f"判定ファイル: {dec_path}")
+        for l in open(dec_path, encoding='utf-8'):
             parts = l.strip().split(None, 2)
             if len(parts) >= 2 and parts[1] in ('adopt', 'reject'):
                 decisions[parts[0]] = (parts[1], parts[2] if len(parts) > 2 else '')
@@ -157,6 +161,7 @@ def main():
         n_rej = len(posts) - len(final)
         print(f"最終: 採用 {len(final)} / 除外 {n_rej}（判定ファイル {len(decisions)} 行を反映） → {out}")
         # 記事・定点観測で使う抜粋: いいね上位と、期間内の日別件数
+        os.makedirs(DATA_DIR, exist_ok=True)
         top = sorted(final, key=lambda t: (t.get('likeCount', 0), t.get('viewCount', 0)), reverse=True)[:40]
         with open(base + '_top.txt', 'w', encoding='utf-8') as f:
             f.write("# 採用のうち反応上位40件（要旨を書くときに原文を読む）\n")
@@ -165,12 +170,13 @@ def main():
         days = Counter(jst(t).date().isoformat() for t in final)
         media = sum(1 for t in final if (t.get('extendedEntities') or {}).get('media'))
         first = [t for t in final if re.search(r'初めて|初見|初現場', t.get('text') or '')]
-        with open(base + '_summary.txt', 'w', encoding='utf-8') as f:
+        summary_path = os.path.join(DATA_DIR, f"egosearch_triage_{args.since}_{args.until}_summary.txt")
+        with open(summary_path, 'w', encoding='utf-8') as f:
             f.write(f"採用 {len(final)} 件／除外 {n_rej} 件（期間 {args.since}〜{args.until}）\n")
             f.write(f"メディア付き {media} 件、初見らしき語を含む {len(first)} 件\n")
             f.write("日別: " + ', '.join(f"{d[5:]}:{n}" for d, n in sorted(days.items())) + '\n')
             f.write("投稿者数: " + str(len({(t.get('author') or {}).get('userName') for t in final})) + '\n')
-        print(f"  {base}_top.txt / _summary.txt")
+        print(f"  {base}_top.txt / {summary_path}")
 
 
 if __name__ == '__main__':

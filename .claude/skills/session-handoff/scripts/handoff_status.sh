@@ -26,6 +26,9 @@ echo
 echo "## セトリ集計の不足月"
 python3 .claude/skills/setlist-analysis/scripts/check_missing_months.py
 echo
+echo "## X 取得データ（work/x_fetch と lollpop_data）"
+python3 .claude/skills/x-data-sync/scripts/sync_x_data.py status 2>/dev/null || echo "(x-data-sync の status に失敗)"
+echo
 echo "## 取得済みの X 投稿（work/x_fetch）"
 if ls work/x_fetch/*.jsonl >/dev/null 2>&1; then
   for j in work/x_fetch/*.jsonl; do echo "$(basename "$j"): $(wc -l < "$j") 件"; done

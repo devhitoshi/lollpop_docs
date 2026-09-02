@@ -32,6 +32,8 @@
 | ファン向け入口文書 | `guide/`。メンバー情報は `members/` |
 | デザイン定義の変更 | `design.md` を先に直し、`resources/css/style.css` に反映 |
 | 公開HTML | `resources/`（design.md のバンド原則に従う） |
+| 機械が作る成果物（エゴサの判定・件数・要約） | `data/x/`（追跡する。他人の投稿の原文は置かない） |
+| X の取得データ（他人の投稿の原文） | `work/x_fetch/`（追跡しない）。セッションの終わりに `.claude/skills/x-data-sync` で非公開リポジトリ `lollpop_data` へ退避し、始めに復元する |
 | 一時的な作業ファイル | `work/`（恒久化が決まったらドメインへ運び出す。**基本は空**） |
 | 旧版・役目を終えたもの | `archive/` |
 
@@ -53,7 +55,7 @@
 
 - 置き場と現状の正: [`articles/週刊まとめ/README.md`](./articles/週刊まとめ/README.md)、[`articles/月刊まとめ/README.md`](./articles/月刊まとめ/README.md)。
 - 2026年8月分まで作成済み。8月の全17公演は `events/data_event.csv` 追記済み・集計反映済み。
-- **X収集は API に一本化した（2026-09-02〜）。** 公式・メンバーの投稿は `.claude/skills/x-account-fetch`、周囲の反応（エゴサーチ）は `.claude/skills/x-egosearch`（全件取得→機械仕分け→Claude が判定）。Grok 版の `prompts/collect/x_collect.md` は API が使えない環境の予備。8月分は両方とも完了し、週刊8/25-8/31号と月刊8月号に反映済み。取得データは `work/x_fetch/`（コミットしない）にあり、コンテナが変わると消えるので再取得が要る。
+- **X収集は API に一本化した（2026-09-02〜）。** 公式・メンバーの投稿は `.claude/skills/x-account-fetch`、周囲の反応（エゴサーチ）は `.claude/skills/x-egosearch`（全件取得→機械仕分け→Claude が判定）。Grok 版の `prompts/collect/x_collect.md` は API が使えない環境の予備。8月分は両方とも完了し、週刊8/25-8/31号と月刊8月号に反映済み。取得データは `work/x_fetch/`（コミットしない）にあり、コンテナが変わると消える。**消える前に `.claude/skills/x-data-sync` で非公開リポジトリ `lollpop_data` へ退避し、次のセッションの始めに復元する**（起動時 hook が自動で試みる。リモート環境ではセッションの範囲に lollpop_data が要る）。判定ファイルは `data/x/` にコミット済みなので、再取得しても再判定は要らない。
 - **執筆の入口は `.claude/skills/weekly-monthly-draft`**（2026-09-02〜）。取得済み投稿と `events/data_event.csv` から素材ファイル（`work/x_fetch/draft_material_*.md`、コミットしない）を組み立て、`prompts/write/` の文体・構成で書き、`article-review` でレビューしてから README を更新する。
 
 ## 実行環境の注意（Claude Code リモート環境）

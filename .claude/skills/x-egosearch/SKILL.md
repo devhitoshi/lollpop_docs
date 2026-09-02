@@ -45,7 +45,18 @@ Grok でやっていた `x_collect.md` の手順2を、API で「漏れなく集
 
 3. **判定する**（Claude の仕事）
 
-   `egosearch_candidates_*.md` を最初から最後まで読み、次の基準で採用・除外する。
+   まず機械仕分けで読む量を減らす:
+
+   ```bash
+   python3 .claude/skills/x-egosearch/scripts/triage_egosearch.py --since <since> --until <until>
+   ```
+
+   `work/x_fetch/egosearch_triage_*_adopt.txt`（強い手がかりあり）と `_review.txt`（要判定）を読み、判定を
+   `data/x/egosearch_decisions_<since>_<until>.txt` に「<id> adopt|reject メモ」で書く。要判定のうち書かなかったものは除外になる。
+   もう一度 triage を実行すると判定が反映され、採用リスト・反応上位・件数（`data/x/..._summary.txt`）が出る。
+   判定ファイルは追跡するので、生データを取り直しても再判定は要らない。
+
+   採用・除外の基準:
 
    - 採用: アイドルグループ「ろりぽっぷ!!!!!!!」（メンバー・曲・ライブ・特典会）について書かれた、公式・メンバー以外の投稿
    - 除外: サーバー、ゲーム、菓子、同名の学校・店・個人、別の「ろりぽっぷ」（名古屋の同名アイドルなど）、出演者一覧を並べただけの主催告知（ろりぽっぷへの言及が名前だけのもの）
@@ -54,7 +65,7 @@ Grok でやっていた `x_collect.md` の手順2を、API で「漏れなく集
 
 4. **素材にまとめる**
 
-   `work/x_fetch/egosearch_<since>_<until>_reactions.md` に、`x_collect.md` の「外部の反応」の形式で書く:
+   `data/x/egosearch_<since>_<until>_reactions.md`（追跡ディレクトリ）に、`x_collect.md` の「外部の反応」の形式で書く:
    `- [投稿者名]（@handle）／[YYYY-MM-DD]／[何に対して・どう反応したか（1〜2文の要旨）]／[いいね・表示]／出典: URL`
 
    - 他人の投稿は**要旨**にする。原文の長文転載はしない（記事でも同じ）
@@ -65,6 +76,11 @@ Grok でやっていた `x_collect.md` の手順2を、API で「漏れなく集
 5. **記事に反映したら**
 
    各シリーズ README の未解決から「エゴサーチ待ち」を消し（取り消し線＋日付）、記事の出典に URL を足す。
+
+## データの保存先
+
+- 生データ（`work/x_fetch/*.jsonl`）はコミットしない。セッションの終わりに `.claude/skills/x-data-sync` で非公開リポジトリへ退避する
+- 判定・件数・要約（`data/x/`）は lollpop_docs にコミットする
 
 ## 規約・法務
 

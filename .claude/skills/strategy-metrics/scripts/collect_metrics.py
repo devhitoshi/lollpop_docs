@@ -129,7 +129,7 @@ def previous_metrics():
 def egosearch_summary(since, until_incl):
     """x-egosearch の出力（判定済み reactions があればそれ、無ければ候補）を読んで UGC の集計に使う。"""
     base = f"work/x_fetch/egosearch_{since}_{until_incl}"
-    judged = base + '_reactions.md'
+    judged = f"data/x/egosearch_{since}_{until_incl}_reactions.md"   # 判定済みの要約は追跡ディレクトリにある
     cands = base + '_candidates.md'
     raw = base + '.jsonl'
     result = {'source': None}

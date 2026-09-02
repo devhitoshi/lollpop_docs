@@ -53,7 +53,8 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 | `strategy/` | 運用戦略。`growth_strategy.md` と四半期の定点観測 `metrics_YYYY-MM-DD.md` |
 | `articles/` | **note記事のホーム**（全シリーズ＋単発。索引と置き方は `articles/README.md`） |
 | `audio/` | 曲調解析に使う音源の置き場（音源自体はリポジトリに入りません） |
-| `work/` | 汎用の一時作業場。**中身は空が正常**（案内は `work/README.md`） |
+| `data/` | 機械が作る成果物（エゴサーチの判定・件数・要約）。追跡する。他人の投稿の原文は置かない（`data/README.md`） |
+| `work/` | 汎用の一時作業場。**中身は空が正常**（案内は `work/README.md`）。`work/x_fetch/` の取得データは非公開リポジトリ `lollpop_data` に退避する |
 | `archive/` | 役目を終えた旧版ドラフト |
 
 ### 公開面と標準文書
