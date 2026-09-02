@@ -25,6 +25,7 @@
     python3 .claude/skills/x-media-collect/scripts/make_vertical.py --spec work/vertical_spec.json
 """
 import argparse
+import csv
 import glob
 import json
 import os
@@ -51,6 +52,9 @@ FONT_CANDIDATES = [
     '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc',
 ]
 IMAGE_EXT = {'.jpg', '.jpeg', '.png', '.webp'}
+MANIFEST = 'work/x_media/manifest.csv'
+CREDIT_Y = H - 62        # 下帯のいちばん下。テロップとぶつからない位置
+CREDIT_SIZE = 30
 
 
 def parse_args():
@@ -94,7 +98,40 @@ def drawtext_filters(text, font, y, size, color, line_gap=14):
     return out
 
 
-def build_segment(seg, idx, font, tmp):
+def load_manifest():
+    """ファイル名 → 出典（撮影者・出どころ）。fetch_media.py が書いたもの。"""
+    if not os.path.exists(MANIFEST):
+        return {}
+    return {r['file']: r for r in csv.DictReader(open(MANIFEST, encoding='utf-8'))}
+
+
+def credit_for(seg, manifest):
+    """区間のクレジット文字列を決める。決められない区間は書き出さない。
+
+    クレジットは「あとで付ける」ものにすると必ず抜けるので、
+    素材と同じところ（manifest.csv ＝ fetch_media が残した出典）から機械的に作り、
+    映像に焼き込む。manifest に無い素材（自分で撮ったものなど）は spec に
+    `"credit"` を明記してもらう。省略は許さない。
+    """
+    if seg.get('credit'):
+        return str(seg['credit'])
+    row = manifest.get(os.path.basename(seg['file']))
+    if not row:
+        sys.exit(
+            f"クレジットが決められない: {seg['file']}\n"
+            f"  {MANIFEST} に出典が無い。fetch_media.py で落とした素材ならそこに載る。\n"
+            f"  自分で撮ったものなど手元の素材は、spec のその区間に "
+            f'"credit": "撮影: 自分" のように明記する'
+        )
+    author = row.get('author', '')
+    if row.get('source') == '公式':
+        return f"提供: ろりぽっぷ!!!!!!! 公式（@{author}）"
+    if row.get('source') == 'メンバー':
+        return f"提供: @{author}（メンバー）"
+    return f"撮影: @{author}"
+
+
+def build_segment(seg, idx, font, tmp, credit):
     """1区間を 1080x1920 の mp4 にする。"""
     src = seg['file']
     if not os.path.exists(src):
@@ -117,6 +154,8 @@ def build_segment(seg, idx, font, tmp):
         texts += drawtext_filters(seg['top'], font, TOP_Y, 62, INK)
     if seg.get('bottom'):
         texts += drawtext_filters(seg['bottom'], font, BOTTOM_Y, 58, ACCENT)
+    # クレジットは全区間に必ず入れる（外せる引数は用意しない）
+    texts += drawtext_filters(credit, font, CREDIT_Y, CREDIT_SIZE, 'white@0.85')
     last = '[banded]'
     if texts:
         chain.append(last + ','.join(texts) + '[out]')
@@ -148,10 +187,14 @@ def main():
     os.makedirs(os.path.dirname(out) or '.', exist_ok=True)
     tmp = tempfile.mkdtemp(prefix='vertical_')
     try:
+        manifest = load_manifest()
+        # 1区間でもクレジットが決まらなければ、1本も書き出さずに止める
+        credits = [credit_for(seg, manifest) for seg in spec['segments']]
         parts = []
         for i, seg in enumerate(spec['segments']):
-            print(f"  区間 {i + 1}/{len(spec['segments'])}: {os.path.basename(seg['file'])}")
-            parts.append(build_segment(seg, i, font, tmp))
+            print(f"  区間 {i + 1}/{len(spec['segments'])}: "
+                  f"{os.path.basename(seg['file'])}  [{credits[i]}]")
+            parts.append(build_segment(seg, i, font, tmp, credits[i]))
         lst = os.path.join(tmp, 'list.txt')
         with open(lst, 'w', encoding='utf-8') as f:
             for p in parts:
@@ -166,8 +209,9 @@ def main():
     dur = subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration',
                           '-of', 'csv=p=0', out], capture_output=True, text=True).stdout.strip()
     print(f"書き出した: {out}（{size:.1f} MB / {float(dur):.1f} 秒 / {W}x{H} / フォント {os.path.basename(font)}）")
-    print("素材の出典は work/x_media/manifest.csv。公開時はクレジットを添え、"
-          "楽曲はアプリ内の公式音源を使う（data/x/media_permissions.md）")
+    print("クレジットは各区間に焼き込み済み: " + ' / '.join(dict.fromkeys(credits)))
+    print("投稿の説明文にも同じ出典を書く。楽曲はアプリ内の公式音源を使う"
+          "（data/x/media_permissions.md）")
 
 
 if __name__ == '__main__':
