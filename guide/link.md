@@ -1,14 +1,19 @@
 # ろりぽっぷ!!!!!!! リンク集
 
+このページはURLの一覧です。**どのSNSで何が見られるか**は
+[スターターパックの「SNSの使い分け」](./starter_pack.md#SNSの使い分け)を参照してください。
+
+なお、ろりぽっぷ!!!!!!!に**公式YouTubeチャンネルはありません**（2026年9月時点）。
+
 ## グループ共通リンク
-- **公式サイト**: https://flapinc.jp/lollipop/about  
-- **公式X (Twitter)**: https://x.com/lollipop_1116  
-- **Lit.Link (公式リンク集)**: https://lit.link/roripopu1116  
-- **公式Instagram**: https://www.instagram.com/lollipop_official/  
-- **公式TikTok**: https://www.tiktok.com/@lollipop_1116  
-- **公式Facebook**: https://www.facebook.com/people/Lollipop-ろりぽっぷ公式/61572699195775/  
-- **公式ショップ (BASE)**: https://lollipopshop.base.ec  
-- **スケジュール/カレンダー (TimeTree)**: https://timetreeapp.com/public_calendars/lollipop_1116  
+- **公式サイト**: https://flapinc.jp/lollipop/about
+- **公式X (Twitter)**: https://x.com/lollipop_1116
+- **Lit.Link (公式リンク集)**: https://lit.link/roripopu1116
+- **公式Instagram**: https://www.instagram.com/lollipop_official/
+- **公式TikTok**: https://www.tiktok.com/@lollipop_1116
+- **公式Facebook**: https://www.facebook.com/people/Lollipop-ろりぽっぷ公式/61572699195775/
+- **公式ショップ (BASE)**: https://lollipopshop.base.ec
+- **スケジュール/カレンダー (TimeTree)**: https://timetreeapp.com/public_calendars/lollipop_1116
 
 ## 音楽配信 (TuneCore)
 - **[TuneCoreアーティストページ　ろりぽっぷ!!!!!!](https://www.tunecore.co.jp/artists/Lollipop!!!!!!)**
@@ -25,36 +30,36 @@
   - [Spotify](https://open.spotify.com/artist/07sr1MtDyS64q8m0eHBNYW)
 
 ## メンバー個別リンク
-- **やぎ くるみ**  
-  - X: https://x.com/kurumi_lpop  
+- **やぎ くるみ**
+  - X: https://x.com/kurumi_lpop
   - lit.link: https://lit.link/kurumi628ssc
   - Instagram: https://www.instagram.com/kurumi_lpop/
   - TikTok: https://www.tiktok.com/@kurumi_chandayo
   - TikTok: https://www.tiktok.com/@lpop_kurumi
   - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/1RLZ4ZDTQDL51?ref_=wl_share
 
-- **夏川 茉夢**  
-  - X:　https://x.com/mayu_lpop  
-  - Instagram: https://www.instagram.com/shizuokamusume/  
+- **夏川 茉夢**
+  - X: https://x.com/mayu_lpop
+  - Instagram: https://www.instagram.com/shizuokamusume/
   - TikTok: https://www.tiktok.com/@omayu17
 
-- **まう**  
-  - X: https://x.com/mau_lpop 
+- **まう**
+  - X: https://x.com/mau_lpop
   - lit.link: https://lit.link/maudayooo
-  - Instagram: https://www.instagram.com/maudayo0127/  
-  - TikTok: https://www.tiktok.com/@mautan0127  
+  - Instagram: https://www.instagram.com/maudayo0127/
+  - TikTok: https://www.tiktok.com/@mautan0127
   - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/1IQCOG06DFW7A?ref_=wl_share
 
-- **松川 愛美**  
+- **松川 愛美**
   - X: https://x.com/ami_lpop
   - lit.link: https://lit.link/CzVsBEoOXJUDOpd4lBJ24ynIZDY2
   - Instagram: https://www.instagram.com/ami_matsukawa
   - TikTok: https://www.tiktok.com/@ami_matsukawa
   - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/27AGP93MEZL3T?ref_=wl_share
 
-- **愛月 まな**  
-  - X: https://x.com/mana_lpop  
-  - Instagram: https://www.instagram.com/manadayoooooooo/  
+- **愛月 まな**
+  - X: https://x.com/mana_lpop
+  - Instagram: https://www.instagram.com/manadayoooooooo/
   - TikTok: https://www.tiktok.com/@manadayoooooooo
 
 ## 元メンバー個別リンク
@@ -63,7 +68,7 @@
 - **姫杏 朝香**（2026年4月22日卒業）
   - X: https://x.com/asaka_lpop
   - lit.link: https://lit.link/himeasa
-  - Instagram: https://www.instagram.com/hime_asa.chan/  
+  - Instagram: https://www.instagram.com/hime_asa.chan/
   - TikTok: https://www.tiktok.com/@hime_asa.chan
   - 欲しいものリスト：https://www.amazon.co.jp/hz/wishlist/ls/RWY1R8DFOF6T?ref_=wl_share
 
