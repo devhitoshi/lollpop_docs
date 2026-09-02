@@ -70,7 +70,9 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 | パス | 内容 |
 | --- | --- |
 | `prompts/` | note 記事を作るためのLLM用プロンプト（`collect/` = Grok・Gemini、`write/` = Claude） |
-| `.claude/skills/` | 繰り返す作業の手順書（歌詞ドキュメント作成、月次セトリ集計、曲調解析、X投稿の取得） |
+| `.claude/skills/` | 繰り返す作業の手順書（歌詞ドキュメント作成、月次セトリ集計と整合性チェック、曲調解析、X投稿の取得、週刊・月刊の下書き、記事の公開前レビュー、セッション引き継ぎ） |
+| `.claude/agents/` | Claude Code のサブエージェント。`article-review` は記事を直さず校閲レポートだけを返す読み取り専用の校閲係 |
+| `.claude/hooks/` + `.claude/settings.json` | Claude Code の自動処理。起動時サマリ、秘密情報・取得データのコミット防止、公演CSV編集後の自動集計 |
 
 ## 公式サイト
 https://flapinc.jp/lollipop/about

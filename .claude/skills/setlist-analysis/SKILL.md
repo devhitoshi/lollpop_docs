@@ -36,8 +36,20 @@ description: 「ろりぽっぷ!!!!!!!」のセットリストを月ごとに集
    python3 .claude/skills/setlist-analysis/scripts/analyze_monthly_setlist.py --all
    ```
 
-4. **結果を伝える**
-   `events/monthly_setlist_ranking.csv` が更新されたことをユーザーに伝える。
+4. **整合性を点検する**
+
+   ```bash
+   python3 .claude/skills/setlist-analysis/scripts/check_event_consistency.py
+   ```
+
+   楽曲一覧に名寄せできない曲名（集計から黙って落ちているもの）、重複行、日付の書式・並びを列挙する。
+   `work/x_fetch/lollipop_1116.jsonl`（x-account-fetch で取得した公式投稿）があれば、セトリらしき投稿があるのに
+   CSV に無い日（取りこぼし）や、同日の投稿数より行数が少ない日（1部/2部の片方抜け）も出す。
+   `--since/--until` で期間を絞れる。**自動では直さない**ので、候補を見てユーザーと判断する。
+   カバー曲・ソロ曲が「名寄せできない」に出るのは正常。
+
+5. **結果を伝える**
+   `events/monthly_setlist_ranking.csv` が更新されたこと、整合性チェックで見つかった候補をユーザーに伝える。
 
 ## 入出力
 
@@ -51,6 +63,8 @@ description: 「ろりぽっぷ!!!!!!!」のセットリストを月ごとに集
 
 - スクリプトは自分でリポジトリルートに `chdir` するので、どこから実行してもよい。
   ただしスクリプトを移動した場合は、両ファイル冒頭の `project_root` の階層数を直すこと。
-- セトリの表記ゆれは `analyze_monthly_setlist.py` の `normalize_song_name()` で吸収している。
+- セトリの表記ゆれは `scripts/song_names.py` の `normalize_song_name()` で吸収している（集計とチェックの共通モジュール）。
   新曲を追加したら、まず `songs/楽曲一覧.md` に正表記を追加し、必要なら名寄せルールを足す。
+- `events/data_event.csv` を Claude Code で編集すると、hook（`.claude/hooks/after_event_csv.py`）が集計の再実行と
+  `check_event_consistency.py --quiet` を自動で回し、結果を文脈に返す。手順1〜3を飛ばしてよいのはこの場合だけ。
 - `events/data_event.csv` の `setlist` が空、または「セトリ投稿確認」を含む行は集計対象外。

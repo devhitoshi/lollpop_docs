@@ -12,7 +12,9 @@
 - **表記**: 曲名・イベント名は資料の表記をそのまま使う（「!」の数、「☆」「★」を正規化しない）。グループ名は「ろりぽっぷ!!!!!!!」（!が7個）。
 - **文体**: note 用記事は [`prompts/write/style_ai_poppar.md`](./prompts/write/style_ai_poppar.md)（AIぽっぱー）に従う。note は表組み不可・見出しは2階層まで。
 - **メンバー情報**: 基本情報の正は [`members/members.md`](./members/members.md)。人物像は [`members/`](./members/) のデータに根拠がある範囲だけ書く。卒業メンバーの卒業後の活動・私生活には踏み込まない。運営の意図・体調・人間関係の推測は書かない。
-- **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計は `.claude/skills/setlist-analysis`、曲調解析は `.claude/skills/music-analysis`、公式・メンバーのX投稿取得は `.claude/skills/x-account-fetch` の手順に従う。
+- **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計と公演データの整合性チェックは `.claude/skills/setlist-analysis`、曲調解析は `.claude/skills/music-analysis`、公式・メンバーのX投稿取得は `.claude/skills/x-account-fetch`、週刊・月刊の下書きは `.claude/skills/weekly-monthly-draft` の手順に従う。
+- **記事の公開前レビュー**: note 記事を書き終えたら、PR を作る前に `.claude/skills/article-review`（機械チェック＋読み取り専用エージェント `article-review`）を通す。手戻りの多い「公演の抜け」「公演数の誤り」「表記ゆれ」「文体の崩れ」を資料と突き合わせて拾う。
+- **セッションの終わり**: `.claude/skills/session-handoff` の手順で、各シリーズ README の「未解決」と CLAUDE.md の進行中セクションを更新してからコミット・push する。
 - **デザイン**: `resources/` のHTMLを触るときは [`design.md`](./design.md)（色・タイポ・バンド構成の正）に従う。実装は `resources/css/style.css`。単一ファイル完結のHTML（セトリ白書・成長戦略）には同じトークン値が転記されている。
 
 ## 資源配置ルール（何をどこに置くか）
@@ -51,9 +53,11 @@
 - 置き場と現状の正: [`articles/週刊まとめ/README.md`](./articles/週刊まとめ/README.md)、[`articles/月刊まとめ/README.md`](./articles/月刊まとめ/README.md)。
 - 2026年8月分まで作成済み。8月の全17公演は `events/data_event.csv` 追記済み・集計反映済み。
 - **X収集は2ルートに分かれた（2026-09-01〜）。** 公式・メンバーの投稿は `.claude/skills/x-account-fetch`（twitterapi.io・全件取得）、エゴサーチ（周囲の反応）は従来どおり `prompts/collect/x_collect.md` の手順2をGrokで実行する。前者は完了済み、**後者が未実施**（詳細は各READMEの「未解決」参照）。
+- **執筆の入口は `.claude/skills/weekly-monthly-draft`**（2026-09-02〜）。取得済み投稿と `events/data_event.csv` から素材ファイル（`work/x_fetch/draft_material_*.md`、コミットしない）を組み立て、`prompts/write/` の文体・構成で書き、`article-review` でレビューしてから README を更新する。
 
 ## 実行環境の注意（Claude Code リモート環境）
 
 - **twitterapi.io は環境によって到達可否が変わる。** 信頼モードでは403、フルアクセス環境では到達可能（2026-09-01確認）。APIキーは環境変数 `TWITTERAPI_IO_KEY` かルートの `.env`（`.gitignore` 済み）から読む。**キーをチャットに貼らせない。** 取得した投稿データ（`work/x_fetch/`）は他人の著作物なのでコミットしない（`.gitignore` 済み）。
 - **linkco.re（TuneCore配信ページ）はネットワークポリシーで到達不可。** 歌詞はユーザーにスクリーンショットかテキストで貼ってもらい、転記する。原文の表記揺れは正規化せず、歌詞ファイル末尾のHTMLコメント（転記メモ）に記録して、ユーザーにレビューを依頼する。
 - **記事系のPRは、作成後そのままマージしてよい**（オーナー方針・2026年9月確認）。マージ後は作業ブランチを origin/main に揃え直す。
+- **hooks（`.claude/settings.json`、2026-09-02〜）が3つ動く。** 起動時に現状サマリ（ブランチ・不足月・APIキーの有無・取得済み投稿）を出す `session_start.sh`、`git add -f` と `.env`／`work/x_fetch/`／音源を含むコミットを止める `guard_git.py`、`events/data_event.csv` を編集したら集計と整合性チェックを自動で回す `after_event_csv.py`。止められたときは理由が表示されるので、無理に回避せずユーザーに確認する。

@@ -64,6 +64,9 @@
 - メンバーの人物像・口調・SNS発信の傾向は [`../members/`](../members/) にデータとしてまとめています。
   月刊記事のメンバー紹介などで参照してください（プロンプトではなく資料です）。
 - リポジトリ全体の作業手順（歌詞ドキュメント作成、セトリ集計、曲調解析）は [`../.claude/skills/`](../.claude/skills/) にあります。
+- Claude Code 上で週刊・月刊を書くときは [`../.claude/skills/weekly-monthly-draft/`](../.claude/skills/weekly-monthly-draft/) が入口です。
+  `write/` のファイルはそのまま文体・構成の正として読まれます（このディレクトリを置き換えるものではありません）。
+  書き終えた記事は [`../.claude/skills/article-review/`](../.claude/skills/article-review/) で `write/` のルールに照らしてチェックできます。
 - 曲調の**数値**（BPM・キー・音量推移）は `music_listen.md` ではなく
   [`../.claude/skills/music-analysis/`](../.claude/skills/music-analysis/) のスクリプトで取ります。
   聴取メモは数値にならない「音の表情」を担当します。
