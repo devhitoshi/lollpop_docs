@@ -250,7 +250,19 @@ def check_content(plain, kind, rep):
             def annotated(m):
                 after = plain[m.end():m.end() + 14]
                 before = plain[max(0, m.start() - 2):m.start()]
-                return bool(re.match(r'.{0,12}[（(]', after)) or '（' in before or '(' in before
+                if re.match(r'.{0,12}[（(]', after) or '（' in before or '(' in before:
+                    return True
+                # 「特典会（ライブ後にチェキ＝その場で撮る…）」のように、別の語の説明の括弧の中で
+                # 「＝」「とは」を伴って説明されている場合も注釈ありとみなす
+                if re.match(r'\s*(＝|=|とは|という)', after):
+                    return True
+                open_paren = plain.rfind('（', 0, m.start())
+                close_paren = plain.find('）', m.end())
+                if open_paren >= 0 and close_paren >= 0 and plain.rfind('）', 0, m.start()) < open_paren:
+                    inside = plain[open_paren:close_paren]
+                    if '＝' in inside or 'とは' in inside:
+                        return True
+                return False
             if not any(annotated(m) for m in occ):
                 rep.warn('JARGON', f"月刊は専門用語に注釈を付ける: 「{w}」に注釈が無い …{snippet(plain, occ[0].start())}…")
             elif not annotated(occ[0]):
@@ -300,9 +312,20 @@ def check_events(body, kind, start, end, rep):
                 rep.warn('EVENT_COUNT', f"記事の「{k}公演」と CSV の {n} 公演が合わない（数え方が違うだけなら可）")
 
 
+def count_sentences(text):
+    """段落の文の数。引用の中と、閉じ括弧の直前の句点は数えない。
+
+    「クモリノチ。」「『クモリニキ。』」のように句点で終わる固有名詞があるので、
+    素朴に「。」を数えると1段落の文数を多く見積もる。引用を落としてから数える。
+    """
+    t = QUOTE_RE.sub('', text)
+    t = re.sub(r'。(?=[』」）\)])', '', t)
+    return t.count('。')
+
+
 def check_structure(body, memo, kind, rep):
     paras = [p for p in re.split(r'\n\s*\n', body) if p.strip() and not p.lstrip().startswith(('#', '-', '*', '|', '>'))]
-    long_paras = [p for p in paras if p.count('。') > 4]
+    long_paras = [p for p in paras if count_sentences(p) > 4]
     if long_paras:
         rep.warn('PARAGRAPH', f"1段落が5文以上の段落が {len(long_paras)} つ（3〜4文まで）: 「{long_paras[0].strip()[:40]}…」")
     if kind in ('weekly', 'monthly'):
