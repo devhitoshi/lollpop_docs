@@ -27,3 +27,9 @@ work/x_fetch/
 # Python の中間生成物
 __pycache__/
 *.pyc
+
+# セトリ白書の図表の確認用出力（render_charts.py の既定の出力先）。白書に反映するときは articles/セトリ白書/img へ
+work/charts/
+
+# ダウンロードした画像・動画（許諾済みでも他人の著作物。リポジトリには入れない）
+work/x_media/
