@@ -158,6 +158,14 @@ def main():
         with open(out, 'w', encoding='utf-8') as f:
             for t in final:
                 f.write(json.dumps(t, ensure_ascii=False) + '\n')
+        # 採用したIDだけを追跡ディレクトリにも残す。final.jsonl は原文を含むので退避対象外＝コンテナが変わると消えるが、
+        # ID の一覧があれば x-media-collect の索引は判定を効かせたまま作り直せる
+        os.makedirs(DATA_DIR, exist_ok=True)
+        adopted_path = os.path.join(DATA_DIR, f"egosearch_adopted_{args.since}_{args.until}.txt")
+        with open(adopted_path, 'w', encoding='utf-8') as f:
+            f.write(f"# エゴサーチで採用と判定した投稿ID（{args.since}〜{args.until}・{len(final)} 件）\n")
+            for t in final:
+                f.write(f"{t.get('id')}\n")
         n_rej = len(posts) - len(final)
         print(f"最終: 採用 {len(final)} / 除外 {n_rej}（判定ファイル {len(decisions)} 行を反映） → {out}")
         # 記事・定点観測で使う抜粋: いいね上位と、期間内の日別件数
@@ -176,7 +184,7 @@ def main():
             f.write(f"メディア付き {media} 件、初見らしき語を含む {len(first)} 件\n")
             f.write("日別: " + ', '.join(f"{d[5:]}:{n}" for d, n in sorted(days.items())) + '\n')
             f.write("投稿者数: " + str(len({(t.get('author') or {}).get('userName') for t in final})) + '\n')
-        print(f"  {base}_top.txt / {summary_path}")
+        print(f"  {base}_top.txt / {summary_path} / {adopted_path}")
 
 
 if __name__ == '__main__':

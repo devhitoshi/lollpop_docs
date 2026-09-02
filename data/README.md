@@ -33,7 +33,12 @@
    ├─ weekly-monthly-draft   : 記事の素材（work/x_fetch/draft_material_*.md、コミットしない）
    ├─ strategy-metrics       : UGC 件数・公式の発信量 → strategy/metrics_<日付>.md
    ├─ member-profile-refresh : 投稿統計 → members/*.md の更新根拠
-   └─ setlist-analysis       : 公式のセトリ投稿と events/data_event.csv の突き合わせ
+   ├─ setlist-analysis       : 公式のセトリ投稿と events/data_event.csv の突き合わせ
+   └─ x-media-collect        : 縦型動画の素材（画像・動画）
+        ├─ build_media_index → data/x/media_index_<期間>.csv（追跡。URL と寸法だけ）
+        └─ fetch_media       → work/x_media/（許諾済みのみ。コミットしない）
+             ├─ 許諾の判断は data/x/media_permissions.md の「OK」の行だけ
+             └─ manifest.csv に出典が残る（クレジット表記に使う）
 
  セッション終了（session-handoff の手順）
    ├─ x-data-sync push : work/x_fetch/*.jsonl → lollpop_data/x/*.jsonl.gz（項目を絞って圧縮・commit・push）
@@ -48,3 +53,9 @@
 - `work/x_fetch/` … 他人の投稿の原文。追跡しない。消えてよい（退避先から戻る）
 - `data/x/` … 自分が書いた判定・件数・要約。追跡する。**他人の投稿の原文は置かない**
 - `lollpop_data`（非公開リポジトリ）… 生データの圧縮版。公開しない・再配布しない
+- `work/x_media/` … 許諾済みで落とした画像・動画。追跡しない・退避もしない（索引から落とし直せる）
+
+### 通し検証（2026-09-02）
+
+`work/` を丸ごと消してから、起動時 hook → triage → 索引 → ダウンロードを順に流し、
+**索引の md5 が消す前と一致**することを確認済み。判定（349件の採用）も `data/x/` の判定ファイルから復元できる。

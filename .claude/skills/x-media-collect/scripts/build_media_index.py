@@ -67,6 +67,11 @@ def adopted_ids(since, until):
     索引に判定を効かせないと、同名の別グループ（名古屋の Lollipop♡CHU）や、対バン相手を撮った写真が
     「ろりぽっぷの素材」として並んでしまう。
     """
+    # 追跡している採用ID一覧が第一候補（コンテナが変わっても残る）
+    adopted = os.path.join(DATA_DIR, f"egosearch_adopted_{since}_{until}.txt")
+    if os.path.exists(adopted):
+        ids = {l.strip() for l in open(adopted, encoding='utf-8') if l.strip() and not l.startswith('#')}
+        return ids, adopted
     final = os.path.join('work/x_fetch', f"egosearch_triage_{since}_{until}_final.jsonl")
     if os.path.exists(final):
         ids = set()
@@ -204,8 +209,8 @@ def main():
     if adopted_src:
         print(f"  エゴサーチ分は判定済みの採用のみ（{adopted_src}）。--no-filter-judged で全件")
     elif not args.no_filter_judged:
-        print("  警告: エゴサーチの判定ファイルが無いので絞り込めていない。"
-              "別グループ・他グループの写真が混ざる。先に x-egosearch の triage を実行する")
+        print("  警告: エゴサーチの採用ID一覧が無いので絞り込めていない。別グループ・他グループの写真が混ざる。"
+              "\n        data/x/egosearch_decisions_*.txt があれば x-egosearch の triage を実行すると復元できる")
     print("  出どころ: " + ', '.join(f"{k} {v}" for k, v in Counter(r['source'] for r in rows).most_common()))
     print("  種別:     " + ', '.join(f"{k} {v}" for k, v in Counter(r['type'] for r in rows).most_common()))
     print("  向き:     " + ', '.join(f"{k or '不明'} {v}" for k, v in Counter(r['orientation'] for r in rows).most_common()))
