@@ -504,18 +504,25 @@ a { color: var(--primary); }
 
 STYLE_CARDS = """<style>
 /* =====================================================================
-   ろりぽっぷ!!!!!!! コール表 — SNS用の縦型カード（1枚 = 1かたまり）
+   ろりぽっぷ!!!!!!! コール表 — SNSに載せる1枚（1曲 = 1枚）
    このファイルは resources/build_call_sheet.py が生成する。直接編集しない。
 
-   1枚 1080x1350（4:5）。X も Instagram も 4:5 なら切り取らずに幅いっぱいで
-   出すので、タイムラインのまま拡大せずに読める大きさで組む。
-   本文40px は、スマホで幅390pxに縮んだとき約14pxで見える計算。
-   横長版（call_sheet.html）と違い、パート名は本文の上に置く。カードの幅が
-   狭いぶん、ラベルの列を作らず本文に幅を使うため。
+   1枚 1080x1920（9:16）。スマホでは 9:16 までの縦画像は画面の幅いっぱい
+   （約390px）で表示されるので、縦に伸ばしても文字は小さくならない。
+   本文46pxは、幅390pxに縮んだとき約17pxで見える（スマホの本文と同じくらい）。
+   だから拡大せずに読めて、1曲を1枚に収められる。
+
+   横長にすると幅が文字数で埋まり、同じ内容が4px相当まで縮む。3枚に割ると
+   1曲が散らばってSNSで追えない。どちらも試して却下した（2026-09-04）。
+
+   組み方は横長版（call_sheet.html）と別:
+   - パート名は左の細い列。本文は右で、行を折り返しても頭が揃う。
+   - 「1番 / 2番 / ラスト」は行の流れを切る見出しとして挟む。
+   - 同じ指示の繰り返し（イントロ・間奏・アウトロ）は「〜と同じ」に畳む。
+     繰り返しに縦を使うと、その分だけ本文を小さくすることになるため。
    色トークンと配色の考え方は call_sheet.html と共通。デザインの正は design.md。
    ===================================================================== */
 :root {
-  --canvas: #ffffff;
   --font: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", Meiryo, sans-serif;
 
   /* メンバーカラー（装飾専用）。紺のカードだけ PALETTES 側で明るい方に振り替える */
@@ -543,9 +550,8 @@ body {
 }
 
 .card {
-  width: 1080px;
-  min-height: 1350px;
-  padding: 60px 64px;
+  width: 1350px;
+  padding: 72px 64px;
   background-color: var(--ground);
   color: var(--text);
   display: flex;
@@ -554,64 +560,110 @@ body {
 }
 
 .card__mark {
-  margin: 0 0 16px;
+  margin: 0 0 14px;
   color: var(--meta);
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 700;
   letter-spacing: 0.06em;
   line-height: 1.4;
 }
 
 .card__title {
-  margin: 0 0 10px;
+  margin: 0 0 8px;
   color: var(--title);
-  font-size: 68px;
+  font-size: 92px;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
   letter-spacing: -0.02em;
 }
 
-.card__block {
-  margin: 0 0 22px;
+/* かたまりの見出し。行の流れを切るだけなので、面や枠は作らない */
+.block {
+  margin: 30px 0 10px;
   color: var(--title);
   font-size: 38px;
   font-weight: 700;
   line-height: 1.3;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
 }
 
-.rows { border-top: 2px solid var(--line); }
+.block:first-child { margin-top: 0; }
 
-.row {
-  padding: 17px 0;
-  border-bottom: 2px solid var(--line);
-}
-
-.row__part {
-  margin: 0 0 4px;
-  color: var(--meta);
-  font-size: 30px;
+.card__sub {
+  margin: 0 0 30px;
+  color: var(--sub);
+  font-size: 36px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.1em;
   line-height: 1.4;
 }
 
-.row__line {
-  margin: 0;
-  color: var(--text);
-  font-size: 40px;
-  line-height: 1.45;
+.card__note {
+  margin: 30px 0 0;
+  color: var(--meta);
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.6;
 }
 
-.row__line + .row__line { margin-top: 4px; }
+.rows { border-top: 3px solid var(--line); }
 
-/* メンバー名は担当カラーのドット付きで（横長版と同じ扱い） */
-.chips { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; }
-.chip { display: inline-flex; align-items: center; gap: 10px; color: var(--title); font-weight: 700; }
-.chip__arrow { margin-right: 6px; color: var(--meta); font-size: 32px; font-weight: 400; }
-.chip__label { color: var(--sub); font-size: 32px; }
+/* 1行 = 1パート。左にパート名、右に中身 */
+.row {
+  display: grid;
+  grid-template-columns: 168px 1fr;
+  gap: 0 20px;
+  padding: 16px 0;
+  border-bottom: 3px solid var(--line);
+}
 
-.dot { width: 30px; height: 30px; border-radius: 9999px; flex: none; }
+.block + .row { border-top: 3px solid var(--line); }
+
+.row__part {
+  margin: 0;
+  color: var(--meta);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.95;
+  letter-spacing: 0.02em;
+}
+
+.row__body { min-width: 0; }
+
+/* 合図とメンバーの並び。ここが一番大きい＝一番先に目に入る */
+.line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 20px;
+  margin: 0;
+  color: var(--text);
+  font-size: 48px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* 説明文は一段小さく。読むのは目を留めたときでいい */
+.line--note {
+  display: block;
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--sub);
+}
+
+/* 「イントロと同じ」の繰り返しは、本文より落として流し読みできるように */
+.line--same { font-size: 36px; font-weight: 400; color: var(--sub); }
+
+.line + .line { margin-top: 4px; }
+
+/* メンバー名は担当カラーのドット付きで */
+.chips { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; }
+.chip { display: inline-flex; align-items: center; gap: 13px; color: var(--title); font-weight: 700; }
+.chip__arrow { margin-right: 5px; color: var(--meta); font-size: 34px; font-weight: 400; }
+.chip__label { color: var(--sub); font-size: 36px; }
+
+.dot { width: 34px; height: 34px; border-radius: 9999px; flex: none; }
 .dot--outline { box-shadow: inset 0 0 0 2px var(--ring); }
 </style>"""
 
@@ -642,42 +694,93 @@ def render_sheet(song: Song, blocks: str, key: str, mark: str) -> str:
     )
 
 
-def render_card(song: Song, label: str, parts: list[Part], key: str, index: int, mark: str) -> str:
-    rows = []
-    for part in parts:
-        lines = []
-        for item in part.items:
-            lines.append(f'<p class="row__line">{render_text(item.text)}</p>')
-            for sub in item.subs:
-                lines.append(f'<p class="row__line">{render_text(sub)}</p>')
-        rows.append(
-            '        <div class="row">\n'
-            f'          <p class="row__part">{html.escape(part.name)}</p>\n'
-            + "".join(f"          {line}\n" for line in lines)
-            + "        </div>"
-        )
+# 「見出しになる短い指示」の目安。これ以下は本文サイズ、超えたら説明文サイズ。
+# 振りコピとか / メンバーコール / ケチャ のような合図は大きく、
+# 長い説明は一段小さくして、1枚に収まる密度にする。
+SHORT = 20
+
+
+def part_lines(part: Part) -> list[str]:
+    """1パート分の表示行。"""
+    lines = []
+    for item in part.items:
+        lines.append(item.text)
+        lines.extend(item.subs)
+    return lines
+
+
+def render_lines(lines: list[str]) -> str:
+    """行をまとめる。パートの1行目とメンバーの並びは大きく、補足は一段小さく。
+
+    1行目は「そのパートで何をするか」なので必ず大きくする。長い説明でも小さくすると、
+    イントロや2間奏（MIXの掛け声）のように文で書かれたパートだけ弱く見えてしまう。
+    2行目以降の補足（コツや但し書き）は一段落として、目を留めたときに読めればいい。
+
+    「メンバーコール」と「あみ→くるみ」は別々の行にすると縦を倍使うので、
+    横に並べて入るなら1行に流す（入らなければ折り返す）。
+    """
+    out = []
+    index = 0
+    while index < len(lines):
+        line = lines[index]
+        first = not out
+        is_route = bool(ROUTE_RE.match(line))
+
+        if not first and not is_route and len(line) > SHORT:
+            out.append(f'<p class="line line--note">{render_text(line)}</p>')
+            index += 1
+            continue
+
+        chunk = [render_text(line)]
+        index += 1
+        while index < len(lines) and ROUTE_RE.match(lines[index]):
+            chunk.append(render_text(lines[index]))
+            index += 1
+        out.append(f'<p class="line">{"".join(chunk)}</p>')
+    return "".join(out)
+
+
+def render_card(song: Song, colors_key: str, mark: str) -> str:
+    """1曲まるごとを1枚に。SNSに載せるのはこれ1枚。"""
+    # 同じ指示の繰り返しは「〜と同じ」に畳む。イントロ・間奏・アウトロは同じ44文字で、
+    # そのまま3回出すと縦が埋まり、その分だけ本文を小さくすることになる。
+    seen: dict[tuple[str, ...], str] = {}
+    body = []
+    for label, parts in group(song):
+        if label:
+            body.append(f'        <p class="block">{html.escape(label)}</p>')
+        for part in parts:
+            lines = part_lines(part)
+            key = tuple(lines)
+            if key in seen:
+                content = f'<p class="line line--same">{html.escape(seen[key])}と同じ</p>'
+            else:
+                seen[key] = part.name
+                content = render_lines(lines)
+            body.append(
+                '        <div class="row">\n'
+                f'          <p class="row__part">{html.escape(part.name)}</p>\n'
+                f'          <div class="row__body">{content}</div>\n'
+                "        </div>"
+            )
 
     return (
-        f'    <section class="card sheet-band--{key}" id="card-{key}-{index}">\n'
+        f'    <section class="card sheet-band--{colors_key}" id="card-{colors_key}">\n'
         f'      <p class="card__mark">{mark}</p>\n'
         f'      <h2 class="card__title">{html.escape(song.title)}</h2>\n'
-        f'      <p class="card__block">{html.escape(label)}</p>\n'
+        '      <p class="card__sub">コール表</p>\n'
         '      <div class="rows">\n'
-        + "\n".join(rows)
+        + "\n".join(body)
         + "\n      </div>\n"
+        '      <p class="card__note">コールは現場やその日の煽りで変わります。まわりに合わせるのがいちばん確実です。</p>\n'
         "    </section>"
     )
 
 
 def build_cards(song: Song, colors: list[str]) -> str:
-    """SNS用の縦型カードを並べたページ。1枚 = 1かたまり。撮るのはカードだけ。"""
+    """SNS用の縦型カードを色ちがいで並べたページ。1曲 = 1枚。撮るのはカードだけ。"""
     mark = f"🍭 ろりぽっぷ!!!!!!! 非公式コール表 ・ {last_updated()}時点"
-    blocks = group(song)
-    cards = "\n\n".join(
-        render_card(song, label, parts, key, index, mark)
-        for key in colors
-        for index, (label, parts) in enumerate(blocks, start=1)
-    )
+    cards = "\n\n".join(render_card(song, key, mark) for key in colors)
     style = STYLE_CARDS.replace("</style>", palette_css(colors) + "</style>")
 
     return f"""<!DOCTYPE html>
@@ -685,7 +788,7 @@ def build_cards(song: Song, colors: list[str]) -> str:
 
 <head>
     <meta charset="UTF-8">
-    <title>{html.escape(song.title)} コール表（縦型カード）</title>
+    <title>{html.escape(song.title)} コール表（SNS用）</title>
     <meta name="robots" content="noindex">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
 {style}

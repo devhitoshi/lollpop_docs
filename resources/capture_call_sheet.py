@@ -6,12 +6,11 @@
     python3 resources/capture_call_sheet.py --format both   # 横長も一緒に
 
 **縦型（既定・SNSに載せるのはこっち）**
-  resources/call_sheet_cards.html の1枚ずつを撮る。1080x1350（4:5）を実寸2倍で
-  書き出して resources/img/call_sheet_<色>_p<番号>.png。1枚 = 1かたまり
-  （1番 / 2番 / ラスト）なので、3枚で1曲。
-  4:5 は X も Instagram も切り取らずに幅いっぱいで出す比率。本文40pxは、
-  スマホで幅390pxに縮んだとき約14pxで見える。拡大しないで読めるのはここまで。
-  横長1枚に全部入れると本文が4px相当まで縮んで読めない（2026-09-04に確認）。
+  resources/call_sheet_cards.html のカードを撮る。**1曲 = 1枚**。
+  出力は resources/img/call_sheet_<色>.png（2700x5848 / 実寸2倍の高解像度）。
+  1曲を3枚に割ると、SNSで1曲のコール表が散らばって追えない。横長1枚に
+  詰め込むと本文が4px相当まで縮んで拡大しないと読めない。どちらも試して
+  却下し、縦1枚に落ち着いた（2026-09-04）。
 
 **横長（--format landscape / both）**
   resources/call_sheet.html の帯を撮る。幅1440・16:9（実寸2880x1620）。
@@ -70,19 +69,18 @@ async def check_font(page, selector: str) -> None:
 
 
 async def capture_portrait(browser) -> list[Path]:
-    """縦型カード。カードはHTML側で 1080x1350 に組んであるので、そのまま撮る。"""
+    """縦型カード。カードはHTML側で幅1350に組んであるので、そのまま撮る。"""
     page = await browser.new_page(
-        viewport={"width": 1200, "height": 1400}, device_scale_factor=SCALE
+        viewport={"width": 1500, "height": 2000}, device_scale_factor=SCALE
     )
     await page.goto(CARDS_PAGE.as_uri())
     await page.wait_for_timeout(1500)
-    await check_font(page, ".row__line")
+    await check_font(page, ".line")
 
     written = []
     for card_id in await page.eval_on_selector_all(".card", "els => els.map(el => el.id)"):
-        # id は card-<色>-<番号>
-        _, key, index = card_id.split("-")
-        path = OUT_DIR / f"call_sheet_{key}_p{index}.png"
+        key = card_id.removeprefix("card-")  # id は card-<色>
+        path = OUT_DIR / f"call_sheet_{key}.png"
         await (await page.query_selector(f"#{card_id}")).screenshot(path=path)
         written.append(path)
     await page.close()
