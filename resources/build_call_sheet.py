@@ -527,8 +527,7 @@ STYLE_CARDS = """<style>
    組み方は横長版（call_sheet.html）と別:
    - パート名は左の細い列。本文は右で、行を折り返しても頭が揃う。
    - 「1番 / 2番 / ラスト」は行の流れを切る見出しとして挟む。
-   - 同じ指示の繰り返し（イントロ・間奏・アウトロ）は「〜と同じ」に畳む。
-     繰り返しに縦を使うと、その分だけ本文を小さくすることになるため。
+   - 中身が同じパートも「〜と同じ」で参照させず、そのつど書き下す。
    色トークンと配色の考え方は call_sheet.html と共通。デザインの正は design.md。
    ===================================================================== */
 :root {
@@ -560,7 +559,7 @@ body {
 
 .card {
   width: 1800px;
-  padding: 116px 108px;
+  padding: 150px 140px;
   background-color: var(--ground);
   color: var(--text);
   display: flex;
@@ -669,9 +668,6 @@ body {
   color: var(--sub);
 }
 
-/* 「イントロと同じ」の繰り返しは、本文より落として流し読みできるように */
-.line--same { font-size: 40px; font-weight: 400; color: var(--sub); }
-
 .line + .line { margin-top: 8px; }
 
 /* メンバー名は担当カラーのドット付きで */
@@ -751,28 +747,17 @@ def render_lines(lines: list[str]) -> str:
 
 def render_card(song: Song, colors_key: str, mark: str) -> str:
     """1曲まるごとを1枚に。SNSに載せるのはこれ1枚。"""
-    # 同じ指示の繰り返しは「〜と同じ」に畳む。イントロ・間奏・アウトロは同じ44文字で、
-    # そのまま3回出すと縦が埋まり、その分だけ本文を小さくすることになる。
-    # ただしメンバーパートを含むパートは畳まない。誰が歌うかは、そのパートを見て
-    # すぐ分かるべき情報で、「〜と同じ」で参照させると読み手が前に戻ることになる。
-    seen: dict[tuple[str, ...], str] = {}
+    # どのパートも書き下す。中身が同じでも「〜と同じ」で参照させない。
+    # 読み手はその場で分かるべきで、前に戻らせない。
     body = []
     for label, parts in group(song):
         if label:
             body.append(f'        <p class="block">{html.escape(label)}</p>')
         for part in parts:
-            lines = part_lines(part)
-            key = tuple(lines)
-            has_members = any(ROUTE_RE.match(line) for line in lines)
-            if key in seen and not has_members:
-                content = f'<p class="line line--same">{html.escape(seen[key])}と同じ</p>'
-            else:
-                seen[key] = part.name
-                content = render_lines(lines)
             body.append(
                 '        <div class="row">\n'
                 f'          <p class="row__part">{html.escape(part.name)}</p>\n'
-                f'          <div class="row__body">{content}</div>\n'
+                f'          <div class="row__body">{render_lines(part_lines(part))}</div>\n'
                 "        </div>"
             )
 

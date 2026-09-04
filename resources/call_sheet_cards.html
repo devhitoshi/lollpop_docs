@@ -22,8 +22,7 @@
    組み方は横長版（call_sheet.html）と別:
    - パート名は左の細い列。本文は右で、行を折り返しても頭が揃う。
    - 「1番 / 2番 / ラスト」は行の流れを切る見出しとして挟む。
-   - 同じ指示の繰り返し（イントロ・間奏・アウトロ）は「〜と同じ」に畳む。
-     繰り返しに縦を使うと、その分だけ本文を小さくすることになるため。
+   - 中身が同じパートも「〜と同じ」で参照させず、そのつど書き下す。
    色トークンと配色の考え方は call_sheet.html と共通。デザインの正は design.md。
    ===================================================================== */
 :root {
@@ -55,7 +54,7 @@ body {
 
 .card {
   width: 1800px;
-  padding: 116px 108px;
+  padding: 150px 140px;
   background-color: var(--ground);
   color: var(--text);
   display: flex;
@@ -164,9 +163,6 @@ body {
   color: var(--sub);
 }
 
-/* 「イントロと同じ」の繰り返しは、本文より落として流し読みできるように */
-.line--same { font-size: 40px; font-weight: 400; color: var(--sub); }
-
 .line + .line { margin-top: 8px; }
 
 /* メンバー名は担当カラーのドット付きで */
@@ -259,7 +255,7 @@ body {
         </div>
         <div class="row">
           <p class="row__part">間奏</p>
-          <div class="row__body"><p class="line line--same">イントロと同じ</p></div>
+          <div class="row__body"><p class="line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p></div>
         </div>
         <p class="block">2番</p>
         <div class="row">
@@ -293,7 +289,7 @@ body {
         </div>
         <div class="row">
           <p class="row__part">アウトロ</p>
-          <div class="row__body"><p class="line line--same">イントロと同じ</p></div>
+          <div class="row__body"><p class="line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p></div>
         </div>
       </div>
       <p class="card__note">ここに書いたのは一例です。日によっても変わります。感じたままに声を出したり身体を動かしたり、なにもしなくても大丈夫。</p>
@@ -323,7 +319,7 @@ body {
         </div>
         <div class="row">
           <p class="row__part">間奏</p>
-          <div class="row__body"><p class="line line--same">イントロと同じ</p></div>
+          <div class="row__body"><p class="line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p></div>
         </div>
         <p class="block">2番</p>
         <div class="row">
@@ -357,7 +353,7 @@ body {
         </div>
         <div class="row">
           <p class="row__part">アウトロ</p>
-          <div class="row__body"><p class="line line--same">イントロと同じ</p></div>
+          <div class="row__body"><p class="line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p></div>
         </div>
       </div>
       <p class="card__note">ここに書いたのは一例です。日によっても変わります。感じたままに声を出したり身体を動かしたり、なにもしなくても大丈夫。</p>
@@ -387,7 +383,7 @@ body {
         </div>
         <div class="row">
           <p class="row__part">間奏</p>
-          <div class="row__body"><p class="line line--same">イントロと同じ</p></div>
+          <div class="row__body"><p class="line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p></div>
         </div>
         <p class="block">2番</p>
         <div class="row">
@@ -421,7 +417,7 @@ body {
         </div>
         <div class="row">
           <p class="row__part">アウトロ</p>
-          <div class="row__body"><p class="line line--same">イントロと同じ</p></div>
+          <div class="row__body"><p class="line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p></div>
         </div>
       </div>
       <p class="card__note">ここに書いたのは一例です。日によっても変わります。感じたままに声を出したり身体を動かしたり、なにもしなくても大丈夫。</p>
@@ -451,7 +447,7 @@ body {
         </div>
         <div class="row">
           <p class="row__part">間奏</p>
-          <div class="row__body"><p class="line line--same">イントロと同じ</p></div>
+          <div class="row__body"><p class="line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p></div>
         </div>
         <p class="block">2番</p>
         <div class="row">
@@ -485,7 +481,7 @@ body {
         </div>
         <div class="row">
           <p class="row__part">アウトロ</p>
-          <div class="row__body"><p class="line line--same">イントロと同じ</p></div>
+          <div class="row__body"><p class="line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p></div>
         </div>
       </div>
       <p class="card__note">ここに書いたのは一例です。日によっても変わります。感じたままに声を出したり身体を動かしたり、なにもしなくても大丈夫。</p>
