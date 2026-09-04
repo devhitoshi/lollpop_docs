@@ -84,5 +84,8 @@
 
 - **twitterapi.io は環境によって到達可否が変わる。** 信頼モードでは403、フルアクセス環境では到達可能（2026-09-01確認）。APIキーは環境変数 `TWITTERAPI_IO_KEY` かルートの `.env`（`.gitignore` 済み）から読む。**キーをチャットに貼らせない。** 取得した投稿データ（`work/x_fetch/`）は他人の著作物なのでコミットしない（`.gitignore` 済み）。
 - **linkco.re（TuneCore配信ページ）はネットワークポリシーで到達不可。** 歌詞はユーザーにスクリーンショットかテキストで貼ってもらい、転記する。原文の表記揺れは正規化せず、歌詞ファイル末尾のHTMLコメント（転記メモ）に記録して、ユーザーにレビューを依頼する。
+- **公開用の画像を撮る前に、必ず `bash resources/install_capture_font.sh` を実行する。入れずに撮ると漢字が中国語フォントの字形になる**（2026-09-04に実際にやらかした）。コンテナのヘッドレスChromiumは `fonts.googleapis.com` に到達できず（curl は proxy 経由で通るのにブラウザは `ERR_CONNECTION_RESET`）、コンテナの日本語フォントは IPAGothic と WenQuanYi しか無い。そのまま撮ると **WenQuanYi Zen Hei（中国語フォント）で漢字が描画される**。コンテナは使い捨てなので、セッションが変わるたびに入れ直す。
+  **CSSの指定と実際に描画されたフォントは別物。** 画像にする前に CDP の `CSS.getPlatformFontsForNode` で実物を確認する（`resources/capture_call_sheet.py` は Noto Sans JP でなければ中断する。他のページを撮るときも同じ確認を入れる）。ページ側のフォント指定は design.md が正で、この件で変えない。
+- **Playwright はコンテナに未インストール。`pip install playwright` で入れる。** ブラウザは `/opt/pw-browsers` にあり、`playwright install` は不要（禁止）。pip版とバンドル版でビルド番号がずれて起動に失敗するので、`executable_path="/opt/pw-browsers/chromium-1194/chrome-linux/chrome"`（実際のディレクトリ名を確認する）と `args=["--no-sandbox"]` を渡す。
 - **記事系のPRは、作成後そのままマージしてよい**（オーナー方針・2026年9月確認）。マージ後は作業ブランチを origin/main に揃え直す。
 - **hooks（`.claude/settings.json`、2026-09-02〜）が3つ動く。** 起動時に現状サマリ（ブランチ・不足月・APIキーの有無・取得済み投稿）を出す `session_start.sh`、`git add -f` と `.env`／`work/x_fetch/`／音源を含むコミットを止める `guard_git.py`、`events/data_event.csv` を編集したら集計と整合性チェックを自動で回す `after_event_csv.py`。止められたときは理由が表示されるので、無理に回避せずユーザーに確認する。

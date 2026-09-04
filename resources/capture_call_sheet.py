@@ -9,11 +9,12 @@
 する。X のタイムラインで上下が切られないため。
 
 必要なもの:
-- Playwright の Chromium。
-- **Noto Sans JP がシステムに入っていること。** 入っていないと別の日本語フォント
-  （中国語フォントなど）で描画され、漢字の字形が変わったまま画像になる。実際に
-  描画に使われたフォントを CDP で確認し、Noto Sans JP でなければ中断する。
-  Linux なら Google Fonts から取って fc-cache すれば入る。
+- Playwright の Chromium。リモート環境では `/opt/pw-browsers` のものを
+  --chromium で指定する（pip版とビルド番号がずれるため）。
+- **Noto Sans JP がシステムに入っていること**（`bash resources/install_capture_font.sh`）。
+  入っていないと別の日本語フォント（中国語フォントなど）で描画され、漢字の字形が
+  変わったまま画像になる。実際に描画に使われたフォントを CDP で確認し、
+  Noto Sans JP でなければ中断する。CLAUDE.md「実行環境の注意」も参照。
 """
 
 from __future__ import annotations
@@ -30,6 +31,9 @@ WIDTH = 1440
 RATIO = 9 / 16
 SCALE = 2
 FONT = "Noto Sans JP"
+
+# フォントが無い環境で撮ろうとしたときに出す直し方
+INSTALL = "  bash resources/install_capture_font.sh"
 
 
 async def capture(chromium_path: str | None) -> list[Path]:
@@ -67,7 +71,9 @@ async def capture(chromium_path: str | None) -> list[Path]:
             await browser.close()
             sys.exit(
                 f"描画に使われたフォントが {FONT} ではない（{'、'.join(used) or '取得できず'}）。\n"
-                f"{FONT} を入れてから撮り直す。入れずに撮ると字形が変わった画像になる。"
+                f"このまま撮ると字形の違う画像になるので中断した。{FONT} を入れてから撮り直す:\n"
+                f"{INSTALL}\n"
+                "詳しくは CLAUDE.md「実行環境の注意」。"
             )
 
         for key in await page.eval_on_selector_all(
