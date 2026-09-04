@@ -18,6 +18,7 @@
   帯の中身は736pxなので、足りない分はその帯の地の色で上下に足して16:9にする。
   ブログやOGPなど、横に広い置き場用。
 
+作りかたと決めごと（なぜこの組み方なのか）は resources/call_sheet_requirements.md。
 必要なもの:
 - Playwright の Chromium。リモート環境では `/opt/pw-browsers` のものを
   --chromium で指定する（pip版とビルド番号がずれるため）。
