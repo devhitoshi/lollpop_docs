@@ -81,20 +81,21 @@ body {
   letter-spacing: -0.02em;
 }
 
-/* かたまりの見出し。1番 / 2番 / ラストを色の帯にして、上に間を空けて積む。
-   帯があると3つのまとまりが一目で分かり、どこを見ているか迷わない */
+/* かたまりの見出し。1番 / 2番 / ラストは、色の面ではなくスキマで分ける。
+   面にすると帯が主役になってしまうので、間を空けて色文字を置くだけにする */
 .block {
-  margin: 56px 0 0;
-  padding: 14px 26px;
-  background-color: var(--accent);
-  color: var(--on-accent);
-  font-size: 42px;
+  margin: 60px 0 12px;
+  color: var(--accent);
+  font-size: 40px;
   font-weight: 700;
   line-height: 1.3;
   letter-spacing: 0.12em;
 }
 
 .block:first-child { margin-top: 0; }
+
+/* 見出しの下は、そこから新しいまとまりが始まることを線で示す */
+.block + .row { border-top: 3px solid var(--line); }
 
 .card__sub {
   margin: 0 0 34px;
@@ -284,7 +285,7 @@ body {
         </div>
         <div class="row">
           <p class="row__part">3Bメロ</p>
-          <div class="row__body"><p class="line line--same">Bメロと同じ</p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line line--members"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">ラスサビ</p>
@@ -348,7 +349,7 @@ body {
         </div>
         <div class="row">
           <p class="row__part">3Bメロ</p>
-          <div class="row__body"><p class="line line--same">Bメロと同じ</p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line line--members"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">ラスサビ</p>
@@ -412,7 +413,7 @@ body {
         </div>
         <div class="row">
           <p class="row__part">3Bメロ</p>
-          <div class="row__body"><p class="line line--same">Bメロと同じ</p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line line--members"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">ラスサビ</p>
@@ -476,7 +477,7 @@ body {
         </div>
         <div class="row">
           <p class="row__part">3Bメロ</p>
-          <div class="row__body"><p class="line line--same">Bメロと同じ</p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line line--members"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">ラスサビ</p>

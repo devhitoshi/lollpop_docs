@@ -586,20 +586,21 @@ body {
   letter-spacing: -0.02em;
 }
 
-/* かたまりの見出し。1番 / 2番 / ラストを色の帯にして、上に間を空けて積む。
-   帯があると3つのまとまりが一目で分かり、どこを見ているか迷わない */
+/* かたまりの見出し。1番 / 2番 / ラストは、色の面ではなくスキマで分ける。
+   面にすると帯が主役になってしまうので、間を空けて色文字を置くだけにする */
 .block {
-  margin: 56px 0 0;
-  padding: 14px 26px;
-  background-color: var(--accent);
-  color: var(--on-accent);
-  font-size: 42px;
+  margin: 60px 0 12px;
+  color: var(--accent);
+  font-size: 40px;
   font-weight: 700;
   line-height: 1.3;
   letter-spacing: 0.12em;
 }
 
 .block:first-child { margin-top: 0; }
+
+/* 見出しの下は、そこから新しいまとまりが始まることを線で示す */
+.block + .row { border-top: 3px solid var(--line); }
 
 .card__sub {
   margin: 0 0 34px;
@@ -752,6 +753,8 @@ def render_card(song: Song, colors_key: str, mark: str) -> str:
     """1曲まるごとを1枚に。SNSに載せるのはこれ1枚。"""
     # 同じ指示の繰り返しは「〜と同じ」に畳む。イントロ・間奏・アウトロは同じ44文字で、
     # そのまま3回出すと縦が埋まり、その分だけ本文を小さくすることになる。
+    # ただしメンバーパートを含むパートは畳まない。誰が歌うかは、そのパートを見て
+    # すぐ分かるべき情報で、「〜と同じ」で参照させると読み手が前に戻ることになる。
     seen: dict[tuple[str, ...], str] = {}
     body = []
     for label, parts in group(song):
@@ -760,7 +763,8 @@ def render_card(song: Song, colors_key: str, mark: str) -> str:
         for part in parts:
             lines = part_lines(part)
             key = tuple(lines)
-            if key in seen:
+            has_members = any(ROUTE_RE.match(line) for line in lines)
+            if key in seen and not has_members:
                 content = f'<p class="line line--same">{html.escape(seen[key])}と同じ</p>'
             else:
                 seen[key] = part.name
