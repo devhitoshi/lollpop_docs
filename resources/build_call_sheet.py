@@ -8,6 +8,7 @@
 コールの内容の正は songs/call_list.md。このスクリプトは表示用に組み立てるだけで、
 中身は書き換えない（行頭の全角スペースを表示のときだけ落とすのみ）。
 
+作りかたと決めごと（なぜこの組み方なのか）は resources/call_sheet_requirements.md。
 デザインの正はリポジトリルートの design.md（実装: resources/css/style.css）。
 出力は単一ファイル完結のページなので、design.md のトークン値を転記している
 （セトリ白書・成長戦略ノートと同じ扱い）。
