@@ -38,6 +38,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "songs" / "call_list.md"
 DEFAULT_SONG = "未完成ヒロイン"
 DEFAULT_OUTPUT = ROOT / "resources" / "call_sheet.html"
+DEFAULT_CARDS_OUTPUT = ROOT / "resources" / "call_sheet_cards.html"
 
 # 曲の「かたまり」。曲の構造そのものなので曲ごとに書く。
 # ここに無いパートは直前のかたまりの末尾に入り、実行時に警告を出す（行は落とさない）。
@@ -501,6 +502,120 @@ a { color: var(--primary); }
 </style>"""
 
 
+STYLE_CARDS = """<style>
+/* =====================================================================
+   ろりぽっぷ!!!!!!! コール表 — SNS用の縦型カード（1枚 = 1かたまり）
+   このファイルは resources/build_call_sheet.py が生成する。直接編集しない。
+
+   1枚 1080x1350（4:5）。X も Instagram も 4:5 なら切り取らずに幅いっぱいで
+   出すので、タイムラインのまま拡大せずに読める大きさで組む。
+   本文40px は、スマホで幅390pxに縮んだとき約14pxで見える計算。
+   横長版（call_sheet.html）と違い、パート名は本文の上に置く。カードの幅が
+   狭いぶん、ラベルの列を作らず本文に幅を使うため。
+   色トークンと配色の考え方は call_sheet.html と共通。デザインの正は design.md。
+   ===================================================================== */
+:root {
+  --canvas: #ffffff;
+  --font: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", Meiryo, sans-serif;
+
+  /* メンバーカラー（装飾専用）。紺のカードだけ PALETTES 側で明るい方に振り替える */
+  --mc-kurumi: #cc0000;
+  --mc-mayu: #f5c400;
+  --mc-mau: #7fd4e8;
+  --mc-ami: #2e9e5b;
+  --mc-mana: #ffffff;
+  --mc-asaka: #f172a3;
+  --mc-natsumi: #2a6fd6;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  /* カードの外。撮るのはカードだけなので、境目が分かる中間色にしておく */
+  background-color: #9a8f94;
+  font-family: var(--font);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 48px;
+  padding: 48px;
+}
+
+.card {
+  width: 1080px;
+  min-height: 1350px;
+  padding: 60px 64px;
+  background-color: var(--ground);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  letter-spacing: 0.01em;
+}
+
+.card__mark {
+  margin: 0 0 16px;
+  color: var(--meta);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+}
+
+.card__title {
+  margin: 0 0 10px;
+  color: var(--title);
+  font-size: 68px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.card__block {
+  margin: 0 0 22px;
+  color: var(--title);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.08em;
+}
+
+.rows { border-top: 2px solid var(--line); }
+
+.row {
+  padding: 17px 0;
+  border-bottom: 2px solid var(--line);
+}
+
+.row__part {
+  margin: 0 0 4px;
+  color: var(--meta);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.row__line {
+  margin: 0;
+  color: var(--text);
+  font-size: 40px;
+  line-height: 1.45;
+}
+
+.row__line + .row__line { margin-top: 4px; }
+
+/* メンバー名は担当カラーのドット付きで（横長版と同じ扱い） */
+.chips { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; }
+.chip { display: inline-flex; align-items: center; gap: 10px; color: var(--title); font-weight: 700; }
+.chip__arrow { margin-right: 6px; color: var(--meta); font-size: 32px; font-weight: 400; }
+.chip__label { color: var(--sub); font-size: 32px; }
+
+.dot { width: 30px; height: 30px; border-radius: 9999px; flex: none; }
+.dot--outline { box-shadow: inset 0 0 0 2px var(--ring); }
+</style>"""
+
+
 def palette_css(colors: list[str]) -> str:
     """色ちがいの帯ごとにトークンを差し替えるCSSを組む。"""
     rules = []
@@ -525,6 +640,63 @@ def render_sheet(song: Song, blocks: str, key: str, mark: str) -> str:
         "          </div>\n"
         "        </section>"
     )
+
+
+def render_card(song: Song, label: str, parts: list[Part], key: str, index: int, mark: str) -> str:
+    rows = []
+    for part in parts:
+        lines = []
+        for item in part.items:
+            lines.append(f'<p class="row__line">{render_text(item.text)}</p>')
+            for sub in item.subs:
+                lines.append(f'<p class="row__line">{render_text(sub)}</p>')
+        rows.append(
+            '        <div class="row">\n'
+            f'          <p class="row__part">{html.escape(part.name)}</p>\n'
+            + "".join(f"          {line}\n" for line in lines)
+            + "        </div>"
+        )
+
+    return (
+        f'    <section class="card sheet-band--{key}" id="card-{key}-{index}">\n'
+        f'      <p class="card__mark">{mark}</p>\n'
+        f'      <h2 class="card__title">{html.escape(song.title)}</h2>\n'
+        f'      <p class="card__block">{html.escape(label)}</p>\n'
+        '      <div class="rows">\n'
+        + "\n".join(rows)
+        + "\n      </div>\n"
+        "    </section>"
+    )
+
+
+def build_cards(song: Song, colors: list[str]) -> str:
+    """SNS用の縦型カードを並べたページ。1枚 = 1かたまり。撮るのはカードだけ。"""
+    mark = f"🍭 ろりぽっぷ!!!!!!! 非公式コール表 ・ {last_updated()}時点"
+    blocks = group(song)
+    cards = "\n\n".join(
+        render_card(song, label, parts, key, index, mark)
+        for key in colors
+        for index, (label, parts) in enumerate(blocks, start=1)
+    )
+    style = STYLE_CARDS.replace("</style>", palette_css(colors) + "</style>")
+
+    return f"""<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{html.escape(song.title)} コール表（縦型カード）</title>
+    <meta name="robots" content="noindex">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
+{style}
+</head>
+
+<body>
+{cards}
+</body>
+
+</html>
+"""
 
 
 def build(song: Song, colors: list[str]) -> str:
@@ -608,7 +780,10 @@ def build(song: Song, colors: list[str]) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--song", default=DEFAULT_SONG, help="曲名（songs/call_list.md の見出しのまま）")
-    parser.add_argument("--out", type=Path, default=DEFAULT_OUTPUT, help="出力先のHTML")
+    parser.add_argument("--out", type=Path, default=DEFAULT_OUTPUT, help="出力先のHTML（横長のページ）")
+    parser.add_argument(
+        "--cards-out", type=Path, default=DEFAULT_CARDS_OUTPUT, help="出力先のHTML（SNS用の縦型カード）"
+    )
     choices = "、".join(f"{key}={palette['label']}" for key, palette in PALETTES.items())
     parser.add_argument(
         "--colors",
@@ -628,12 +803,15 @@ def main() -> None:
         sys.exit(f"{args.song} が {SOURCE.relative_to(ROOT)} に見つからない")
 
     args.out.write_text(build(song, colors), encoding="utf-8")
+    args.cards_out.write_text(build_cards(song, colors), encoding="utf-8")
+
     blocks = group(song)
     shape = " / ".join(f"{label or '（かたまりなし）'}{len(parts)}" for label, parts in blocks)
     palette = "・".join(PALETTES[key]["label"] for key in colors)
-    out = args.out.resolve()
-    where = out.relative_to(ROOT) if out.is_relative_to(ROOT) else out
-    print(f"{where} を生成: {song.title}（{shape}）背景: {palette}")
+    for path, what in ((args.out, "横長"), (args.cards_out, f"縦型カード{len(blocks) * len(colors)}枚")):
+        resolved = path.resolve()
+        where = resolved.relative_to(ROOT) if resolved.is_relative_to(ROOT) else resolved
+        print(f"{where} を生成: {song.title}（{shape}）背景: {palette} — {what}")
 
 
 if __name__ == "__main__":
