@@ -61,7 +61,7 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 
 | パス | 内容 |
 | --- | --- |
-| `resources/` | GitHub Pages で公開しているサイト一式（ポータル・ビューア・セトリ白書・成長戦略ノート・コール表・CSS）。`call_list.html` は `songs/call_list.md` から `build_call_list.py` で生成する |
+| `resources/` | GitHub Pages で公開しているサイト一式（ポータル・ビューア・セトリ白書・成長戦略ノート・CSS）。`call_sheet.html` は SNS 用の1曲コール表で、`songs/call_list.md` から `build_call_sheet.py` で生成する |
 | `design.md` | デザインシステム定義（色・タイポ・バンド構成の正。`resources/css/style.css` が実装） |
 | `README.md` | この文書。リポジトリの地図 |
 | `CLAUDE.md` | Claude Code 用の作業ルールと資源配置ルール |
