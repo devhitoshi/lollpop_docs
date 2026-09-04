@@ -642,7 +642,8 @@ body {
 
 .row__body { min-width: 0; }
 
-/* 合図とメンバーの並び。ここが一番大きい＝一番先に目に入る */
+/* 2段目: やること（メンバーコール・振りコピ）。3段目より一段小さくして、
+   担当カラー付きのメンバーパートが先に目に入るようにする */
 .line {
   display: flex;
   flex-wrap: wrap;
@@ -650,10 +651,13 @@ body {
   gap: 6px 22px;
   margin: 0;
   color: var(--text);
-  font-size: 54px;
+  font-size: 48px;
   font-weight: 500;
   line-height: 1.4;
 }
+
+/* 3段目: メンバーパート。ここが一番大きい＝一番先に目に入る */
+.line--members { font-size: 54px; }
 
 /* 説明文は一段小さく。読むのは目を留めたときでいい */
 .line--note {
@@ -734,8 +738,12 @@ def render_lines(lines: list[str]) -> str:
     """
     out = []
     for index, line in enumerate(lines):
-        note = index and not ROUTE_RE.match(line) and len(line) > SHORT
-        cls = "line line--note" if note else "line"
+        if ROUTE_RE.match(line):
+            cls = "line line--members"  # メンバーパート。ここが一番大きい
+        elif index and len(line) > SHORT:
+            cls = "line line--note"  # 2行目以降の補足
+        else:
+            cls = "line"  # やること
         out.append(f'<p class="{cls}">{render_text(line)}</p>')
     return "".join(out)
 
@@ -772,7 +780,7 @@ def render_card(song: Song, colors_key: str, mark: str) -> str:
         '      <div class="rows">\n'
         + "\n".join(body)
         + "\n      </div>\n"
-        '      <p class="card__note">コールは現場やその日の煽りで変わります。まわりに合わせるのがいちばん確実です。</p>\n'
+        '      <p class="card__note">ここに書いたのは一例です。日によっても変わります。感じたままに声を出したり身体を動かしたり、なにもしなくても大丈夫。</p>\n'
         "    </section>"
     )
 
@@ -858,7 +866,7 @@ def build(song: Song, colors: list[str]) -> str:
                 <h2 class="notes__title">この表について</h2>
                 <ul class="notes__list">
                     <li>ファン有志がライブで聞き取ってまとめた非公式のコール表です。運営公認のものではありません。</li>
-                    <li>コールは現場やその日の煽りで変わります。まわりに合わせるのがいちばん確実です。</li>
+                    <li>ここに書いたのは一例です。日によっても変わります。感じたままに声を出したり身体を動かしたり、なにもしなくても大丈夫。</li>
                     <li>メンバーパートは記録した時点のもの。編成や振り入れで変わることがあります。</li>
                 </ul>
                 <ul class="notes__links">
