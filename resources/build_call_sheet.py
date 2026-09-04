@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """songs/call_list.md の1曲分から、SNSキャプチャ用の1枚もののコール表を作る。
 
-    python3 resources/build_call_sheet.py                    # 未完成ヒロイン
-    python3 resources/build_call_sheet.py --song 乙女ロック    # 別の曲
+    python3 resources/build_call_sheet.py                      # 未完成ヒロイン・4色
+    python3 resources/build_call_sheet.py --song 乙女ロック      # 別の曲
+    python3 resources/build_call_sheet.py --colors navy         # 色を選ぶ
 
 コールの内容の正は songs/call_list.md。このスクリプトは表示用に組み立てるだけで、
 中身は書き換えない（行頭の全角スペースを表示のときだけ落とすのみ）。
@@ -18,6 +19,9 @@
   列の切れ目が曲の切れ目と一致するので、どこから読むか迷わない。
   狭い画面では、かたまりを縦に積む。
 - メンバー名は担当カラーのドット付き（design.md: メンバーカラーは装飾専用）。
+- 同じ内容を PALETTES の色ちがいで並べる。投稿する色を選ぶためのもの。
+  ベージュと紺は design.md の4面（白・ブラッシュ・プラム黒・ピンク）に無い色で、
+  このページのキャプチャ用バリアント。採用する色が決まったら design.md に足す。
 """
 
 from __future__ import annotations
@@ -44,6 +48,68 @@ BLOCKS = {
         # 2間奏（行！く！ぞー！のMIX）はラスサビへの助走なので、ラスト側の頭に置く
         ("ラスト", ["2間奏", "3Bメロ", "ラスサビ", "アウトロ"]),
     ],
+}
+
+# キャプチャ用の色ちがい。帯ごとにトークンを差し替えるだけで、組み方は同じ。
+# 白とブラッシュは design.md の面そのもの。ベージュと紺はこのページ用の拡張で、
+# 紺は暗い面なので design.md の「暗帯ではアクセントを明るい側へ反転する」に倣い、
+# メンバーカラーも明るい方へ振る（濃い赤・緑は暗い面に沈んでドットが読めない）。
+PALETTES = {
+    "white": {
+        "label": "白",
+        "tokens": {
+            "ground": "#ffffff",
+            "title": "#1d1216",
+            "text": "#45383e",
+            "sub": "#71646b",
+            "meta": "#998a92",
+            "line": "#f2e2ea",
+            "ring": "#f6d3e3",
+        },
+    },
+    "beige": {
+        "label": "ベージュ",
+        "tokens": {
+            "ground": "#f5efe4",
+            "title": "#2a2118",
+            "text": "#4a4036",
+            "sub": "#77695a",
+            "meta": "#9a8d7c",
+            "line": "#e6dbc9",
+            "ring": "#ddd0ba",
+        },
+    },
+    "blush": {
+        "label": "ピンク",
+        "tokens": {
+            "ground": "#fbe7f0",
+            "title": "#1d1216",
+            "text": "#45383e",
+            "sub": "#71646b",
+            "meta": "#998a92",
+            "line": "#f6d3e3",
+            "ring": "#f6d3e3",
+        },
+    },
+    "navy": {
+        "label": "紺",
+        "tokens": {
+            "ground": "#101b2f",
+            "title": "#f2f5fb",
+            "text": "#ccd6ea",
+            "sub": "#a9b7d2",
+            "meta": "#8fa0c0",
+            "line": "#26334f",
+            "ring": "transparent",  # 白いドットは暗い面では輪郭が要らない
+        },
+        "members": {
+            "--mc-kurumi": "#ff5f5f",
+            "--mc-mayu": "#ffd633",
+            "--mc-ami": "#4fd28a",
+            "--mc-asaka": "#ff9ec4",
+            "--mc-natsumi": "#6f9fe8",
+        },
+    },
 }
 
 # 担当カラーの正は members/members.md、色の値は design.md。
@@ -190,7 +256,7 @@ def render_block(label: str, parts: list[Part]) -> str:
             "            </div>"
         )
 
-    heading = f'          <h2 class="block__label">{html.escape(label)}</h2>\n' if label else ""
+    heading = f'          <h3 class="block__label">{html.escape(label)}</h3>\n' if label else ""
     return (
         '        <section class="block">\n'
         + heading
@@ -305,18 +371,36 @@ a { color: var(--primary); }
 .top-nav__links { display: flex; gap: var(--s-lg); margin: 0; padding: 0; list-style: none; }
 .top-nav__links a:active { color: var(--primary-active); }
 
+/* ---------- Sub nav（ページのクローム。design.md の Docs 例外） ---------- */
+.sub-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-xs) var(--s-lg);
+  padding: var(--s-sm) var(--s-lg);
+  background-color: var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.sub-nav__title { margin: 0; color: var(--ink); font-size: 17px; font-weight: 700; line-height: 1.5; }
+.sub-nav__note { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.sub-nav__colors { display: flex; flex-wrap: wrap; gap: var(--s-md); margin: 0 0 0 auto; padding: 0; list-style: none; font-size: 13px; font-weight: 500; }
+.sub-nav__colors a { color: var(--primary); text-decoration: none; }
+
 /* ---------- Band ---------- */
 .band { padding: var(--s-band) var(--s-lg); }
 .band__inner { max-width: 1200px; margin: 0 auto; }
 
-.band--blush { background-color: var(--surface-blush); color: var(--body); }
 .band--dark  { background-color: var(--surface-dark); color: var(--on-dark-soft); }
 .band--dark a { color: var(--primary-on-dark); text-decoration: none; }
+
+/* コール表の帯。色ちがいはトークンの差し替えだけで、組み方は共通 */
+.sheet-band { background-color: var(--ground); color: var(--text); }
 
 /* ---------- 見出し（ワードマーク・非公式・時点まで同じ面に置く） ---------- */
 .sheet__mark {
   margin: 0 0 var(--s-xs);
-  color: var(--muted-soft);
+  color: var(--meta);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -325,7 +409,7 @@ a { color: var(--primary); }
 
 .sheet__title {
   margin: 0 0 var(--s-xl);
-  color: var(--ink);
+  color: var(--title);
   font-size: 40px;
   font-weight: 700;
   line-height: 1.25;
@@ -343,7 +427,7 @@ a { color: var(--primary); }
 
 .block__label {
   margin: 0 0 var(--s-xs);
-  color: var(--ink);
+  color: var(--title);
   font-size: 15px;
   font-weight: 700;
   line-height: 1.5;
@@ -351,19 +435,19 @@ a { color: var(--primary); }
 }
 
 /* コール行。1行が1レコードなので、ここは線を引いてよい場所 */
-.calls { border-top: 1px solid var(--surface-blush-strong); }
+.calls { border-top: 1px solid var(--line); }
 
 .call {
   display: grid;
   grid-template-columns: 4.8em 1fr;
   gap: var(--s-xxs) var(--s-sm);
   padding: var(--s-sm) 0;
-  border-bottom: 1px solid var(--surface-blush-strong);
+  border-bottom: 1px solid var(--line);
 }
 
 .call__part {
   margin: 0;
-  color: var(--ink);
+  color: var(--title);
   font-size: 13px;
   font-weight: 700;
   line-height: 1.7;
@@ -373,7 +457,7 @@ a { color: var(--primary); }
 
 .call__line {
   margin: 0;
-  color: var(--body);
+  color: var(--text);
   font-size: 15px;
   line-height: 1.7;
 }
@@ -382,13 +466,13 @@ a { color: var(--primary); }
 
 /* メンバー名は担当カラーのドット付きで */
 .chips { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--s-xxs) var(--s-xs); }
-.chip { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); font-weight: 700; }
-.chip__arrow { margin-right: 2px; color: var(--muted-soft); font-size: 13px; font-weight: 400; }
-.chip__label { color: var(--muted); font-size: 13px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; color: var(--title); font-weight: 700; }
+.chip__arrow { margin-right: 2px; color: var(--meta); font-size: 13px; font-weight: 400; }
+.chip__label { color: var(--sub); font-size: 13px; }
 
 .dot { width: 12px; height: 12px; border-radius: var(--r-pill); flex: none; }
-/* 白（まな）のドットだけ輪郭が要る。ヘアラインより一段濃い桜で描く */
-.dot--outline { box-shadow: inset 0 0 0 1px var(--surface-blush-strong); }
+/* 白（まな）のドットだけ輪郭が要る。明るい面では地より一段濃い線、暗い面では無し */
+.dot--outline { box-shadow: inset 0 0 0 1px var(--ring); }
 
 /* ---------- 注記（暗帯。design.md: 記事ページではフッターを兼ねてよい） ---------- */
 .notes__title { margin: 0 0 var(--s-md); color: var(--on-dark); font-size: 20px; font-weight: 700; }
@@ -417,9 +501,52 @@ a { color: var(--primary); }
 </style>"""
 
 
-def build(song: Song) -> str:
+def palette_css(colors: list[str]) -> str:
+    """色ちがいの帯ごとにトークンを差し替えるCSSを組む。"""
+    rules = []
+    for key in colors:
+        palette = PALETTES[key]
+        decls = "".join(f"  --{name}: {value};\n" for name, value in palette["tokens"].items())
+        decls += "".join(f"  {name}: {value};\n" for name, value in palette.get("members", {}).items())
+        rules.append(f".sheet-band--{key} {{\n{decls}}}")
+    return "\n/* ---------- 色ちがい ---------- */\n" + "\n\n".join(rules) + "\n"
+
+
+def render_sheet(song: Song, blocks: str, key: str, mark: str) -> str:
+    return (
+        f'        <!-- {PALETTES[key]["label"]}: この1バンドだけでキャプチャが完結する -->\n'
+        f'        <section class="band sheet-band sheet-band--{key}" id="{key}">\n'
+        '          <div class="band__inner">\n'
+        f'            <p class="sheet__mark">{mark}</p>\n'
+        f'            <h2 class="sheet__title">{html.escape(song.title)}</h2>\n'
+        '            <div class="sheet">\n'
+        f"{blocks}\n"
+        "            </div>\n"
+        "          </div>\n"
+        "        </section>"
+    )
+
+
+def build(song: Song, colors: list[str]) -> str:
     blocks = "\n\n".join(render_block(label, parts) for label, parts in group(song))
     title = html.escape(song.title)
+    mark = f"🍭 ろりぽっぷ!!!!!!! 非公式コール表 ・ {last_updated()}時点"
+
+    sheets = "\n\n".join(render_sheet(song, blocks, key, mark) for key in colors)
+    style = STYLE.replace("</style>", palette_css(colors) + "</style>")
+
+    if len(colors) > 1:
+        picker = (
+            '            <p class="sub-nav__note">背景ちがい。好きな帯をそのままキャプチャしてください</p>\n'
+            '            <ul class="sub-nav__colors">\n'
+            + "".join(
+                f'                <li><a href="#{key}">{PALETTES[key]["label"]}</a></li>\n'
+                for key in colors
+            )
+            + "            </ul>\n"
+        )
+    else:
+        picker = ""
 
     return f"""<!DOCTYPE html>
 <html lang="ja">
@@ -431,7 +558,7 @@ def build(song: Song) -> str:
     <meta name="description" content="アイドルグループ『ろりぽっぷ!!!!!!!』の楽曲「{title}」のコールとメンバーパートをまとめた、ファンによる非公式のコール表です。">
     <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
-{STYLE}
+{style}
 </head>
 
 <body>
@@ -443,17 +570,12 @@ def build(song: Song) -> str:
         </ul>
     </nav>
 
+    <div class="sub-nav">
+        <h1 class="sub-nav__title">{title} コール表</h1>
+{picker}    </div>
+
     <main>
-        <!-- ブラッシュ: この1バンドだけでキャプチャが完結する -->
-        <section class="band band--blush">
-            <div class="band__inner">
-                <p class="sheet__mark">🍭 ろりぽっぷ!!!!!!! 非公式コール表 ・ {last_updated()}時点</p>
-                <h1 class="sheet__title">{title}</h1>
-                <div class="sheet">
-{blocks}
-                </div>
-            </div>
-        </section>
+{sheets}
 
         <!-- プラム黒: 注記とフッターを兼ねる -->
         <section class="band band--dark">
@@ -487,17 +609,31 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--song", default=DEFAULT_SONG, help="曲名（songs/call_list.md の見出しのまま）")
     parser.add_argument("--out", type=Path, default=DEFAULT_OUTPUT, help="出力先のHTML")
+    choices = "、".join(f"{key}={palette['label']}" for key, palette in PALETTES.items())
+    parser.add_argument(
+        "--colors",
+        default=",".join(PALETTES),
+        help=f"背景の色をカンマ区切りで（{choices}）",
+    )
     args = parser.parse_args()
+
+    colors = [key.strip() for key in args.colors.split(",") if key.strip()]
+    unknown = [key for key in colors if key not in PALETTES]
+    if unknown or not colors:
+        sys.exit(f"知らない色: {'、'.join(unknown) or '(指定なし)'}。選べるのは {'、'.join(PALETTES)}")
 
     songs = {song.title: song for song in parse(SOURCE.read_text(encoding="utf-8"))}
     song = songs.get(args.song)
     if song is None:
         sys.exit(f"{args.song} が {SOURCE.relative_to(ROOT)} に見つからない")
 
-    args.out.write_text(build(song), encoding="utf-8")
+    args.out.write_text(build(song, colors), encoding="utf-8")
     blocks = group(song)
     shape = " / ".join(f"{label or '（かたまりなし）'}{len(parts)}" for label, parts in blocks)
-    print(f"{args.out.relative_to(ROOT)} を生成: {song.title}（{shape}）")
+    palette = "・".join(PALETTES[key]["label"] for key in colors)
+    out = args.out.resolve()
+    where = out.relative_to(ROOT) if out.is_relative_to(ROOT) else out
+    print(f"{where} を生成: {song.title}（{shape}）背景: {palette}")
 
 
 if __name__ == "__main__":

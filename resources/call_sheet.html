@@ -97,18 +97,36 @@ a { color: var(--primary); }
 .top-nav__links { display: flex; gap: var(--s-lg); margin: 0; padding: 0; list-style: none; }
 .top-nav__links a:active { color: var(--primary-active); }
 
+/* ---------- Sub nav（ページのクローム。design.md の Docs 例外） ---------- */
+.sub-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-xs) var(--s-lg);
+  padding: var(--s-sm) var(--s-lg);
+  background-color: var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.sub-nav__title { margin: 0; color: var(--ink); font-size: 17px; font-weight: 700; line-height: 1.5; }
+.sub-nav__note { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.sub-nav__colors { display: flex; flex-wrap: wrap; gap: var(--s-md); margin: 0 0 0 auto; padding: 0; list-style: none; font-size: 13px; font-weight: 500; }
+.sub-nav__colors a { color: var(--primary); text-decoration: none; }
+
 /* ---------- Band ---------- */
 .band { padding: var(--s-band) var(--s-lg); }
 .band__inner { max-width: 1200px; margin: 0 auto; }
 
-.band--blush { background-color: var(--surface-blush); color: var(--body); }
 .band--dark  { background-color: var(--surface-dark); color: var(--on-dark-soft); }
 .band--dark a { color: var(--primary-on-dark); text-decoration: none; }
+
+/* コール表の帯。色ちがいはトークンの差し替えだけで、組み方は共通 */
+.sheet-band { background-color: var(--ground); color: var(--text); }
 
 /* ---------- 見出し（ワードマーク・非公式・時点まで同じ面に置く） ---------- */
 .sheet__mark {
   margin: 0 0 var(--s-xs);
-  color: var(--muted-soft);
+  color: var(--meta);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -117,7 +135,7 @@ a { color: var(--primary); }
 
 .sheet__title {
   margin: 0 0 var(--s-xl);
-  color: var(--ink);
+  color: var(--title);
   font-size: 40px;
   font-weight: 700;
   line-height: 1.25;
@@ -135,7 +153,7 @@ a { color: var(--primary); }
 
 .block__label {
   margin: 0 0 var(--s-xs);
-  color: var(--ink);
+  color: var(--title);
   font-size: 15px;
   font-weight: 700;
   line-height: 1.5;
@@ -143,19 +161,19 @@ a { color: var(--primary); }
 }
 
 /* コール行。1行が1レコードなので、ここは線を引いてよい場所 */
-.calls { border-top: 1px solid var(--surface-blush-strong); }
+.calls { border-top: 1px solid var(--line); }
 
 .call {
   display: grid;
   grid-template-columns: 4.8em 1fr;
   gap: var(--s-xxs) var(--s-sm);
   padding: var(--s-sm) 0;
-  border-bottom: 1px solid var(--surface-blush-strong);
+  border-bottom: 1px solid var(--line);
 }
 
 .call__part {
   margin: 0;
-  color: var(--ink);
+  color: var(--title);
   font-size: 13px;
   font-weight: 700;
   line-height: 1.7;
@@ -165,7 +183,7 @@ a { color: var(--primary); }
 
 .call__line {
   margin: 0;
-  color: var(--body);
+  color: var(--text);
   font-size: 15px;
   line-height: 1.7;
 }
@@ -174,13 +192,13 @@ a { color: var(--primary); }
 
 /* メンバー名は担当カラーのドット付きで */
 .chips { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--s-xxs) var(--s-xs); }
-.chip { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); font-weight: 700; }
-.chip__arrow { margin-right: 2px; color: var(--muted-soft); font-size: 13px; font-weight: 400; }
-.chip__label { color: var(--muted); font-size: 13px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; color: var(--title); font-weight: 700; }
+.chip__arrow { margin-right: 2px; color: var(--meta); font-size: 13px; font-weight: 400; }
+.chip__label { color: var(--sub); font-size: 13px; }
 
 .dot { width: 12px; height: 12px; border-radius: var(--r-pill); flex: none; }
-/* 白（まな）のドットだけ輪郭が要る。ヘアラインより一段濃い桜で描く */
-.dot--outline { box-shadow: inset 0 0 0 1px var(--surface-blush-strong); }
+/* 白（まな）のドットだけ輪郭が要る。明るい面では地より一段濃い線、暗い面では無し */
+.dot--outline { box-shadow: inset 0 0 0 1px var(--ring); }
 
 /* ---------- 注記（暗帯。design.md: 記事ページではフッターを兼ねてよい） ---------- */
 .notes__title { margin: 0 0 var(--s-md); color: var(--on-dark); font-size: 20px; font-weight: 700; }
@@ -206,6 +224,52 @@ a { color: var(--primary); }
   .call__part { font-size: 12px; }
   .call__line { font-size: 14px; }
 }
+
+/* ---------- 色ちがい ---------- */
+.sheet-band--white {
+  --ground: #ffffff;
+  --title: #1d1216;
+  --text: #45383e;
+  --sub: #71646b;
+  --meta: #998a92;
+  --line: #f2e2ea;
+  --ring: #f6d3e3;
+}
+
+.sheet-band--beige {
+  --ground: #f5efe4;
+  --title: #2a2118;
+  --text: #4a4036;
+  --sub: #77695a;
+  --meta: #9a8d7c;
+  --line: #e6dbc9;
+  --ring: #ddd0ba;
+}
+
+.sheet-band--blush {
+  --ground: #fbe7f0;
+  --title: #1d1216;
+  --text: #45383e;
+  --sub: #71646b;
+  --meta: #998a92;
+  --line: #f6d3e3;
+  --ring: #f6d3e3;
+}
+
+.sheet-band--navy {
+  --ground: #101b2f;
+  --title: #f2f5fb;
+  --text: #ccd6ea;
+  --sub: #a9b7d2;
+  --meta: #8fa0c0;
+  --line: #26334f;
+  --ring: transparent;
+  --mc-kurumi: #ff5f5f;
+  --mc-mayu: #ffd633;
+  --mc-ami: #4fd28a;
+  --mc-asaka: #ff9ec4;
+  --mc-natsumi: #6f9fe8;
+}
 </style>
 </head>
 
@@ -218,15 +282,26 @@ a { color: var(--primary); }
         </ul>
     </nav>
 
+    <div class="sub-nav">
+        <h1 class="sub-nav__title">未完成ヒロイン コール表</h1>
+            <p class="sub-nav__note">背景ちがい。好きな帯をそのままキャプチャしてください</p>
+            <ul class="sub-nav__colors">
+                <li><a href="#white">白</a></li>
+                <li><a href="#beige">ベージュ</a></li>
+                <li><a href="#blush">ピンク</a></li>
+                <li><a href="#navy">紺</a></li>
+            </ul>
+    </div>
+
     <main>
-        <!-- ブラッシュ: この1バンドだけでキャプチャが完結する -->
-        <section class="band band--blush">
-            <div class="band__inner">
-                <p class="sheet__mark">🍭 ろりぽっぷ!!!!!!! 非公式コール表 ・ 2026年9月4日時点</p>
-                <h1 class="sheet__title">未完成ヒロイン</h1>
-                <div class="sheet">
+        <!-- 白: この1バンドだけでキャプチャが完結する -->
+        <section class="band sheet-band sheet-band--white" id="white">
+          <div class="band__inner">
+            <p class="sheet__mark">🍭 ろりぽっぷ!!!!!!! 非公式コール表 ・ 2026年9月4日時点</p>
+            <h2 class="sheet__title">未完成ヒロイン</h2>
+            <div class="sheet">
         <section class="block">
-          <h2 class="block__label">1番</h2>
+          <h3 class="block__label">1番</h3>
           <div class="calls">
             <div class="call">
               <p class="call__part">イントロ</p>
@@ -265,7 +340,7 @@ a { color: var(--primary); }
         </section>
 
         <section class="block">
-          <h2 class="block__label">2番</h2>
+          <h3 class="block__label">2番</h3>
           <div class="calls">
             <div class="call">
               <p class="call__part">2Aメロ</p>
@@ -299,7 +374,7 @@ a { color: var(--primary); }
         </section>
 
         <section class="block">
-          <h2 class="block__label">ラスト</h2>
+          <h3 class="block__label">ラスト</h3>
           <div class="calls">
             <div class="call">
               <p class="call__part">2間奏</p>
@@ -330,8 +405,353 @@ a { color: var(--primary); }
             </div>
           </div>
         </section>
-                </div>
             </div>
+          </div>
+        </section>
+
+        <!-- ベージュ: この1バンドだけでキャプチャが完結する -->
+        <section class="band sheet-band sheet-band--beige" id="beige">
+          <div class="band__inner">
+            <p class="sheet__mark">🍭 ろりぽっぷ!!!!!!! 非公式コール表 ・ 2026年9月4日時点</p>
+            <h2 class="sheet__title">未完成ヒロイン</h2>
+            <div class="sheet">
+        <section class="block">
+          <h3 class="block__label">1番</h3>
+          <div class="calls">
+            <div class="call">
+              <p class="call__part">イントロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">Aメロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーコール</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">Bメロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーコール</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">サビ</p>
+              <div class="call__body">
+                <p class="call__line">振りコピとか</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">間奏</p>
+              <div class="call__body">
+                <p class="call__line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h3 class="block__label">2番</h3>
+          <div class="calls">
+            <div class="call">
+              <p class="call__part">2Aメロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーコール</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">2Bメロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーコール</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">2サビ</p>
+              <div class="call__body">
+                <p class="call__line">振りコピとか</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">Cメロ</p>
+              <div class="call__body">
+                <p class="call__line">「大丈夫さー」のあとに「アーアーアーアー」と歌ったり歌わなかったり</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h3 class="block__label">ラスト</h3>
+          <div class="calls">
+            <div class="call">
+              <p class="call__part">2間奏</p>
+              <div class="call__body">
+                <p class="call__line">行！く！ぞー！→ウリャオイ！ウリャオイ！ウリャオイ！ウリャオイ！ → シャー行くぞ → スタンダード</p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">3Bメロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーコール</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">ラスサビ</p>
+              <div class="call__body">
+                <p class="call__line">振りコピとか</p>
+                <p class="call__line">まなパートのラストにクラップ4回のフリがあるのでそこ合わせられると気持ちいい</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">アウトロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p>
+              </div>
+            </div>
+          </div>
+        </section>
+            </div>
+          </div>
+        </section>
+
+        <!-- ピンク: この1バンドだけでキャプチャが完結する -->
+        <section class="band sheet-band sheet-band--blush" id="blush">
+          <div class="band__inner">
+            <p class="sheet__mark">🍭 ろりぽっぷ!!!!!!! 非公式コール表 ・ 2026年9月4日時点</p>
+            <h2 class="sheet__title">未完成ヒロイン</h2>
+            <div class="sheet">
+        <section class="block">
+          <h3 class="block__label">1番</h3>
+          <div class="calls">
+            <div class="call">
+              <p class="call__part">イントロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">Aメロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーコール</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">Bメロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーコール</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">サビ</p>
+              <div class="call__body">
+                <p class="call__line">振りコピとか</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">間奏</p>
+              <div class="call__body">
+                <p class="call__line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h3 class="block__label">2番</h3>
+          <div class="calls">
+            <div class="call">
+              <p class="call__part">2Aメロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーコール</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">2Bメロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーコール</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">2サビ</p>
+              <div class="call__body">
+                <p class="call__line">振りコピとか</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">Cメロ</p>
+              <div class="call__body">
+                <p class="call__line">「大丈夫さー」のあとに「アーアーアーアー」と歌ったり歌わなかったり</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h3 class="block__label">ラスト</h3>
+          <div class="calls">
+            <div class="call">
+              <p class="call__part">2間奏</p>
+              <div class="call__body">
+                <p class="call__line">行！く！ぞー！→ウリャオイ！ウリャオイ！ウリャオイ！ウリャオイ！ → シャー行くぞ → スタンダード</p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">3Bメロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーコール</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">ラスサビ</p>
+              <div class="call__body">
+                <p class="call__line">振りコピとか</p>
+                <p class="call__line">まなパートのラストにクラップ4回のフリがあるのでそこ合わせられると気持ちいい</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">アウトロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p>
+              </div>
+            </div>
+          </div>
+        </section>
+            </div>
+          </div>
+        </section>
+
+        <!-- 紺: この1バンドだけでキャプチャが完結する -->
+        <section class="band sheet-band sheet-band--navy" id="navy">
+          <div class="band__inner">
+            <p class="sheet__mark">🍭 ろりぽっぷ!!!!!!! 非公式コール表 ・ 2026年9月4日時点</p>
+            <h2 class="sheet__title">未完成ヒロイン</h2>
+            <div class="sheet">
+        <section class="block">
+          <h3 class="block__label">1番</h3>
+          <div class="calls">
+            <div class="call">
+              <p class="call__part">イントロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">Aメロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーコール</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">Bメロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーコール</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">サビ</p>
+              <div class="call__body">
+                <p class="call__line">振りコピとか</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">間奏</p>
+              <div class="call__body">
+                <p class="call__line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h3 class="block__label">2番</h3>
+          <div class="calls">
+            <div class="call">
+              <p class="call__part">2Aメロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーコール</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">2Bメロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーコール</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">2サビ</p>
+              <div class="call__body">
+                <p class="call__line">振りコピとか</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">Cメロ</p>
+              <div class="call__body">
+                <p class="call__line">「大丈夫さー」のあとに「アーアーアーアー」と歌ったり歌わなかったり</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="block">
+          <h3 class="block__label">ラスト</h3>
+          <div class="calls">
+            <div class="call">
+              <p class="call__part">2間奏</p>
+              <div class="call__body">
+                <p class="call__line">行！く！ぞー！→ウリャオイ！ウリャオイ！ウリャオイ！ウリャオイ！ → シャー行くぞ → スタンダード</p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">3Bメロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーコール</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">ラスサビ</p>
+              <div class="call__body">
+                <p class="call__line">振りコピとか</p>
+                <p class="call__line">まなパートのラストにクラップ4回のフリがあるのでそこ合わせられると気持ちいい</p>
+                <p class="call__line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p>
+              </div>
+            </div>
+            <div class="call">
+              <p class="call__part">アウトロ</p>
+              <div class="call__body">
+                <p class="call__line">メンバーのフリに合わせて、腕を前で合わせながら左右に移動。合わせてオイオイ叫んでも楽しい</p>
+              </div>
+            </div>
+          </div>
+        </section>
+            </div>
+          </div>
         </section>
 
         <!-- プラム黒: 注記とフッターを兼ねる -->
