@@ -66,6 +66,8 @@ PALETTES = {
             "meta": "#998a92",
             "line": "#f2e2ea",
             "ring": "#f6d3e3",
+            "accent": "#d6006e",
+            "on-accent": "#ffffff",
         },
     },
     "beige": {
@@ -78,6 +80,8 @@ PALETTES = {
             "meta": "#9a8d7c",
             "line": "#e6dbc9",
             "ring": "#ddd0ba",
+            "accent": "#b0005b",
+            "on-accent": "#ffffff",
         },
     },
     "blush": {
@@ -90,6 +94,8 @@ PALETTES = {
             "meta": "#998a92",
             "line": "#f6d3e3",
             "ring": "#f6d3e3",
+            "accent": "#d6006e",
+            "on-accent": "#ffffff",
         },
     },
     "navy": {
@@ -102,6 +108,9 @@ PALETTES = {
             "meta": "#8fa0c0",
             "line": "#26334f",
             "ring": "transparent",  # 白いドットは暗い面では輪郭が要らない
+            # 暗い面では濃いピンクが沈むので、design.md に倣って明るいピンクに反転する
+            "accent": "#ff9ecb",
+            "on-accent": "#101b2f",
         },
         "members": {
             "--mc-kurumi": "#ff5f5f",
@@ -550,8 +559,8 @@ body {
 }
 
 .card {
-  width: 1350px;
-  padding: 72px 64px;
+  width: 1800px;
+  padding: 76px 72px;
   background-color: var(--ground);
   color: var(--text);
   display: flex;
@@ -560,48 +569,51 @@ body {
 }
 
 .card__mark {
-  margin: 0 0 14px;
+  margin: 0 0 16px;
   color: var(--meta);
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 700;
   letter-spacing: 0.06em;
   line-height: 1.4;
 }
 
 .card__title {
-  margin: 0 0 8px;
+  margin: 0 0 10px;
   color: var(--title);
-  font-size: 92px;
+  font-size: 104px;
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.02em;
 }
 
-/* かたまりの見出し。行の流れを切るだけなので、面や枠は作らない */
+/* かたまりの見出し。1番 / 2番 / ラストを色の帯にして、上に間を空けて積む。
+   帯があると3つのまとまりが一目で分かり、どこを見ているか迷わない */
 .block {
-  margin: 30px 0 10px;
-  color: var(--title);
-  font-size: 38px;
+  margin: 56px 0 0;
+  padding: 14px 26px;
+  background-color: var(--accent);
+  color: var(--on-accent);
+  font-size: 42px;
   font-weight: 700;
   line-height: 1.3;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
 }
 
 .block:first-child { margin-top: 0; }
 
 .card__sub {
-  margin: 0 0 30px;
+  margin: 0 0 34px;
   color: var(--sub);
-  font-size: 36px;
+  font-size: 40px;
   font-weight: 700;
   letter-spacing: 0.1em;
   line-height: 1.4;
 }
 
 .card__note {
-  margin: 30px 0 0;
+  margin: 34px 0 0;
   color: var(--meta);
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 500;
   line-height: 1.6;
 }
@@ -611,20 +623,20 @@ body {
 /* 1行 = 1パート。左にパート名、右に中身 */
 .row {
   display: grid;
-  grid-template-columns: 168px 1fr;
-  gap: 0 20px;
-  padding: 16px 0;
+  grid-template-columns: 190px 1fr;
+  gap: 0 26px;
+  padding: 18px 0;
   border-bottom: 3px solid var(--line);
 }
 
-.block + .row { border-top: 3px solid var(--line); }
+
 
 .row__part {
   margin: 0;
   color: var(--meta);
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 700;
-  line-height: 1.95;
+  line-height: 1.9;
   letter-spacing: 0.02em;
 }
 
@@ -635,10 +647,10 @@ body {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 6px 20px;
+  gap: 6px 22px;
   margin: 0;
   color: var(--text);
-  font-size: 48px;
+  font-size: 54px;
   font-weight: 500;
   line-height: 1.4;
 }
@@ -646,24 +658,24 @@ body {
 /* 説明文は一段小さく。読むのは目を留めたときでいい */
 .line--note {
   display: block;
-  font-size: 34px;
+  font-size: 38px;
   font-weight: 400;
   line-height: 1.5;
   color: var(--sub);
 }
 
 /* 「イントロと同じ」の繰り返しは、本文より落として流し読みできるように */
-.line--same { font-size: 36px; font-weight: 400; color: var(--sub); }
+.line--same { font-size: 40px; font-weight: 400; color: var(--sub); }
 
 .line + .line { margin-top: 4px; }
 
 /* メンバー名は担当カラーのドット付きで */
 .chips { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; }
-.chip { display: inline-flex; align-items: center; gap: 13px; color: var(--title); font-weight: 700; }
-.chip__arrow { margin-right: 5px; color: var(--meta); font-size: 34px; font-weight: 400; }
-.chip__label { color: var(--sub); font-size: 36px; }
+.chip { display: inline-flex; align-items: center; gap: 15px; color: var(--title); font-weight: 700; }
+.chip__arrow { margin-right: 6px; color: var(--meta); font-size: 38px; font-weight: 400; }
+.chip__label { color: var(--sub); font-size: 40px; }
 
-.dot { width: 34px; height: 34px; border-radius: 9999px; flex: none; }
+.dot { width: 38px; height: 38px; border-radius: 9999px; flex: none; }
 .dot--outline { box-shadow: inset 0 0 0 2px var(--ring); }
 </style>"""
 

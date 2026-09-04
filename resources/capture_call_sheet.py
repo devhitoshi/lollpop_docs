@@ -7,7 +7,7 @@
 
 **縦型（既定・SNSに載せるのはこっち）**
   resources/call_sheet_cards.html のカードを撮る。**1曲 = 1枚**。
-  出力は resources/img/call_sheet_<色>.png（2700x5848 / 実寸2倍の高解像度）。
+  出力は resources/img/call_sheet_<色>.png（3600x5956 / 実寸2倍の高解像度）。
   1曲を3枚に割ると、SNSで1曲のコール表が散らばって追えない。横長1枚に
   詰め込むと本文が4px相当まで縮んで拡大しないと読めない。どちらも試して
   却下し、縦1枚に落ち着いた（2026-09-04）。
@@ -69,19 +69,36 @@ async def check_font(page, selector: str) -> None:
 
 
 async def capture_portrait(browser) -> list[Path]:
-    """縦型カード。カードはHTML側で幅1350に組んであるので、そのまま撮る。"""
-    page = await browser.new_page(
-        viewport={"width": 1500, "height": 2000}, device_scale_factor=SCALE
-    )
+    """縦型カード。カードはHTML側で幅を決めているので、そのまま撮る。
+
+    ビューポートはカードより広く取る。狭いとカードがはみ出し、切れた画像が
+    書き出される。しかも切れた画像も寸法だけは正しいので、出力の大きさを見ても
+    気づけない（実際に見逃した）。だから撮る前に、カードが横方向で
+    ビューポートに収まっているかを確かめる。
+    """
+    page = await browser.new_page(viewport={"width": 1200, "height": 1600}, device_scale_factor=SCALE)
     await page.goto(CARDS_PAGE.as_uri())
     await page.wait_for_timeout(1500)
     await check_font(page, ".line")
 
+    # カードの実寸に合わせてビューポートを広げる（HTML側で幅を変えても追従する）
+    card_width = await page.eval_on_selector(".card", "el => el.getBoundingClientRect().width")
+    viewport_width = round(card_width) + 160
+    await page.set_viewport_size({"width": viewport_width, "height": 1600})
+    await page.wait_for_timeout(300)
+
     written = []
     for card_id in await page.eval_on_selector_all(".card", "els => els.map(el => el.id)"):
         key = card_id.removeprefix("card-")  # id は card-<色>
+        card = await page.query_selector(f"#{card_id}")
+        box = await card.bounding_box()
+        if box["x"] < 0 or box["x"] + box["width"] > viewport_width:
+            sys.exit(
+                f"カード（幅{round(box['width'])}）がビューポート（幅{viewport_width}）に収まっていない。"
+                "このまま撮ると切れた画像になる。"
+            )
         path = OUT_DIR / f"call_sheet_{key}.png"
-        await (await page.query_selector(f"#{card_id}")).screenshot(path=path)
+        await card.screenshot(path=path)
         written.append(path)
     await page.close()
     return written
