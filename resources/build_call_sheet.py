@@ -620,24 +620,24 @@ body {
 
 .rows { border-top: 3px solid var(--line); }
 
-/* 1行 = 1パート。左にパート名、右に中身 */
+/* 1パート = 3段。曲の構成 → やること → メンバーパートの順に上から積む。
+   段を横に並べると1行に収まって縦は短くなるが、種類の違う情報が同じ行に
+   混ざって読みにくい。縦に分けたほうが目が迷わない */
 .row {
-  display: grid;
-  grid-template-columns: 190px 1fr;
-  gap: 0 26px;
-  padding: 18px 0;
+  padding: 20px 0 22px;
   border-bottom: 3px solid var(--line);
 }
 
 
 
+/* 1段目: 曲の構成（Aメロ・サビ…）。本文より小さく、色も落として見出しにする */
 .row__part {
-  margin: 0;
+  margin: 0 0 6px;
   color: var(--meta);
   font-size: 36px;
   font-weight: 700;
-  line-height: 1.9;
-  letter-spacing: 0.02em;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
 }
 
 .row__body { min-width: 0; }
@@ -667,7 +667,7 @@ body {
 /* 「イントロと同じ」の繰り返しは、本文より落として流し読みできるように */
 .line--same { font-size: 40px; font-weight: 400; color: var(--sub); }
 
-.line + .line { margin-top: 4px; }
+.line + .line { margin-top: 8px; }
 
 /* メンバー名は担当カラーのドット付きで */
 .chips { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; }
@@ -722,33 +722,21 @@ def part_lines(part: Part) -> list[str]:
 
 
 def render_lines(lines: list[str]) -> str:
-    """行をまとめる。パートの1行目とメンバーの並びは大きく、補足は一段小さく。
+    """1パートを3段で出す。上から「やること」→「メンバーパート」。
+
+    パート名（曲の構成）は呼び出し側が上に置くので、ここは2段目から。
+    「メンバーコール」と「あみ→くるみ」は別の行にする。横に並べると1行に
+    収まって縦は短くなるが、やることとメンバーが同じ行に混ざって読みにくい。
 
     1行目は「そのパートで何をするか」なので必ず大きくする。長い説明でも小さくすると、
     イントロや2間奏（MIXの掛け声）のように文で書かれたパートだけ弱く見えてしまう。
     2行目以降の補足（コツや但し書き）は一段落として、目を留めたときに読めればいい。
-
-    「メンバーコール」と「あみ→くるみ」は別々の行にすると縦を倍使うので、
-    横に並べて入るなら1行に流す（入らなければ折り返す）。
     """
     out = []
-    index = 0
-    while index < len(lines):
-        line = lines[index]
-        first = not out
-        is_route = bool(ROUTE_RE.match(line))
-
-        if not first and not is_route and len(line) > SHORT:
-            out.append(f'<p class="line line--note">{render_text(line)}</p>')
-            index += 1
-            continue
-
-        chunk = [render_text(line)]
-        index += 1
-        while index < len(lines) and ROUTE_RE.match(lines[index]):
-            chunk.append(render_text(lines[index]))
-            index += 1
-        out.append(f'<p class="line">{"".join(chunk)}</p>')
+    for index, line in enumerate(lines):
+        note = index and not ROUTE_RE.match(line) and len(line) > SHORT
+        cls = "line line--note" if note else "line"
+        out.append(f'<p class="{cls}">{render_text(line)}</p>')
     return "".join(out)
 
 

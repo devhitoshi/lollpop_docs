@@ -7,7 +7,8 @@
 
 **縦型（既定・SNSに載せるのはこっち）**
   resources/call_sheet_cards.html のカードを撮る。**1曲 = 1枚**。
-  出力は resources/img/call_sheet_<色>.png（3600x5956 / 実寸2倍の高解像度）。
+  1パートを3段（曲の構成 → やること → メンバーパート）で積む。
+  出力は resources/img/call_sheet_<色>.png（2700x6126 / 実寸1.5倍）。
   1曲を3枚に割ると、SNSで1曲のコール表が散らばって追えない。横長1枚に
   詰め込むと本文が4px相当まで縮んで拡大しないと読めない。どちらも試して
   却下し、縦1枚に落ち着いた（2026-09-04）。
@@ -39,7 +40,9 @@ CARDS_PAGE = ROOT / "resources" / "call_sheet_cards.html"
 OUT_DIR = ROOT / "resources" / "img"
 LANDSCAPE_WIDTH = 1440
 LANDSCAPE_RATIO = 9 / 16
-SCALE = 2
+# 実寸の倍率。3段構成にして縦が伸びたので、2倍だと高さが8000pxを超えて
+# X の上限（8192px）に迫る。1.5倍でも幅2700pxあり、SNSには十分な解像度。
+SCALE = 1.5
 FONT = "Noto Sans JP"
 
 # フォントが無い環境で撮ろうとしたときに出す直し方

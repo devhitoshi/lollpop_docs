@@ -115,24 +115,24 @@ body {
 
 .rows { border-top: 3px solid var(--line); }
 
-/* 1行 = 1パート。左にパート名、右に中身 */
+/* 1パート = 3段。曲の構成 → やること → メンバーパートの順に上から積む。
+   段を横に並べると1行に収まって縦は短くなるが、種類の違う情報が同じ行に
+   混ざって読みにくい。縦に分けたほうが目が迷わない */
 .row {
-  display: grid;
-  grid-template-columns: 190px 1fr;
-  gap: 0 26px;
-  padding: 18px 0;
+  padding: 20px 0 22px;
   border-bottom: 3px solid var(--line);
 }
 
 
 
+/* 1段目: 曲の構成（Aメロ・サビ…）。本文より小さく、色も落として見出しにする */
 .row__part {
-  margin: 0;
+  margin: 0 0 6px;
   color: var(--meta);
   font-size: 36px;
   font-weight: 700;
-  line-height: 1.9;
-  letter-spacing: 0.02em;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
 }
 
 .row__body { min-width: 0; }
@@ -162,7 +162,7 @@ body {
 /* 「イントロと同じ」の繰り返しは、本文より落として流し読みできるように */
 .line--same { font-size: 40px; font-weight: 400; color: var(--sub); }
 
-.line + .line { margin-top: 4px; }
+.line + .line { margin-top: 8px; }
 
 /* メンバー名は担当カラーのドット付きで */
 .chips { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; }
@@ -242,15 +242,15 @@ body {
         </div>
         <div class="row">
           <p class="row__part">Aメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">Bメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">サビ</p>
-          <div class="row__body"><p class="line">振りコピとか<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span></span></p></div>
+          <div class="row__body"><p class="line">振りコピとか</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">間奏</p>
@@ -259,19 +259,19 @@ body {
         <p class="block">2番</p>
         <div class="row">
           <p class="row__part">2Aメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">2Bメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">2サビ</p>
-          <div class="row__body"><p class="line">振りコピとか<span class="chips"><span class="chip"><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
+          <div class="row__body"><p class="line">振りコピとか</p><p class="line"><span class="chips"><span class="chip"><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">Cメロ</p>
-          <div class="row__body"><p class="line">「大丈夫さー」のあとに「アーアーアーアー」と歌ったり歌わなかったり<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
+          <div class="row__body"><p class="line">「大丈夫さー」のあとに「アーアーアーアー」と歌ったり歌わなかったり</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
         </div>
         <p class="block">ラスト</p>
         <div class="row">
@@ -306,15 +306,15 @@ body {
         </div>
         <div class="row">
           <p class="row__part">Aメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">Bメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">サビ</p>
-          <div class="row__body"><p class="line">振りコピとか<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span></span></p></div>
+          <div class="row__body"><p class="line">振りコピとか</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">間奏</p>
@@ -323,19 +323,19 @@ body {
         <p class="block">2番</p>
         <div class="row">
           <p class="row__part">2Aメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">2Bメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">2サビ</p>
-          <div class="row__body"><p class="line">振りコピとか<span class="chips"><span class="chip"><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
+          <div class="row__body"><p class="line">振りコピとか</p><p class="line"><span class="chips"><span class="chip"><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">Cメロ</p>
-          <div class="row__body"><p class="line">「大丈夫さー」のあとに「アーアーアーアー」と歌ったり歌わなかったり<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
+          <div class="row__body"><p class="line">「大丈夫さー」のあとに「アーアーアーアー」と歌ったり歌わなかったり</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
         </div>
         <p class="block">ラスト</p>
         <div class="row">
@@ -370,15 +370,15 @@ body {
         </div>
         <div class="row">
           <p class="row__part">Aメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">Bメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">サビ</p>
-          <div class="row__body"><p class="line">振りコピとか<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span></span></p></div>
+          <div class="row__body"><p class="line">振りコピとか</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">間奏</p>
@@ -387,19 +387,19 @@ body {
         <p class="block">2番</p>
         <div class="row">
           <p class="row__part">2Aメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">2Bメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">2サビ</p>
-          <div class="row__body"><p class="line">振りコピとか<span class="chips"><span class="chip"><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
+          <div class="row__body"><p class="line">振りコピとか</p><p class="line"><span class="chips"><span class="chip"><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">Cメロ</p>
-          <div class="row__body"><p class="line">「大丈夫さー」のあとに「アーアーアーアー」と歌ったり歌わなかったり<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
+          <div class="row__body"><p class="line">「大丈夫さー」のあとに「アーアーアーアー」と歌ったり歌わなかったり</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
         </div>
         <p class="block">ラスト</p>
         <div class="row">
@@ -434,15 +434,15 @@ body {
         </div>
         <div class="row">
           <p class="row__part">Aメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">Bメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">サビ</p>
-          <div class="row__body"><p class="line">振りコピとか<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span></span></p></div>
+          <div class="row__body"><p class="line">振りコピとか</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">間奏</p>
@@ -451,19 +451,19 @@ body {
         <p class="block">2番</p>
         <div class="row">
           <p class="row__part">2Aメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">2Bメロ</p>
-          <div class="row__body"><p class="line">メンバーコール<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
+          <div class="row__body"><p class="line">メンバーコール</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-mau);" aria-hidden="true"></span>まう</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">2サビ</p>
-          <div class="row__body"><p class="line">振りコピとか<span class="chips"><span class="chip"><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
+          <div class="row__body"><p class="line">振りコピとか</p><p class="line"><span class="chips"><span class="chip"><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-mayu);" aria-hidden="true"></span>おまゆ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot" style="background-color: var(--mc-ami);" aria-hidden="true"></span>あみ</span><span class="chip"><span class="chip__arrow" aria-hidden="true">→</span><span class="dot dot--outline" style="background-color: var(--mc-mana);" aria-hidden="true"></span>まな</span></span></p></div>
         </div>
         <div class="row">
           <p class="row__part">Cメロ</p>
-          <div class="row__body"><p class="line">「大丈夫さー」のあとに「アーアーアーアー」と歌ったり歌わなかったり<span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
+          <div class="row__body"><p class="line">「大丈夫さー」のあとに「アーアーアーアー」と歌ったり歌わなかったり</p><p class="line"><span class="chips"><span class="chip"><span class="dot" style="background-color: var(--mc-kurumi);" aria-hidden="true"></span>くるみ</span></span></p></div>
         </div>
         <p class="block">ラスト</p>
         <div class="row">
