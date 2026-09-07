@@ -32,7 +32,7 @@ if [ -n "${TWITTERAPI_IO_KEY:-}" ] || [ -f .env ]; then echo "twitterapi.io キ�
 if ls work/x_fetch/*.jsonl >/dev/null 2>&1; then
   echo "取得済み X 投稿: $(ls work/x_fetch/*.jsonl | xargs -n1 basename | tr '\n' ' ')"
 else
-  echo "取得済み X 投稿: なし（週刊・月刊を書くなら先に x-account-fetch）"
+  echo "取得済み X 投稿: なし（週刊なら weekly-pipeline の --stage collect から）"
 fi
 echo "引き継ぎの正: articles/*/README.md の「未解決」節と CLAUDE.md の進行中セクション（終わりに session-handoff で更新）"
 exit 0

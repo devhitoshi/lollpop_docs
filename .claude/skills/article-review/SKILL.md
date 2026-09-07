@@ -43,6 +43,7 @@ description: note 記事（articles/ 配下）を公開・マージする前に�
 | MEMBER_EMOJI / NICKNAME_FIRST | 担当カラーの絵文字違い、月刊で愛称の初出に本名が無い | members.md / monthly.md |
 | GRADUATED / SENSITIVE / SPECULATION | 卒業メンバー・数字・運営・体調・推測表現への言及（要判断） | style_ai_poppar.md / CLAUDE.md |
 | SONG_NOTATION | 同じ曲の表記が記事内で揺れている、楽曲一覧との違い | songs/楽曲一覧.md |
+| IMAGE_RIGHTS | pbs.twimg.com / video.twimg.com など twimg.com の画像URLを直貼りしている疑い | style_ai_poppar.md（メンバー写真を直貼りしない） |
 | MISSING_EVENT / DATE_NOT_IN_CSV / EVENT_COUNT | CSV にある公演が記事に無い、記事の公演数が CSV と違う | events/data_event.csv |
 | JARGON / PARAGRAPH / SOURCES / MEMO | 月刊の注釈、段落の長さ、出典節、編集メモ | monthly.md / style / articles README |
 

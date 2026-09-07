@@ -20,11 +20,13 @@ import json
 import os
 import random
 import re
+import shutil
 import sys
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from datetime import date
 
 # 既存スキル（setlist-analysis）と同じ流儀で、どこから実行してもリポジトリルートを基準にする。
 # スクリプトを別階層へ移した場合はこの階層数を直すこと。
@@ -165,6 +167,54 @@ def usd(credits):
     return credits / CREDITS_PER_USD
 
 
+def refresh_period(out_dir, accounts, since, until):
+    """--since〜--until の期間に入る既存行を各アカウントの jsonl から除去する（weekly-pipeline の --refresh から呼ぶ）。
+
+    `until` はこのスクリプトの慣習どおり「終了日+1日」（exclusive）で渡される前提。削除は since <= 日付 < until。
+    削除前に必ず `<out_dir>_bak_<today>/` へコピーする（既定の out_dir なら work/x_fetch_bak_<date>/。
+    2026-09-07 に手作業で行ったのと同じ運用）。既定動作（--refresh を付けないとき）は変えない。
+    """
+    parent, name = os.path.split(os.path.normpath(out_dir))
+    backup_dir = os.path.join(parent, f"{name}_bak_{date.today().isoformat()}")
+
+    plan = {}
+    for handle, _ in accounts:
+        path = os.path.join(out_dir, f"{handle}.jsonl")
+        if not os.path.exists(path):
+            continue
+        kept, removed = [], 0
+        with open(path, encoding="utf-8") as f:
+            for line in f:
+                s = line.strip()
+                if not s:
+                    continue
+                try:
+                    t = json.loads(s)
+                except json.JSONDecodeError:
+                    kept.append(line if line.endswith("\n") else line + "\n")
+                    continue
+                d = tweet_date(t)
+                if d and since <= d < until:
+                    removed += 1
+                else:
+                    kept.append(line if line.endswith("\n") else line + "\n")
+        if removed:
+            plan[path] = (kept, removed)
+
+    if not plan:
+        print(f"--refresh: {since}〜{until} に該当する既存行は無し（削除不要）")
+        return
+
+    os.makedirs(backup_dir, exist_ok=True)
+    for path in plan:
+        shutil.copy2(path, os.path.join(backup_dir, os.path.basename(path)))
+    for path, (kept, removed) in plan.items():
+        with open(path, "w", encoding="utf-8") as f:
+            f.writelines(kept)
+        print(f"  --refresh: {os.path.basename(path)} から {removed} 件削除")
+    print(f"バックアップ: {backup_dir}")
+
+
 def fetch_account(handle, since, until, max_tweets, out_dir, api_key):
     """1アカウント分を全件列挙して JSONL に保存する。中断・再開対応。"""
     out_path = os.path.join(out_dir, f"{handle}.jsonl")
@@ -288,6 +338,9 @@ def main():
     p.add_argument("--yes", action="store_true", help="事前確認を省略する")
     p.add_argument("--draft-only", action="store_true",
                    help="APIを叩かず、取得済みのJSONLからドラフトだけ作り直す（課金なし）")
+    p.add_argument("--refresh", action="store_true",
+                   help="--since〜--until の期間に入る既存行を各アカウントのjsonlから削除してから取得し直す"
+                        "（削除前に <out-dir>_bak_<今日の日付>/ へバックアップ。既定動作は変えない）")
     args = p.parse_args()
 
     if args.max_tweets_per_account <= 0:
@@ -304,6 +357,9 @@ def main():
             accounts.append((handle.strip().lstrip("@"), label.strip()))
 
     os.makedirs(args.out_dir, exist_ok=True)
+
+    if args.refresh and not args.draft_only:
+        refresh_period(args.out_dir, accounts, args.since, args.until)
 
     if args.draft_only:
         # 課金なし。クレジット切れで途中終了したときなど、取得済み分だけで作り直すため。

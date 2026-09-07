@@ -38,6 +38,7 @@ COLOR_EMOJI = {'赤': '❤️', '黄': '💛', '水色': '🩵', '緑': '💚', 
 MEMBER_EMOJI = set(COLOR_EMOJI.values())
 URL_RE = re.compile(r'https?://\S+')
 QUOTE_RE = re.compile(r'「[^「」]*」|『[^『』]*』|“[^”]*”')
+TWIMG_RE = re.compile(r'https?://(?:[\w-]+\.)?twimg\.com\S*', re.I)
 
 
 class Report:
@@ -282,6 +283,16 @@ def check_songs(body, songs, rep):
             rep.info('SONG_NOTATION', f"「{next(iter(variants))}」は楽曲一覧では「{song}」（投稿の表記ママなら可）")
 
 
+def check_image_rights(body, rep):
+    """メンバー写真の直貼り疑い。pbs.twimg.com / video.twimg.com などの直リンクは、
+    Markdown画像（![]()）でも生URLでも検出する。X 埋め込み（裸URL単独行）や自作図版に差し替える。
+    """
+    for m in TWIMG_RE.finditer(body):
+        rep.warn('IMAGE_RIGHTS',
+                  f"twimg.com の画像URLを直接貼っている疑い（メンバー写真は事務所の著作物。"
+                  f"X 埋め込みか自作図版に差し替える）: …{snippet(body, m.start())}…")
+
+
 def check_events(body, kind, start, end, rep):
     if not start:
         return
@@ -362,6 +373,7 @@ def main():
     check_members(body, plain, kind, members, rep)
     check_content(plain, kind, rep)
     check_songs(body, songs, rep)
+    check_image_rights(body, rep)
     check_events(body, kind, start, end, rep)
     check_structure(body, memo, kind, rep)
 

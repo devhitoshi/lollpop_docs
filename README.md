@@ -79,5 +79,12 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 ## 公式サイト
 https://flapinc.jp/lollipop/about
 
+## リポジトリ名の綴りについて
+
+`lollpop_docs` / `lollpop_data` の `lollpop` は、公式の `lollipop` に対して 1 文字足りない。typo だが **意図的にこのまま**にしている
+（2026-09-02 にオーナーが「かわいいし」で現状維持を決定）。GitHub Pages の URL（`devhitoshi.github.io/lollpop_docs/`）はリポジトリを
+改名するとリダイレクトされず切れる、という実害もある。**修正提案はしない。** 新しく関連リポジトリを作るときも `lollpop` に揃える。
+本文中のグループ名表記や `lollipop_1116.jsonl` のようなデータファイル名は `lollipop` のままでよい（揃えるのはリポジトリ／ディレクトリ名だけ）。
+
 ## 参照ページ
 https://devhitoshi.github.io/lollpop_docs/resources/index.html
