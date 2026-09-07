@@ -13,7 +13,7 @@
 - **文体**: note 用記事は [`prompts/write/style_ai_poppar.md`](./prompts/write/style_ai_poppar.md)（AIぽっぱー）に従う。note は表組み不可・見出しは2階層まで。
 - **メンバー情報**: 基本情報の正は [`members/members.md`](./members/members.md)。人物像は [`members/`](./members/) のデータに根拠がある範囲だけ書く。卒業メンバーの卒業後の活動・私生活には踏み込まない。運営の意図・体調・人間関係の推測は書かない。
 - **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計・公演データの整合性チェック・セトリ白書の図表は `.claude/skills/setlist-analysis`、曲調解析は `.claude/skills/music-analysis`、公式・メンバーのX投稿取得は `.claude/skills/x-account-fetch`、周囲の反応（エゴサーチ）は `.claude/skills/x-egosearch`、週刊・月刊の下書きは `.claude/skills/weekly-monthly-draft`、メンバーの人物像の更新は `.claude/skills/member-profile-refresh` の手順に従う。コール表のSNS画像はスキルにしていないので、[`resources/call_sheet_requirements.md`](./resources/call_sheet_requirements.md) を読んでから作る。
-- **調査・分析**: 戦略の定点観測（フォロワー数・UGC・公式の発信量）は `.claude/skills/strategy-metrics`、Web 調査（市場・競合・業界）は `.claude/skills/web-research`。出典と確認日を付け、評価語を書かない。
+- **調査・分析**: 戦略の定点観測（フォロワー数・UGC・公式の発信量）は `.claude/skills/strategy-metrics`、Web 調査（市場・競合・業界）は `.claude/skills/web-research`。出典と確認日を付け、評価語を書かない。調査メモは `strategy/research_YYYY-MM-DD_<題名>.md`。
 - **記事の公開前レビュー**: note 記事を書き終えたら、PR を作る前に `.claude/skills/article-review`（機械チェック＋読み取り専用エージェント `article-review`）を通す。手戻りの多い「公演の抜け」「公演数の誤り」「表記ゆれ」「文体の崩れ」を資料と突き合わせて拾う。
 - **セッションの終わり**: `.claude/skills/session-handoff` の手順で、各シリーズ README の「未解決」と CLAUDE.md の進行中セクションを更新してからコミット・push する。
 - **デザイン**: `resources/` のHTMLを触るときは [`design.md`](./design.md)（色・タイポ・バンド構成の正）に従う。実装は `resources/css/style.css`。単一ファイル完結のHTML（セトリ白書・成長戦略）には同じトークン値が転記されている。
@@ -74,8 +74,22 @@
   試作1本（8/26単独＋8/30カモガワ＋8/31の縦写真、24秒）を作って構成は確認済み。**書き出しは `work/` に置きコミットしない。**
 - **クレジットは必ず入れる**（オーナー方針・2026-09-02）。`make_vertical.py` が `manifest.csv` の出典から
   文面を作って全区間に焼き込む。外す引数は無く、出典が引けない素材は spec に `"credit"` を書かないと止まる。
+- **運用の設計は [`strategy/short_video_playbook.md`](./strategy/short_video_playbook.md)（2026-09-05 作成・2026-09-07 改訂）。**
+  アカウント設計（扱う範囲と名前）・番組表・月のリズム・1本ごとのチェックリスト・90日の進め方まで。
+  事例と出典は `strategy/research_2026-09-05_ショート動画運用の事例.md`。要点:
+  ①**ろりぽっぷ単独が軸**。売れている他グループを混ぜてリーチを借りる形は取らない（大手は撮影不可が基本で素材が無く、
+  アカウントの軸もぶれる）。「可愛い女の子紹介チャンネルの体裁でろりぽっぷを挟む」案も検討して**不採用**
+  （素材の壁は看板を変えても消えない・看板で釣る利得は小さい・不満は本体に跳ね返る）。入口はトピックで広げる
+  （「はじめての対バン」「500円で行けるライブ」など、例が全部ろりぽっぷになる形）。幅は**対バンの共演者への言及・引用**まで ②**コール講座と個別の公演告知は落とした**
+  （オーナー判断・2026-09-07。ライブはコールしなくてよい／公演は月平均14.8本あって告知はキリがない）。
+  代わりに TimeTree と公式X への**恒常導線**をプロフィールと固定コメントに固定し、動画には日付を焼き込まない
+  ③**主力の型は「X の反応集」**（オーナー判断・2026-09-07）。台本の在庫は `data/x/egosearch_<期間>_reactions.md`
+  （2026年8月は判定済み349件）。引用の作法は playbook 7.3（反応だけを並べない／@handle を消さない／文言を変えない／
+  引用部分を見た目で区別する／許諾済みを優先／ネガティブは使わない／使ったら本人に一言）
+  ④動画を撮れるのは主催系だけ（2026年は月平均2.8本）なので月8〜10本に絞る ⑤**X は JASRAC の UGC 許諾サービス一覧に無い**
+  ので動画本体は TikTok に置き、X はリンクで回す。
 - 待ち: 楽曲は TikTok のライブラリにあると確認済み。**書き出しは無音にして、アプリ内で公式音源を選ぶ。**
-  運営・メンバーの許諾の範囲（改変・クレジット・期限）は未確認。次に作るなら 9/20 単独ライブ Vol.19 の告知。
+  運営・メンバーの許諾の範囲（改変・クレジット・期限）は未確認（確認したい項目は playbook 11章に整理した）。次に作るなら 9/20 単独ライブ Vol.19 の告知。
 - 未解決: クレジットの文面は本来「許諾の属性」。いまは `media_permissions.md` が可否（OK／都度）しか持たず、
   文面を `make_vertical.py` 側で決め打ちしている。運営・メンバーに改変とクレジットの条件を確認したら、
   その回答を permissions.md の列にして、動画側は読むだけにする（個別条件を記憶でなく記録で扱うため）。

@@ -26,6 +26,7 @@ J-POPアイドルジャンルを中心に、ライブを通じて観客と一緒
 - [はじめての方へ / スターターパック (guide/starter_pack.md)](./guide/starter_pack.md)
 - [楽曲一覧 (songs/楽曲一覧.md)](./songs/楽曲一覧.md)
 - [市場・競合分析と成長戦略 (strategy/growth_strategy.md)](./strategy/growth_strategy.md) ／ [解説HTML版 (resources/growth_strategy.html)](./resources/growth_strategy.html)
+- [ショート動画の運用設計 (strategy/short_video_playbook.md)](./strategy/short_video_playbook.md)
 - [全曲コール表 (songs/call_list.md)](./songs/call_list.md)
 - [公式ルール・現場のマナー (guide/rules.md)](./guide/rules.md)
 - [メンバープロフィール (members/members.md)](./members/members.md)

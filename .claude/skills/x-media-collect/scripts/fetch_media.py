@@ -145,6 +145,10 @@ def main():
 
     permitted = [r for r in rows if r['author'].lower() in ok]
     skipped = [r for r in rows if r['author'].lower() not in ok]
+    # URL が索引に入っていない行がある（索引作成時にメディアの URL が取れなかったもの）。
+    # そのまま渡すと urllib が落ちるので、ここで外して件数だけ知らせる
+    nourl = [r for r in permitted if not (r['best_mp4'] or r['media_url'])]
+    permitted = [r for r in permitted if r['best_mp4'] or r['media_url']]
     by_skipped = {}
     for r in skipped:
         by_skipped[r['author']] = by_skipped.get(r['author'], 0) + 1
@@ -153,6 +157,9 @@ def main():
     if other:
         print("記録はあるが OK ではない: " + ', '.join(f"@{h}（{v}）" for h, v in other))
     print(f"対象 {len(permitted)} 件 / 索引の絞り込み後 {len(rows)} 件")
+    if nourl:
+        print(f"URL が索引に無いので落とせない: {len(nourl)} 件"
+              "（索引を作り直すと拾えることがある）")
     if by_skipped:
         top = sorted(by_skipped.items(), key=lambda x: -x[1])[:8]
         print(f"許諾の記録が無いので落とさない: {len(skipped)} 件（{len(by_skipped)} 人）"

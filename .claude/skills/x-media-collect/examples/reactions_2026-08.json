@@ -1,0 +1,27 @@
+{
+  "out": "work/x_media/vertical_reactions_2026-08.mp4",
+  "segments": [
+    {"file": "work/x_media/2026-08-26_lollipop_1116_2092609972186304774_1.mp4",
+     "start": 9, "duration": 5.5, "mute": true,
+     "top": "2026.8.26 単独ライブ", "bottom": "中野坂上SUB TOKYO"},
+
+    {"file": "work/x_media/2026-08-26_lollipop_1116_2092609972186304774_1.mp4",
+     "start": 20, "duration": 5.5, "mute": true,
+     "quote": {"text": "初見ながら楽しさ、気付き、羨ましさ(悔しさ？)などいろいろ食らって実によかった",
+               "handle": "@uskGAS", "date": "2026-08-02", "y": 1270}},
+
+    {"file": "work/x_media/2026-08-26_lollipop_1116_2092609972186304774_1.mp4",
+     "start": 44, "duration": 5.0, "mute": true,
+     "quote": {"text": "ろりぽっぷ以降の会場の盛り上がり大きく変わった",
+               "handle": "@0130y_hama", "date": "2026-08-22", "y": 1330}},
+
+    {"file": "work/x_media/2026-08-26_lollipop_1116_2092609972186304774_1.mp4",
+     "start": 69, "duration": 5.5, "mute": true,
+     "quote": {"text": "初めて聴いたろりぽっぷ様の楽曲めちゃくちゃ可愛くて巡り会えて良かった",
+               "handle": "@hoshi_251219", "date": "2026-08-11", "y": 1270}},
+
+    {"file": "work/x_media/2026-08-26_lollipop_1116_2092603977661833309_1.jpg",
+     "duration": 4.5,
+     "top": "ろりぽっぷ!!!!!!!", "bottom": "予定は全部 TimeTree"}
+  ]
+}
