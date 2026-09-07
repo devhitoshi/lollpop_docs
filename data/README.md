@@ -31,6 +31,8 @@
 
  利用（同じデータを読む）
    ├─ weekly-monthly-draft   : 記事の素材（work/x_fetch/draft_material_*.md、コミットしない）
+   ├─ 縦型動画の「反応集」    : data/x/egosearch_<期間>_reactions.md をそのまま台本の在庫として読む
+   │                            （引用の作法は strategy/short_video_playbook.md 7.3。原文の長文転載はしない）
    ├─ strategy-metrics       : UGC 件数・公式の発信量 → strategy/metrics_<日付>.md
    ├─ member-profile-refresh : 投稿統計 → members/*.md の更新根拠
    ├─ setlist-analysis       : 公式のセトリ投稿と events/data_event.csv の突き合わせ
