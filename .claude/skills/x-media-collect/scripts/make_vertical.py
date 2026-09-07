@@ -15,6 +15,11 @@
     }
 
 - `file` が画像なら静止画の区間になる（`duration` 必須）
+- `"quote": {"text": "…", "handle": "@xxx", "date": "2026-08-02", "y": 1250}` を書くと **引用カード**の区間になる
+  （`y` はカードの上端。省略すると中央。横の映像に重ねるときは下げると映像が隠れない）
+  （X の反応集の型）。明るいカードに載せて自分のテロップと見た目で分け、@handle と日付を
+  カードの中に必ず入れる。文面は折り返すだけで書き換えない。作法は
+  strategy/short_video_playbook.md 7.3
 - `top` / `bottom` は改行を入れて複数行にできる
 - 音は各動画区間のものを使う。`"mute": true` で無音にできる
   （TikTok などでアプリ内の公式音源を選ぶ前提なら消しておく）
@@ -52,6 +57,14 @@ FONT_CANDIDATES = [
     '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc',
 ]
 IMAGE_EXT = {'.jpg', '.jpeg', '.png', '.webp'}
+# 引用カード（X の反応集）。design.md のトークン
+CARD_BG = '0xfff5f9@0.96'    # surface-soft
+CARD_ACCENT = '0xd6006e'     # primary。カードの左帯と引用元の色
+CARD_INK = '0x1d1216'        # ink。引用の本文
+CARD_MUTED = '0x71646b'      # muted。「X の投稿より引用」のラベル
+CARD_X, CARD_W = 90, 900
+CARD_PAD = 56
+QUOTE_SIZE, QUOTE_GAP = 46, 18
 MANIFEST = 'work/x_media/manifest.csv'
 CREDIT_Y = H - 62        # 下帯のいちばん下。テロップとぶつからない位置
 CREDIT_SIZE = 30
@@ -96,6 +109,65 @@ def drawtext_filters(text, font, y, size, color, line_gap=14):
             f":x=(w-text_w)/2:y={y + i * (size + line_gap)}:borderw=3:bordercolor=black@0.6"
         )
     return out
+
+
+def wrap_ja(text, size, width):
+    """日本語まじりの1行を、カードの幅に収まるように折り返す。
+
+    全角はだいたい font size ぶんの幅、半角はその半分として数える。
+    元の改行は残す（引用は改変しない）。
+    """
+    limit = width / size
+    out = []
+    for para in text.split('\n'):
+        line, w = '', 0.0
+        for ch in para:
+            cw = 0.5 if ord(ch) < 0x2000 else 1.0
+            if w + cw > limit and line:
+                out.append(line)
+                line, w = '', 0.0
+            line += ch
+            w += cw
+        out.append(line)
+    return out
+
+
+def quote_filters(quote, font):
+    """引用カードを描く drawbox / drawtext の並びを返す。
+
+    反応集（X の反応を引く型）用。**自分のテロップと見た目で区別する**ために、
+    明るい面のカードに載せて左に色の帯を置く。引用元（@handle と日付）は
+    カードの中に必ず入れる（出典の明示。トリミングで消さない）。
+    文面はここで折り返すだけで、書き換えない。
+    """
+    text = quote['text'].strip()
+    lines = wrap_ja(text, QUOTE_SIZE, CARD_W - CARD_PAD * 2 - 20)
+    label_h, foot_h = 52, 58
+    card_h = CARD_PAD * 2 + label_h + len(lines) * (QUOTE_SIZE + QUOTE_GAP) + foot_h
+    # 既定は中央。映像の上に重ねるときは "y" で下げると、映像が隠れない
+    card_y = int(quote['y']) if quote.get('y') else max(120, (H - card_h) // 2)
+    card_y = min(card_y, H - card_h - 120)
+    src = quote.get('handle', '')
+    if quote.get('date'):
+        src = f"{src}／{quote['date']}"
+    f = [
+        f"drawbox=x=0:y=0:w={W}:h={H}:color=black@0.28:t=fill",   # カードを浮かせるぶんだけ落とす
+        f"drawbox=x={CARD_X}:y={card_y}:w={CARD_W}:h={card_h}:color={CARD_BG}:t=fill",
+        f"drawbox=x={CARD_X}:y={card_y}:w=12:h={card_h}:color={CARD_ACCENT}:t=fill",
+        f"drawtext=fontfile='{font}':text='{esc(quote.get('label', 'X の投稿より引用'))}'"
+        f":fontcolor={CARD_MUTED}:fontsize=30:x={CARD_X + CARD_PAD}:y={card_y + CARD_PAD - 12}",
+    ]
+    y = card_y + CARD_PAD + label_h
+    for i, line in enumerate(lines):
+        f.append(
+            f"drawtext=fontfile='{font}':text='{esc(line)}':fontcolor={CARD_INK}"
+            f":fontsize={QUOTE_SIZE}:x={CARD_X + CARD_PAD}:y={y + i * (QUOTE_SIZE + QUOTE_GAP)}"
+        )
+    f.append(
+        f"drawtext=fontfile='{font}':text='{esc(src)}':fontcolor={CARD_ACCENT}:fontsize=32"
+        f":x={CARD_X + CARD_PAD}:y={card_y + card_h - CARD_PAD - 10}"
+    )
+    return f
 
 
 def load_manifest():
@@ -146,10 +218,17 @@ def build_segment(seg, idx, font, tmp, credit):
         "gblur=sigma=28,eq=brightness=-0.18[bg]",
         f"[0:v]scale={W}:-2[fg]",
         "[bg][fg]overlay=(W-w)/2:(H-h)/2[base]",
-        f"[base]drawbox=x=0:y=0:w={W}:h={BAND_H}:color={BAND}:t=fill,"
-        f"drawbox=x=0:y={H - BAND_H}:w={W}:h={BAND_H}:color={BAND}:t=fill[banded]",
     ]
+    # 帯はテロップを載せる下地。文字が無い区間では敷かない（引用カードの区間など）
+    if seg.get('top') or seg.get('bottom'):
+        chain.append(
+            f"[base]drawbox=x=0:y=0:w={W}:h={BAND_H}:color={BAND}:t=fill,"
+            f"drawbox=x=0:y={H - BAND_H}:w={W}:h={BAND_H}:color={BAND}:t=fill[banded]")
+    else:
+        chain.append("[base]null[banded]")
     texts = []
+    if seg.get('quote'):
+        texts += quote_filters(seg['quote'], font)
     if seg.get('top'):
         texts += drawtext_filters(seg['top'], font, TOP_Y, 62, INK)
     if seg.get('bottom'):
