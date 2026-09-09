@@ -59,6 +59,7 @@
 - **縦動画**: 運用の正は [`strategy/short_video_playbook.md`](./strategy/short_video_playbook.md)、型定義と量産フローは [`strategy/video/`](./strategy/video/README.md)。
   2026-09-07 に型体系を A〜E＋F・G に一本化（主力は A 反応集と F/G メンバーエピソードの両輪、月 10〜12 本。ファン投稿の引用は 7.3 の作法で可。コール講座は不採用→入門コンテンツをバックログ）。
   素材の索引・許諾・組み立ては `.claude/skills/x-media-collect` と [`data/README.md`](./data/README.md)。**他人の素材は `data/x/media_permissions.md` に「OK」がある分だけ。クレジットは必ず入れる。**
+  2026-09-09 に**開示（誰かを明かす瞬間）の言い方を「ろりぽっぷ!!!!!!!というアイドルグループの◯◯だよ」に統一**（台本全般。略さない。正は `strategy/video/formats/00_テンプレート.md`「開示の言い方」）。G-001 は承認済みで写真待ち。
   未解決: 運営・メンバーの許諾条件（改変・クレジット・期限。playbook 11章）が未確認で、クレジット文面を `make_vertical.py` が決め打ちしている。F 用の VOICEVOX 話者 1 名が未決定。
 
 ## 実行環境の注意
@@ -66,6 +67,7 @@
 - **ローカル（Windows）**: このリポジトリで起動する（`work/` から起動すると hooks・スキル・専用メモリが効かない。PowerShell の `cl` で起動できる）。`python3` はシムで `python` 3.10 に解決する（2026-09-07〜）。
 - **クラウド（リモート環境）**:
   - **twitterapi.io は環境によって到達可否が変わる。** 信頼モードでは403、フルアクセス環境では到達可能（2026-09-01確認）。APIキーは環境変数 `TWITTERAPI_IO_KEY` かルートの `.env`（`.gitignore` 済み）から読む。**キーをチャットに貼らせない。** 取得した投稿データ（`work/x_fetch/`）は他人の著作物なのでコミットしない（`.gitignore` 済み）。
+  - **YouTube の動画本体はクラウドから落とせない**（2026-09-09確認）。`googlevideo.com` には到達できるが、データセンターIPのため YouTube が GVS PO トークン（BotGuard）を要求し、`Sign in to confirm you're not a bot` と映像URLへの `HTTP 403` で止まる。メタデータ（題名・投稿者・尺）と形式一覧は `yt-dlp --js-runtimes node:/opt/node22/bin/node --extractor-args "youtube:player_client=web_embedded"` で取れるが、**本体は手元（Windows）で落とす。**
   - **linkco.re（TuneCore配信ページ）はネットワークポリシーで到達不可。** 歌詞はユーザーにスクリーンショットかテキストで貼ってもらい、転記する。原文の表記揺れは正規化せず、歌詞ファイル末尾のHTMLコメント（転記メモ）に記録して、ユーザーにレビューを依頼する。
   - **公開用の画像を撮る前に、必ず `bash resources/install_capture_font.sh` を実行する。入れずに撮ると漢字が中国語フォントの字形になる**（2026-09-04に実際にやらかした）。コンテナのヘッドレスChromiumは `fonts.googleapis.com` に到達できず、日本語フォントは IPAGothic と WenQuanYi しか無い。**CSSの指定と実際に描画されたフォントは別物。** 画像にする前に CDP の `CSS.getPlatformFontsForNode` で実物を確認する（`resources/capture_call_sheet.py` は Noto Sans JP でなければ中断する）。コンテナは使い捨てなので、セッションが変わるたびに入れ直す。
   - **Playwright はコンテナに未インストール。`pip install playwright` で入れる。** ブラウザは `/opt/pw-browsers` にあり、`playwright install` は不要（禁止）。`executable_path="/opt/pw-browsers/chromium-1194/chrome-linux/chrome"`（実際のディレクトリ名を確認する）と `args=["--no-sandbox"]` を渡す。
