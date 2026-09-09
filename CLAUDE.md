@@ -59,7 +59,8 @@
 - **縦動画**: 運用の正は [`strategy/short_video_playbook.md`](./strategy/short_video_playbook.md)、型定義と量産フローは [`strategy/video/`](./strategy/video/README.md)。
   2026-09-07 に型体系を A〜E＋F・G に一本化（主力は A 反応集と F/G メンバーエピソードの両輪、月 10〜12 本。ファン投稿の引用は 7.3 の作法で可。コール講座は不採用→入門コンテンツをバックログ）。
   素材の索引・許諾・組み立ては `.claude/skills/x-media-collect` と [`data/README.md`](./data/README.md)。**他人の素材は `data/x/media_permissions.md` に「OK」がある分だけ。クレジットは必ず入れる。**
-  未解決: 運営・メンバーの許諾条件（改変・クレジット・期限。playbook 11章）が未確認で、クレジット文面を `make_vertical.py` が決め打ちしている。F 用の VOICEVOX 話者 1 名が未決定。
+  2026-09-09 に F の VOICEVOX 話者を冥鳴ひまりに決定（G は春日部つむぎ×冥鳴ひまり）。**F-001「放水ライブの後悔」の台本を承認**（次の待ちはスクショ撮影）。
+  未解決: 運営・メンバーの許諾条件（改変・クレジット・期限。playbook 11章）が未確認で、クレジット文面を `make_vertical.py` が決め打ちしている。
 
 ## 実行環境の注意
 
