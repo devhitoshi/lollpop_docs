@@ -33,3 +33,21 @@ work/charts/
 
 # ダウンロードした画像・動画（許諾済みでも他人の著作物。リポジトリには入れない）
 work/x_media/
+
+# 書き出した動画。台本はリポジトリに置くが、動画そのものは Google Drive に置いて URL で渡す。
+# どの台本から何が出てどこにあるかは strategy/video/台本/納品メモ.md が索引になる。
+*.mp4
+*.mov
+*.m4v
+*.webm
+*.mkv
+*.avi
+*.gif
+# レンダリングの中間生成物・書き出し先
+work/video/
+work/render/
+
+# OpenACP（Discord ブリッジ）の設定。config.json に Discord の Bot トークンが平文で入る。
+# 既定の置き場はリポジトリ外（C:\Users\kawad\work\.openacp\）だが、
+# workspace を取り違えてここに作られたときのための保険。
+.openacp/
