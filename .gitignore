@@ -51,3 +51,7 @@ work/render/
 # 既定の置き場はリポジトリ外（C:\Users\kawad\work\.openacp\）だが、
 # workspace を取り違えてここに作られたときのための保険。
 .openacp/
+
+# Claude Code のワークツリー。Discord のスレッドごとに作業ディレクトリを分けるために作られる。
+# 中身は同じリポジトリの別チェックアウトなので、コミット対象にしない。
+.claude/worktrees/

@@ -352,6 +352,14 @@ code{font-family:var(--font-mono); font-size:.92em; word-break:break-all}
           </p>
         </div>
         <div class="row">
+          <p class="row__k">スレッドごとの作業ディレクトリ</p>
+          <p class="row__v">
+            <code>.claude/worktrees/&lt;種別&gt;/&lt;日付&gt;-&lt;スラッグ&gt;/</code>（git 管理外）<br>
+            スレッド1本＝ワークツリー1つ＝ブランチ1本。共有チェックアウトのままだと、
+            後から立ったスレッドがブランチを切り替えて先行スレッドの作業ツリーを奪う
+          </p>
+        </div>
+        <div class="row">
           <p class="row__k">ログ</p>
           <p class="row__v">
             <code>...\.openacp\logs\openacp.log</code>（全体）／<code>...\logs\sessions\</code>（セッション別）
@@ -556,6 +564,14 @@ code{font-family:var(--font-mono); font-size:.92em; word-break:break-all}
         <div class="cmd">
           <p class="cmd__line">openacp plugin configure @openacp/security --dir C:\Users\kawad\work</p>
           <p class="cmd__desc">利用者の追加・削除、セッションのタイムアウト変更</p>
+        </div>
+        <div class="cmd">
+          <p class="cmd__line">git worktree list</p>
+          <p class="cmd__desc">スレッドごとの作業ディレクトリ。落ちたセッションの分が残る（Discord 経由は終了時に後始末を促されない）</p>
+        </div>
+        <div class="cmd">
+          <p class="cmd__line">git worktree remove .claude/worktrees/&lt;パス&gt;</p>
+          <p class="cmd__desc">畳む。ロックで拒否されたら <code>git worktree unlock</code> を先に</p>
         </div>
         <div class="cmd">
           <p class="cmd__line">Get-ScheduledTaskInfo -TaskName "OpenACP"</p>

@@ -86,8 +86,18 @@ def subcommand(seg):
     return None, []
 
 
+# git を動かす場所。main() で hook 入力の cwd から設定する。
+# ワークツリーに入ったセッションでは CLAUDE_PROJECT_DIR がメインチェックアウトを
+# 指したまま動かないので、これに頼るとブランチもステージも別のツリーを見てしまう。
+REPO_DIR = None
+
+
+def repo_dir():
+    return REPO_DIR or os.environ.get('CLAUDE_PROJECT_DIR') or os.getcwd()
+
+
 def current_branch():
-    root = os.environ.get('CLAUDE_PROJECT_DIR') or os.getcwd()
+    root = repo_dir()
     try:
         return subprocess.run(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], cwd=root,
                               capture_output=True, text=True, timeout=10).stdout.strip()
@@ -142,6 +152,8 @@ def main():
         data = json.load(sys.stdin)
     except Exception:
         return
+    global REPO_DIR
+    REPO_DIR = data.get('cwd') or None
     cmd = (data.get('tool_input') or {}).get('command') or ''
     if 'git' not in cmd:
         return
@@ -154,7 +166,7 @@ def main():
     commits = [g for g in gits if re.match(r'git\s+commit\b', g)]
     if not commits:
         return
-    root = os.environ.get('CLAUDE_PROJECT_DIR') or os.getcwd()
+    root = repo_dir()
     try:
         staged = subprocess.run(['git', 'diff', '--cached', '--name-only'], cwd=root,
                                 capture_output=True, text=True, timeout=10).stdout.splitlines()
