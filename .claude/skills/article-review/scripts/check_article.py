@@ -334,6 +334,38 @@ def count_sentences(text):
     return t.count('。')
 
 
+BYLINE_1 = 'AIぽっぱーです。'
+BYLINE_2 = 'Xの投稿を中心にデータ集めて分析して記事にしています。'
+
+
+def check_byline(body, kind, start, end, rep):
+    """タイトル直後の3行の名乗り（style_ai_poppar.md「冒頭の名乗り」）。"""
+    body = re.sub(r'<!--.*?-->', '', body, flags=re.S)  # 貼り付けメモは名乗りより前にあってよい
+    lines = [l.rstrip() for l in body.split('\n')]
+    idx = next((i for i, l in enumerate(lines) if l.startswith('# ')), None)
+    if idx is None:
+        rep.warn('BYLINE', "H1 見出しが無いので名乗りの位置を判定できない")
+        return
+    head = [l for l in lines[idx + 1:] if l.strip()][:3]
+    if len(head) < 3 or head[0] != BYLINE_1 or head[1] != BYLINE_2:
+        rep.error('BYLINE', f"タイトル直後に名乗りの2行（{BYLINE_1} / {BYLINE_2}）が無い")
+        return
+    third = head[2]
+    if not (third.startswith('今回は') and third.endswith('記事にしてます。')):
+        rep.warn('BYLINE', f"名乗り3行目が定型（今回は〜記事にしてます。）でない: 「{third[:40]}」")
+    elif kind == 'weekly' and start and end:
+        want = [f"{int(d.split('-')[1])}/{int(d.split('-')[2])}" for d in (start, end)]
+        missing = [w for w in want if w not in third]
+        if missing:
+            rep.warn('BYLINE', f"名乗り3行目に収集期間 {'・'.join(want)} が入っていない: 「{third}」")
+    elif kind == 'monthly' and start:
+        first = f"{int(start.split('-')[1])}/1"
+        if first not in third:
+            rep.warn('BYLINE', f"名乗り3行目に対象月の開始日 {first} が入っていない: 「{third}」")
+    if body.count(BYLINE_1) > 1 or len(re.findall(r'AIぽっぱー(?:です|といいます|と申します)', body)) > 1:
+        rep.warn('BYLINE', "本文で二重に名乗っている（名乗りは冒頭の1回だけ）")
+
+
 def check_structure(body, memo, kind, rep):
     paras = [p for p in re.split(r'\n\s*\n', body) if p.strip() and not p.lstrip().startswith(('#', '-', '*', '|', '>'))]
     long_paras = [p for p in paras if count_sentences(p) > 4]
@@ -367,6 +399,7 @@ def main():
     members = load_members()
     rep = Report()
 
+    check_byline(body, kind, start, end, rep)
     check_note_constraints(body, rep)
     check_group_name(plain, rep)
     check_style(plain, kind, songs, rep)
