@@ -55,3 +55,11 @@ work/render/
 # Claude Code のワークツリー。Discord のスレッドごとに作業ディレクトリを分けるために作られる。
 # 中身は同じリポジトリの別チェックアウトなので、コミット対象にしない。
 .claude/worktrees/
+
+# posfie のログインセッション（X OAuth を通した cookie）。認証情報なのでコミットしない。
+# .claude/skills/posfie-summary/scripts/posfie_post.py --login が作る。
+work/.posfie_state.json
+
+# posfie の素材データ（build_material.py の中間出力）。他人の投稿の原文を含むので
+# work/x_fetch/ と同じ扱いにする。選んだ結果と引用だけを articles/posfie/ にコミットする。
+work/posfie/
