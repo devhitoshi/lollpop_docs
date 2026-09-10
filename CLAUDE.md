@@ -14,13 +14,37 @@
 - **文体と表現規約**: note 用記事は [`prompts/write/style_ai_poppar.md`](./prompts/write/style_ai_poppar.md)（AIぽっぱー）に従う。note は表組み不可・見出しは2階層まで。
   同ファイル末尾の「使わない言葉・使い方」（**「地下アイドル」と言わない／「レア曲」と書かない／メンバー写真を直貼りしない／おすすめ曲は通算と直近を併記**）は記事・動画・字幕・キャプション・ハッシュタグすべてに適用する。
 - **メンバー情報**: 基本情報の正は [`members/members.md`](./members/members.md)。人物像は [`members/`](./members/) のデータに根拠がある範囲だけ書く。卒業メンバーの卒業後の活動・私生活には踏み込まない。運営の意図・体調・人間関係の推測は書かない。
-- **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計・公演データの整合性チェック・セトリ白書の図表は `.claude/skills/setlist-analysis`、曲調解析は `.claude/skills/music-analysis`、公式・メンバーのX投稿取得は `.claude/skills/x-account-fetch`、周囲の反応（エゴサーチ）は `.claude/skills/x-egosearch`、週刊・月刊の下書きは `.claude/skills/weekly-monthly-draft`（**収集〜仕上げを一本で回すなら `.claude/skills/weekly-pipeline`**。前回実行の翌日から今日までを既定期間にするので、毎週同じ曜日でなくてよい）、メンバーの人物像の更新は `.claude/skills/member-profile-refresh` の手順に従う（**節の定義と禁止事項の正は [`members/README.md`](./members/README.md)。書く前に読む**）。コール表のSNS画像はスキルにしていないので、[`resources/call_sheet_requirements.md`](./resources/call_sheet_requirements.md) を読んでから作る。
+- **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計・公演データの整合性チェック・セトリ白書の図表は `.claude/skills/setlist-analysis`、曲調解析は `.claude/skills/music-analysis`、公式・メンバーのX投稿取得は `.claude/skills/x-account-fetch`、周囲の反応（エゴサーチ）は `.claude/skills/x-egosearch`、週刊・月刊の下書きは `.claude/skills/weekly-monthly-draft`（**収集〜仕上げを一本で回すなら `.claude/skills/weekly-pipeline`**。前回実行の翌日から今日までを既定期間にするので、毎週同じ曜日でなくてよい）、posfie（Xポストを並べるまとめ）は `.claude/skills/posfie-summary`、メンバーの人物像の更新は `.claude/skills/member-profile-refresh` の手順に従う（**節の定義と禁止事項の正は [`members/README.md`](./members/README.md)。書く前に読む**）。コール表のSNS画像はスキルにしていないので、[`resources/call_sheet_requirements.md`](./resources/call_sheet_requirements.md) を読んでから作る。
 - **調査・分析**: 戦略の定点観測（フォロワー数・UGC・公式の発信量）は `.claude/skills/strategy-metrics`、Web 調査（市場・競合・業界）は `.claude/skills/web-research`。出典と確認日を付け、評価語を書かない。調査メモは `strategy/research_YYYY-MM-DD_<題名>.md`。
 - **記事の公開前レビュー**: note 記事を書き終えたら、PR を作る前に `.claude/skills/article-review`（機械チェック＋読み取り専用エージェント `article-review`）を通す。手戻りの多い「公演の抜け」「公演数の誤り」「表記ゆれ」「文体の崩れ」を資料と突き合わせて拾う。
 - **公開済み note の更新**: `.claude/skills/article-refresh`（差分検知→改稿→レビュー→貼り替え手順書。公開 URL と最終同期日は `articles/公開一覧.md`）。
 - **セッションの終わり**: `.claude/skills/session-handoff` の手順で、各シリーズ README の「未解決」と CLAUDE.md の進行中セクションを更新してからコミット・push する。
 - **デザイン**: `resources/` のHTMLを触るときは [`design.md`](./design.md)（色・タイポ・バンド構成の正）に従う。実装は `resources/css/style.css`。単一ファイル完結のHTML（セトリ白書・成長戦略）には同じトークン値が転記されている。
 - **手動修正中のファイル**: オーナーが「いま手で直している」と言ったファイル（例: `songs/call_list.md`）は、確定の連絡まで編集も依存もしない。着手前に `git status` で他セッションの未コミット変更を見る。
+
+## Discord 経由の運用（OpenACP）
+
+Discord のスレッドから指示を受けて作業することがある。**利用者はスマートフォンの Discord アプリから読む。**
+GitHub の差分画面・PR 画面は開かれない前提で応答を組み立てる。
+
+- **応答言語**: 常に日本語。
+- **ワークツリー**: 新規スレッド＝1タスク＝**1ワークツリー＝1ブランチ**。スレッドの最初に `EnterWorktree` で
+  `<video|article|review>/<YYYYMMDD>-<内容スラッグ>` という名前のワークツリーを作り、以降の作業はその中で行う
+  （ブランチは `worktree-` を冠した名前で自動的に作られる）。3人が別スレッドで同時に作業するため、
+  **共有のチェックアウトでブランチを切り替えると他のスレッドの作業ツリーを奪う。**
+  **最初の応答でワークツリー名とブランチ名を明示する**（セッションが切れても、その1行があれば再開できる）。
+  そのスレッド内の変更はすべて同じブランチに積む。
+- **完了時**: PR を作ってマージし、そのあと `ExitWorktree`（`action: "remove"`）でワークツリーを畳む。
+  Discord 経由のセッションは終了時に後始末を促されないので、明示的に消さないと残り続ける。
+  **main への直接コミットと force push は禁止。**
+- **コミット**: メッセージ末尾に `requested-by: @<依頼者の Discord 表示名>` を入れる。
+  ホストの git 設定上コミット作者は全員同じ名義になるので、これが依頼者を判別する唯一の手段。
+- **応答の作り方**: 台本・記事の本文はチャットに直接貼る（1メッセージ 2000 文字。超えたら分割する）。
+  併せてファイルの GitHub URL も返す。**URL は推測で組み立てず `gh browse --no-browser --branch <ブランチ> <パス>` の出力を使う。**
+  修正したときは「何をどう変えたか」を必ずチャットで要約する（差分画面を見ないので、これが唯一の変更確認手段）。
+  時間のかかる処理は、着手したことを先に返してから始め、終わったら通知する。
+- **スキルのルーティング**: 動画の制作依頼（台本づくり・動画化・テロップ修正など）は `.claude/skills/video-production`、
+  記事の制作・レビューは `.claude/skills/article-review` と `.claude/skills/article-refresh` を使う。
 
 ## 資源配置ルール（何をどこに置くか）
 
@@ -31,6 +55,7 @@
 | 新しい歌詞 | `songs/lyrics/[曲名].md`（公式表記のまま） |
 | 曲調データ | `songs/analysis/[曲名].md`＋全曲比較 `songs/analysis/song_features.csv`（スキルが自動生成） |
 | note記事（シリーズ・単発とも） | `articles/`（シリーズは専用ディレクトリ、単発は `articles/単発/`。詳細は `articles/README.md`） |
+| posfie まとめ（Xポストを並べる形式） | `articles/posfie/<開始日>_<終了日>.md`（貼るポストと順番の設計図。posfie 上の実体は別。詳細は `articles/posfie/README.md`） |
 | 公演・セトリのデータ | `events/data_event.csv`（一次データ）。集計は `events/monthly_setlist_ranking.csv`。入れ方と TimeTree の使い方は [`events/README.md`](./events/README.md) |
 | 戦略・定点観測 | `strategy/`（観測結果は `strategy/metrics_YYYY-MM-DD.md`、調査メモは `strategy/research_*.md`） |
 | 縦動画の運用設計・型定義・量産フロー | `strategy/short_video_playbook.md`（運用の正）と [`strategy/video/`](./strategy/video/)（型定義 A〜G、量産フロー、台本の部品、流行調査）。制作ツールは別リポジトリ `lollpop_video`（F・G）とこのリポジトリの `x-media-collect/scripts/make_vertical.py`（A〜E） |

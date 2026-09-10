@@ -37,6 +37,11 @@ def main():
         notes.append("整合性チェック（check_event_consistency.py --quiet）:\n" + out[-3000:])
     else:
         notes.append("整合性チェック: 問題候補なし。")
+    # Windows の Python はパイプへ書くとき既定で cp932 に落ちる。Claude Code は UTF-8 で読む。
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
     print(json.dumps({
         "hookSpecificOutput": {
             "hookEventName": "PostToolUse",

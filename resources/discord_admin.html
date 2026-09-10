@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discord 制作環境の仕組み — 管理者向け</title>
+<meta name="description" content="OpenACP + Discord + Claude Code で ろりぽっぷ!!!!!!! の記事・動画制作を回す仕組みの構成・権限・運用。">
+<meta name="theme-color" content="#ffffff">
+<meta name="robots" content="noindex, nofollow">
+<!-- ポータル（index.html）からは辿らせない内部向け文書。公開 URL では開けるが検索には載せない -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+/* =====================================================================
+   Discord 制作環境の仕組み — 管理者向け
+   デザインの正はリポジトリルートの design.md（実装: resources/css/style.css）。
+   単一ファイル完結のため、同じトークン値をここに転記している。
+   フルブリードのバンド構成。カードなし・影なし・角丸は操作要素のみ。
+   図版（構成図・権限の層）は design.md「図版の床は必ず白」に従い、
+   白い面の上にだけ置く。図版だけは自前の視覚言語（1px の枠）を持つ。
+   ===================================================================== */
+:root{
+  color-scheme: light;
+  --primary:#d6006e; --primary-active:#b0005b; --primary-on-dark:#ff9ecb; --on-primary:#ffffff;
+  --canvas:#ffffff; --surface-soft:#fff5f9; --surface-blush:#fbe7f0; --surface-blush-strong:#f6d3e3;
+  --surface-dark:#1a1113; --surface-dark-elevated:#2a1a24; --surface-dark-soft:#241a20;
+  --ink:#1d1216; --body:#45383e; --body-strong:#2a2026; --muted:#71646b; --muted-soft:#998a92;
+  --on-dark:#fff5f9; --on-dark-soft:#d9c4ce;
+  --hairline:#f2e2ea; --hairline-soft:#faeef4;
+  --success:#2e9e5b; --warning:#b45309; --error:#cf3a3a;
+  --chart-stk:#2a6fd6; --chart-hpst:#eda100; --chart-axis:#dcc8d2;
+  --r-xs:4px; --r-sm:6px; --r-md:8px; --r-pill:9999px;
+  --s-xxs:4px; --s-xs:8px; --s-sm:12px; --s-md:16px; --s-lg:24px; --s-xl:32px; --s-xxl:48px;
+  --s-band:64px; --s-section:96px;
+  --font:"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic Medium",Meiryo,sans-serif;
+  --font-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--canvas); color:var(--body);
+  font-family:var(--font); font-size:16px; line-height:1.85; letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{margin:0; color:var(--ink); font-weight:700; line-height:1.4; text-wrap:balance}
+p{margin:0}
+a{color:var(--primary); text-decoration-thickness:1px; text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--primary); outline-offset:3px; border-radius:2px}
+code{font-family:var(--font-mono); font-size:.92em; word-break:break-all}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position:sticky; top:0; z-index:30;
+  display:flex; align-items:center; justify-content:space-between; gap:var(--s-md);
+  height:56px; padding:0 var(--s-lg);
+  background:var(--canvas); border-bottom:1px solid var(--hairline);
+  font-size:13px; font-weight:500; line-height:1;
+}
+.top-nav__brand{color:var(--ink); text-decoration:none; font-weight:700}
+.top-nav__meta{color:var(--muted-soft); font-size:12px; letter-spacing:.06em}
+
+/* ---------- バンド ---------- */
+.band{padding:var(--s-band) var(--s-lg)}
+.band__inner{max-width:720px; margin:0 auto}
+.band__inner--wide{max-width:1080px}
+.band--white{background:var(--canvas)}
+.band--blush{background:var(--surface-blush)}
+.band--dark{background:var(--surface-dark); color:var(--on-dark-soft)}
+.band--dark h2,.band--dark h3,.band--dark h4{color:var(--on-dark)}
+.band--dark a{color:var(--primary-on-dark)}
+.band--dark code{color:var(--primary-on-dark)}
+.band--pink{background:var(--primary); color:var(--on-primary)}
+.band--pink h2{color:var(--on-primary)}
+.band__eyebrow{
+  display:block; margin-bottom:var(--s-sm);
+  font-size:12px; font-weight:700; letter-spacing:.06em; color:var(--muted-soft);
+}
+.band--pink .band__eyebrow{color:var(--on-primary)}
+.band__title{font-size:28px; letter-spacing:-.015em}
+.band__lead{margin-top:var(--s-md); font-size:17px; line-height:1.75; color:var(--body-strong)}
+.band--dark .band__lead{color:var(--on-dark-soft)}
+.band--pink .band__lead{color:var(--on-primary)}
+.prose{margin-top:var(--s-lg)}
+.prose p + p{margin-top:var(--s-md)}
+
+.hero{padding-top:var(--s-xxl); padding-bottom:var(--s-xxl)}
+.hero h1{font-size:34px; letter-spacing:-.02em; color:var(--ink)}
+.hero .band__lead{font-size:18px}
+.hero__meta{
+  margin-top:var(--s-xl); display:flex; flex-wrap:wrap; gap:var(--s-xs);
+}
+
+/* ---------- グリッド ---------- */
+.grid{display:grid; gap:var(--s-xl); margin-top:var(--s-xl)}
+.item__title{font-size:17px; margin-bottom:var(--s-xxs)}
+.item__desc{font-size:15px; line-height:1.8; color:var(--muted)}
+.band--dark .item__desc{color:var(--on-dark-soft)}
+.item__glyph{display:block; font-size:26px; line-height:1; margin-bottom:var(--s-sm)}
+
+/* ---------- 図版: 構成図（白い床の上にだけ置く） ---------- */
+.figure{margin-top:var(--s-xl); background:var(--canvas)}
+.figure__caption{
+  margin-top:var(--s-sm); font-size:13px; font-weight:500; color:var(--muted-soft); line-height:1.6;
+}
+.flow{display:grid; gap:var(--s-md); align-items:stretch}
+.flow__node{
+  padding:var(--s-md); border:1px solid var(--chart-axis); border-radius:var(--r-xs);
+  display:flex; flex-direction:column; gap:var(--s-xxs);
+}
+.flow__node--accent{border-color:var(--primary); border-width:2px}
+.flow__kicker{font-size:11px; font-weight:700; letter-spacing:.08em; color:var(--muted-soft)}
+.flow__name{font-size:16px; font-weight:700; color:var(--ink); line-height:1.4}
+.flow__note{font-size:13px; line-height:1.65; color:var(--muted)}
+.flow__arrow{
+  display:flex; align-items:center; justify-content:center;
+  color:var(--primary); font-size:18px; line-height:1;
+}
+/* 縦に積まれている間は下向き。横1列になる 960px 以上でだけ右向きにする */
+.flow__arrow::before{content:"↓"}
+
+/* ---------- 層（権限の多重化） ---------- */
+.layers{margin-top:var(--s-xl); display:grid; gap:var(--s-md)}
+.layer{
+  display:grid; grid-template-columns:auto 1fr; gap:var(--s-md); align-items:start;
+  padding:var(--s-md) 0; border-top:1px solid var(--hairline);
+}
+.band--dark .layer{border-top-color:var(--surface-dark-elevated)}
+.layer__no{
+  width:28px; height:28px; border-radius:var(--r-pill);
+  background:var(--primary); color:var(--on-primary);
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:700; line-height:1;
+}
+.band--dark .layer__no{background:var(--primary-on-dark); color:var(--surface-dark)}
+.layer__title{font-size:16px; margin-bottom:var(--s-xxs)}
+.layer__where{
+  display:block; font-size:12px; font-weight:500; letter-spacing:.04em;
+  color:var(--muted-soft); margin-bottom:var(--s-xxs);
+}
+.layer__desc{font-size:15px; line-height:1.8; color:var(--muted)}
+.band--dark .layer__desc{color:var(--on-dark-soft)}
+
+/* ---------- レコード行 ---------- */
+.rows{margin-top:var(--s-xl)}
+.row{padding:var(--s-md) 0; border-bottom:1px solid var(--hairline)}
+.band--dark .row{border-bottom-color:var(--surface-dark-elevated)}
+.rows .row:first-child{border-top:1px solid var(--hairline)}
+.band--dark .rows .row:first-child{border-top-color:var(--surface-dark-elevated)}
+.row__k{font-size:15px; font-weight:700; color:var(--ink); margin-bottom:var(--s-xxs)}
+.band--dark .row__k{color:var(--on-dark)}
+.row__v{font-size:14px; line-height:1.8; color:var(--muted)}
+.band--dark .row__v{color:var(--on-dark-soft)}
+.row__v code{color:var(--body-strong)}
+.band--dark .row__v code{color:var(--primary-on-dark)}
+
+/* ---------- 落とし穴 ---------- */
+.trap{padding-left:var(--s-md); border-left:3px solid var(--primary)}
+.traps{margin-top:var(--s-xl); display:grid; gap:var(--s-xl)}
+.trap__title{font-size:17px; margin-bottom:var(--s-xs)}
+.trap__desc{font-size:15px; line-height:1.8; color:var(--body)}
+.trap__fix{
+  margin-top:var(--s-xs); font-size:14px; line-height:1.7; color:var(--muted);
+}
+
+/* ---------- コマンド ---------- */
+.cmds{margin-top:var(--s-xl); display:grid; gap:var(--s-md)}
+.cmd{display:grid; gap:var(--s-xxs)}
+.cmd__line{
+  font-family:var(--font-mono); font-size:14px; line-height:1.6;
+  background:var(--surface-dark-elevated); color:var(--on-dark);
+  padding:var(--s-xs) var(--s-sm); border-radius:var(--r-sm);
+  overflow-x:auto; white-space:pre;
+}
+.cmd__desc{font-size:14px; line-height:1.7; color:var(--on-dark-soft)}
+
+/* ---------- バッジ ---------- */
+.badge{
+  display:inline-block; padding:2px 10px; border-radius:var(--r-pill);
+  background:var(--surface-blush-strong); color:var(--body-strong);
+  font-size:13px; font-weight:500; line-height:1.6;
+}
+
+/* ---------- 注記 ---------- */
+.note{margin-top:var(--s-xl); padding-left:var(--s-md); border-left:3px solid var(--chart-axis)}
+.note__title{font-size:15px; font-weight:700; color:var(--ink); margin-bottom:var(--s-xxs)}
+.band--dark .note__title{color:var(--on-dark)}
+.note p{font-size:15px; line-height:1.8; color:var(--muted)}
+.band--dark .note p{color:var(--on-dark-soft)}
+
+/* ---------- フッター ---------- */
+.footer{padding:var(--s-band) var(--s-lg); background:var(--surface-dark); color:var(--on-dark-soft)}
+.footer__inner{max-width:720px; margin:0 auto; font-size:14px; line-height:1.8}
+.footer a{color:var(--primary-on-dark)}
+
+/* ---------- 広い画面 ---------- */
+@media (min-width:720px){
+  .band{padding:var(--s-section) var(--s-xl)}
+  .hero h1{font-size:48px}
+  .band__title{font-size:36px; letter-spacing:-.02em}
+  .grid--3{grid-template-columns:repeat(3,1fr)}
+  .grid--2{grid-template-columns:repeat(2,1fr)}
+  .traps{grid-template-columns:repeat(2,1fr); gap:var(--s-xxl)}
+}
+@media (min-width:960px){
+  /* 構成図: 4ノード＋3矢印を1行に */
+  .flow{grid-template-columns:1fr auto 1fr auto 1fr auto 1fr; gap:var(--s-sm)}
+  .flow__arrow::before{content:"→"}
+}
+</style>
+</head>
+
+<body>
+
+<nav class="top-nav">
+  <a class="top-nav__brand" href="#top">🍭 ろりぽっぷ!!!!!!! Docs</a>
+  <span class="top-nav__meta">管理者向け</span>
+</nav>
+
+<main id="top">
+
+  <!-- 白: ヒーロー -->
+  <section class="band band--white hero">
+    <div class="band__inner">
+      <span class="band__eyebrow">INFRASTRUCTURE</span>
+      <h1>Discord 制作環境の<br>仕組み</h1>
+      <p class="band__lead">
+        3名が Discord のスレッドから記事と動画をつくり、成果物が
+        リポジトリと Google ドライブに積まれるまでの構成・権限・運用。
+      </p>
+      <div class="hero__meta">
+        <span class="badge">OpenACP 2026.518.2</span>
+        <span class="badge">Claude Code</span>
+        <span class="badge">Windows 11 / WSL なし</span>
+        <span class="badge">2026-09-10 構築</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ブラッシュ: 設計の要点 -->
+  <section class="band band--blush">
+    <div class="band__inner">
+      <span class="band__eyebrow">PRINCIPLES</span>
+      <h2 class="band__title">設計の要点</h2>
+      <div class="grid grid--3">
+        <div>
+          <span class="item__glyph" aria-hidden="true">🧵</span>
+          <h3 class="item__title">スレッド＝セッション＝ブランチ</h3>
+          <p class="item__desc">
+            Discord のスレッド1本が、独立した Claude Code のセッション1本と、
+            git のブランチ1本に対応します。文脈が混ざらず、失敗しても main が汚れません。
+          </p>
+        </div>
+        <div>
+          <span class="item__glyph" aria-hidden="true">🔒</span>
+          <h3 class="item__title">止める場所を4層に分ける</h3>
+          <p class="item__desc">
+            誰が使えるか・何を実行してよいか・何をコミットしてよいか・何を push してよいかを、
+            それぞれ別のレイヤーで止めます。1つ抜けても残りが効きます。
+          </p>
+        </div>
+        <div>
+          <span class="item__glyph" aria-hidden="true">📦</span>
+          <h3 class="item__title">テキストはリポジトリ、バイナリはドライブ</h3>
+          <p class="item__desc">
+            台本・記事はコミットして URL で辿れるように。動画・音声は
+            Google ドライブに置き、索引だけをリポジトリに残します。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 白: 構成図（図版の床は白） -->
+  <section class="band band--white">
+    <div class="band__inner band__inner--wide">
+      <span class="band__eyebrow">ARCHITECTURE</span>
+      <h2 class="band__title">全体の構成</h2>
+      <p class="band__lead">
+        すべてこの PC の上で動きます。コードもトークンも外部のサービスには渡りません。
+      </p>
+
+      <div class="figure">
+        <div class="flow">
+          <div class="flow__node">
+            <span class="flow__kicker">USERS</span>
+            <span class="flow__name">利用者 3名</span>
+            <span class="flow__note">スマホの Discord。スレッドを立てて話しかける</span>
+          </div>
+          <div class="flow__arrow" aria-hidden="true"></div>
+          <div class="flow__node flow__node--accent">
+            <span class="flow__kicker">BRIDGE</span>
+            <span class="flow__name">OpenACP</span>
+            <span class="flow__note">この PC で常駐。スレッドごとにセッションを分け、承認をボタンに変換する</span>
+          </div>
+          <div class="flow__arrow" aria-hidden="true"></div>
+          <div class="flow__node">
+            <span class="flow__kicker">AGENT</span>
+            <span class="flow__name">Claude Code</span>
+            <span class="flow__note">認証済み。CLAUDE.md とスキルを読んで作業する</span>
+          </div>
+          <div class="flow__arrow" aria-hidden="true"></div>
+          <div class="flow__node">
+            <span class="flow__kicker">OUTPUT</span>
+            <span class="flow__name">リポジトリ／ドライブ</span>
+            <span class="flow__note">台本・記事は GitHub、動画は Google ドライブ</span>
+          </div>
+        </div>
+        <p class="figure__caption">
+          利用者からは常に「チャットに貼られた本文」と「リンク」だけが見える。GitHub の差分画面も PR 画面も開かせない前提で組んでいる。
+        </p>
+      </div>
+
+      <div class="note">
+        <p class="note__title">なぜ OpenACP が要るのか</p>
+        <p>
+          Claude Code はターミナルか IDE でしか動かせません。OpenACP はその間に入って、
+          Discord のスレッドをセッションに割り当て、実行の許可要求をボタンに変え、出力を流し込みます。
+          自己ホスト型なので、やり取りが第三者のサーバーを経由しません。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 黒: 置き場 -->
+  <section class="band band--dark">
+    <div class="band__inner">
+      <span class="band__eyebrow">LOCATIONS</span>
+      <h2 class="band__title">どこに何があるか</h2>
+      <p class="band__lead">障害のとき最初に見る場所。</p>
+
+      <div class="rows">
+        <div class="row">
+          <p class="row__k">OpenACP の workspace</p>
+          <p class="row__v">
+            <code>C:\Users\kawad\work</code><br>
+            設定・ログ・セッション記録がこの下の <code>.openacp\</code> に入る。
+            <strong>git リポジトリではない場所を選んである</strong>（トークンがリポジトリに落ちないため）
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__k">Bot トークン（平文）</p>
+          <p class="row__v">
+            <code>...\work\.openacp\config.json</code><br>
+            <code>...\.openacp\plugins\data\@openacp\discord-adapter\settings.json</code>
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__k">利用者の許可リスト・タイムアウト</p>
+          <p class="row__v">
+            <code>...\.openacp\plugins\data\@openacp\security\settings.json</code><br>
+            編集は <code>openacp plugin configure @openacp/security</code>
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__k">スレッドごとの作業ディレクトリ</p>
+          <p class="row__v">
+            <code>.claude/worktrees/&lt;種別&gt;/&lt;日付&gt;-&lt;スラッグ&gt;/</code>（git 管理外）<br>
+            スレッド1本＝ワークツリー1つ＝ブランチ1本。共有チェックアウトのままだと、
+            後から立ったスレッドがブランチを切り替えて先行スレッドの作業ツリーを奪う
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__k">ログ</p>
+          <p class="row__v">
+            <code>...\.openacp\logs\openacp.log</code>（全体）／<code>...\logs\sessions\</code>（セッション別）
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__k">台本と納品の索引</p>
+          <p class="row__v">
+            <code>strategy/video/台本/</code> と <code>strategy/video/台本/納品メモ.md</code><br>
+            動画はコミットしないので、このメモが「どの台本から何が出てどこにあるか」の唯一の索引
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__k">動画の納品先</p>
+          <p class="row__v">
+            <code>G:\マイドライブ\claude-work\&lt;yyyymmdd&gt;_&lt;タスク名&gt;\</code><br>
+            Drive for Desktop 経由でコピーし、共有 URL を返す
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__k">常駐の設定</p>
+          <p class="row__v">
+            タスクスケジューラのタスク <code>OpenACP</code>（ログオン30秒後に <code>openacp start</code>）<br>
+            OpenACP は Windows での自動起動を公式にサポートしないため、systemd の代わりに使っている
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__k">ルールの正</p>
+          <p class="row__v">
+            <code>CLAUDE.md</code>（常時読まれるルール）／<code>SETUP_DISCORD.md</code>（構築手順）／
+            <code>.claude/skills/video-production/</code>（動画制作の段取り）
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 白: 権限の層 -->
+  <section class="band band--white">
+    <div class="band__inner">
+      <span class="band__eyebrow">SAFETY</span>
+      <h2 class="band__title">止める場所は4層ある</h2>
+      <p class="band__lead">
+        1か所で全部を守ろうとしていません。上の層をすり抜けても、下の層で止まります。
+      </p>
+
+      <div class="layers">
+        <div class="layer">
+          <span class="layer__no">1</span>
+          <div>
+            <span class="layer__where">OpenACP — 誰が使えるか</span>
+            <h3 class="layer__title">利用者の許可リスト</h3>
+            <p class="layer__desc">
+              <code>allowedUserIds</code> に入っていないユーザーのメッセージは、
+              <strong>通知もされず黙って捨てられます</strong>。3名分の Discord ユーザー ID が入っていることが前提。
+              空配列だとサーバー全員が使えてしまうので、ここが最重要。
+            </p>
+          </div>
+        </div>
+        <div class="layer">
+          <span class="layer__no">2</span>
+          <div>
+            <span class="layer__where">Claude Code — 何を実行してよいか</span>
+            <h3 class="layer__title">承認ボタン</h3>
+            <p class="layer__desc">
+              読み取りと検索は無言で通り、<strong>シェルコマンドとファイル書き込みだけ</strong>が
+              Discord に承認ボタンとして出ます。これは Claude Code の既定の挙動で、設定は入れていません。
+              リポジトリの <code>.claude/settings.json</code> に制限を書くと、ターミナルから直接使うときにも効いてしまうためです。
+            </p>
+          </div>
+        </div>
+        <div class="layer">
+          <span class="layer__no">3</span>
+          <div>
+            <span class="layer__where">リポジトリ — 何をコミット・push してよいか</span>
+            <h3 class="layer__title">PreToolUse フック（<code>guard_git.py</code>）</h3>
+            <p class="layer__desc">
+              force push、main への直接 push、<code>.env</code>・取得済み X 投稿・音源・動画を含むコミット、
+              <code>git add -f</code> を、実行前に<strong>日本語の理由付きで</strong>止めます。
+              その理由文がそのまま Discord に出るので、利用者にも何が起きたか伝わります。
+              Claude Code のセッション内でしか効かないのが弱点。
+            </p>
+          </div>
+        </div>
+        <div class="layer">
+          <span class="layer__no">4</span>
+          <div>
+            <span class="layer__where">GitHub — サーバー側の最終防御</span>
+            <h3 class="layer__title">ブランチ保護（ルールセット <span class="num">22720228</span>）</h3>
+            <p class="layer__desc">
+              main に対して <code>deletion</code> / <code>non_fast_forward</code> / <code>pull_request</code> を有効化。
+              バイパス対象を空にしてあるので、<strong>admin であるオーナー自身も main に直接 push できません</strong>。
+              手打ちの git や GitHub Desktop からの操作も含めて弾かれます。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="note">
+        <p class="note__title">3層目と4層目が重なっている理由</p>
+        <p>
+          フックは早く止まって理由が読めるが、Claude Code を経由しない操作には無力。
+          ブランチ保護は確実だが、押し戻されるのが push の瞬間で、エラーも英語。
+          役割が違うので両方かけています。片方を外すならフック側を残すと、日常の手触りは変わりません。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ブラッシュ: 落とし穴 -->
+  <section class="band band--blush">
+    <div class="band__inner">
+      <span class="band__eyebrow">PITFALLS</span>
+      <h2 class="band__title">構築時に踏んだ落とし穴</h2>
+      <p class="band__lead">
+        公式ドキュメントのとおりにやると事故る箇所。パッケージ本体のコードを読んで確認した内容です。
+      </p>
+
+      <div class="traps">
+        <div class="trap">
+          <h3 class="trap__title">許可リストの置き場が、ドキュメントと違う</h3>
+          <p class="trap__desc">
+            ドキュメントは <code>config.json</code> の <code>security</code> ブロックに書けと言うが、
+            実装は<strong>プラグイン設定ファイルを先に読み、そこにあればそちらを使う</strong>。
+            プラグインの初期化がそのファイルを必ず作るので、<code>config.json</code> 側は事実上使われない。
+          </p>
+          <p class="trap__fix">
+            → <code>plugins\data\@openacp\security\settings.json</code> に書く。書き間違えると<strong>全員が使える状態のまま</strong>になり、エラーも出ない。
+          </p>
+        </div>
+        <div class="trap">
+          <h3 class="trap__title">許可リストは対話エディタから編集できない</h3>
+          <p class="trap__desc">
+            <code>openacp config</code> の Security メニューには「Max concurrent sessions」と
+            「Session timeout」しかなく、<strong>allowed user IDs は表示されるのに項目がない</strong>。
+          </p>
+          <p class="trap__fix">
+            → <code>openacp plugin configure @openacp/security</code> を使う。こちらには「Edit allowed user IDs」がある。
+          </p>
+        </div>
+        <div class="trap">
+          <h3 class="trap__title">workspace をリポジトリにするとトークンが漏れる</h3>
+          <p class="trap__desc">
+            設定は <code>~/.openacp/</code> ではなく <code>&lt;workspace&gt;/.openacp/</code> に作られる。
+            workspace にリポジトリを指定すると、Bot トークンが<strong>平文でリポジトリの中に置かれる</strong>。
+          </p>
+          <p class="trap__fix">
+            → workspace は <code>C:\Users\kawad\work</code>。保険として <code>.openacp/</code> を
+            <code>.gitignore</code> とフックの禁止パターンの両方に入れてある。
+          </p>
+        </div>
+        <div class="trap">
+          <h3 class="trap__title">フックの日本語が文字化けしていた</h3>
+          <p class="trap__desc">
+            Windows の Python はパイプへ書くとき既定でロケール（cp932）に落ちる。
+            Claude Code はフックの出力を UTF-8 として読むため、<strong>理由文が壊れて届いていた</strong>。
+            構築前から潜んでいた不具合。
+          </p>
+          <p class="trap__fix">
+            → <code>guard_git.py</code> と <code>after_event_csv.py</code> の両方で
+            <code>sys.stdout.reconfigure(encoding='utf-8')</code> を明示。
+          </p>
+        </div>
+      </div>
+
+      <div class="note">
+        <p class="note__title">できないと分かったこと</p>
+        <p>
+          OpenACP には「読み取りは自動承認、書き込みは承認要求」のような<strong>粒度のある自動承認ルールがありません</strong>。
+          あるのはセッション単位の全承認トグルだけ。ただし Claude Code の既定がまさにその区別をするので、
+          結果として設定は不要でした。<strong>セッション開始時に固定プロンプトを注入する設定も存在しません</strong>。
+          常時読ませたいルールは <code>CLAUDE.md</code> にだけ書けます。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 黒: 運用コマンド -->
+  <section class="band band--dark">
+    <div class="band__inner">
+      <span class="band__eyebrow">OPERATIONS</span>
+      <h2 class="band__title">よく使うコマンド</h2>
+      <p class="band__lead">PowerShell から。workspace は <code>C:\Users\kawad\work</code>。</p>
+
+      <div class="cmds">
+        <div class="cmd">
+          <p class="cmd__line">openacp status</p>
+          <p class="cmd__desc">動いているか、PID はいくつか</p>
+        </div>
+        <div class="cmd">
+          <p class="cmd__line">openacp logs</p>
+          <p class="cmd__desc">ログを追う。Ctrl+C で抜ける</p>
+        </div>
+        <div class="cmd">
+          <p class="cmd__line">openacp restart</p>
+          <p class="cmd__desc">設定を変えたあと。ホットリロードされない項目があるため</p>
+        </div>
+        <div class="cmd">
+          <p class="cmd__line">openacp doctor</p>
+          <p class="cmd__desc">設定と依存の診断。まず疑うのはここ</p>
+        </div>
+        <div class="cmd">
+          <p class="cmd__line">openacp plugin configure @openacp/security --dir C:\Users\kawad\work</p>
+          <p class="cmd__desc">利用者の追加・削除、セッションのタイムアウト変更</p>
+        </div>
+        <div class="cmd">
+          <p class="cmd__line">git worktree list</p>
+          <p class="cmd__desc">スレッドごとの作業ディレクトリ。落ちたセッションの分が残る（Discord 経由は終了時に後始末を促されない）</p>
+        </div>
+        <div class="cmd">
+          <p class="cmd__line">git worktree remove .claude/worktrees/&lt;パス&gt;</p>
+          <p class="cmd__desc">畳む。ロックで拒否されたら <code>git worktree unlock</code> を先に</p>
+        </div>
+        <div class="cmd">
+          <p class="cmd__line">Get-ScheduledTaskInfo -TaskName "OpenACP"</p>
+          <p class="cmd__desc">自動起動が走ったか。<code>LastTaskResult</code> が 0 以外なら失敗</p>
+        </div>
+        <div class="cmd">
+          <p class="cmd__line">Disable-ScheduledTask -TaskName "OpenACP"</p>
+          <p class="cmd__desc">しばらく使わないとき。常時起動を止める</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <p class="note__title">停止したいとき</p>
+        <p>
+          <code>openacp stop</code> でブリッジが止まります。Discord 側は無反応になるだけで、
+          スレッドや進行中の内容は消えません。再開は <code>openacp start</code>。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 白: 障害対応 -->
+  <section class="band band--white">
+    <div class="band__inner">
+      <span class="band__eyebrow">TRIAGE</span>
+      <h2 class="band__title">利用者から「動かない」と言われたら</h2>
+
+      <div class="rows">
+        <div class="row">
+          <p class="row__k">まったく反応がない（全員）</p>
+          <p class="row__v">
+            <code>openacp status</code> → 止まっていれば <code>openacp start</code>。
+            起動しないなら <code>openacp doctor</code> とログ。
+            PC の再起動後なら、タスクスケジューラが有効か確認する。
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__k">特定の1人だけ反応がない</p>
+          <p class="row__v">
+            許可リストにその人の ID が入っていない可能性が高い。仕様上<strong>拒否メッセージは出ません</strong>。
+            <code>openacp plugin configure @openacp/security</code> で確認する。
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__k">途中で止まったまま進まない</p>
+          <p class="row__v">
+            承認ボタンが押されずに放置されている。<strong>10分で自動的に拒否</strong>されるので、
+            そのあとは依頼し直しになる。長い作業のときは通知チャンネルも見てもらう。
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__k">時間を空けたら話が通じない</p>
+          <p class="row__v">
+            セッションのタイムアウト。既定 60 分では短いので延ばしてある。
+            それでも切れるなら、ブランチ名を伝えて再開してもらう運用に倒す。
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__k">ドライブのリンクが開けない</p>
+          <p class="row__v">
+            <code>claude-work</code> フォルダがその人の Google アカウントと共有されていない。
+            リンク共有にはせず、アカウントを個別に追加する。
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__k">main を壊されたかもしれない</p>
+          <p class="row__v">
+            ブランチ保護が有効なので、履歴の書き換えと直接 push は届いていません。
+            <code>gh api repos/devhitoshi/lollpop_docs/rules/branches/main</code> で3つのルールが返れば生きています。
+          </p>
+        </div>
+      </div>
+
+      <div class="note">
+        <p class="note__title">トークンが漏れたかもしれないとき</p>
+        <p>
+          Discord Developer Portal で <strong>Reset Token</strong> し、
+          <code>openacp plugin configure @openacp/discord-adapter</code> の「Change bot token」で入れ直して
+          <code>openacp restart</code>。古いトークンはその時点で無効になります。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ピンク: 1ページに1回だけのCTA -->
+  <section class="band band--pink">
+    <div class="band__inner">
+      <span class="band__eyebrow">NEXT</span>
+      <h2 class="band__title">構築の手順は SETUP_DISCORD.md に</h2>
+      <p class="band__lead">
+        Bot の作成から動作確認まで、上から順に実行できる形でまとめてあります。
+        このページは「なぜそうなっているか」、あちらは「どう作るか」。
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <p>ろりぽっぷ!!!!!!! Docs — Discord 制作環境（管理者向け）</p>
+    <p>
+      利用者に渡すのは <a href="./discord_guide.html">使い方ガイド</a>。
+      文書の正はリポジトリの <code>CLAUDE.md</code> と <code>SETUP_DISCORD.md</code>、デザインの正は <code>design.md</code>。
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
