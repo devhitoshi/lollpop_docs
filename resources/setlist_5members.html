@@ -316,6 +316,56 @@ dt:first-of-type { margin-top: 0; }
   .db, .db__axis { grid-template-columns: 8.5rem minmax(0, 1fr) 3.6rem; gap: 8px; }
   .db__label, .bar__label { font-size: 13px; }
 }
+
+/* ---------- セトリ全文 ---------- */
+.sets {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px 64px;
+}
+.set__meta {
+  display: flex; align-items: baseline; gap: 12px;
+  margin: 0 0 2px;
+  font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums;
+}
+.set__n { margin-left: auto; font-weight: 700; color: var(--ink); }
+.set__title {
+  margin: 0; font-size: 17px; font-weight: 700; line-height: 1.5; color: var(--ink);
+  overflow-wrap: anywhere;
+}
+.set__venue {
+  margin: 2px 0 12px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 13px; color: var(--muted);
+}
+.set__list { margin: 0; padding: 0; list-style: none; }
+.si {
+  display: grid; grid-template-columns: 2em 12px 1fr;
+  align-items: baseline; gap: 10px;
+  padding: 3px 0;
+  font-size: 15px; color: var(--ink);
+}
+.si__no { font-size: 12px; color: var(--muted-soft); font-variant-numeric: tabular-nums; text-align: right; }
+.si .swatch { align-self: center; }
+.si__name { overflow-wrap: anywhere; }
+.si--marker { grid-template-columns: 2em 1fr; }
+.si--marker .si__name {
+  grid-column: 2 / -1;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.12em; color: var(--muted-soft);
+}
+.si--other .si__name { color: var(--muted); }
+.si__tag {
+  margin-left: 8px; padding: 2px 8px;
+  border-radius: 9999px; background: var(--hairline);
+  font-size: 11px; font-weight: 500; color: var(--muted); white-space: nowrap;
+}
+.swatch--none { background: transparent; border: 1px solid var(--hairline); }
+.evlist--two { columns: 2; column-gap: 48px; }
+.evlist--two .ev { break-inside: avoid; }
+
+@media (max-width: 780px) {
+  .sets { grid-template-columns: 1fr; gap: 40px; }
+  .evlist--two { columns: 1; }
+}
 </style>
 <header class="band">
   <div class="wrap">
@@ -400,22 +450,26 @@ dt:first-of-type { margin-top: 0; }
 
 <section class="band band--blush">
   <div class="wrap">
-    <div class="two-col">
-      <div>
-        <p class="eyebrow">SHOWS</p>
-        <h2>5人体制の10公演</h2>
-        <ul class="evlist"><li class="ev"><span class="ev__date">2026-08-22</span><span class="ev__name">ガラストロメ!!<span class="ev__venue">TOKYOSQUARE in Itabashi</span></span><span class="ev__n">6曲</span></li><li class="ev"><span class="ev__date">2026-08-24</span><span class="ev__name">「idolliveinfo REAL」<span class="ev__venue">新宿DHNoA</span></span><span class="ev__n">5曲</span></li><li class="ev"><span class="ev__date">2026-08-26</span><span class="ev__name">単独ライブ（1部ワンコインライブ）<span class="ev__venue">中野坂上SUB TOKYO</span></span><span class="ev__n">4曲</span></li><li class="ev"><span class="ev__date">2026-08-26</span><span class="ev__name">単独ライブ（2部 Vol.18 夏曲お披露目公演）<span class="ev__venue">中野坂上SUB TOKYO</span></span><span class="ev__n">6曲</span></li><li class="ev"><span class="ev__date">2026-08-29</span><span class="ev__name">『POP CRUSH DAY1』<span class="ev__venue">渋谷VIDENT</span></span><span class="ev__n">4曲</span></li><li class="ev"><span class="ev__date">2026-08-30</span><span class="ev__name">「バブリー革命ライブ＠カモガワ」<span class="ev__venue">千葉県鴨川市前原海岸特設ステージ</span></span><span class="ev__n">4曲</span></li><li class="ev"><span class="ev__date">2026-08-31</span><span class="ev__name">クモリノチ。×ニキプレ pre.『クモリニキ。』<span class="ev__venue">渋谷近未来会館</span></span><span class="ev__n">7曲</span></li><li class="ev"><span class="ev__date">2026-09-05</span><span class="ev__name">『白絵葵子生誕祭2026』<span class="ev__venue">大塚FUTURE:</span></span><span class="ev__n">5曲</span></li><li class="ev"><span class="ev__date">2026-09-05</span><span class="ev__name">PLUMLIVE #125<span class="ev__venue">新宿Zirco</span></span><span class="ev__n">4曲</span></li><li class="ev"><span class="ev__date">2026-09-06</span><span class="ev__name">やぎくるみ生誕祭2026<span class="ev__venue">渋谷CYCLONE</span></span><span class="ev__n">10曲</span></li></ul>
-        <p class="note">曲数は持ち曲として数えられた分です。
-          9/6「やぎくるみ生誕祭2026」のソロ曲・カバー曲は持ち曲ではないので数に入れていません。</p>
-      </div>
-      <div>
-        <p class="eyebrow">NOT YET</p>
-        <h2>まだ登場していない7曲</h2>
-        <ul class="evlist"><li class="ev"><span class="ev__root swatch swatch--orig"></span><span class="ev__name">メイク☆マイダンス<span class="ev__venue">オリジナル曲 ／ 通算 10回</span></span></li><li class="ev"><span class="ev__root swatch swatch--stk"></span><span class="ev__name">BLIND CALL<span class="ev__venue">ストクレ曲 ／ 通算 25回</span></span></li><li class="ev"><span class="ev__root swatch swatch--stk"></span><span class="ev__name">むげんの☆Lambie<span class="ev__venue">ストクレ曲 ／ 通算 86回</span></span></li><li class="ev"><span class="ev__root swatch swatch--stk"></span><span class="ev__name">MY DREAM MY LIFE<span class="ev__venue">ストクレ曲 ／ 通算 61回</span></span></li><li class="ev"><span class="ev__root swatch swatch--stk"></span><span class="ev__name">Say Hello!!<span class="ev__venue">ストクレ曲 ／ 通算 45回</span></span></li><li class="ev"><span class="ev__root swatch swatch--hpst"></span><span class="ev__name">KAWAIIは正義<span class="ev__venue">ハピスト曲 ／ 通算 19回</span></span></li><li class="ev"><span class="ev__root swatch swatch--hpst"></span><span class="ev__name">♀︎正解の方程式♂<span class="ev__venue">ハピスト曲 ／ 通算 10回</span></span></li></ul>
-        <p class="note">この10公演で出番が無かっただけで、セットリストから外れたかどうかは分かりません。
-          公式の告知を確認してください。</p>
-      </div>
+    <div class="section-head">
+      <p class="eyebrow">NOT YET</p>
+      <h2>まだ登場していない7曲</h2>
+      <p class="note">この10公演で出番が無かっただけで、セットリストから外れたかどうかは分かりません。
+        公式の告知を確認してください。</p>
     </div>
+    <ul class="evlist evlist--two"><li class="ev"><span class="ev__root swatch swatch--orig"></span><span class="ev__name">メイク☆マイダンス<span class="ev__venue">オリジナル曲 ／ 通算 10回</span></span></li><li class="ev"><span class="ev__root swatch swatch--stk"></span><span class="ev__name">BLIND CALL<span class="ev__venue">ストクレ曲 ／ 通算 25回</span></span></li><li class="ev"><span class="ev__root swatch swatch--stk"></span><span class="ev__name">むげんの☆Lambie<span class="ev__venue">ストクレ曲 ／ 通算 86回</span></span></li><li class="ev"><span class="ev__root swatch swatch--stk"></span><span class="ev__name">MY DREAM MY LIFE<span class="ev__venue">ストクレ曲 ／ 通算 61回</span></span></li><li class="ev"><span class="ev__root swatch swatch--stk"></span><span class="ev__name">Say Hello!!<span class="ev__venue">ストクレ曲 ／ 通算 45回</span></span></li><li class="ev"><span class="ev__root swatch swatch--hpst"></span><span class="ev__name">KAWAIIは正義<span class="ev__venue">ハピスト曲 ／ 通算 19回</span></span></li><li class="ev"><span class="ev__root swatch swatch--hpst"></span><span class="ev__name">♀︎正解の方程式♂<span class="ev__venue">ハピスト曲 ／ 通算 10回</span></span></li></ul>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">SETLIST</p>
+      <h2>10公演のセトリ全文</h2>
+      <p class="note">記録どおりの並びです。曲名・番号・SE・MC も公式のセットリスト投稿の表記のまま載せています。
+        丸の色はルーツ（<span class="swatch"></span>オリジナル／<span class="swatch swatch--stk"></span>ストクレ／<span class="swatch swatch--hpst"></span>ハピスト）。
+        「持ち曲外」はソロ曲・カバー曲で、回数の集計には入れていません。</p>
+    </div>
+    <div class="sets"><article class="set"><p class="set__meta"><span class="set__date">2026-08-22</span><span class="set__n">6曲</span></p><h3 class="set__title">ガラストロメ!!</h3><p class="set__venue">TOKYOSQUARE in Itabashi</p><ol class="set__list"><li class="si si--marker"><span class="si__no"></span><span class="si__name">SE</span></li><li class="si"><span class="si__no">01</span><span class="swatch swatch--orig"></span><span class="si__name">始まりの宴!!!!!!!</span></li><li class="si"><span class="si__no">02</span><span class="swatch swatch--orig"></span><span class="si__name">乙女ロック</span></li><li class="si"><span class="si__no">03</span><span class="swatch swatch--hpst"></span><span class="si__name">推し事〜女の子アイドルオタクあるある〜</span></li><li class="si"><span class="si__no">04</span><span class="swatch swatch--stk"></span><span class="si__name">MADOROMI</span></li><li class="si"><span class="si__no">05</span><span class="swatch swatch--orig"></span><span class="si__name">シーソーゲーム</span></li><li class="si"><span class="si__no">06</span><span class="swatch swatch--stk"></span><span class="si__name">SHINY DAYS</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li></ol></article><article class="set"><p class="set__meta"><span class="set__date">2026-08-24</span><span class="set__n">5曲</span></p><h3 class="set__title">「idolliveinfo REAL」</h3><p class="set__venue">新宿DHNoA</p><ol class="set__list"><li class="si si--marker"><span class="si__no"></span><span class="si__name">SE</span></li><li class="si"><span class="si__no">01</span><span class="swatch swatch--orig"></span><span class="si__name">始まりの宴!!!!!!!</span></li><li class="si"><span class="si__no">02</span><span class="swatch swatch--hpst"></span><span class="si__name">推し事〜女の子アイドルオタクあるある〜</span></li><li class="si"><span class="si__no">03</span><span class="swatch swatch--orig"></span><span class="si__name">未完成ヒロイン</span></li><li class="si"><span class="si__no">04</span><span class="swatch swatch--orig"></span><span class="si__name">シーソーゲーム</span></li><li class="si"><span class="si__no">05</span><span class="swatch swatch--stk"></span><span class="si__name">END THE WORLD</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li></ol></article><article class="set"><p class="set__meta"><span class="set__date">2026-08-26</span><span class="set__n">4曲</span></p><h3 class="set__title">単独ライブ（1部ワンコインライブ）</h3><p class="set__venue">中野坂上SUB TOKYO</p><ol class="set__list"><li class="si si--marker"><span class="si__no"></span><span class="si__name">SE</span></li><li class="si"><span class="si__no">01</span><span class="swatch swatch--hpst"></span><span class="si__name">推し事〜女の子アイドルオタクあるある〜</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li><li class="si"><span class="si__no">02</span><span class="swatch swatch--stk"></span><span class="si__name">キミノセイ、</span></li><li class="si"><span class="si__no">03</span><span class="swatch swatch--orig"></span><span class="si__name">ろりぽっぷ!!!!!!!</span></li><li class="si"><span class="si__no">04</span><span class="swatch swatch--orig"></span><span class="si__name">始まりの宴!!!!!!!</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li></ol></article><article class="set"><p class="set__meta"><span class="set__date">2026-08-26</span><span class="set__n">6曲</span></p><h3 class="set__title">単独ライブ（2部 Vol.18 夏曲お披露目公演）</h3><p class="set__venue">中野坂上SUB TOKYO</p><ol class="set__list"><li class="si si--marker"><span class="si__no"></span><span class="si__name">SE</span></li><li class="si"><span class="si__no">01</span><span class="swatch swatch--stk"></span><span class="si__name">Singularity</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li><li class="si"><span class="si__no">02</span><span class="swatch swatch--orig"></span><span class="si__name">夏色ラムネ🆕</span></li><li class="si"><span class="si__no">03</span><span class="swatch swatch--orig"></span><span class="si__name">乙女ロック</span></li><li class="si"><span class="si__no">04</span><span class="swatch swatch--hpst"></span><span class="si__name">アタックサイン</span></li><li class="si"><span class="si__no">05</span><span class="swatch swatch--orig"></span><span class="si__name">約束!!!!!!!</span></li><li class="si"><span class="si__no">06</span><span class="swatch swatch--orig"></span><span class="si__name">夏色ラムネ🆕</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li></ol></article><article class="set"><p class="set__meta"><span class="set__date">2026-08-29</span><span class="set__n">4曲</span></p><h3 class="set__title">『POP CRUSH DAY1』</h3><p class="set__venue">渋谷VIDENT</p><ol class="set__list"><li class="si si--marker"><span class="si__no"></span><span class="si__name">SE</span></li><li class="si"><span class="si__no">01</span><span class="swatch swatch--stk"></span><span class="si__name">キミノセイ、</span></li><li class="si"><span class="si__no">02</span><span class="swatch swatch--orig"></span><span class="si__name">ぽっぽ♪ポジティブ!!</span></li><li class="si"><span class="si__no">03</span><span class="swatch swatch--hpst"></span><span class="si__name">推し事〜女の子アイドルオタクあるある〜</span></li><li class="si"><span class="si__no">04</span><span class="swatch swatch--orig"></span><span class="si__name">夏色ラムネ</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li></ol></article><article class="set"><p class="set__meta"><span class="set__date">2026-08-30</span><span class="set__n">4曲</span></p><h3 class="set__title">「バブリー革命ライブ＠カモガワ」</h3><p class="set__venue">千葉県鴨川市前原海岸特設ステージ</p><ol class="set__list"><li class="si si--marker"><span class="si__no"></span><span class="si__name">SE</span></li><li class="si"><span class="si__no">01</span><span class="swatch swatch--stk"></span><span class="si__name">HELLO</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li><li class="si"><span class="si__no">02</span><span class="swatch swatch--orig"></span><span class="si__name">夏色ラムネ</span></li><li class="si"><span class="si__no">03</span><span class="swatch swatch--stk"></span><span class="si__name">SHINY DAYS</span></li><li class="si"><span class="si__no">04</span><span class="swatch swatch--orig"></span><span class="si__name">始まりの宴!!!!!!!</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li></ol></article><article class="set"><p class="set__meta"><span class="set__date">2026-08-31</span><span class="set__n">7曲</span></p><h3 class="set__title">クモリノチ。×ニキプレ pre.『クモリニキ。』</h3><p class="set__venue">渋谷近未来会館</p><ol class="set__list"><li class="si si--marker"><span class="si__no"></span><span class="si__name">SE</span></li><li class="si"><span class="si__no">01</span><span class="swatch swatch--orig"></span><span class="si__name">シーソーゲーム</span></li><li class="si"><span class="si__no">02</span><span class="swatch swatch--orig"></span><span class="si__name">乙女ロック</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li><li class="si"><span class="si__no">03</span><span class="swatch swatch--orig"></span><span class="si__name">未完成ヒロイン</span></li><li class="si"><span class="si__no">04</span><span class="swatch swatch--stk"></span><span class="si__name">SHINY DAYS</span></li><li class="si"><span class="si__no">05</span><span class="swatch swatch--stk"></span><span class="si__name">END THE WORLD</span></li><li class="si"><span class="si__no">06</span><span class="swatch swatch--stk"></span><span class="si__name">MADOROMI</span></li><li class="si"><span class="si__no">07</span><span class="swatch swatch--orig"></span><span class="si__name">始まりの宴!!!!!!!</span></li></ol></article><article class="set"><p class="set__meta"><span class="set__date">2026-09-05</span><span class="set__n">5曲</span></p><h3 class="set__title">『白絵葵子生誕祭2026』</h3><p class="set__venue">大塚FUTURE:</p><ol class="set__list"><li class="si si--marker"><span class="si__no"></span><span class="si__name">SE</span></li><li class="si"><span class="si__no">01</span><span class="swatch swatch--orig"></span><span class="si__name">未完成ヒロイン</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li><li class="si"><span class="si__no">02</span><span class="swatch swatch--stk"></span><span class="si__name">HELLO</span></li><li class="si"><span class="si__no">03</span><span class="swatch swatch--orig"></span><span class="si__name">夏色ラムネ</span></li><li class="si"><span class="si__no">04</span><span class="swatch swatch--stk"></span><span class="si__name">SHINY DAYS</span></li><li class="si"><span class="si__no">05</span><span class="swatch swatch--hpst"></span><span class="si__name">推し事～女の子アイドルオタクあるある〜</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li></ol></article><article class="set"><p class="set__meta"><span class="set__date">2026-09-05</span><span class="set__n">4曲</span></p><h3 class="set__title">PLUMLIVE #125</h3><p class="set__venue">新宿Zirco</p><ol class="set__list"><li class="si si--marker"><span class="si__no"></span><span class="si__name">SE</span></li><li class="si"><span class="si__no">01</span><span class="swatch swatch--orig"></span><span class="si__name">夏色ラムネ</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li><li class="si"><span class="si__no">02</span><span class="swatch swatch--hpst"></span><span class="si__name">アタックサイン</span></li><li class="si"><span class="si__no">03</span><span class="swatch swatch--orig"></span><span class="si__name">シーソーゲーム</span></li><li class="si"><span class="si__no">04</span><span class="swatch swatch--orig"></span><span class="si__name">始まりの宴!!!!!!!</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li></ol></article><article class="set"><p class="set__meta"><span class="set__date">2026-09-06</span><span class="set__n">10曲</span></p><h3 class="set__title">やぎくるみ生誕祭2026</h3><p class="set__venue">渋谷CYCLONE</p><ol class="set__list"><li class="si si--marker"><span class="si__no"></span><span class="si__name">SE</span></li><li class="si"><span class="si__no">01</span><span class="swatch swatch--orig"></span><span class="si__name">始まりの宴</span></li><li class="si"><span class="si__no">02</span><span class="swatch swatch--orig"></span><span class="si__name">ぽっぽ♪ポジティブ!!</span></li><li class="si"><span class="si__no">03</span><span class="swatch swatch--orig"></span><span class="si__name">夏色ラムネ</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li><li class="si si--other"><span class="si__no">04</span><span class="swatch swatch--none"></span><span class="si__name">My Story<span class="si__tag">持ち曲外</span></span></li><li class="si si--other"><span class="si__no">05</span><span class="swatch swatch--none"></span><span class="si__name">幸せなんだ<span class="si__tag">持ち曲外</span></span></li><li class="si"><span class="si__no">06</span><span class="swatch swatch--stk"></span><span class="si__name">Singularity</span></li><li class="si"><span class="si__no">07</span><span class="swatch swatch--hpst"></span><span class="si__name">サクラロード</span></li><li class="si"><span class="si__no">08</span><span class="swatch swatch--orig"></span><span class="si__name">Unknown</span></li><li class="si"><span class="si__no">09</span><span class="swatch swatch--stk"></span><span class="si__name">MADOROMI</span></li><li class="si"><span class="si__no">10</span><span class="swatch swatch--orig"></span><span class="si__name">シーソーゲーム</span></li><li class="si"><span class="si__no">11</span><span class="swatch swatch--orig"></span><span class="si__name">主人公</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">MC</span></li><li class="si si--marker"><span class="si__no"></span><span class="si__name">アンコール</span></li><li class="si"><span class="si__no">12</span><span class="swatch swatch--stk"></span><span class="si__name">SHINY DAYS</span></li></ol></article></div>
   </div>
 </section>
 
