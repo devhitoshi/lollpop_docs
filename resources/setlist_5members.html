@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ろりぽっぷ!!!!!!! 5人体制のセトリ</title>
+<meta name="description" content="ろりぽっぷ!!!!!!!が5人体制になった2026年8月22日以降の10公演から、持ち曲26曲のうち披露済みの19曲をグラフにしたページです。">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
+</head>
+<body>
+<nav class="top-nav"><a href="./index.html">🍭 ろりぽっぷ!!!!!!! Docs</a></nav>
+<style>
+/* =====================================================================
+   ろりぽっぷ!!!!!!! 5人体制のセトリ
+   デザインの正はリポジトリルートの design.md（実装: resources/css/style.css）。
+   単一ファイル完結のため、同じトークン値をここに転記している。
+   フルブリードのバンド構成。カードなし・影なし・角丸は操作要素とバッジのみ。
+   ===================================================================== */
+:root {
+  color-scheme: light;
+  --primary: #d6006e;
+  --primary-on-dark: #ff9ecb;
+  --canvas: #ffffff;
+  --surface-blush: #fbe7f0;
+  --surface-blush-strong: #f6d3e3;
+  --surface-dark: #1a1113;
+  --ink: #1d1216;
+  --ink-2: #45383e;
+  --muted: #71646b;
+  --muted-soft: #998a92;
+  --on-dark: #fff5f9;
+  --on-dark-soft: #d9c4ce;
+  --hairline: #f2e2ea;
+  --hairline-soft: #faeef4;
+  --grid: #f0e2e9;
+
+  /* ルーツ別カテゴリカル（design.md チャートパレット） */
+  --c-orig: #d6006e;
+  --c-stk:  #2a6fd6;
+  --c-hpst: #eda100;
+
+  --r-md: 8px;
+  --font: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium",
+          Meiryo, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink-2);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--primary); }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+.sr {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+
+/* ---------- top nav ---------- */
+.top-nav {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; align-items: center;
+  height: 56px; padding: 0 24px;
+  background: var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+  font-size: 13px; line-height: 1;
+}
+.top-nav a { color: var(--ink); text-decoration: none; font-weight: 700; }
+
+/* ---------- バンド ---------- */
+.band { padding-block: 96px; padding-inline: 24px; }
+.band--tight { padding-block: 64px; }
+.band--blush { background: var(--surface-blush); }
+.band--dark { background: var(--surface-dark); color: var(--on-dark-soft); }
+.band--dark h2, .band--dark strong { color: var(--on-dark); }
+.band--dark a { color: var(--primary-on-dark); }
+.wrap { max-width: 1000px; margin: 0 auto; }
+.wrap--prose { max-width: 720px; margin: 0 auto; }
+
+.eyebrow {
+  margin: 0 0 12px;
+  font-size: 12px; font-weight: 700; line-height: 1.4; letter-spacing: 0.12em;
+  color: var(--muted-soft);
+}
+.band--dark .eyebrow { color: var(--on-dark-soft); }
+h1 {
+  margin: 0 0 16px;
+  font-size: 40px; font-weight: 700; line-height: 1.25; letter-spacing: -0.02em;
+  color: var(--ink);
+}
+h2 {
+  margin: 0 0 8px;
+  font-size: 28px; font-weight: 700; line-height: 1.35; letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.lead { margin: 0; font-size: 20px; line-height: 1.6; color: var(--ink-2); max-width: 42em; }
+.note { margin: 8px 0 0; font-size: 14px; line-height: 1.8; color: var(--muted); max-width: 46em; }
+.band--dark .note { color: var(--on-dark-soft); }
+.section-head { margin-bottom: 40px; }
+
+/* ---------- 数字の帯 ---------- */
+.stats {
+  display: flex; flex-wrap: wrap; gap: 32px 48px;
+  max-width: 1000px; margin: 0 auto;
+}
+.stat { min-width: 120px; }
+.stat__n {
+  display: block;
+  font-size: 44px; font-weight: 700; line-height: 1.1; letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.stat__n em { font-style: normal; font-size: 20px; font-weight: 500; margin-left: 2px; }
+.stat__k { display: block; font-size: 13px; font-weight: 500; color: var(--muted); line-height: 1.5; }
+
+/* ---------- 持ち曲マップ ---------- */
+.rootgroup + .rootgroup { margin-top: 48px; }
+.rootgroup__head {
+  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 16px; padding-bottom: 10px;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.5;
+}
+.rootgroup__ratio { margin-left: auto; font-size: 13px; font-weight: 500; color: var(--muted); }
+.swatch {
+  display: inline-block; width: 12px; height: 12px; flex: none; border-radius: 9999px;
+  background: var(--c-orig);
+}
+.swatch--stk { background: var(--c-stk); }
+.swatch--hpst { background: var(--c-hpst); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 10px 6px 12px;
+  border-radius: 9999px;
+  font-size: 14px; line-height: 1.5;
+}
+.chip--on { color: #ffffff; font-weight: 500; }
+.chip--on[data-root="orig"] { background: var(--c-orig); }
+.chip--on[data-root="stk"]  { background: var(--c-stk); }
+.chip--on[data-root="hpst"] { background: var(--c-hpst); color: #3b2600; }
+.chip--off {
+  background: transparent; color: var(--muted);
+  border: 1px dashed var(--muted-soft);
+}
+.chip__n {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 22px; height: 20px; padding: 0 5px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.28);
+  font-size: 12px; font-weight: 700; line-height: 1;
+}
+.chip--on[data-root="hpst"] .chip__n { background: rgba(0, 0, 0, 0.14); }
+.chip__n--off { background: transparent; color: var(--muted-soft); }
+.legend {
+  display: flex; flex-wrap: wrap; gap: 8px 24px;
+  margin: 0 0 32px; padding: 0; list-style: none;
+  font-size: 13px; color: var(--muted);
+}
+.legend li { display: flex; align-items: center; gap: 8px; }
+.legend .chip { pointer-events: none; }
+
+/* ---------- 横棒（ランキング） ---------- */
+.bars { margin: 0; padding: 0; list-style: none; }
+.bar {
+  display: grid;
+  grid-template-columns: minmax(0, 15em) 1fr 3em;
+  align-items: center; gap: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--hairline-soft);
+}
+.bar__label { font-size: 14px; color: var(--ink); overflow-wrap: anywhere; }
+.bar__track { height: 14px; background: var(--grid); }
+.bar__fill { display: block; height: 100%; background: var(--c-orig); }
+.bar__fill--stk { background: var(--c-stk); }
+.bar__fill--hpst { background: var(--c-hpst); }
+.bar__val { font-size: 14px; font-weight: 700; color: var(--ink); text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- 公演×曲マトリクス ---------- */
+.matrix-scroll { overflow-x: auto; padding-bottom: 8px; }
+.matrix { border-collapse: collapse; font-size: 13px; background: var(--canvas); }
+.matrix th, .matrix td { padding: 0; }
+.matrix thead th {
+  vertical-align: bottom; padding: 0 0 10px;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 11px; font-weight: 700; color: var(--muted);
+  white-space: nowrap;
+}
+.matrix thead th span { display: block; width: 40px; text-align: center; }
+.matrix thead th small { display: block; font-size: 11px; font-weight: 400; }
+.matrix__corner { text-align: left !important; padding-left: 16px !important; }
+.matrix thead th:first-child { padding-left: 0 !important; }
+.matrix__corner span { width: auto !important; }
+.matrix tbody th, .matrix tfoot th {
+  position: sticky; left: 0; z-index: 1;
+  padding: 0 16px 0 0;
+  background: var(--canvas);
+  font-weight: 400; text-align: left; white-space: nowrap;
+  color: var(--ink);
+}
+.matrix tbody tr { border-bottom: 1px solid var(--hairline-soft); }
+.matrix tfoot th, .matrix tfoot td {
+  padding-top: 8px; border-top: 1px solid var(--hairline);
+  font-size: 12px; color: var(--muted);
+}
+/* .sr（読み上げ用テキスト）は position:absolute。セルを位置決めの基準にしないと
+   ページ全体の右端に飛び出して、横スクロールが生まれる。 */
+.cell { position: relative; height: 30px; text-align: center; }
+.cell--sum { font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; padding-left: 16px; }
+.dot { display: inline-block; width: 12px; height: 12px; border-radius: 9999px; background: var(--c-orig); }
+.dot--stk { background: var(--c-stk); }
+.dot--hpst { background: var(--c-hpst); }
+.dot--off { background: var(--grid); width: 6px; height: 6px; }
+.dot--twice { box-shadow: 0 0 0 3px var(--canvas), 0 0 0 5px currentColor; color: var(--muted-soft); }
+
+/* ---------- 一覧行 ---------- */
+.evlist { margin: 0; padding: 0; list-style: none; }
+.ev {
+  display: flex; align-items: baseline; gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--hairline);
+  font-size: 16px;
+}
+.ev__date { flex: none; width: 6.5em; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ev__root { align-self: center; }
+.ev__name { flex: 1 1 auto; color: var(--ink); overflow-wrap: anywhere; }
+.ev__venue { display: block; font-size: 13px; color: var(--muted); }
+.ev__n { flex: none; font-size: 14px; font-weight: 700; color: var(--ink); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.band--dark dt { font-weight: 700; color: var(--on-dark); margin-top: 20px; font-size: 15px; }
+.band--dark dd { margin: 4px 0 0; font-size: 14px; line-height: 1.8; }
+
+@media (max-width: 780px) {
+  .band { padding-block: 64px; }
+  h1 { font-size: 30px; }
+  h2 { font-size: 23px; }
+  .lead { font-size: 17px; }
+  .stat__n { font-size: 34px; }
+  .stats { gap: 24px 32px; }
+  .bar { grid-template-columns: minmax(0, 9.5em) 1fr 2.4em; gap: 10px; }
+  .two-col { grid-template-columns: 1fr; gap: 32px; }
+  .ev { flex-wrap: wrap; gap: 4px 12px; }
+  .ev__date { width: auto; }
+}
+
+/* ---------- 前後比較（ダンベル） ---------- */
+.db__axis {
+  display: grid; grid-template-columns: 15rem minmax(0, 1fr) 4.5rem; gap: 16px;
+  margin: 0 0 6px; font-size: 11px; color: var(--muted-soft); line-height: 1;
+}
+.db__axis-in { grid-column: 2; display: flex; justify-content: space-between; margin: 0 7px; }
+.dbs { margin: 0; padding: 0; list-style: none; }
+.db {
+  display: grid; grid-template-columns: 15rem minmax(0, 1fr) 4.5rem;
+  align-items: center; gap: 16px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+}
+.db__label { font-size: 14px; color: var(--ink); overflow-wrap: anywhere; }
+.db__track {
+  position: relative; height: 14px; margin: 0 7px;
+  background: linear-gradient(to bottom, transparent 6px, rgba(255,255,255,0.85) 6px,
+              rgba(255,255,255,0.85) 8px, transparent 8px);
+}
+.db__line {
+  position: absolute; top: 6px; height: 2px;
+  background: var(--muted-soft);
+}
+.db__pt {
+  position: absolute; top: 1px;
+  width: 12px; height: 12px; margin-left: -6px;
+  border-radius: 9999px;
+  background: var(--canvas);
+  border: 2px solid var(--muted-soft);
+}
+.db__pt--after { border: 0; background: var(--c-orig); }
+.db__pt--stk { background: var(--c-stk); }
+.db__pt--hpst { background: var(--c-hpst); }
+.db__val {
+  font-size: 13px; font-weight: 700; text-align: right;
+  font-variant-numeric: tabular-nums; color: var(--muted);
+}
+.db__val--up, .db__val--down, .db__val--flat { color: var(--ink); }
+.db__unit { font-size: 10px; font-weight: 500; margin-left: 1px; }
+.db__key {
+  display: flex; align-items: center; gap: 6px;
+  margin: 20px 0 0; font-size: 13px; color: var(--muted);
+}
+.db__key .db__pt { position: static; margin: 0 2px 0 12px; }
+.db__key .db__pt:first-child { margin-left: 0; }
+
+/* ---------- ランキングの通算 ---------- */
+.bar { grid-template-columns: minmax(0, 15em) 1fr 2.6em 5em; }
+.bar__sub { font-size: 12px; color: var(--muted-soft); text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ---------- 本文の細部 ---------- */
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.88em;
+  background: var(--hairline-soft);
+  padding: 1px 5px;
+}
+.band--dark code { background: rgba(255, 255, 255, 0.1); }
+dl { margin: 0; }
+dt:first-of-type { margin-top: 0; }
+
+@media (max-width: 780px) {
+  .bar { grid-template-columns: minmax(0, 9.5em) 1fr 2.2em 4.2em; gap: 8px; }
+  .db, .db__axis { grid-template-columns: 8.5rem minmax(0, 1fr) 3.6rem; gap: 8px; }
+  .db__label, .bar__label { font-size: 13px; }
+}
+</style>
+<header class="band">
+  <div class="wrap">
+    <p class="eyebrow">5-MEMBER ERA / 2026-08-22 → 2026-09-06</p>
+    <h1>5人体制のセトリ<br>持ち曲26曲のうち19曲</h1>
+    <p class="lead">
+      ろりぽっぷ!!!!!!!が5人体制で迎えた最初の10公演を、
+      <code>events/data_event.csv</code> のセットリストから数えました。
+      持ち曲26曲のうち19曲が舞台にのり、7曲はまだ登場していません。
+    </p>
+    <p class="note">
+      ファンが公式のセットリスト投稿を写しとって数えている<strong>非公式</strong>のページです。
+      集計は2026年9月6日の公演まで。10公演ぶんなので、1公演の増減で割合が大きく動きます。
+    </p>
+  </div>
+</header>
+
+<section class="band band--blush band--tight">
+  <div class="stats">
+    <div class="stat"><span class="stat__n">10</span><span class="stat__k">5人体制の公演数</span></div>
+    <div class="stat"><span class="stat__n">55</span><span class="stat__k">のべ披露回数</span></div>
+    <div class="stat"><span class="stat__n">26</span><span class="stat__k">持ち曲</span></div>
+    <div class="stat"><span class="stat__n">19<em>／26</em></span><span class="stat__k">披露済み（73%）</span></div>
+    <div class="stat"><span class="stat__n">7</span><span class="stat__k">まだ登場していない曲</span></div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">SONG MAP</p>
+      <h2>持ち曲26曲の地図</h2>
+      <p class="note">ルーツごとに並べた持ち曲の全体像。色が付いているのが5人体制で披露された曲で、
+        数字はこの10公演での回数です。点線の枠はまだ登場していない曲。</p>
+    </div>
+    <ul class="legend">
+      <li><span class="chip chip--on" data-root="orig"><span class="chip__name">披露済み</span><span class="chip__n">n</span></span>この期間の披露回数</li>
+      <li><span class="chip chip--off"><span class="chip__name">未披露</span><span class="chip__n chip__n--off">—</span></span>この期間は登場なし</li>
+    </ul>
+    <div class="rootgroup"><p class="rootgroup__head"><span class="swatch swatch--orig"></span>オリジナル曲<span class="rootgroup__ratio">10 / 11 曲</span></p><ul class="chips"><li class="chip chip--on" data-root="orig"><span class="chip__name">ろりぽっぷ!!!!!!!</span><span class="chip__n">1</span></li><li class="chip chip--on" data-root="orig"><span class="chip__name">ぽっぽ♪ポジティブ！！</span><span class="chip__n">2</span></li><li class="chip chip--on" data-root="orig"><span class="chip__name">始まりの宴!!!!!!!</span><span class="chip__n">7</span></li><li class="chip chip--on" data-root="orig"><span class="chip__name">約束!!!!!!!</span><span class="chip__n">1</span></li><li class="chip chip--on" data-root="orig"><span class="chip__name">乙女ロック</span><span class="chip__n">3</span></li><li class="chip chip--on" data-root="orig"><span class="chip__name">主人公!!!!!!!</span><span class="chip__n">1</span></li><li class="chip chip--on" data-root="orig"><span class="chip__name">Unknown</span><span class="chip__n">1</span></li><li class="chip chip--on" data-root="orig"><span class="chip__name">未完成ヒロイン</span><span class="chip__n">3</span></li><li class="chip chip--on" data-root="orig"><span class="chip__name">シーソーゲーム</span><span class="chip__n">5</span></li><li class="chip chip--off" data-root="orig"><span class="chip__name">メイク☆マイダンス</span><span class="chip__n chip__n--off">—</span></li><li class="chip chip--on" data-root="orig"><span class="chip__name">夏色ラムネ</span><span class="chip__n">7</span></li></ul></div>
+<div class="rootgroup"><p class="rootgroup__head"><span class="swatch swatch--stk"></span>ストクレ曲<span class="rootgroup__ratio">6 / 10 曲</span></p><ul class="chips"><li class="chip chip--on" data-root="stk"><span class="chip__name">END THE WORLD</span><span class="chip__n">2</span></li><li class="chip chip--on" data-root="stk"><span class="chip__name">HELLO</span><span class="chip__n">2</span></li><li class="chip chip--on" data-root="stk"><span class="chip__name">SHINY DAYS</span><span class="chip__n">5</span></li><li class="chip chip--off" data-root="stk"><span class="chip__name">BLIND CALL</span><span class="chip__n chip__n--off">—</span></li><li class="chip chip--on" data-root="stk"><span class="chip__name">Singularity</span><span class="chip__n">2</span></li><li class="chip chip--on" data-root="stk"><span class="chip__name">MADOROMI</span><span class="chip__n">3</span></li><li class="chip chip--off" data-root="stk"><span class="chip__name">むげんの☆Lambie</span><span class="chip__n chip__n--off">—</span></li><li class="chip chip--on" data-root="stk"><span class="chip__name">キミノセイ、</span><span class="chip__n">2</span></li><li class="chip chip--off" data-root="stk"><span class="chip__name">MY DREAM MY LIFE</span><span class="chip__n chip__n--off">—</span></li><li class="chip chip--off" data-root="stk"><span class="chip__name">Say Hello!!</span><span class="chip__n chip__n--off">—</span></li></ul></div>
+<div class="rootgroup"><p class="rootgroup__head"><span class="swatch swatch--hpst"></span>ハピスト曲<span class="rootgroup__ratio">3 / 5 曲</span></p><ul class="chips"><li class="chip chip--on" data-root="hpst"><span class="chip__name">推し事～女の子アイドルオタクあるある〜</span><span class="chip__n">5</span></li><li class="chip chip--on" data-root="hpst"><span class="chip__name">サクラロード</span><span class="chip__n">1</span></li><li class="chip chip--off" data-root="hpst"><span class="chip__name">KAWAIIは正義</span><span class="chip__n chip__n--off">—</span></li><li class="chip chip--on" data-root="hpst"><span class="chip__name">アタックサイン</span><span class="chip__n">2</span></li><li class="chip chip--off" data-root="hpst"><span class="chip__name">♀︎正解の方程式♂</span><span class="chip__n chip__n--off">—</span></li></ul></div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">RANKING</p>
+      <h2>5人体制での披露回数</h2>
+      <p class="note">棒はこの10公演での回数、右の薄い数字は通算（325公演）の回数です。
+        色はルーツ（<span class="swatch"></span>オリジナル／<span class="swatch swatch--stk"></span>ストクレ／<span class="swatch swatch--hpst"></span>ハピスト）。</p>
+    </div>
+    <ol class="bars"><li class="bar"><span class="bar__label">始まりの宴!!!!!!!</span><span class="bar__track"><span class="bar__fill bar__fill--orig" style="width:100.0%"></span></span><span class="bar__val">7</span><span class="bar__sub">通算 145</span></li><li class="bar"><span class="bar__label">夏色ラムネ</span><span class="bar__track"><span class="bar__fill bar__fill--orig" style="width:100.0%"></span></span><span class="bar__val">7</span><span class="bar__sub">通算 7</span></li><li class="bar"><span class="bar__label">シーソーゲーム</span><span class="bar__track"><span class="bar__fill bar__fill--orig" style="width:71.4%"></span></span><span class="bar__val">5</span><span class="bar__sub">通算 18</span></li><li class="bar"><span class="bar__label">SHINY DAYS</span><span class="bar__track"><span class="bar__fill bar__fill--stk" style="width:71.4%"></span></span><span class="bar__val">5</span><span class="bar__sub">通算 120</span></li><li class="bar"><span class="bar__label">推し事～女の子アイドルオタクあるある〜</span><span class="bar__track"><span class="bar__fill bar__fill--hpst" style="width:71.4%"></span></span><span class="bar__val">5</span><span class="bar__sub">通算 106</span></li><li class="bar"><span class="bar__label">乙女ロック</span><span class="bar__track"><span class="bar__fill bar__fill--orig" style="width:42.9%"></span></span><span class="bar__val">3</span><span class="bar__sub">通算 69</span></li><li class="bar"><span class="bar__label">未完成ヒロイン</span><span class="bar__track"><span class="bar__fill bar__fill--orig" style="width:42.9%"></span></span><span class="bar__val">3</span><span class="bar__sub">通算 40</span></li><li class="bar"><span class="bar__label">MADOROMI</span><span class="bar__track"><span class="bar__fill bar__fill--stk" style="width:42.9%"></span></span><span class="bar__val">3</span><span class="bar__sub">通算 30</span></li><li class="bar"><span class="bar__label">ぽっぽ♪ポジティブ！！</span><span class="bar__track"><span class="bar__fill bar__fill--orig" style="width:28.6%"></span></span><span class="bar__val">2</span><span class="bar__sub">通算 167</span></li><li class="bar"><span class="bar__label">END THE WORLD</span><span class="bar__track"><span class="bar__fill bar__fill--stk" style="width:28.6%"></span></span><span class="bar__val">2</span><span class="bar__sub">通算 42</span></li><li class="bar"><span class="bar__label">HELLO</span><span class="bar__track"><span class="bar__fill bar__fill--stk" style="width:28.6%"></span></span><span class="bar__val">2</span><span class="bar__sub">通算 102</span></li><li class="bar"><span class="bar__label">Singularity</span><span class="bar__track"><span class="bar__fill bar__fill--stk" style="width:28.6%"></span></span><span class="bar__val">2</span><span class="bar__sub">通算 13</span></li><li class="bar"><span class="bar__label">キミノセイ、</span><span class="bar__track"><span class="bar__fill bar__fill--stk" style="width:28.6%"></span></span><span class="bar__val">2</span><span class="bar__sub">通算 92</span></li><li class="bar"><span class="bar__label">アタックサイン</span><span class="bar__track"><span class="bar__fill bar__fill--hpst" style="width:28.6%"></span></span><span class="bar__val">2</span><span class="bar__sub">通算 88</span></li><li class="bar"><span class="bar__label">ろりぽっぷ!!!!!!!</span><span class="bar__track"><span class="bar__fill bar__fill--orig" style="width:14.3%"></span></span><span class="bar__val">1</span><span class="bar__sub">通算 185</span></li><li class="bar"><span class="bar__label">約束!!!!!!!</span><span class="bar__track"><span class="bar__fill bar__fill--orig" style="width:14.3%"></span></span><span class="bar__val">1</span><span class="bar__sub">通算 38</span></li><li class="bar"><span class="bar__label">主人公!!!!!!!</span><span class="bar__track"><span class="bar__fill bar__fill--orig" style="width:14.3%"></span></span><span class="bar__val">1</span><span class="bar__sub">通算 29</span></li><li class="bar"><span class="bar__label">Unknown</span><span class="bar__track"><span class="bar__fill bar__fill--orig" style="width:14.3%"></span></span><span class="bar__val">1</span><span class="bar__sub">通算 52</span></li><li class="bar"><span class="bar__label">サクラロード</span><span class="bar__track"><span class="bar__fill bar__fill--hpst" style="width:14.3%"></span></span><span class="bar__val">1</span><span class="bar__sub">通算 27</span></li></ol>
+  </div>
+</section>
+
+<section class="band band--blush">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">BEFORE / AFTER</p>
+      <h2>出番の変わりかた</h2>
+      <p class="note">1公演あたりでその曲が出てくる割合を、5人体制より前（315公演）と
+        5人体制（10公演）で並べました。上ほど出番が増えた曲です。
+        右側の丸が5人体制、左の薄い丸が前。10公演ぶんの数字なので、傾向として読んでください。</p>
+    </div>
+    <p class="db__axis"><span class="db__axis-in"><span>0%</span><span>50%</span><span>100%</span></span></p><ol class="dbs"><li class="db"><span class="db__label">夏色ラムネ</span><span class="db__track"><span class="db__line" style="left:0.0%;width:70.0%"></span><span class="db__pt db__pt--before" style="left:0.0%" title="5人体制より前 0%"></span><span class="db__pt db__pt--after db__pt--orig" style="left:70.0%" title="5人体制 70%"></span></span><span class="db__val db__val--up">+70<span class="db__unit">pt</span></span><span class="sr">5人体制より前 0% → 5人体制 70%</span></li><li class="db"><span class="db__label">シーソーゲーム</span><span class="db__track"><span class="db__line" style="left:4.1%;width:45.9%"></span><span class="db__pt db__pt--before" style="left:4.1%" title="5人体制より前 4%"></span><span class="db__pt db__pt--after db__pt--orig" style="left:50.0%" title="5人体制 50%"></span></span><span class="db__val db__val--up">+46<span class="db__unit">pt</span></span><span class="sr">5人体制より前 4% → 5人体制 50%</span></li><li class="db"><span class="db__label">始まりの宴!!!!!!!</span><span class="db__track"><span class="db__line" style="left:43.8%;width:26.2%"></span><span class="db__pt db__pt--before" style="left:43.8%" title="5人体制より前 44%"></span><span class="db__pt db__pt--after db__pt--orig" style="left:70.0%" title="5人体制 70%"></span></span><span class="db__val db__val--up">+26<span class="db__unit">pt</span></span><span class="sr">5人体制より前 44% → 5人体制 70%</span></li><li class="db"><span class="db__label">MADOROMI</span><span class="db__track"><span class="db__line" style="left:8.6%;width:21.4%"></span><span class="db__pt db__pt--before" style="left:8.6%" title="5人体制より前 9%"></span><span class="db__pt db__pt--after db__pt--stk" style="left:30.0%" title="5人体制 30%"></span></span><span class="db__val db__val--up">+21<span class="db__unit">pt</span></span><span class="sr">5人体制より前 9% → 5人体制 30%</span></li><li class="db"><span class="db__label">未完成ヒロイン</span><span class="db__track"><span class="db__line" style="left:11.7%;width:18.3%"></span><span class="db__pt db__pt--before" style="left:11.7%" title="5人体制より前 12%"></span><span class="db__pt db__pt--after db__pt--orig" style="left:30.0%" title="5人体制 30%"></span></span><span class="db__val db__val--up">+18<span class="db__unit">pt</span></span><span class="sr">5人体制より前 12% → 5人体制 30%</span></li><li class="db"><span class="db__label">推し事～女の子アイドルオタクあるある〜</span><span class="db__track"><span class="db__line" style="left:32.1%;width:17.9%"></span><span class="db__pt db__pt--before" style="left:32.1%" title="5人体制より前 32%"></span><span class="db__pt db__pt--after db__pt--hpst" style="left:50.0%" title="5人体制 50%"></span></span><span class="db__val db__val--up">+18<span class="db__unit">pt</span></span><span class="sr">5人体制より前 32% → 5人体制 50%</span></li><li class="db"><span class="db__label">Singularity</span><span class="db__track"><span class="db__line" style="left:3.5%;width:16.5%"></span><span class="db__pt db__pt--before" style="left:3.5%" title="5人体制より前 3%"></span><span class="db__pt db__pt--after db__pt--stk" style="left:20.0%" title="5人体制 20%"></span></span><span class="db__val db__val--up">+17<span class="db__unit">pt</span></span><span class="sr">5人体制より前 3% → 5人体制 20%</span></li><li class="db"><span class="db__label">SHINY DAYS</span><span class="db__track"><span class="db__line" style="left:36.5%;width:13.5%"></span><span class="db__pt db__pt--before" style="left:36.5%" title="5人体制より前 37%"></span><span class="db__pt db__pt--after db__pt--stk" style="left:50.0%" title="5人体制 50%"></span></span><span class="db__val db__val--up">+13<span class="db__unit">pt</span></span><span class="sr">5人体制より前 37% → 5人体制 50%</span></li><li class="db"><span class="db__label">乙女ロック</span><span class="db__track"><span class="db__line" style="left:21.0%;width:9.0%"></span><span class="db__pt db__pt--before" style="left:21.0%" title="5人体制より前 21%"></span><span class="db__pt db__pt--after db__pt--orig" style="left:30.0%" title="5人体制 30%"></span></span><span class="db__val db__val--up">+9<span class="db__unit">pt</span></span><span class="sr">5人体制より前 21% → 5人体制 30%</span></li><li class="db"><span class="db__label">END THE WORLD</span><span class="db__track"><span class="db__line" style="left:12.7%;width:7.3%"></span><span class="db__pt db__pt--before" style="left:12.7%" title="5人体制より前 13%"></span><span class="db__pt db__pt--after db__pt--stk" style="left:20.0%" title="5人体制 20%"></span></span><span class="db__val db__val--up">+7<span class="db__unit">pt</span></span><span class="sr">5人体制より前 13% → 5人体制 20%</span></li><li class="db"><span class="db__label">サクラロード</span><span class="db__track"><span class="db__line" style="left:8.3%;width:1.7%"></span><span class="db__pt db__pt--before" style="left:8.3%" title="5人体制より前 8%"></span><span class="db__pt db__pt--after db__pt--hpst" style="left:10.0%" title="5人体制 10%"></span></span><span class="db__val db__val--up">+2<span class="db__unit">pt</span></span><span class="sr">5人体制より前 8% → 5人体制 10%</span></li><li class="db"><span class="db__label">主人公!!!!!!!</span><span class="db__track"><span class="db__line" style="left:8.9%;width:1.1%"></span><span class="db__pt db__pt--before" style="left:8.9%" title="5人体制より前 9%"></span><span class="db__pt db__pt--after db__pt--orig" style="left:10.0%" title="5人体制 10%"></span></span><span class="db__val db__val--up">+1<span class="db__unit">pt</span></span><span class="sr">5人体制より前 9% → 5人体制 10%</span></li><li class="db"><span class="db__label">約束!!!!!!!</span><span class="db__track"><span class="db__line" style="left:10.0%;width:1.7%"></span><span class="db__pt db__pt--before" style="left:11.7%" title="5人体制より前 12%"></span><span class="db__pt db__pt--after db__pt--orig" style="left:10.0%" title="5人体制 10%"></span></span><span class="db__val db__val--down">−2<span class="db__unit">pt</span></span><span class="sr">5人体制より前 12% → 5人体制 10%</span></li><li class="db"><span class="db__label">メイク☆マイダンス</span><span class="db__track"><span class="db__line" style="left:0.0%;width:3.2%"></span><span class="db__pt db__pt--before" style="left:3.2%" title="5人体制より前 3%"></span><span class="db__pt db__pt--after db__pt--orig" style="left:0.0%" title="5人体制 0%"></span></span><span class="db__val db__val--down">−3<span class="db__unit">pt</span></span><span class="sr">5人体制より前 3% → 5人体制 0%</span></li><li class="db"><span class="db__label">♀︎正解の方程式♂</span><span class="db__track"><span class="db__line" style="left:0.0%;width:3.2%"></span><span class="db__pt db__pt--before" style="left:3.2%" title="5人体制より前 3%"></span><span class="db__pt db__pt--after db__pt--hpst" style="left:0.0%" title="5人体制 0%"></span></span><span class="db__val db__val--down">−3<span class="db__unit">pt</span></span><span class="sr">5人体制より前 3% → 5人体制 0%</span></li><li class="db"><span class="db__label">KAWAIIは正義</span><span class="db__track"><span class="db__line" style="left:0.0%;width:6.0%"></span><span class="db__pt db__pt--before" style="left:6.0%" title="5人体制より前 6%"></span><span class="db__pt db__pt--after db__pt--hpst" style="left:0.0%" title="5人体制 0%"></span></span><span class="db__val db__val--down">−6<span class="db__unit">pt</span></span><span class="sr">5人体制より前 6% → 5人体制 0%</span></li><li class="db"><span class="db__label">Unknown</span><span class="db__track"><span class="db__line" style="left:10.0%;width:6.2%"></span><span class="db__pt db__pt--before" style="left:16.2%" title="5人体制より前 16%"></span><span class="db__pt db__pt--after db__pt--orig" style="left:10.0%" title="5人体制 10%"></span></span><span class="db__val db__val--down">−6<span class="db__unit">pt</span></span><span class="sr">5人体制より前 16% → 5人体制 10%</span></li><li class="db"><span class="db__label">アタックサイン</span><span class="db__track"><span class="db__line" style="left:20.0%;width:7.3%"></span><span class="db__pt db__pt--before" style="left:27.3%" title="5人体制より前 27%"></span><span class="db__pt db__pt--after db__pt--hpst" style="left:20.0%" title="5人体制 20%"></span></span><span class="db__val db__val--down">−7<span class="db__unit">pt</span></span><span class="sr">5人体制より前 27% → 5人体制 20%</span></li><li class="db"><span class="db__label">BLIND CALL</span><span class="db__track"><span class="db__line" style="left:0.0%;width:7.9%"></span><span class="db__pt db__pt--before" style="left:7.9%" title="5人体制より前 8%"></span><span class="db__pt db__pt--after db__pt--stk" style="left:0.0%" title="5人体制 0%"></span></span><span class="db__val db__val--down">−8<span class="db__unit">pt</span></span><span class="sr">5人体制より前 8% → 5人体制 0%</span></li><li class="db"><span class="db__label">キミノセイ、</span><span class="db__track"><span class="db__line" style="left:20.0%;width:8.6%"></span><span class="db__pt db__pt--before" style="left:28.6%" title="5人体制より前 29%"></span><span class="db__pt db__pt--after db__pt--stk" style="left:20.0%" title="5人体制 20%"></span></span><span class="db__val db__val--down">−9<span class="db__unit">pt</span></span><span class="sr">5人体制より前 29% → 5人体制 20%</span></li><li class="db"><span class="db__label">HELLO</span><span class="db__track"><span class="db__line" style="left:20.0%;width:11.7%"></span><span class="db__pt db__pt--before" style="left:31.7%" title="5人体制より前 32%"></span><span class="db__pt db__pt--after db__pt--stk" style="left:20.0%" title="5人体制 20%"></span></span><span class="db__val db__val--down">−12<span class="db__unit">pt</span></span><span class="sr">5人体制より前 32% → 5人体制 20%</span></li><li class="db"><span class="db__label">Say Hello!!</span><span class="db__track"><span class="db__line" style="left:0.0%;width:14.3%"></span><span class="db__pt db__pt--before" style="left:14.3%" title="5人体制より前 14%"></span><span class="db__pt db__pt--after db__pt--stk" style="left:0.0%" title="5人体制 0%"></span></span><span class="db__val db__val--down">−14<span class="db__unit">pt</span></span><span class="sr">5人体制より前 14% → 5人体制 0%</span></li><li class="db"><span class="db__label">MY DREAM MY LIFE</span><span class="db__track"><span class="db__line" style="left:0.0%;width:19.4%"></span><span class="db__pt db__pt--before" style="left:19.4%" title="5人体制より前 19%"></span><span class="db__pt db__pt--after db__pt--stk" style="left:0.0%" title="5人体制 0%"></span></span><span class="db__val db__val--down">−19<span class="db__unit">pt</span></span><span class="sr">5人体制より前 19% → 5人体制 0%</span></li><li class="db"><span class="db__label">むげんの☆Lambie</span><span class="db__track"><span class="db__line" style="left:0.0%;width:27.3%"></span><span class="db__pt db__pt--before" style="left:27.3%" title="5人体制より前 27%"></span><span class="db__pt db__pt--after db__pt--stk" style="left:0.0%" title="5人体制 0%"></span></span><span class="db__val db__val--down">−27<span class="db__unit">pt</span></span><span class="sr">5人体制より前 27% → 5人体制 0%</span></li><li class="db"><span class="db__label">ぽっぽ♪ポジティブ！！</span><span class="db__track"><span class="db__line" style="left:20.0%;width:32.4%"></span><span class="db__pt db__pt--before" style="left:52.4%" title="5人体制より前 52%"></span><span class="db__pt db__pt--after db__pt--orig" style="left:20.0%" title="5人体制 20%"></span></span><span class="db__val db__val--down">−32<span class="db__unit">pt</span></span><span class="sr">5人体制より前 52% → 5人体制 20%</span></li><li class="db"><span class="db__label">ろりぽっぷ!!!!!!!</span><span class="db__track"><span class="db__line" style="left:10.0%;width:48.4%"></span><span class="db__pt db__pt--before" style="left:58.4%" title="5人体制より前 58%"></span><span class="db__pt db__pt--after db__pt--orig" style="left:10.0%" title="5人体制 10%"></span></span><span class="db__val db__val--down">−48<span class="db__unit">pt</span></span><span class="sr">5人体制より前 58% → 5人体制 10%</span></li></ol><p class="db__key"><span class="db__pt db__pt--before"></span>5人体制より前（315公演）　<span class="db__pt db__pt--after db__pt--orig"></span>5人体制（10公演）</p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">MATRIX</p>
+      <h2>どの公演で何をやったか</h2>
+      <p class="note">縦が曲、横が公演日。丸が付いているところが披露された曲です。
+        二重丸は1公演で2回披露された曲（8/26 2部の「夏色ラムネ」）。横にスクロールできます。</p>
+    </div>
+    <div class="matrix-scroll"><table class="matrix"><caption class="sr">公演ごとの披露曲（縦: 曲、横: 公演日）</caption><thead><tr><th scope="col" class="matrix__corner">曲 ＼ 公演</th><th scope="col"><span>08/22<small>&nbsp;</small></span></th><th scope="col"><span>08/24<small>&nbsp;</small></span></th><th scope="col"><span>08/26<small>①</small></span></th><th scope="col"><span>08/26<small>②</small></span></th><th scope="col"><span>08/29<small>&nbsp;</small></span></th><th scope="col"><span>08/30<small>&nbsp;</small></span></th><th scope="col"><span>08/31<small>&nbsp;</small></span></th><th scope="col"><span>09/05<small>①</small></span></th><th scope="col"><span>09/05<small>②</small></span></th><th scope="col"><span>09/06<small>&nbsp;</small></span></th><th scope="col" class="matrix__corner">計</th></tr></thead><tbody><tr><th scope="row">始まりの宴!!!!!!!</th><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell cell--sum">7</td></tr><tr><th scope="row">夏色ラムネ</th><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig dot--twice"></span><span class="sr">2回</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell cell--sum">7</td></tr><tr><th scope="row">シーソーゲーム</th><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell cell--sum">5</td></tr><tr><th scope="row">SHINY DAYS</th><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell cell--sum">5</td></tr><tr><th scope="row">推し事～女の子アイドルオタクあるある〜</th><td class="cell"><span class="dot dot--hpst"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--hpst"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--hpst"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--hpst"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--hpst"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell cell--sum">5</td></tr><tr><th scope="row">乙女ロック</th><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell cell--sum">3</td></tr><tr><th scope="row">未完成ヒロイン</th><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell cell--sum">3</td></tr><tr><th scope="row">MADOROMI</th><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell cell--sum">3</td></tr><tr><th scope="row">ぽっぽ♪ポジティブ！！</th><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell cell--sum">2</td></tr><tr><th scope="row">END THE WORLD</th><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell cell--sum">2</td></tr><tr><th scope="row">HELLO</th><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell cell--sum">2</td></tr><tr><th scope="row">Singularity</th><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell cell--sum">2</td></tr><tr><th scope="row">キミノセイ、</th><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--stk"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell cell--sum">2</td></tr><tr><th scope="row">アタックサイン</th><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--hpst"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--hpst"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell cell--sum">2</td></tr><tr><th scope="row">ろりぽっぷ!!!!!!!</th><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell cell--sum">1</td></tr><tr><th scope="row">約束!!!!!!!</th><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell cell--sum">1</td></tr><tr><th scope="row">主人公!!!!!!!</th><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell cell--sum">1</td></tr><tr><th scope="row">Unknown</th><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--orig"></span><span class="sr">披露</span></td><td class="cell cell--sum">1</td></tr><tr><th scope="row">サクラロード</th><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--off"></span><span class="sr">なし</span></td><td class="cell"><span class="dot dot--hpst"></span><span class="sr">披露</span></td><td class="cell cell--sum">1</td></tr></tbody><tfoot><tr><th scope="row">公演ごとの曲数</th><td class="cell cell--sum">6</td><td class="cell cell--sum">5</td><td class="cell cell--sum">4</td><td class="cell cell--sum">6</td><td class="cell cell--sum">4</td><td class="cell cell--sum">4</td><td class="cell cell--sum">7</td><td class="cell cell--sum">5</td><td class="cell cell--sum">4</td><td class="cell cell--sum">10</td><td class="cell cell--sum">55</td></tr></tfoot></table></div>
+  </div>
+</section>
+
+<section class="band band--blush">
+  <div class="wrap">
+    <div class="two-col">
+      <div>
+        <p class="eyebrow">SHOWS</p>
+        <h2>5人体制の10公演</h2>
+        <ul class="evlist"><li class="ev"><span class="ev__date">2026-08-22</span><span class="ev__name">ガラストロメ!!<span class="ev__venue">TOKYOSQUARE in Itabashi</span></span><span class="ev__n">6曲</span></li><li class="ev"><span class="ev__date">2026-08-24</span><span class="ev__name">「idolliveinfo REAL」<span class="ev__venue">新宿DHNoA</span></span><span class="ev__n">5曲</span></li><li class="ev"><span class="ev__date">2026-08-26</span><span class="ev__name">単独ライブ（1部ワンコインライブ）<span class="ev__venue">中野坂上SUB TOKYO</span></span><span class="ev__n">4曲</span></li><li class="ev"><span class="ev__date">2026-08-26</span><span class="ev__name">単独ライブ（2部 Vol.18 夏曲お披露目公演）<span class="ev__venue">中野坂上SUB TOKYO</span></span><span class="ev__n">6曲</span></li><li class="ev"><span class="ev__date">2026-08-29</span><span class="ev__name">『POP CRUSH DAY1』<span class="ev__venue">渋谷VIDENT</span></span><span class="ev__n">4曲</span></li><li class="ev"><span class="ev__date">2026-08-30</span><span class="ev__name">「バブリー革命ライブ＠カモガワ」<span class="ev__venue">千葉県鴨川市前原海岸特設ステージ</span></span><span class="ev__n">4曲</span></li><li class="ev"><span class="ev__date">2026-08-31</span><span class="ev__name">クモリノチ。×ニキプレ pre.『クモリニキ。』<span class="ev__venue">渋谷近未来会館</span></span><span class="ev__n">7曲</span></li><li class="ev"><span class="ev__date">2026-09-05</span><span class="ev__name">『白絵葵子生誕祭2026』<span class="ev__venue">大塚FUTURE:</span></span><span class="ev__n">5曲</span></li><li class="ev"><span class="ev__date">2026-09-05</span><span class="ev__name">PLUMLIVE #125<span class="ev__venue">新宿Zirco</span></span><span class="ev__n">4曲</span></li><li class="ev"><span class="ev__date">2026-09-06</span><span class="ev__name">やぎくるみ生誕祭2026<span class="ev__venue">渋谷CYCLONE</span></span><span class="ev__n">10曲</span></li></ul>
+        <p class="note">曲数は持ち曲として数えられた分です。
+          9/6「やぎくるみ生誕祭2026」のソロ曲・カバー曲は持ち曲ではないので数に入れていません。</p>
+      </div>
+      <div>
+        <p class="eyebrow">NOT YET</p>
+        <h2>まだ登場していない7曲</h2>
+        <ul class="evlist"><li class="ev"><span class="ev__root swatch swatch--orig"></span><span class="ev__name">メイク☆マイダンス<span class="ev__venue">オリジナル曲 ／ 通算 10回</span></span></li><li class="ev"><span class="ev__root swatch swatch--stk"></span><span class="ev__name">BLIND CALL<span class="ev__venue">ストクレ曲 ／ 通算 25回</span></span></li><li class="ev"><span class="ev__root swatch swatch--stk"></span><span class="ev__name">むげんの☆Lambie<span class="ev__venue">ストクレ曲 ／ 通算 86回</span></span></li><li class="ev"><span class="ev__root swatch swatch--stk"></span><span class="ev__name">MY DREAM MY LIFE<span class="ev__venue">ストクレ曲 ／ 通算 61回</span></span></li><li class="ev"><span class="ev__root swatch swatch--stk"></span><span class="ev__name">Say Hello!!<span class="ev__venue">ストクレ曲 ／ 通算 45回</span></span></li><li class="ev"><span class="ev__root swatch swatch--hpst"></span><span class="ev__name">KAWAIIは正義<span class="ev__venue">ハピスト曲 ／ 通算 19回</span></span></li><li class="ev"><span class="ev__root swatch swatch--hpst"></span><span class="ev__name">♀︎正解の方程式♂<span class="ev__venue">ハピスト曲 ／ 通算 10回</span></span></li></ul>
+        <p class="note">この10公演で出番が無かっただけで、セットリストから外れたかどうかは分かりません。
+          公式の告知を確認してください。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band band--dark band--tight">
+  <div class="wrap--prose">
+    <p class="eyebrow">METHOD</p>
+    <h2>数えかた</h2>
+    <dl>
+      <dt>期間</dt>
+      <dd>2026年8月22日〜2026年9月6日。8月15日「POPGALAXY2026」を最後に6人体制が終わり、
+        次の公演である8月22日「ガラストロメ!!」から5人体制になりました。</dd>
+      <dt>出どころ</dt>
+      <dd>公式のセットリスト投稿を写した <code>events/data_event.csv</code>（全325公演）。
+        曲名の表記ゆれは <code>.claude/skills/setlist-analysis</code> の名寄せルールで揃えています。</dd>
+      <dt>持ち曲26曲</dt>
+      <dd><code>songs/楽曲一覧.md</code> の内訳。オリジナル11曲・ストクレ10曲・ハピスト5曲。
+        ソロ曲とカバー曲は持ち曲に数えていません。</dd>
+      <dt>のべ回数</dt>
+      <dd>1公演で2回披露された曲は2回として数えます（8/26 2部の「夏色ラムネ」）。
+        SE・MC・企画コーナーは除いています。</dd>
+      <dt>気をつけること</dt>
+      <dd>母数が10公演なので、1回の増減が割合を大きく動かします。
+        セットリストが公開されていない公演があれば、その分は数に入っていません。</dd>
+    </dl>
+  </div>
+</section>
+
+</body>
+</html>
