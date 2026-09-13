@@ -385,7 +385,7 @@ dt:first-of-type { margin-top: 0; }
 }
 '''
 
-BODY = r'''<header class="band">
+BODY = r'''<header class="band" id="top">
   <div class="wrap">
     <p class="eyebrow">5-MEMBER ERA / 2026-08-22 → 2026-09-06</p>
     <h1>5人体制のセトリ<br>持ち曲{{N_SONGS}}曲のうち{{N_DONE}}曲</h1>
@@ -401,7 +401,7 @@ BODY = r'''<header class="band">
   </div>
 </header>
 
-<section class="band band--blush band--tight">
+<section class="band band--blush band--tight" id="stats">
   <div class="stats">
     <div class="stat"><span class="stat__n">{{N_SHOWS}}</span><span class="stat__k">5人体制の公演数</span></div>
     <div class="stat"><span class="stat__n">{{N_TOTAL}}</span><span class="stat__k">のべ披露回数</span></div>
@@ -411,7 +411,7 @@ BODY = r'''<header class="band">
   </div>
 </section>
 
-<section class="band">
+<section class="band" id="map">
   <div class="wrap">
     <div class="section-head">
       <p class="eyebrow">SONG MAP</p>
@@ -427,7 +427,7 @@ BODY = r'''<header class="band">
   </div>
 </section>
 
-<section class="band">
+<section class="band" id="ranking">
   <div class="wrap">
     <div class="section-head">
       <p class="eyebrow">RANKING</p>
@@ -439,7 +439,7 @@ BODY = r'''<header class="band">
   </div>
 </section>
 
-<section class="band band--blush">
+<section class="band band--blush" id="change">
   <div class="wrap">
     <div class="section-head">
       <p class="eyebrow">BEFORE / AFTER</p>
@@ -452,7 +452,7 @@ BODY = r'''<header class="band">
   </div>
 </section>
 
-<section class="band">
+<section class="band" id="matrix">
   <div class="wrap">
     <div class="section-head">
       <p class="eyebrow">MATRIX</p>
@@ -464,7 +464,7 @@ BODY = r'''<header class="band">
   </div>
 </section>
 
-<section class="band band--blush">
+<section class="band band--blush" id="unplayed">
   <div class="wrap">
     <div class="section-head">
       <p class="eyebrow">NOT YET</p>
@@ -476,7 +476,7 @@ BODY = r'''<header class="band">
   </div>
 </section>
 
-<section class="band">
+<section class="band" id="setlist">
   <div class="wrap">
     <div class="section-head">
       <p class="eyebrow">SETLIST</p>
@@ -489,7 +489,7 @@ BODY = r'''<header class="band">
   </div>
 </section>
 
-<section class="band band--dark band--tight">
+<section class="band band--dark band--tight" id="method">
   <div class="wrap--prose">
     <p class="eyebrow">METHOD</p>
     <h2>数えかた</h2>
