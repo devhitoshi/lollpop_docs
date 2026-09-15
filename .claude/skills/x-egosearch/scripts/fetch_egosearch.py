@@ -40,7 +40,10 @@ OUT_DIR = 'work/x_fetch'
 # x_collect.md の 2-1〜2-3 をそのまま
 BASE_QUERIES = {
     '2-1 基本形': '("ろりぽっぷ" OR "#ろりぽっぷ" OR "ろりぽ" OR @lollipop_1116)',
-    '2-2 カタカナ・英字': '("ロリポップ" OR "ロリポ" OR "lollipop") (アイドル OR ライブ OR 対バン OR セトリ OR 特典会 OR チェキ OR 現場)',
+    # 2-2「カタカナ・英字」は 2026-09-15 に外した。3期間（2026-08-01〜09-15）で候補633件・採用2件（0.3%）で、
+    # 中身はレンタルサーバー「ロリポップ!」とお菓子と Lollipop Chainsaw だった。
+    # ファンがカタカナで書くときも「ろりぽ」を併記することがほとんどで、2-1 が拾えている。
+    # 復活させるなら BASE_QUERIES に戻すだけでよい（打率は data/x/egosearch_triage_*_summary.txt で測れる）。
     # 本名・ハンドルは一意なのでそのまま引く
     '2-3 メンバー名': '("愛月まな" OR "やぎくるみ" OR "夏川茉夢" OR "松川愛美" '
                   'OR @mana_lpop OR @kurumi_lpop OR @mayu_lpop OR @ami_lpop OR @mau_lpop)',
