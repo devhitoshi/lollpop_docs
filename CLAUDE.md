@@ -87,6 +87,9 @@ GitHub の差分画面・PR 画面は開かれない前提で応答を組み立�
   現メンバー5人は完了（デビュー 2024-11-16 以降・約11,900件が根拠。手順は `.claude/skills/member-profile-refresh`）。
   **元メンバー2人は旧構成のまま凍結する**（オーナー判断・2026-09-10。取得もしない）。
   「やぎくるみ＝リーダー」表記は削除済み（ストクレ時代の経験。現グループに役職は無い。claude-work #17）。
+- **エゴサーチの精度**: 正は [`.claude/skills/x-egosearch/SKILL.md`](./.claude/skills/x-egosearch/SKILL.md)。2026-09-15 に 2-2「カタカナ・英字」を廃止（3期間で打率0.3%）、
+  愛称（くるみん等）は文脈語との併用を必須に、**過去に採用したアカウントを加点**（`data/x/known_accounts.txt`。打率97% vs 6%）。
+  判定はスワイプアプリでも捌ける（`build_triage_app.py` → Artifact として公開。原文を含むので共有しない）。
 - **縦動画**: 運用の正は [`strategy/short_video_playbook.md`](./strategy/short_video_playbook.md)、型定義と量産フローは [`strategy/video/`](./strategy/video/README.md)。
   2026-09-07 に型体系を A〜E＋F・G に一本化（主力は A 反応集と F/G メンバーエピソードの両輪、月 10〜12 本。ファン投稿の引用は 7.3 の作法で可。コール講座は不採用→入門コンテンツをバックログ）。
   素材の索引・許諾・組み立ては `.claude/skills/x-media-collect` と [`data/README.md`](./data/README.md)。**他人の素材は `data/x/media_permissions.md` に「OK」がある分だけ。クレジットは必ず入れる。**
