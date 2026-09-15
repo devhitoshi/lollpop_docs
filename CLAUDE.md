@@ -57,6 +57,7 @@ GitHub の差分画面・PR 画面は開かれない前提で応答を組み立�
 | note記事（シリーズ・単発とも） | `articles/`（シリーズは専用ディレクトリ、単発は `articles/単発/`。詳細は `articles/README.md`） |
 | posfie まとめ（Xポストを並べる形式） | `articles/posfie/<開始日>_<終了日>.md`（貼るポストと順番の設計図。posfie 上の実体は別。詳細は `articles/posfie/README.md`） |
 | 公演・セトリのデータ | `events/data_event.csv`（一次データ）。集計は `events/monthly_setlist_ranking.csv`。入れ方と TimeTree の使い方は [`events/README.md`](./events/README.md) |
+| ライブ以外の露出（メディア・MC・チェキ会・客演） | `events/data_appearance.csv`（列と語彙は [`events/README.md`](./events/README.md)）。`data_event.csv` には入れない |
 | 戦略・定点観測 | `strategy/`（観測結果は `strategy/metrics_YYYY-MM-DD.md`、調査メモは `strategy/research_*.md`） |
 | 縦動画の運用設計・型定義・量産フロー | `strategy/short_video_playbook.md`（運用の正）と [`strategy/video/`](./strategy/video/)（型定義 A〜G、量産フロー、台本の部品、流行調査）。制作ツールは別リポジトリ `lollpop_video`（F・G）とこのリポジトリの `x-media-collect/scripts/make_vertical.py`（A〜E） |
 | ファン向け入口文書 | `guide/`。メンバー情報は `members/` |

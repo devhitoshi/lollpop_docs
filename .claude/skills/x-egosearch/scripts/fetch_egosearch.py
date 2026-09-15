@@ -33,7 +33,8 @@ from fetch_accounts import (  # noqa: E402
 )
 
 JST = timezone(timedelta(hours=9))
-OWN_HANDLES = {h for h, _ in DEFAULT_ACCOUNTS} | {'asaka_lpop', 'natsumi_lpop'}
+# 元メンバー2人と、マネージャーの日向なの（@nanotabiyori）。関係者の投稿は「外部の反応」ではないので候補から外す。
+OWN_HANDLES = {h for h, _ in DEFAULT_ACCOUNTS} | {'asaka_lpop', 'natsumi_lpop', 'nanotabiyori'}
 OUT_DIR = 'work/x_fetch'
 
 # x_collect.md の 2-1〜2-3 をそのまま

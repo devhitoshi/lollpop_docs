@@ -49,6 +49,11 @@
 - `@asaka_lpop` — 姫杏朝香（2026年4月22日卒業）
 - `@natsumi_lpop` — 苺花なつみ（2026年8月15日卒業）
 
+**運営**
+- `@nanotabiyori` — 日向なの（マネージャー）。**関係者なので「外部の反応」には入れない**
+  （`fetch_egosearch.py` の `OWN_HANDLES` で候補から除外している）。
+  投稿を素材に使いたいときは `--accounts nanotabiyori:日向なの` を明示して取得する
+
 ---
 
 ## 検索手順
