@@ -145,6 +145,21 @@
     font-size: 16px; line-height: 1.75; color: var(--body);
     white-space: pre-wrap; word-break: break-word;
   }
+  .memoblock { display: flex; flex-direction: column; gap: 6px; }
+  .memo {
+    width: 100%; box-sizing: border-box; font: inherit; font-size: 13px;
+    padding: 9px 11px; border-radius: 10px; border: 1px solid var(--hairline);
+    background: var(--blush); color: var(--ink);
+  }
+  .memo::placeholder { color: var(--muted-soft); }
+  .memo:focus-visible { outline: 2px solid var(--pink); outline-offset: 1px; }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    appearance: none; font: inherit; font-size: 11px; font-weight: 700;
+    padding: 5px 10px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--hairline); background: var(--surface); color: var(--muted);
+  }
+  .chip:hover { border-color: var(--pink); color: var(--pink); }
   .numbers {
     display: flex; gap: 16px; font-size: 12px; color: var(--muted);
     font-variant-numeric: tabular-nums; border-top: 1px solid var(--hairline); padding-top: 10px;
@@ -202,6 +217,12 @@
   }
   .row { display: flex; gap: 8px; flex-wrap: wrap; }
   .note { font-size: 11px; color: var(--muted-soft); line-height: 1.7; }
+  .acct { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+  .acct h3 { margin: 0; font-size: 13px; color: var(--ink); }
+  .acctlist { display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto; width: 100%; }
+  .acctrow { display: grid; grid-template-columns: minmax(0, 1fr); gap: 5px; }
+  .acctrow .who { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .acctrow .who b { color: var(--ink); word-break: break-all; }
 
   @media (prefers-reduced-motion: reduce) {
     .card.animate, .meter-fill { transition: none; }
@@ -243,6 +264,11 @@
         <button class="btn btn-yes" id="copy" type="button" style="font-size:13px;padding:11px 18px;">判定をコピー</button>
         <button class="btn btn-no" id="again" type="button" style="font-size:13px;padding:11px 18px;">もう一度見る</button>
       </div>
+      <div class="acct">
+        <h3>アカウントの備考</h3>
+        <p class="note">ここに書いた説明は判定ファイルのメモ欄に入り、<code>known_accounts.txt</code> に残ります。</p>
+        <div class="acctlist" id="acctlist"></div>
+      </div>
       <p class="note" id="staffnote"></p>
     </div>
   </main>
@@ -264,6 +290,7 @@
   var LS_KEY = "lollpop-triage-" + PERIOD;
 
   var decisions = {};           // id -> "adopt" | "reject"
+  var notes = {};               // @handle -> 備考（アカウント単位。判定ファイルのメモ欄に出る）
   var history = [];             // [{id, prev}]
   var deck = "review";
   var db = null;
@@ -290,7 +317,8 @@
     doneMsg: document.getElementById("done-msg"),
     staffnote: document.getElementById("staffnote"),
     copy: document.getElementById("copy"),
-    again: document.getElementById("again")
+    again: document.getElementById("again"),
+    acctlist: document.getElementById("acctlist")
   };
 
   el.tabReview.textContent = "要判定 " + DATA.review.length;
@@ -305,12 +333,15 @@
   function readLocal() {
     try {
       var raw = localStorage.getItem(LS_KEY);
-      if (raw) return JSON.parse(raw) || {};
+      if (!raw) return;
+      var v = JSON.parse(raw) || {};
+      // 旧形式（判定だけを直に入れていた）も読めるようにする
+      if (v.d || v.n) { decisions = v.d || {}; notes = v.n || {}; }
+      else { decisions = v; }
     } catch (e) {}
-    return {};
   }
   function writeLocal() {
-    try { localStorage.setItem(LS_KEY, JSON.stringify(decisions)); } catch (e) {}
+    try { localStorage.setItem(LS_KEY, JSON.stringify({ d: decisions, n: notes })); } catch (e) {}
   }
   function scheduleWrite() {
     dirty = true;
@@ -323,7 +354,7 @@
   function flush() {
     if (!db || writing || !dirty) return;
     writing = true; dirty = false;
-    var body = { period: PERIOD, decisions: decisions, updatedAt: new Date().toISOString() };
+    var body = { period: PERIOD, decisions: decisions, notes: notes, updatedAt: new Date().toISOString() };
     db.doc(DOC_PATH).set(body).then(function () {
       writing = false;
       if (dirty) flush(); else el.sync.textContent = "保存済み";
@@ -352,6 +383,15 @@
         (it.tag ? '<span class="badge">' + esc(it.tag) + '</span>' : '') +
       '</div>' +
       '<div class="posttext">' + esc(it.text) + '</div>' +
+      '<div class="memoblock">' +
+        '<input class="memo" id="memo-' + esc(it.id) + '" type="text" autocomplete="off" ' +
+          'placeholder="' + esc(it.handle) + ' の備考（任意）" value="' + esc(notes[it.handle] || "") + '">' +
+        '<div class="chips">' +
+          '<button class="chip" type="button" data-fill="ファンのアカウント">ファンのアカウント</button>' +
+          '<button class="chip" type="button" data-fill="共演者・関係者">共演者・関係者</button>' +
+          '<button class="chip" type="button" data-fill="同名の別物">同名の別物</button>' +
+        '</div>' +
+      '</div>' +
       '<div class="numbers">' +
         '<span>いいね ' + it.likes.toLocaleString() + '</span>' +
         '<span>表示 ' + it.views.toLocaleString() + '</span>' +
@@ -390,6 +430,7 @@
       el.doneMsg.textContent = "下のテキストを data/x/egosearch_decisions_" + PERIOD +
         ".txt に貼れば、そのまま判定ファイルになります。";
       el.out.value = exportText();
+      renderAccounts();
       el.btnYes.disabled = el.btnNo.disabled = true;
       return;
     }
@@ -402,6 +443,7 @@
     topCard = buildCard(q[0], "top");
     el.stage.appendChild(topCard);
     attachDrag(topCard);
+    attachMemo(topCard, q[0]);
   }
 
   function exportText() {
@@ -412,7 +454,9 @@
       if (seen[it.id]) return;
       seen[it.id] = 1;
       var d = decisions[it.id];
-      if (d) lines.push(it.id + " " + d);
+      if (!d) return;
+      var memo = (notes[it.handle] || "").replace(/\s+/g, " ").trim();
+      lines.push(it.id + " " + d + (memo ? " " + memo : ""));
     });
     return lines.join("\n");
   }
@@ -445,13 +489,63 @@
   }
 
   /* ---------- drag ---------- */
+  function attachMemo(card, it) {
+    var input = card.querySelector(".memo");
+    if (!input) return;
+    input.addEventListener("input", function () {
+      if (input.value.trim()) notes[it.handle] = input.value.trim();
+      else delete notes[it.handle];
+      scheduleWrite();
+    });
+    Array.prototype.slice.call(card.querySelectorAll(".chip")).forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        input.value = chip.getAttribute("data-fill");
+        notes[it.handle] = input.value;
+        scheduleWrite();
+      });
+    });
+  }
+
+  function renderAccounts() {
+    var seen = {};
+    var order = [];
+    items().forEach(function (it) {
+      if (!decisions[it.id]) return;
+      if (!seen[it.handle]) { seen[it.handle] = { n: 0, yes: 0 }; order.push(it.handle); }
+      seen[it.handle].n++;
+      if (decisions[it.id] === "adopt") seen[it.handle].yes++;
+    });
+    order.sort(function (a, b) { return (seen[b].yes - seen[a].yes) || (seen[b].n - seen[a].n); });
+    el.acctlist.innerHTML = "";
+    order.forEach(function (h) {
+      var row = document.createElement("div");
+      row.className = "acctrow";
+      var s = seen[h];
+      row.innerHTML = '<div class="who"><b>' + esc(h) + '</b> 　関連 ' + s.yes + ' / ' + s.n + ' 件</div>';
+      var input = document.createElement("input");
+      input.className = "memo";
+      input.type = "text";
+      input.id = "acctmemo-" + h.replace(/[^A-Za-z0-9_]/g, "");
+      input.autocomplete = "off";
+      input.placeholder = h + " の備考（任意）";
+      input.value = notes[h] || "";
+      input.addEventListener("input", function () {
+        if (input.value.trim()) notes[h] = input.value.trim(); else delete notes[h];
+        el.out.value = exportText();
+        scheduleWrite();
+      });
+      row.appendChild(input);
+      el.acctlist.appendChild(row);
+    });
+  }
+
   function attachDrag(card) {
     var startX = 0, startY = 0, dx = 0, dy = 0, active = false, pid = null;
     var yesTag = card.querySelector(".verdict.yes");
     var noTag = card.querySelector(".verdict.no");
 
     card.addEventListener("pointerdown", function (e) {
-      if (e.target.closest("a")) return;
+      if (e.target.closest("a, input, button")) return;
       if (e.target.closest(".posttext") && e.pointerType !== "mouse") {
         var pt = e.target.closest(".posttext");
         if (pt.scrollHeight > pt.clientHeight + 2) return;
@@ -529,7 +623,7 @@
   });
 
   /* ---------- boot ---------- */
-  decisions = readLocal();
+  readLocal();
   render();
   el.sync.textContent = "この端末にだけ保存";
 
@@ -539,10 +633,15 @@
       db = d;
       return db.doc(DOC_PATH).get().then(function (snap) {
         if (snap && snap.exists) {
-          var stored = (snap.data() || {}).decisions || {};
+          var body = snap.data() || {};
+          var stored = body.decisions || {};
+          var storedNotes = body.notes || {};
           var merged = false;
           Object.keys(stored).forEach(function (k) {
             if (!Object.prototype.hasOwnProperty.call(decisions, k)) { decisions[k] = stored[k]; merged = true; }
+          });
+          Object.keys(storedNotes).forEach(function (k) {
+            if (!notes[k]) { notes[k] = storedNotes[k]; merged = true; }
           });
           if (merged) { writeLocal(); render(); }
         }
