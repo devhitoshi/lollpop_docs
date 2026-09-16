@@ -1,0 +1,332 @@
+# ろりぽっぷ!!!!!!! の話をしたことがあるアカウント（判定履歴から自動生成）
+# build_known_accounts.py が作る。元は 3 本の判定ファイルと採用IDリスト。
+# 書式: @handle<TAB>adopt=N reject=M<TAB>メモ
+# メモに「# fixed」と書いておくと、再生成しても上書きしない（手で書いた説明を残すため）
+# 他人の投稿の原文はここに入れない。
+@Hamakun4	adopt=100 reject=0	
+@mo_8_c	adopt=73 reject=4	
+@AhyonCulturismo	adopt=68 reject=0	反応まとめに採用
+@Katsuki_fksayo	adopt=40 reject=0	反応まとめに採用
+@haru_makimaki__	adopt=36 reject=0	
+@JunbanZx	adopt=33 reject=0	
+@hien4614	adopt=32 reject=0	
+@Ago_decha_U	adopt=31 reject=0	反応まとめに採用
+@EF8195riyu	adopt=31 reject=0	
+@momo_dq	adopt=30 reject=0	
+@26dc3c270cd84e6	adopt=29 reject=1	出演者一覧・告知・別グループ（adopt行28）
+@PPPPPPPRPP	adopt=28 reject=1	反応まとめに採用
+@kazuchin39	adopt=24 reject=0	
+@yuki_denou4649	adopt=23 reject=1	反応まとめに採用／全文にろりぽっぷ固有語なし（同名の別人・別グループ）
+@sigerin_t	adopt=20 reject=0	反応まとめに採用
+@ka_kunn_nazo	adopt=18 reject=1	全文にろりぽっぷ固有語なし（同名の別人・別グループ）
+@boukyaku_bigaku	adopt=17 reject=0	
+@yuki_t0617	adopt=15 reject=0	反応まとめに採用
+@Elizabethdaga	adopt=13 reject=0	反応まとめに採用
+@mappi_0730	adopt=13 reject=0	
+@tsuki_power_82	adopt=12 reject=0	
+@NaoDreamer0907	adopt=11 reject=1	
+@SANANASA3756	adopt=11 reject=0	
+@SD_KIKO0804	adopt=11 reject=0	反応まとめに採用
+@kamome179	adopt=11 reject=0	
+@nagisa_game1095	adopt=11 reject=0	
+@Hituji_SOS	adopt=10 reject=0	反応まとめに採用
+@I_am_not_wotaku	adopt=10 reject=0	反応まとめに採用
+@camera_shushu	adopt=10 reject=0	
+@terraria_sv	adopt=10 reject=0	
+@ttrsougen	adopt=10 reject=1	全文にろりぽっぷ固有語なし（同名の別人・別グループ）
+@whitytytyty	adopt=10 reject=0	
+@yasu_1_3_2_5	adopt=10 reject=0	
+@0130y_hama	adopt=9 reject=0	
+@61a16	adopt=9 reject=0	反応まとめに採用
+@asage5	adopt=9 reject=0	
+@you1_r2	adopt=9 reject=0	
+@Nyantamu_HS310	adopt=8 reject=3	出演者一覧・告知・別グループ（adopt行31）／出演者一覧・告知・別グループ（adopt行93）／出演者一覧・告知・別グループ（adopt行110）
+@yakitori190511	adopt=8 reject=0	
+@Panchan_7	adopt=7 reject=0	
+@doraemonmilktea	adopt=7 reject=0	
+@nicochanmoon	adopt=7 reject=0	
+@tayandayo	adopt=7 reject=0	
+@tukiusamaru7	adopt=7 reject=0	
+@yuan_desuyo	adopt=7 reject=1	全文にろりぽっぷ固有語なし（同名の別人・別グループ）
+@Eitan813	adopt=6 reject=0	
+@GkrXbn2	adopt=6 reject=1	
+@cybermajin	adopt=6 reject=0	
+@k10jitsu	adopt=6 reject=0	
+@yPRd1b1ABx98704	adopt=6 reject=0	
+@A_go_roku	adopt=5 reject=0	
+@M_Koala_Gussan	adopt=5 reject=1	全文にろりぽっぷ固有語なし（同名の別人・別グループ）
+@SEKITOBA_soda	adopt=5 reject=0	
+@YASU66114383	adopt=5 reject=0	
+@Yuma_1217	adopt=5 reject=0	
+@_i_m_o_b_	adopt=5 reject=0	
+@_iwa3_	adopt=5 reject=0	
+@aquamarine0304	adopt=5 reject=0	
+@qTmCCe44YFunN7l	adopt=5 reject=0	
+@salt_myco	adopt=5 reject=0	反応まとめに採用
+@sshunn_15	adopt=5 reject=0	
+@Eightone_event	adopt=4 reject=1	出演者一覧・告知・別グループ（adopt行232）
+@aile_sai_2008	adopt=4 reject=0	反応まとめに採用
+@amanatsu_DX	adopt=4 reject=0	
+@enjoy_joinus	adopt=4 reject=0	
+@gostrey	adopt=4 reject=0	反応まとめに採用
+@kabuchi_11	adopt=4 reject=0	
+@koncc1701	adopt=4 reject=0	
+@kyo1rikopin	adopt=4 reject=0	
+@mastan	adopt=4 reject=0	
+@nananzz000	adopt=4 reject=0	反応まとめに採用
+@nikipre_	adopt=4 reject=3	出演者一覧・告知・別グループ（adopt行153）／出演者一覧・告知・別グループ（adopt行294）／出演者一覧・告知・別グループ（adopt行295）
+@niko_takosu_9	adopt=4 reject=0	反応まとめに採用
+@nnnttt7676	adopt=4 reject=0	
+@taza_king	adopt=4 reject=0	
+@you_ya222	adopt=4 reject=0	反応まとめに採用
+@yukky_abc0813	adopt=4 reject=0	
+@yusacchi	adopt=4 reject=0	
+@10o6jinddp	adopt=3 reject=0	
+@ANIJYA__0823	adopt=3 reject=0	
+@Drawry0920	adopt=3 reject=0	
+@FamousDreamidol	adopt=3 reject=0	
+@MANACLEofficial	adopt=3 reject=0	
+@TMOsean	adopt=3 reject=0	
+@UNIVERSE_kikaku	adopt=3 reject=0	
+@Ya_mashi_tatata	adopt=3 reject=1	反応まとめに採用
+@__329_	adopt=3 reject=0	
+@akiyuno	adopt=3 reject=0	
+@alen_tsts	adopt=3 reject=0	反応まとめに採用
+@genmai88888	adopt=3 reject=0	
+@kinchan2199	adopt=3 reject=0	
+@kyametaiki	adopt=3 reject=0	
+@lovelydolliz	adopt=3 reject=0	
+@minamitakahashi	adopt=3 reject=0	
+@misukichii__	adopt=3 reject=0	
+@nihei5050	adopt=3 reject=0	
+@r_y_o_8_3	adopt=3 reject=0	
+@sena_nrk	adopt=3 reject=0	
+@shinya_yuki715	adopt=3 reject=0	
+@trainlovur	adopt=3 reject=0	
+@uskGAS	adopt=3 reject=0	
+@197401012977	adopt=2 reject=0	
+@777shachihoko	adopt=2 reject=0	
+@82e57_a	adopt=2 reject=1	出演者一覧・告知・別グループ（adopt行27）
+@AtDragonmaru	adopt=2 reject=0	
+@BlitzSivam	adopt=2 reject=0	
+@Came_SP	adopt=2 reject=0	
+@EiramRats	adopt=2 reject=0	
+@FifanyTo	adopt=2 reject=0	
+@GQGDXQF706cG10U	adopt=2 reject=0	
+@KSDD_megane	adopt=2 reject=0	
+@KyunMeSA	adopt=2 reject=0	
+@MARZ_twit	adopt=2 reject=0	
+@ML_hatena	adopt=2 reject=3	反応まとめに採用
+@MillBlacky	adopt=2 reject=0	
+@Mr_20231015	adopt=2 reject=0	
+@No24653	adopt=2 reject=0	
+@PrePa_official	adopt=2 reject=0	
+@RyanBanGDreamer	adopt=2 reject=0	
+@SQRRL_official	adopt=2 reject=0	
+@Sugar8810	adopt=2 reject=0	
+@TENSENRONGTAI	adopt=2 reject=0	
+@TSeitsuki	adopt=2 reject=0	
+@Takos211	adopt=2 reject=0	
+@We_SUZUHAMU	adopt=2 reject=0	
+@andy0319hi	adopt=2 reject=0	
+@cocorollings	adopt=2 reject=0	
+@curesakura7832	adopt=2 reject=0	
+@ddkiyo	adopt=2 reject=0	
+@elsie1005	adopt=2 reject=0	
+@gasu__pon	adopt=2 reject=0	
+@halcc_	adopt=2 reject=0	
+@hol77910	adopt=2 reject=0	
+@hondak_No04	adopt=2 reject=0	
+@ichi0604	adopt=2 reject=0	
+@ihaelang660862	adopt=2 reject=0	
+@ijnakotas	adopt=2 reject=0	
+@ikurazi	adopt=2 reject=0	
+@ka_neko_0222	adopt=2 reject=0	
+@kaho_tsuji2	adopt=2 reject=0	反応まとめに採用
+@kanikanilanding	adopt=2 reject=0	
+@katton_dev	adopt=2 reject=0	
+@kawa_54	adopt=2 reject=0	
+@kawaiiotakara3	adopt=2 reject=0	
+@kingofhart2	adopt=2 reject=0	
+@knj30312	adopt=2 reject=0	
+@ko_to74yu_ki108	adopt=2 reject=0	
+@kurimanju_1220	adopt=2 reject=0	
+@kuronekokedama	adopt=2 reject=0	
+@love_wing_star	adopt=2 reject=0	
+@mamtakky	adopt=2 reject=0	
+@marsa_10	adopt=2 reject=0	
+@miburo1869	adopt=2 reject=0	
+@micrawruga	adopt=2 reject=0	
+@mimimiita	adopt=2 reject=0	
+@mmmm001060	adopt=2 reject=0	
+@mosan0147265363	adopt=2 reject=0	
+@naototona1122	adopt=2 reject=0	
+@ngizkmoso	adopt=2 reject=0	
+@osyontaron_	adopt=2 reject=0	
+@reinarudo_773	adopt=2 reject=0	
+@sakiponpon6988	adopt=2 reject=0	
+@seki99541912	adopt=2 reject=0	反応まとめに採用
+@sh1n3_31	adopt=2 reject=0	
+@shio1219_msm	adopt=2 reject=0	
+@skyeeffcapital	adopt=2 reject=0	
+@suuseitan	adopt=2 reject=1	
+@ts____c	adopt=2 reject=0	
+@ultragito	adopt=2 reject=0	
+@voidolista	adopt=2 reject=0	
+@weather_cloudly	adopt=2 reject=0	
+@yoruno_kumachan	adopt=2 reject=0	
+@0108foxeagle	adopt=1 reject=0	
+@0622hitoshi	adopt=1 reject=0	
+@5vRX1Cn6VlJcZfs	adopt=1 reject=0	
+@AkashA_Daisuke	adopt=1 reject=0	
+@AkiRanRan11	adopt=1 reject=0	
+@BarrelBoy274	adopt=1 reject=0	
+@Care11Nobody	adopt=1 reject=0	
+@Chan_Shima_16	adopt=1 reject=0	
+@Charcoal_fate	adopt=1 reject=0	
+@E_HOBA	adopt=1 reject=0	
+@FiDZ_Chihiro	adopt=1 reject=0	
+@FiftyNext	adopt=1 reject=0	
+@Girls_Girlsinfo	adopt=1 reject=0	
+@Hattrickt2y	adopt=1 reject=0	
+@I40JpUfRAo5XTTV	adopt=1 reject=0	
+@INSRiA_JPN	adopt=1 reject=0	
+@Jelii_Miyuki	adopt=1 reject=0	
+@KAWA_UCHIZZ	adopt=1 reject=0	
+@KYONO_NASU	adopt=1 reject=0	
+@Kojika51Toyama	adopt=1 reject=0	
+@LOOPARADE	adopt=1 reject=0	
+@LOVE9LOVE_info	adopt=1 reject=0	
+@Lacie_86	adopt=1 reject=0	
+@MCLoffi_	adopt=1 reject=0	
+@MM_7105F	adopt=1 reject=0	
+@MZx9ilnJgy1651	adopt=1 reject=0	
+@NNKamaki	adopt=1 reject=0	
+@NTiSDSjWcc6KlEd	adopt=1 reject=0	
+@N_momongya3	adopt=1 reject=0	
+@OShichen	adopt=1 reject=0	
+@Quon148	adopt=1 reject=0	
+@RURUPA_elha	adopt=1 reject=0	
+@RedStringOfFqte	adopt=1 reject=0	
+@Rickey_Dai	adopt=1 reject=0	
+@Rikuou8815	adopt=1 reject=0	
+@RyoHama	adopt=1 reject=0	
+@SD_NAO0907	adopt=1 reject=0	
+@SD_SU_NEMU0524	adopt=1 reject=0	
+@Shimaenaga1780	adopt=1 reject=0	
+@Shirich2020	adopt=1 reject=0	
+@TaIgA17212356	adopt=1 reject=0	
+@VV_K2_VFI	adopt=1 reject=0	
+@Wata0326st	adopt=1 reject=0	
+@We_HEICHI_	adopt=1 reject=0	
+@Yamashu0530	adopt=1 reject=0	
+@Yarrmmmy	adopt=1 reject=0	
+@_AIAITIGER	adopt=1 reject=0	
+@a__im	adopt=1 reject=0	
+@abeshin1115	adopt=1 reject=1	
+@aidorunoai	adopt=1 reject=0	
+@brave_kaede	adopt=1 reject=0	
+@brokenwingchet	adopt=1 reject=0	
+@brz73motomi	adopt=1 reject=0	
+@chamhapi	adopt=1 reject=0	
+@channama2290	adopt=1 reject=0	
+@chiho_eee	adopt=1 reject=0	
+@coji__chan	adopt=1 reject=0	
+@debychips	adopt=1 reject=0	
+@djAOWxkmO3VDmiK	adopt=1 reject=0	
+@encho5596	adopt=1 reject=0	
+@enriqueyugi	adopt=1 reject=0	
+@everfree1009	adopt=1 reject=0	
+@forger_theBeast	adopt=1 reject=0	
+@foxmoka	adopt=1 reject=1	全文にろりぽっぷ固有語なし（同名の別人・別グループ）
+@geitanpe	adopt=1 reject=0	
+@gokieru	adopt=1 reject=0	
+@haruka_talk	adopt=1 reject=0	
+@hinan86	adopt=1 reject=0	
+@hiravvibe0729	adopt=1 reject=0	
+@hisabisa987	adopt=1 reject=0	
+@hoshi_251219	adopt=1 reject=0	
+@inosan_boso	adopt=1 reject=0	
+@isakuma_tanki	adopt=1 reject=0	
+@jamo6666	adopt=1 reject=0	
+@k_s218	adopt=1 reject=0	
+@kai_zokuooo	adopt=1 reject=1	出演者一覧・告知・別グループ（adopt行293）
+@kakuekiteishya	adopt=1 reject=0	
+@kattsun318	adopt=1 reject=0	
+@kou3741w	adopt=1 reject=0	
+@kunkun48Chu	adopt=1 reject=0	
+@kurage1103	adopt=1 reject=0	
+@kuririn061	adopt=1 reject=0	
+@mahogaku	adopt=1 reject=0	
+@manchesternisi	adopt=1 reject=0	
+@mapppppu3	adopt=1 reject=0	
+@masaaaaaaa1173	adopt=1 reject=1	出演者一覧・告知・別グループ（adopt行66）
+@merryma_ry	adopt=1 reject=0	
+@mgmg_mogumogu	adopt=1 reject=0	
+@mickey_oneone	adopt=1 reject=0	
+@misaka_yu	adopt=1 reject=0	
+@mk1030tk2460	adopt=1 reject=0	
+@mochi_ponkotsu	adopt=1 reject=0	
+@moelement	adopt=1 reject=0	
+@mogugoma	adopt=1 reject=0	
+@momo_yuri_fuku	adopt=1 reject=0	
+@mon_worlsend	adopt=1 reject=0	
+@montevi77	adopt=1 reject=0	
+@mrmr_mkr	adopt=1 reject=0	
+@na_tomo	adopt=1 reject=0	
+@namaeganai	adopt=1 reject=0	
+@naruhodo2100	adopt=1 reject=0	
+@negimasa71	adopt=1 reject=0	
+@nl111290	adopt=1 reject=0	
+@nodatonpe98527	adopt=1 reject=0	
+@nomu_373kawaii	adopt=1 reject=0	
+@oriharaio_staff	adopt=1 reject=0	
+@ororon1099	adopt=1 reject=0	
+@paintd_floral	adopt=1 reject=0	
+@pikaneda	adopt=1 reject=0	
+@pinewonder	adopt=1 reject=0	
+@pointgetterMk21	adopt=1 reject=0	
+@rabbitmammy	adopt=1 reject=0	
+@rappappa_sade	adopt=1 reject=0	
+@rare3_ssr	adopt=1 reject=1	出演者一覧・告知・別グループ（adopt行176）
+@rassie_224	adopt=1 reject=0	
+@riho_rinrin	adopt=1 reject=0	
+@ruria_cledol	adopt=1 reject=0	
+@samhakase	adopt=1 reject=0	
+@sanche_y1r	adopt=1 reject=0	
+@scrw	adopt=1 reject=0	
+@shonanhiro1012	adopt=1 reject=0	
+@shout_itto	adopt=1 reject=0	
+@shu1m14	adopt=1 reject=0	
+@shukasan_	adopt=1 reject=0	
+@singuu05	adopt=1 reject=0	
+@sisou1059	adopt=1 reject=0	
+@smily_sheen	adopt=1 reject=0	
+@soushi_ai	adopt=1 reject=0	
+@soyjoy373	adopt=1 reject=0	
+@t00_11_22	adopt=1 reject=0	
+@taka_wingzero	adopt=1 reject=0	
+@ten77_jt	adopt=1 reject=0	
+@teru_ueei	adopt=1 reject=0	
+@tmfireant	adopt=1 reject=0	
+@toririn_k	adopt=1 reject=0	
+@toshikazu0830	adopt=1 reject=0	
+@tsp_kme_	adopt=1 reject=0	
+@tsunoshosho	adopt=1 reject=0	
+@ttt_kohei	adopt=1 reject=0	
+@ultimate_ddd	adopt=1 reject=0	
+@upomu_	adopt=1 reject=0	
+@ureshinse	adopt=1 reject=0	
+@uribo_eclatcia	adopt=1 reject=0	
+@uto_pompom	adopt=1 reject=0	
+@wJIsNta3br7334	adopt=1 reject=0	
+@wadawad62998192	adopt=1 reject=0	
+@watanabe_freeze	adopt=1 reject=0	
+@yamanao13	adopt=1 reject=0	
+@yoshinonopapa	adopt=1 reject=0	
+@yosshinSPORTS	adopt=1 reject=0	
+@you19711203	adopt=1 reject=0	
+@ystk12_shonan	adopt=1 reject=0	
+@yui_kimihana	adopt=1 reject=0	
+@yukitononbiri	adopt=1 reject=0	
+@zeeeeeetto	adopt=1 reject=1	全文にろりぽっぷ固有語なし（同名の別人・別グループ）

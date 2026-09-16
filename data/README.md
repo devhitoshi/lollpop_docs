@@ -4,7 +4,8 @@
 
 | パス | 内容 | 作るもの |
 | --- | --- | --- |
-| `x/egosearch_decisions_<since>_<until>.txt` | エゴサーチ候補の判定（投稿ID と採用/除外）。生データを取り直しても再判定しなくて済む | `.claude/skills/x-egosearch` |
+| `x/egosearch_decisions_<since>_<until>.txt` | エゴサーチ候補の判定（投稿ID と採用/除外、3列目に任意のメモ）。生データを取り直しても再判定しなくて済む | `.claude/skills/x-egosearch` |
+| `x/known_accounts.txt` | ろりぽっぷの話をしたことがあるアカウント（ハンドル・採用/除外の件数・備考）。判定履歴から自動生成し、次の仕分けの加点に使う | `.claude/skills/x-egosearch/scripts/build_known_accounts.py` |
 | `x/egosearch_<since>_<until>_reactions.md` | 判定済みの反応の要約（要旨・短い引用・URL）。記事と定点観測が読む | 同上（Claude が書く） |
 | `x/egosearch_triage_<since>_<until>_summary.txt` | 採用・除外の件数、日別件数 | 同上（triage が書く） |
 

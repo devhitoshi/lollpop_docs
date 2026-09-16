@@ -53,8 +53,23 @@ Grok でやっていた `x_collect.md` の手順2を、API で「漏れなく集
 
    `work/x_fetch/egosearch_triage_*_adopt.txt`（強い手がかりあり）と `_review.txt`（要判定）を読み、判定を
    `data/x/egosearch_decisions_<since>_<until>.txt` に「<id> adopt|reject メモ」で書く。要判定のうち書かなかったものは除外になる。
+
+   **人が自分で捌くなら `.claude/skills/x-egosearch-review`**（スワイプで仕分けるアプリを作り、
+   判定を書き戻すまで）。要判定が多い週や、文脈を知っている人が見分けたいときはそちらが速い。
    もう一度 triage を実行すると判定が反映され、採用リスト・反応上位・件数（`data/x/..._summary.txt`）が出る。
    判定ファイルは追跡するので、生データを取り直しても再判定は要らない。
+
+   判定し終えたら、**常連アカウントの一覧を作り直す**:
+
+   ```bash
+   python3 .claude/skills/x-egosearch/scripts/build_known_accounts.py
+   ```
+
+   `data/x/known_accounts.txt`（ハンドル・採用/除外の件数・備考）ができ、次回から `triage_egosearch.py` が
+   これを読んで加点する（`--no-known` で無効化）。**投稿者は本文と同じくらい強い手がかり**で、
+   2026-09-15 の実測では過去に採用したアカウントの打率 97%（144件中140件）に対し、それ以外は 6%（449件中25件）。
+   採用した投稿の 85% が常連から出ていた。判定ファイルの3列目のメモ（スワイプアプリの備考欄）は
+   アカウントの説明としてこの一覧に集まる。
 
    採用・除外の基準:
 
