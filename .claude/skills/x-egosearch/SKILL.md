@@ -54,17 +54,8 @@ Grok でやっていた `x_collect.md` の手順2を、API で「漏れなく集
    `work/x_fetch/egosearch_triage_*_adopt.txt`（強い手がかりあり）と `_review.txt`（要判定）を読み、判定を
    `data/x/egosearch_decisions_<since>_<until>.txt` に「<id> adopt|reject メモ」で書く。要判定のうち書かなかったものは除外になる。
 
-   **人がスマホで捌くなら**、同じ素材をスワイプアプリにできる（右＝ろりぽっぷ関連／左＝別物）:
-
-   ```bash
-   python3 .claude/skills/x-egosearch/scripts/build_triage_app.py --since <since> --until <until>
-   ```
-
-   `work/x_fetch/triage_app_<since>_<until>.html` ができるので、Artifact として公開する
-   （`capabilities: {"db": {}}`。判定は artifact の db の `decisions/<since>_<until>` に入り、
-   アプリの「判定をコピー」が判定ファイルの中身をそのまま出す）。
-   **他人の投稿の原文を含むので、この HTML はリポジトリに入れない／artifact を公開共有しない。**
-   db を宣言した artifact は組織内限定になり、既定で非公開。
+   **人が自分で捌くなら `.claude/skills/x-egosearch-review`**（スワイプで仕分けるアプリを作り、
+   判定を書き戻すまで）。要判定が多い週や、文脈を知っている人が見分けたいときはそちらが速い。
    もう一度 triage を実行すると判定が反映され、採用リスト・反応上位・件数（`data/x/..._summary.txt`）が出る。
    判定ファイルは追跡するので、生データを取り直しても再判定は要らない。
 

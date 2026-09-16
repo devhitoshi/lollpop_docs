@@ -2,7 +2,7 @@
 """triage_egosearch.py の仕分け結果を、スワイプで判定する1枚もののHTMLにする。
 
 `_review.txt`（要判定）と `_adopt.txt`（採用候補）を読んで、
-`.claude/skills/x-egosearch/assets/triage_app.template.html` にデータを埋め込むだけ。判定はしない。
+`.claude/skills/x-egosearch-review/assets/triage_app.template.html` にデータを埋め込むだけ。判定はしない。
 
 出来た HTML は Artifact として公開して使う（スマホで右スワイプ＝ろりぽっぷ関連／左スワイプ＝別物）。
 判定は artifact の db に `decisions/<since>_<until>` として溜まり、アプリの「判定をコピー」で
@@ -11,7 +11,7 @@
 出力は work/x_fetch/（.gitignore 済み）。**他人の投稿の原文を含むので、リポジトリにも公開 URL にも置かない**
 （Artifact は db を宣言すると組織内限定になり、既定で非公開）。
 
-    python3 .claude/skills/x-egosearch/scripts/build_triage_app.py --since 2026-09-07 --until 2026-09-15
+    python3 .claude/skills/x-egosearch-review/scripts/build_triage_app.py --since 2026-09-07 --until 2026-09-15
 """
 
 import argparse
@@ -25,7 +25,7 @@ project_root = os.path.abspath(os.path.join(script_dir, '../../../../'))
 os.chdir(project_root)
 
 OUT_DIR = os.path.join('work', 'x_fetch')
-TEMPLATE = os.path.join('.claude', 'skills', 'x-egosearch', 'assets', 'triage_app.template.html')
+TEMPLATE = os.path.join('.claude', 'skills', 'x-egosearch-review', 'assets', 'triage_app.template.html')
 
 # 関係者（本人以外だが「外部の反応」ではない人）。fetch_egosearch.py の OWN_HANDLES で
 # 除外されるようになったが、それ以前に取った素材にはまだ混ざっているので、ここでも落とす。
