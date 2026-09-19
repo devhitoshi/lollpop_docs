@@ -75,12 +75,12 @@ GitHub の差分画面・PR 画面は開かれない前提で応答を組み立�
 
 ## 進行中（要約のみ。詳細は各 README）
 
-- **歌詞考察**: 正は [`articles/歌詞考察/README.md`](./articles/歌詞考察/README.md)。1曲1記事＋横断考察。オリジナル9曲・ルーツ曲1・横断01 まで済。待ち: 「未完成ヒロイン」「夏色ラムネ」の歌詞資料。
+- **歌詞考察**: 正は [`articles/歌詞考察/README.md`](./articles/歌詞考察/README.md)。1曲1記事＋横断考察。オリジナル9曲・ルーツ曲1・横断01 まで済。「未完成ヒロイン」「夏色ラムネ」の歌詞資料は 2026-09-20 に TuneCore から取得済み（記事は未執筆）。
   **曲調に触れてよいのは `songs/analysis/[曲名].md` がある曲だけ**（BPM・キーは推定値。断定しない）。
 - **週刊・月刊まとめ**: 正は [`articles/週刊まとめ/README.md`](./articles/週刊まとめ/README.md)・[`articles/月刊まとめ/README.md`](./articles/月刊まとめ/README.md)。8月分まで公開済み。**週刊 9/1〜9/7 号は 2026-09-07 作成・未コミット（オーナー確認待ち）**。
   X 収集は API 一本化済み（2026-09-02〜。Grok 版 `prompts/collect/x_collect.md` は予備）。取得データは `work/x_fetch/`、退避は `x-data-sync`。
 - **スターターパック・全楽曲解説（公開済み note の保守）**: 正は [`articles/スターターパック/README.md`](./articles/スターターパック/README.md)（公開 URL の表あり）。2026-09-02〜04 に 3 本立て化と全楽曲解説の最新化を実施。
-  `guide/starter_pack.md` より `articles/スターターパック/` が正（2026-09-03 に反転）。次に陳腐化したら「差分検知→改稿→article-review→貼り替え手順書」の型で更新する（スキル `article-refresh` を作る予定）。
+  `guide/starter_pack.md` より `articles/スターターパック/` が正（2026-09-03 に反転）。次に陳腐化したら「差分検知→改稿→article-review→貼り替え手順書」の型で更新する（スキル `article-refresh`）。
 - **メンバーのパーソナリティ**: 正は [`members/README.md`](./members/README.md)。2026-09-09〜10 に、なりきりプロンプト由来の記述から
   **人格心理学の3層（傾向／動機・価値観／自己物語）＋アイドル固有の2層（特典会用の話題の在庫／舞台での見え方）の6節構成**へ全面改稿。
   現メンバー5人は完了（デビュー 2024-11-16 以降・約11,900件が根拠。手順は `.claude/skills/member-profile-refresh`）。
