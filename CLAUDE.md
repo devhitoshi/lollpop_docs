@@ -76,7 +76,7 @@ GitHub の差分画面・PR 画面は開かれない前提で応答を組み立�
 
 ## 進行中（要約のみ。詳細は各 README）
 
-- **歌詞考察**: 正は [`articles/歌詞考察/README.md`](./articles/歌詞考察/README.md)。1曲1記事＋横断考察。オリジナル9曲・ルーツ曲1・横断01 まで済。「未完成ヒロイン」「夏色ラムネ」の歌詞資料は 2026-09-20 に TuneCore から取得済み（記事は未執筆）。
+- **歌詞考察**: 正は [`articles/歌詞考察/README.md`](./articles/歌詞考察/README.md)。1曲1記事＋横断考察。**オリジナル11曲すべて単独記事を書き終えた**（2026-09-20）。ルーツ曲1・横断01/02 まで済。次は次の新曲かルーツ曲。
   **曲調に触れてよいのは `songs/analysis/[曲名].md` がある曲だけ**（BPM・キーは推定値。断定しない）。
 - **週刊・月刊まとめ**: 正は [`articles/週刊まとめ/README.md`](./articles/週刊まとめ/README.md)・[`articles/月刊まとめ/README.md`](./articles/月刊まとめ/README.md)。8月分まで公開済み。**週刊 9/1〜9/7 号は 2026-09-07 作成・未コミット（オーナー確認待ち）**。
   X 収集は API 一本化済み（2026-09-02〜。Grok 版 `prompts/collect/x_collect.md` は予備）。取得データは `work/x_fetch/`、退避は `x-data-sync`。
