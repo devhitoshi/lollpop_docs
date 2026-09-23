@@ -30,10 +30,13 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.abspath(os.path.join(script_dir, '../../../../'))
 os.chdir(project_root)
 sys.path.insert(0, os.path.join(project_root, '.claude/skills/x-account-fetch/scripts'))
-from fetch_accounts import DEFAULT_ACCOUNTS  # noqa: E402
+sys.path.insert(0, script_dir)
+from fetch_egosearch import OWN_HANDLES  # noqa: E402  公式・メンバー・元メンバー・運営
 
 JST = timezone(timedelta(hours=9))
-OWN = {h for h, _ in DEFAULT_ACCOUNTS} | {'asaka_lpop', 'natsumi_lpop'}
+# 候補を作る側（fetch_egosearch.py）と同じ集合を使う。片方だけ直すと、除外したはずの人が採用に残る
+# （2026-09-15、マネージャー @nanotabiyori を fetch 側だけに足して実際に起きた）
+OWN = set(OWN_HANDLES)
 # 本人と見られる別ハンドル（投稿内容から判断。2026-08 の判定で @Ichii_h77 は苺花なつみ本人の生誕祭告知・お礼を投稿していた）
 OWN |= {'Ichii_h77'}
 OUT_DIR = 'work/x_fetch'   # 生データと、原文を含む中間ファイル（コミットしない）
@@ -55,12 +58,39 @@ PLACE = re.compile(r'新宿MARZ|MARZ|中野坂上|SUB TOKYO|VAMPKIN|鴨川|VIDEN
 NOISE = re.compile(r'爽|アイス|LOTTE|ロッテ|パイン|ソーダ|あいりんく|琴宮あいり|Lollipop♡CHU|ろりちゅ|ろりまじゅ|_LC\b|サーバー|サーバ\b|ドメイン|WordPress|ムームー|レンタル|ホスティング|メイドカフェ|コンカフェ|マジカルロリポップ|らりろりぽっぷん|ぽろりぽろり|魔法少女ろりぽっぷ|ヒロイン.*ルート|夏宮らむね|声劇|ボイストランド|現金|paypay|振り込み|卓球部|保育|幼稚園|小学校|名古屋|ロリポップチェーンソー|チェーンソー|キャンディ|ペロペロ|ろりぽっぷ小学校|ぷりたんぺぺると|ラーメン.*ろりぽ|ろりぽん|森本くるみ|SKE48|ミミフィーユ|奈良市観光大使|くるみんマーク|くるみんだいありー|FF14|FFXIV|ララフェル|デアラ|デートアライブ|時崎狂三|ウマ娘|リラックマ|OZaKKa|おまゆう|ふぉろりぽ|スペげん|スペ限', re.I)
 
 
+KNOWN_PATH = os.path.join('data/x', 'known_accounts.txt')
+KNOWN_ROW = re.compile(r'^@(\S+)\tadopt=(\d+)\s+reject=(\d+)')
+
+
+def load_known_accounts(path=KNOWN_PATH):
+    """常連アカウント（過去に採用したことがある投稿者）を読む。
+
+    2026-09-15 の実測で、過去に採用したアカウントの投稿は打率 97%（144件中140件採用）、
+    それ以外は 6%（449件中25件）だった。投稿者は本文と同じくらい強い手がかりなので加点する。
+    一覧は build_known_accounts.py が判定履歴から作る。無ければ加点しないだけ。
+    """
+    known = {}
+    if not os.path.exists(path):
+        return known
+    for line in open(path, encoding='utf-8'):
+        m = KNOWN_ROW.match(line)
+        if not m:
+            continue
+        handle, adopt, reject = m.group(1), int(m.group(2)), int(m.group(3))
+        # 採用のほうが多いアカウントだけ。除外が上回る（同名の別物を追っている等）なら加点しない
+        if adopt >= 1 and adopt >= reject:
+            known[handle] = (adopt, reject)
+    return known
+
+
 def parse_args():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('--since', required=True)
     p.add_argument('--until', required=True)
     p.add_argument('--decisions', help='Claude の判定ファイル（1行「<id> adopt|reject [メモ]」）。省略時は data/x/egosearch_decisions_<since>_<until>.txt があればそれ')
     p.add_argument('--snippet', type=int, default=110, help='要判定リストの本文の長さ')
+    p.add_argument('--no-known', action='store_true',
+                   help='常連アカウントの加点を使わない（一覧の効きを比べたいとき）')
     return p.parse_args()
 
 
@@ -72,8 +102,10 @@ def jst(t):
         return None
 
 
-def score(text):
+def score(text, handle=None, known=None):
     s, why = 0, []
+    if known and handle in known:
+        s += 2; why.append('常')
     if STRONG.search(text): s += 3; why.append('強')
     if MEMBER.search(text): s += 2; why.append('名')
     if SONG.search(text): s += 2; why.append('曲')
@@ -94,6 +126,9 @@ def line(t, snippet):
 
 def main():
     args = parse_args()
+    known = {} if args.no_known else load_known_accounts()
+    if known:
+        print(f"常連アカウント {len(known)} 件を加点に使う（{KNOWN_PATH}）")
     raw = os.path.join(OUT_DIR, f"egosearch_{args.since}_{args.until}.jsonl")
     posts = []
     for l in open(raw, encoding='utf-8'):
@@ -107,7 +142,7 @@ def main():
         d = jst(t)
         if not d or not (args.since <= d.date().isoformat() <= args.until):
             continue
-        t['_score'], t['_why'] = score(t.get('text') or '')
+        t['_score'], t['_why'] = score(t.get('text') or '', a.get('userName'), known)
         posts.append(t)
     posts.sort(key=lambda t: jst(t))
 

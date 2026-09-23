@@ -32,7 +32,8 @@ description: 週刊まとめ記事の「収集→素材化→仕上げ」を一�
      削除前に `work/x_fetch_bak_<今日の日付>/` へバックアップする（2026-09-07 に手作業で行ったのと同じ運用）。
      **本番キャッシュを消す操作なので、実行前にバックアップ先を確認する**
    - `fetch_accounts.py` → `fetch_egosearch.py` → `triage_egosearch.py`（初回・`--decisions` 無し）の順に呼ぶ。
-     `--max` は両方の上限引数（`--max-tweets-per-account` / `--max-tweets-per-query`）に渡る（既定 200）
+     `--max` は両方の上限引数（`--max-tweets-per-account` / `--max-tweets-per-query`）に渡る（既定 200）。
+     どちらも **今回の新規取得分** に対する上限で、既存 jsonl に何件溜まっていても既定のままでよい
    - 最後に3段階の件数（生データ→候補→機械仕分け内訳）を表示する
    - **人がやる判断**: `work/x_fetch/egosearch_triage_<since>_<until>_review.txt` を読み、
      `data/x/egosearch_decisions_<since>_<until>.txt` に `<id> adopt|reject [メモ]` で判定を書く

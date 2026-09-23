@@ -216,7 +216,13 @@ def refresh_period(out_dir, accounts, since, until):
 
 
 def fetch_account(handle, since, until, max_tweets, out_dir, api_key):
-    """1アカウント分を全件列挙して JSONL に保存する。中断・再開対応。"""
+    """1アカウント分を全件列挙して JSONL に保存する。中断・再開対応。
+
+    `max_tweets` は **この実行で新しく取る件数** の上限。既存の jsonl は期間をまたいで積み上がるので、
+    ここを「ファイルの累計件数」と比べると、累計が上限を超えているアカウントは API を1回も叩かずに
+    「新規0件」で終わってしまう（2026-09-15 に実際に起きた。上限200・既存815件のアカウントが素通りした）。
+    課金の歯止めとしても、止めたいのは新規取得のコール数なので、新規件数で数えるのが正しい。
+    """
     out_path = os.path.join(out_dir, f"{handle}.jsonl")
     query = f"from:{handle} since:{since} until:{until}"
 
@@ -237,7 +243,7 @@ def fetch_account(handle, since, until, max_tweets, out_dir, api_key):
 
     cursor, page, new_count, calls = None, 0, 0, 0
     with open(out_path, "a", encoding="utf-8") as out:
-        while len(seen) < max_tweets:
+        while new_count < max_tweets:
             params = {QUERY_PARAM: query, "queryType": "Latest"}
             if cursor:
                 params["cursor"] = cursor
@@ -261,19 +267,20 @@ def fetch_account(handle, since, until, max_tweets, out_dir, api_key):
                 out.write(json.dumps(t, ensure_ascii=False) + "\n")
                 fresh += 1
                 new_count += 1
-                if len(seen) >= max_tweets:
+                if new_count >= max_tweets:
                     break
             out.flush()
             print(f"  {page:>3}ページ目: 応答{len(tweets):>3}件 / 新規{fresh:>3}件 / 累計{len(seen):>4}件")
 
             if not cursor:
                 break
-            if len(seen) < max_tweets:
+            if new_count < max_tweets:
                 time.sleep(SECONDS_PER_CALL)
 
-    hit_cap = len(seen) >= max_tweets and cursor
+    hit_cap = new_count >= max_tweets and cursor
     if hit_cap:
-        print(f"  --max-tweets-per-account に達して打ち切り。{handle} の実数はこれより多い")
+        print(f"  --max-tweets-per-account（今回の新規{max_tweets}件）に達して打ち切り。"
+              f"{handle} の期間内の実数はこれより多い")
 
     return out_path, len(seen), new_count, calls
 
@@ -329,7 +336,9 @@ def main():
     p.add_argument("--until", required=True,
                    help="終了日+1日 YYYY-MM-DD（x_collect.md の慣習と同じ。終了日を含めるなら+1日を渡す）")
     p.add_argument("--max-tweets-per-account", type=int, required=True,
-                   help="1アカウントあたりの取得上限（必須・デフォルトなし）。暴走と課金の歯止め")
+                   help="1アカウントあたり、この実行で新しく取る件数の上限（必須・デフォルトなし）。"
+                        "暴走と課金の歯止め。既存 jsonl の累計件数とは無関係なので、"
+                        "何件溜まっていても同じ値でよい")
     p.add_argument("--accounts", default=None,
                    help="handle:ラベル のカンマ区切り（例 lollipop_1116:公式,mana_lpop:愛月まな）。"
                         "省略時は現メンバー5人+公式")
@@ -387,7 +396,7 @@ def main():
     )
     print(f"対象アカウント : {', '.join(f'@{h}({l})' for h, l in accounts)}")
     print(f"期間           : {args.since} 〜 {args.until}（until は exclusive）")
-    print(f"上限           : アカウントあたり{args.max_tweets_per_account}件（最大 約{est_calls}コール）")
+    print(f"上限           : アカウントあたり新規{args.max_tweets_per_account}件（最大 約{est_calls}コール）")
     print(f"推定コスト     : 最大 {est_credits:,}クレジット = 約${usd(est_credits):.4f}")
     print(f"推定所要時間   : 最大 約{est_calls * SECONDS_PER_CALL / 60:.1f}分（0.2 QPS・逐次）")
     print(f"保存先         : {args.out_dir}")

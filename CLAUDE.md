@@ -14,7 +14,7 @@
 - **文体と表現規約**: note 用記事は [`prompts/write/style_ai_poppar.md`](./prompts/write/style_ai_poppar.md)（AIぽっぱー）に従う。note は表組み不可・見出しは2階層まで。
   同ファイル末尾の「使わない言葉・使い方」（**「地下アイドル」と言わない／「レア曲」と書かない／メンバー写真を直貼りしない／おすすめ曲は通算と直近を併記**）は記事・動画・字幕・キャプション・ハッシュタグすべてに適用する。
 - **メンバー情報**: 基本情報の正は [`members/members.md`](./members/members.md)。人物像は [`members/`](./members/) のデータに根拠がある範囲だけ書く。卒業メンバーの卒業後の活動・私生活には踏み込まない。運営の意図・体調・人間関係の推測は書かない。
-- **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計・公演データの整合性チェック・セトリ白書の図表は `.claude/skills/setlist-analysis`、曲調解析は `.claude/skills/music-analysis`、公式・メンバーのX投稿取得は `.claude/skills/x-account-fetch`、周囲の反応（エゴサーチ）は `.claude/skills/x-egosearch`、週刊・月刊の下書きは `.claude/skills/weekly-monthly-draft`（**収集〜仕上げを一本で回すなら `.claude/skills/weekly-pipeline`**。前回実行の翌日から今日までを既定期間にするので、毎週同じ曜日でなくてよい）、posfie（Xポストを並べるまとめ）は `.claude/skills/posfie-summary`、メンバーの人物像の更新は `.claude/skills/member-profile-refresh` の手順に従う（**節の定義と禁止事項の正は [`members/README.md`](./members/README.md)。書く前に読む**）。コール表のSNS画像はスキルにしていないので、[`resources/call_sheet_requirements.md`](./resources/call_sheet_requirements.md) を読んでから作る。
+- **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計・公演データの整合性チェック・セトリ白書の図表は `.claude/skills/setlist-analysis`、曲調解析は `.claude/skills/music-analysis`、公式・メンバーのX投稿取得は `.claude/skills/x-account-fetch`、周囲の反応（エゴサーチ）は `.claude/skills/x-egosearch`（**候補を人がスワイプで仕分けるなら `.claude/skills/x-egosearch-review`**）、週刊・月刊の下書きは `.claude/skills/weekly-monthly-draft`（**収集〜仕上げを一本で回すなら `.claude/skills/weekly-pipeline`**。前回実行の翌日から今日までを既定期間にするので、毎週同じ曜日でなくてよい）、posfie（Xポストを並べるまとめ）は `.claude/skills/posfie-summary`、メンバーの人物像の更新は `.claude/skills/member-profile-refresh` の手順に従う（**節の定義と禁止事項の正は [`members/README.md`](./members/README.md)。書く前に読む**）。コール表のSNS画像はスキルにしていないので、[`resources/call_sheet_requirements.md`](./resources/call_sheet_requirements.md) を読んでから作る。
 - **調査・分析**: 戦略の定点観測（フォロワー数・UGC・公式の発信量）は `.claude/skills/strategy-metrics`、Web 調査（市場・競合・業界）は `.claude/skills/web-research`。出典と確認日を付け、評価語を書かない。調査メモは `strategy/research_YYYY-MM-DD_<題名>.md`。
 - **記事の公開前レビュー**: note 記事を書き終えたら、PR を作る前に `.claude/skills/article-review`（機械チェック＋読み取り専用エージェント `article-review`）を通す。手戻りの多い「公演の抜け」「公演数の誤り」「表記ゆれ」「文体の崩れ」を資料と突き合わせて拾う。
 - **公開済み note の更新**: `.claude/skills/article-refresh`（差分検知→改稿→レビュー→貼り替え手順書。公開 URL と最終同期日は `articles/公開一覧.md`）。
@@ -57,6 +57,7 @@ GitHub の差分画面・PR 画面は開かれない前提で応答を組み立�
 | note記事（シリーズ・単発とも） | `articles/`（シリーズは専用ディレクトリ、単発は `articles/単発/`。詳細は `articles/README.md`） |
 | posfie まとめ（Xポストを並べる形式） | `articles/posfie/<開始日>_<終了日>.md`（貼るポストと順番の設計図。posfie 上の実体は別。詳細は `articles/posfie/README.md`） |
 | 公演・セトリのデータ | `events/data_event.csv`（一次データ）。集計は `events/monthly_setlist_ranking.csv`。入れ方と TimeTree の使い方は [`events/README.md`](./events/README.md) |
+| ライブ以外の露出（メディア・MC・チェキ会・客演） | `events/data_appearance.csv`（列と語彙は [`events/README.md`](./events/README.md)）。`data_event.csv` には入れない |
 | 戦略・定点観測 | `strategy/`（観測結果は `strategy/metrics_YYYY-MM-DD.md`、調査メモは `strategy/research_*.md`） |
 | 縦動画の運用設計・型定義・量産フロー | `strategy/short_video_playbook.md`（運用の正）と [`strategy/video/`](./strategy/video/)（型定義 A〜G、量産フロー、台本の部品、流行調査）。制作ツールは別リポジトリ `lollpop_video`（F・G）とこのリポジトリの `x-media-collect/scripts/make_vertical.py`（A〜E） |
 | ファン向け入口文書 | `guide/`。メンバー情報は `members/` |
@@ -75,17 +76,20 @@ GitHub の差分画面・PR 画面は開かれない前提で応答を組み立�
 
 ## 進行中（要約のみ。詳細は各 README）
 
-- **歌詞考察**: 正は [`articles/歌詞考察/README.md`](./articles/歌詞考察/README.md)。1曲1記事＋横断考察。オリジナル9曲・ルーツ曲1・横断01 まで済。待ち: 「未完成ヒロイン」「夏色ラムネ」の歌詞資料。
+- **歌詞考察**: 正は [`articles/歌詞考察/README.md`](./articles/歌詞考察/README.md)。1曲1記事＋横断考察。**オリジナル11曲すべて単独記事を書き終えた**（2026-09-20）。ルーツ曲1・横断01/02 まで済。次は次の新曲かルーツ曲。
   **曲調に触れてよいのは `songs/analysis/[曲名].md` がある曲だけ**（BPM・キーは推定値。断定しない）。
 - **週刊・月刊まとめ**: 正は [`articles/週刊まとめ/README.md`](./articles/週刊まとめ/README.md)・[`articles/月刊まとめ/README.md`](./articles/月刊まとめ/README.md)。8月分まで公開済み。**週刊 9/1〜9/7 号は 2026-09-07 作成・未コミット（オーナー確認待ち）**。
   X 収集は API 一本化済み（2026-09-02〜。Grok 版 `prompts/collect/x_collect.md` は予備）。取得データは `work/x_fetch/`、退避は `x-data-sync`。
 - **スターターパック・全楽曲解説（公開済み note の保守）**: 正は [`articles/スターターパック/README.md`](./articles/スターターパック/README.md)（公開 URL の表あり）。2026-09-02〜04 に 3 本立て化と全楽曲解説の最新化を実施。
-  `guide/starter_pack.md` より `articles/スターターパック/` が正（2026-09-03 に反転）。次に陳腐化したら「差分検知→改稿→article-review→貼り替え手順書」の型で更新する（スキル `article-refresh` を作る予定）。
+  `guide/starter_pack.md` より `articles/スターターパック/` が正（2026-09-03 に反転）。次に陳腐化したら「差分検知→改稿→article-review→貼り替え手順書」の型で更新する（スキル `article-refresh`）。
 - **メンバーのパーソナリティ**: 正は [`members/README.md`](./members/README.md)。2026-09-09〜10 に、なりきりプロンプト由来の記述から
   **人格心理学の3層（傾向／動機・価値観／自己物語）＋アイドル固有の2層（特典会用の話題の在庫／舞台での見え方）の6節構成**へ全面改稿。
   現メンバー5人は完了（デビュー 2024-11-16 以降・約11,900件が根拠。手順は `.claude/skills/member-profile-refresh`）。
   **元メンバー2人は旧構成のまま凍結する**（オーナー判断・2026-09-10。取得もしない）。
   「やぎくるみ＝リーダー」表記は削除済み（ストクレ時代の経験。現グループに役職は無い。claude-work #17）。
+- **エゴサーチの精度**: 正は [`.claude/skills/x-egosearch/SKILL.md`](./.claude/skills/x-egosearch/SKILL.md)。2026-09-15 に 2-2「カタカナ・英字」を廃止（3期間で打率0.3%）、
+  愛称（くるみん等）は文脈語との併用を必須に、**過去に採用したアカウントを加点**（`data/x/known_accounts.txt`。打率97% vs 6%）。
+  人が捌く工程は `.claude/skills/x-egosearch-review` に分離（スワイプアプリ → Artifact 公開 → 判定の書き戻し。原文を含むので共有しない）。
 - **縦動画**: 運用の正は [`strategy/short_video_playbook.md`](./strategy/short_video_playbook.md)、型定義と量産フローは [`strategy/video/`](./strategy/video/README.md)。
   2026-09-07 に型体系を A〜E＋F・G に一本化（主力は A 反応集と F/G メンバーエピソードの両輪、月 10〜12 本。ファン投稿の引用は 7.3 の作法で可。コール講座は不採用→入門コンテンツをバックログ）。
   素材の索引・許諾・組み立ては `.claude/skills/x-media-collect` と [`data/README.md`](./data/README.md)。**他人の素材は `data/x/media_permissions.md` に「OK」がある分だけ。クレジットは必ず入れる。**
