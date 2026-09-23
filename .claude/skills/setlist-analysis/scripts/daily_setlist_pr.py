@@ -4,8 +4,10 @@
 **マージはしない。** 自動で main に入れず、朝に人が PR を見て判断する。公式投稿は自由文なので、
 同日2部制のどちらの行か・表記ゆれ・中止や順延の判断は機械では詰め切れないため。
 
-- 埋めるのは「その日のセトリ列が空の行」と「その日のセトリ投稿」がどちらも1つのときだけ。
-  行が無い／複数あって決められない／項目を取り出せない、は PR 本文に「要確認」として並べるだけで触らない
+- **同日2公演は全体の3分の1あるので、投稿を行に割り当てて埋める。**手がかりは会場（🍬の行）、
+  何公演目か（1️⃣本目・2部）、公演名の類似度。どれを当てるか決めきれない日はその日ごと触らない
+- CSV に行が無い／投稿の方が多い／項目を取り出せない／対応する投稿が無く空欄が残った、は
+  PR 本文に「自動では触らなかったもの」として並べるだけで触らない
 - 作業は origin/main から作るテンポラリのワークツリーで行う。**手元の作業ツリーには触らない**
   （未コミットの変更を巻き込まないため。ローカルが毎日 main と同じとは限らない）
 - 未マージの auto/setlist-* が既にあるときは何もしない（PR が積み上がって競合するのを避ける）
@@ -18,6 +20,8 @@
 """
 
 import argparse
+import csv
+import difflib
 import io
 import os
 import re
@@ -48,8 +52,18 @@ TWEETS = os.path.join(project_root, 'work', 'x_fetch', 'lollipop_1116.jsonl')
 LOG_PATH = os.path.join(project_root, 'work', 'x_fetch', 'logs', 'daily_setlist_pr.log')
 BRANCH_PREFIX = 'auto/setlist-'
 
-# セトリの項目らしい行。「SE」「MC」「01 曲名」「12 SHINY DAYS」「アンコール」
-ITEM = re.compile(r'^(SE|MC|W?アンコール|ダブルアンコール|\d{1,2}[\s.．:：]?\s*\S)', re.I)
+# セトリの項目らしい行。「SE」「MC」「01 曲名」「アンコール」。
+# 1桁の番号は区切り（空白・ドット・コロン）を必須にする。「5月一発目ありがとう」「2本ライブ」のような
+# 文を曲と取り違えないため。2桁は「04約束!!!!!!!」と詰めて書かれることがあるので区切り無しも許す
+ITEM = re.compile(r'^(?:SE|MC|W?アンコール|ダブルアンコール|'
+                  r'(?:\d[\s.．:：]\s*|\d{2}[\s.．:：]?\s*)(?!本|部|曲|月|日|周年|現場|公演)\S)', re.I)
+# 「1️⃣本目」「2⃣部」「①本目」。セトリではなく、その日の何公演目かを表す行
+MARKER = re.compile(r'^\s*(?:[0-9０-９][️]?[⃣]|[①-⑨]|[0-9]\s*(?:本目|部|現場目))')
+PART = re.compile(r'([0-9０-９])[️⃣]?\s*(?:本目|部)')
+VENUE = re.compile(r'^\s*🍬\s*(.+)$')
+# 会場も公演名も似ていて、これ以上の差がつかないときは割り当てを決めない。
+# 2024-11 以降の同日2公演の実データ124行で、0.15 なら間違いゼロ（0.05 まで下げると2行間違えた）
+MARGIN = 0.15
 
 
 class Tee:
@@ -85,11 +99,16 @@ def setlist_items(text):
 
     最初の項目行から始め、項目でない行（「ありがとうございました」など）が来たら打ち切る。
     項目の間の空行は読み飛ばす（「MC」のあとに空行が入る投稿が多い）。
+    冒頭の「1️⃣本目」は公演の区切りなので項目に入れない。
     """
     items, started = [], False
     for raw in text.splitlines():
         line = raw.strip()
         if not line:
+            continue
+        if MARKER.match(line):
+            if started:
+                break    # 1本の投稿に次の公演が続いている（古い形式）。1公演分だけ返す
             continue
         if ITEM.match(line):
             items.append(re.sub(r'\s+', ' ', line))
@@ -97,6 +116,67 @@ def setlist_items(text):
         elif started:
             break
     return items
+
+
+def venue_of(text):
+    """投稿の「🍬 会場名」から会場を取る。どの公演の投稿かを見分ける一番強い手がかり。"""
+    for raw in text.splitlines():
+        mm = VENUE.match(raw.strip())
+        if mm:
+            return mm.group(1).strip()
+    return ''
+
+
+def part_of(text):
+    """「1️⃣本目」「2部」から何公演目かを取る。同じ会場の1部/2部を見分けるのに使う。"""
+    mm = PART.search(text)
+    if not mm:
+        return None
+    return int(mm.group(1).translate(str.maketrans('０１２３４５６７８９', '0123456789')))
+
+
+def norm(s):
+    return re.sub(r'[\s　『』「」【】\[\]()（）!！?？・,、。~〜～〜～\-‐―–—:：]', '', s).lower()
+
+
+def score(post, row):
+    """投稿と CSV の行の近さ。会場の一致が一番強い根拠、次に何公演目か、最後に公演名の類似度。"""
+    head = '\n'.join([l for l in post['text'].splitlines() if l.strip()][:5])
+    nh, nv, ne = norm(head), norm(row['venue']), norm(row['event'])
+    pv = norm(venue_of(post['text']))
+    s = 0.0
+    if pv and nv and '会場未記載' not in nv:
+        if pv == nv:
+            s += 3
+        elif pv in nv or nv in pv:
+            s += 2
+        else:
+            s += 2 * difflib.SequenceMatcher(None, pv, nv).ratio()
+    s += difflib.SequenceMatcher(None, ne, nh).ratio()
+    pp, rp = part_of(head), part_of(row['event'])
+    if pp and rp:
+        s += 3 if pp == rp else -3
+    return s
+
+
+def assign(posts, rows):
+    """投稿を CSV の行に割り当てる。1つに決まらない投稿が1つでもあれば None（その日は触らない）。"""
+    pairs, used = [], set()
+    for p in sorted(posts, key=lambda x: x['url']):
+        cand = sorted(((score(p, r), i) for i, r in enumerate(rows) if i not in used), reverse=True)
+        if not cand:
+            return None
+        if len(cand) > 1 and cand[0][0] - cand[1][0] < MARGIN:
+            return None
+        used.add(cand[0][1])
+        pairs.append((p, cand[0][1]))
+    return pairs
+
+
+def parse_line(line):
+    """CSV の1行を dict に。行単位で書き換えたいので、ファイル全体は読み直さない。"""
+    date, event, venue, setlist = next(csv.reader([line]))
+    return {'date': date, 'event': event, 'venue': venue, 'setlist': setlist}
 
 
 def event_date_of(post):
@@ -135,13 +215,18 @@ def unknown_songs(items, canonical):
     return out
 
 
-def fill(lines, day, items):
-    """その日の「セトリ列が空の行」が1行だけなら埋めて True。"""
-    idx = [i for i, l in enumerate(lines) if l.startswith(day + ',') and l.endswith(',""')]
-    if len(idx) != 1:
-        return None
-    lines[idx[0]] = lines[idx[0]][:-2] + '"%s"' % ';'.join(items)
-    return idx[0]
+def fill_row(lines, day, event, items):
+    """その日の、公演名が一致してセトリ列が空の行を埋める。埋めた行番号か None。
+
+    行の並びで指すと、上流で行が足されたときにずれる。公演名で指し直す。
+    """
+    for i, l in enumerate(lines):
+        if not l.startswith(day + ',') or not l.endswith(',""'):
+            continue
+        if parse_line(l)['event'] == event:
+            lines[i] = l[:-2] + '"%s"' % ';'.join(items)
+            return i
+    return None
 
 
 def main():
@@ -179,27 +264,39 @@ def main():
     canonical = load_canonical_songs()
     fills = []
     for day, ps in sorted(by_date.items()):
-        rows = [l for l in lines if l.startswith(day + ',')]
-        empty = [l for l in rows if l.endswith(',""')]
+        rows = [parse_line(l) for l in lines if l.startswith(day + ',')]
         if not rows:
             review.append(("%s: CSV にこの日の行が無い" % day, ps[0]['url']))
             continue
-        if not empty:
+        if not any(not r['setlist'] for r in rows):
             continue  # もう埋まっている。毎日見に来るので普通はここ
-        if len(ps) != 1 or len(empty) != 1:
-            review.append(("%s: 投稿 %d 本 / 空欄 %d 行で1対1にならない" % (day, len(ps), len(empty)),
+        if len(ps) > len(rows):
+            review.append(("%s: 投稿 %d 本に対して行が %d 行しかない" % (day, len(ps), len(rows)),
                            ps[0]['url']))
             continue
-        items = setlist_items(ps[0]['text'])
-        if len(items) < 2:
-            review.append(("%s: セトリの項目を取り出せなかった" % day, ps[0]['url']))
+        # 同日2公演は珍しくない（全体の3分の1）。会場・何公演目か・公演名で投稿を行に割り当てる
+        pairs = assign(ps, rows)
+        if pairs is None:
+            review.append(("%s: 投稿 %d 本をどの行に当てるか決められない" % (day, len(ps)), ps[0]['url']))
             continue
-        fills.append({'date': day, 'url': ps[0]['url'], 'items': items,
-                      'unknown': unknown_songs(items, canonical)})
+        matched = set()
+        for p, k in pairs:
+            matched.add(k)
+            if rows[k]['setlist']:
+                continue  # その公演はもう入っている
+            items = setlist_items(p['text'])
+            if len(items) < 2:
+                review.append(("%s: セトリの項目を取り出せなかった" % day, p['url']))
+                continue
+            fills.append({'date': day, 'event': rows[k]['event'], 'url': p['url'],
+                          'items': items, 'unknown': unknown_songs(items, canonical)})
+        for k, r in enumerate(rows):
+            if not r['setlist'] and k not in matched:
+                review.append(("%s「%s」: 対応する投稿が無く空欄のまま" % (day, r['event'][:40]), ''))
 
     for f in fills:
         extra = ("／名寄せできない: " + '、'.join(f['unknown'])) if f['unknown'] else ''
-        print("埋める %s: %d 項目%s" % (f['date'], len(f['items']), extra))
+        print("埋める %s「%s」: %d 項目%s" % (f['date'], f['event'][:30], len(f['items']), extra))
     for r in review:
         print("要確認 %s" % r[0])
     if not fills:
@@ -229,8 +326,9 @@ def main():
         wt_lines = read_lines(wt_csv)
         applied = []
         for f in fills:
-            if fill(wt_lines, f['date'], f['items']) is None:
-                print("skip %s: origin/main 側では空欄が1行でない。先に誰かが入れた可能性" % f['date'])
+            if fill_row(wt_lines, f['date'], f['event'], f['items']) is None:
+                print("skip %s「%s」: origin/main 側に空欄の行が無い。先に誰かが入れた可能性"
+                      % (f['date'], f['event'][:30]))
                 continue
             applied.append(f)
         if not applied:
@@ -245,12 +343,13 @@ def main():
         checks += run([sys.executable, os.path.join(sl, 'check_event_consistency.py'),
                        '--tweets', TWEETS, '--quiet'], cwd=wt, check=False)
 
-        days = '・'.join(f['date'] for f in applied)
+        days = '・'.join(sorted({f['date'] for f in applied}))
         body = ["公式X（@lollipop_1116）のセトリ投稿から、`events/data_event.csv` の空欄を埋めた。",
                 "**毎朝のタスクスケジューラが自動で作った PR。中身を人が確認してからマージする。**",
                 "", "## 埋めた公演", ""]
         for f in applied:
-            body.append("- **%s**（%d 項目） %s" % (f['date'], len(f['items']), f['url']))
+            body.append("- **%s「%s」**（%d 項目） %s"
+                        % (f['date'], f['event'], len(f['items']), f['url']))
             body.append("  - `%s`" % ';'.join(f['items']))
             if f['unknown']:
                 body.append("  - ⚠️ 楽曲一覧に名寄せできない項目: %s"
