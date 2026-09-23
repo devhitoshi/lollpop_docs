@@ -36,6 +36,7 @@ from fetch_accounts import DEFAULT_ACCOUNTS, tweet_date  # noqa: E402  読み取
 X_FETCH_DIR = 'work/x_fetch'
 DATA_X_DIR = 'data/x'
 STATE_PATH = os.path.join(X_FETCH_DIR, '.pipeline_state.json')
+DAILY_STATE_PATH = os.path.join(X_FETCH_DIR, '.daily_state.json')
 ARTICLE_DIR = os.path.join('articles', '週刊まとめ')
 FORMER_ACCOUNTS = [('asaka_lpop', '姫杏朝香'), ('natsumi_lpop', '苺花なつみ')]
 # x-account-fetch SKILL.md の例（週1回・100件）と x-egosearch の例（月1回・600〜1500件）の中間。
@@ -281,12 +282,34 @@ def stage_collect(args, since, until):
 
     max_n = args.max or DEFAULT_MAX
 
-    fetch_accounts_cmd = py(
-        '.claude/skills/x-account-fetch/scripts/fetch_accounts.py',
-        '--since', since, '--until', plus_one_day(until),
-        '--max-tweets-per-account', str(max_n),
-        '--yes',
-    )
+    # 毎日取得（x-account-fetch/scripts/daily_fetch.py）が取り終えた日は取り直さない。
+    # 保存時に重複は捨てられるが、API の料金は払ってしまうため。--refresh のときは期間全体を取り直す
+    accounts_since = since
+    daily = {}
+    if os.path.exists(DAILY_STATE_PATH):
+        with open(DAILY_STATE_PATH, encoding='utf-8') as f:
+            daily = json.load(f)
+    if not args.refresh and daily.get('covered_from') and daily.get('last_until') \
+            and daily['covered_from'] <= since <= daily['last_until']:
+        accounts_since = plus_one_day(daily['last_until'])
+        print(f"\n毎日取得で {daily['covered_from']}〜{daily['last_until']} は取得済み。"
+              f"公式・メンバーの取得は {accounts_since} から")
+
+    if accounts_since > until:
+        print("公式・メンバーの投稿は期間全体が取得済み。API は叩かず、ドラフトだけ作り直す")
+        fetch_accounts_cmd = py(
+            '.claude/skills/x-account-fetch/scripts/fetch_accounts.py',
+            '--since', since, '--until', plus_one_day(until),
+            '--max-tweets-per-account', str(max_n),
+            '--draft-only',
+        )
+    else:
+        fetch_accounts_cmd = py(
+            '.claude/skills/x-account-fetch/scripts/fetch_accounts.py',
+            '--since', accounts_since, '--until', plus_one_day(until),
+            '--max-tweets-per-account', str(max_n),
+            '--yes',
+        )
     run(fetch_accounts_cmd, args.dry_run)
 
     fetch_egosearch_cmd = py(
