@@ -20,6 +20,11 @@
    └─ 起動時 hook（.claude/hooks/session_start.sh）
         └─ x-data-sync pull : lollpop_data/x/*.jsonl.gz → work/x_fetch/*.jsonl（復元）
 
+ 毎日の自動取得（ローカルのタスクスケジューラ・毎朝 06:00。Claude は起動しない）
+   └─ x-account-fetch の daily_fetch.py
+        ├─ 公式・メンバーの投稿（前回の翌日〜昨日） → work/x_fetch/<handle>.jsonl
+        └─ ハッシュタグだけのエゴサ               → work/x_fetch/hashtags_YYYY-MM.jsonl
+
  取得（費用がかかる。復元してから実行する）
    ├─ x-account-fetch  : 公式・メンバーの投稿      → work/x_fetch/<handle>.jsonl
    └─ x-egosearch      : 周囲の反応（エゴサーチ）  → work/x_fetch/egosearch_<期間>.jsonl
