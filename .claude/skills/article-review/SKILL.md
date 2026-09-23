@@ -38,6 +38,7 @@ description: note 記事（articles/ 配下）を公開・マージする前に�
 | コード | 内容 | 根拠 |
 | --- | --- | --- |
 | BYLINE | タイトル直後の名乗り3行が無い、定型でない、期間がずれている、二重に名乗っている | style_ai_poppar.md（冒頭の名乗り） |
+| EMBED | weekly で本文に X の投稿の埋め込みが無い、または多すぎる | weekly.md（埋め込みの置き方） |
 | NOTE_TABLE / NOTE_HEADING | 表組み、3階層以上の見出し | note の制約（週刊 README） |
 | GROUP_NAME | 「ろりぽっぷ」の「!」が7個でない | CLAUDE.md 表記ルール |
 | EXCLAMATION / KAOMOJI / OTAKU_WORDS | 「!」の連打、顔文字、オタク語彙の回数 | style_ai_poppar.md |

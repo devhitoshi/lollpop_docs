@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="UTF-8">
+<title>週刊まとめ 図版モック</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+/* =====================================================================
+   週刊まとめの note 本文に入れる図版のモック（使い捨て）。
+   色とタイポの正は design.md。ここはその転記。
+
+   幅 1080 固定・高さ可変。note の本文画像はスマホで幅 390px 程度に縮むので、
+   本文は 44px（縮んで約16px）以上にする。call_sheet_cards.html と同じ根拠。
+   ===================================================================== */
+:root {
+  --font: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", Meiryo, sans-serif;
+  --primary: #d6006e;
+  --primary-on-dark: #ff9ecb;
+  --ink: #1d1216;
+  --body: #45383e;
+  --muted: #71646b;
+  --hairline: #f2e2ea;
+  --canvas: #ffffff;
+  --surface-soft: #fff5f9;
+  --surface-dark: #1a1113;
+  --on-dark: #fff5f9;
+  --on-dark-soft: #d9c4ce;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: #c9c9c9; font-family: var(--font); }
+
+/* カードは角丸なし・影なし（design.md: カードなし・影なし、面はバンドで切る） */
+.card { width: 1080px; margin: 40px auto; padding: 0 0 64px; }
+.card.light { background: var(--canvas); color: var(--body); }
+.card.dark  { background: var(--surface-dark); color: var(--on-dark-soft); }
+
+/* 上の帯。押せる色ではないが、ブランド電圧をここだけに集める */
+.band { padding: 36px 64px 32px; }
+.light .band { background: var(--primary); color: #fff; }
+.dark  .band { background: var(--surface-dark); color: var(--on-dark); border-bottom: 2px solid var(--primary-on-dark); }
+.band .title { font-size: 52px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.25; }
+.band .period { font-size: 36px; font-weight: 500; margin-top: 10px; opacity: .92; }
+
+/* ---- 日程カード ---- */
+.rows { padding: 0 64px; }
+.row { display: flex; gap: 40px; padding: 40px 0; }
+.light .row + .row { border-top: 2px solid var(--hairline); }
+.dark  .row + .row { border-top: 2px solid #3a2b33; }
+.row .date { width: 190px; flex: none; }
+.row .d { font-size: 56px; font-weight: 700; line-height: 1; }
+.light .row .d { color: var(--ink); }
+.dark  .row .d { color: var(--on-dark); }
+.row .w { font-size: 32px; font-weight: 500; color: var(--muted); margin-top: 8px; }
+.dark .row .w { color: var(--on-dark-soft); }
+.row .ev { font-size: 46px; font-weight: 700; line-height: 1.4; }
+.light .row .ev { color: var(--ink); }
+.dark  .row .ev { color: var(--on-dark); }
+.row .vn { font-size: 38px; margin-top: 10px; color: var(--muted); }
+.dark .row .vn { color: var(--on-dark-soft); }
+
+/* ---- セトリカード ---- */
+.head { padding: 40px 64px 28px; }
+.head .ev { font-size: 48px; font-weight: 700; line-height: 1.35; }
+.light .head .ev { color: var(--ink); }
+.dark  .head .ev { color: var(--on-dark); }
+.head .meta { font-size: 36px; margin-top: 12px; color: var(--muted); }
+.dark .head .meta { color: var(--on-dark-soft); }
+.songs { padding: 0 64px; }
+.song { display: flex; align-items: baseline; gap: 28px; padding: 22px 0; font-size: 44px; }
+.light .song + .song { border-top: 2px solid var(--hairline); }
+.dark  .song + .song { border-top: 2px solid #3a2b33; }
+.song .no { width: 76px; flex: none; font-weight: 700; font-size: 38px; text-align: right; color: var(--primary); }
+.dark .song .no { color: var(--primary-on-dark); }
+.song .nm { font-weight: 500; line-height: 1.35; }
+.light .song .nm { color: var(--ink); }
+.dark  .song .nm { color: var(--on-dark); }
+.song.mark .nm { font-weight: 700; }
+.badge { display: inline-block; margin-left: 16px; padding: 4px 16px; font-size: 28px; font-weight: 700;
+         background: var(--primary); color: #fff; vertical-align: middle; }
+.dark .badge { background: var(--primary-on-dark); color: var(--surface-dark); }
+.divider { padding: 22px 0 6px 104px; font-size: 32px; font-weight: 700; letter-spacing: .08em; color: var(--muted); }
+.dark .divider { color: var(--on-dark-soft); }
+/* SE は曲ではないので番号を振らず、曲名の列に薄く置く */
+.song.se .nm { font-weight: 400; font-size: 36px; color: var(--muted); letter-spacing: .06em; }
+.dark .song.se .nm { color: var(--on-dark-soft); }
+
+/* 週まとめ版: 1枚に複数公演 */
+.block + .block { margin-top: 20px; }
+.block .bh { padding: 28px 64px 10px; font-size: 40px; font-weight: 700; }
+.light .block .bh { color: var(--primary); }
+.dark  .block .bh { color: var(--primary-on-dark); }
+.block .bs { padding: 0 64px 10px; font-size: 32px; color: var(--muted); }
+.dark .block .bs { color: var(--on-dark-soft); }
+.block .songs .song { padding: 14px 0; font-size: 40px; }
+
+.sign { padding: 40px 64px 0; font-size: 30px; color: var(--muted); }
+.dark .sign { color: var(--on-dark-soft); }
+.label { width: 1080px; margin: 0 auto; font: 700 26px var(--font); color: #333; }
+</style>
+</head>
+
+<body>
+
+<!-- ============ 1. 日程カード 案A（白地） ============ -->
+<div class="label">1. 日程カード 案A（白地）</div>
+<div class="card light" id="schedule-a">
+  <div class="band">
+    <div class="title">今週のライブ</div>
+    <div class="period">ろりぽっぷ!!!!!!! ・ 2026/9/1 〜 9/7</div>
+  </div>
+  <div class="rows">
+    <div class="row">
+      <div class="date"><div class="d">9/5</div><div class="w">土</div></div>
+      <div><div class="ev">『白絵葵子生誕祭2026』</div><div class="vn">大塚FUTURE:</div></div>
+    </div>
+    <div class="row">
+      <div class="date"><div class="d">9/5</div><div class="w">土</div></div>
+      <div><div class="ev">PLUMLIVE #125</div><div class="vn">新宿Zirco</div></div>
+    </div>
+    <div class="row">
+      <div class="date"><div class="d">9/6</div><div class="w">日</div></div>
+      <div><div class="ev">『やぎくるみ生誕祭2026』</div><div class="vn">渋谷CYCLONE</div></div>
+    </div>
+  </div>
+  <div class="sign">ろりぽっぷ!!!!!!! 週刊まとめ</div>
+</div>
+
+<!-- ============ 2. 日程カード 案B（プラム黒） ============ -->
+<div class="label">2. 日程カード 案B（プラム黒）</div>
+<div class="card dark" id="schedule-b">
+  <div class="band">
+    <div class="title">今週のライブ</div>
+    <div class="period">ろりぽっぷ!!!!!!! ・ 2026/9/1 〜 9/7</div>
+  </div>
+  <div class="rows">
+    <div class="row">
+      <div class="date"><div class="d">9/5</div><div class="w">土</div></div>
+      <div><div class="ev">『白絵葵子生誕祭2026』</div><div class="vn">大塚FUTURE:</div></div>
+    </div>
+    <div class="row">
+      <div class="date"><div class="d">9/5</div><div class="w">土</div></div>
+      <div><div class="ev">PLUMLIVE #125</div><div class="vn">新宿Zirco</div></div>
+    </div>
+    <div class="row">
+      <div class="date"><div class="d">9/6</div><div class="w">日</div></div>
+      <div><div class="ev">『やぎくるみ生誕祭2026』</div><div class="vn">渋谷CYCLONE</div></div>
+    </div>
+  </div>
+  <div class="sign">ろりぽっぷ!!!!!!! 週刊まとめ</div>
+</div>
+
+<!-- ============ 3. セトリカード 案A（公演ごと・白地） ============ -->
+<div class="label">3. セトリカード 案A（公演ごと・白地）</div>
+<div class="card light" id="setlist-a">
+  <div class="head">
+    <div class="ev">『やぎくるみ生誕祭2026』</div>
+    <div class="meta">2026/9/6（日）・渋谷CYCLONE<br>本編11曲＋アンコール1曲</div>
+  </div>
+  <div class="songs">
+    <div class="song se"><div class="no"></div><div class="nm">SE</div></div>
+    <div class="song"><div class="no">01</div><div class="nm">始まりの宴</div></div>
+    <div class="song"><div class="no">02</div><div class="nm">ぽっぽ♪ポジティブ!!</div></div>
+    <div class="song"><div class="no">03</div><div class="nm">夏色ラムネ</div></div>
+    <div class="song mark"><div class="no">04</div><div class="nm">My Story<span class="badge">ソロ曲</span></div></div>
+    <div class="song mark"><div class="no">05</div><div class="nm">幸せなんだ<span class="badge">カバー</span></div></div>
+    <div class="song"><div class="no">06</div><div class="nm">Singularity</div></div>
+    <div class="song"><div class="no">07</div><div class="nm">サクラロード</div></div>
+    <div class="song"><div class="no">08</div><div class="nm">Unknown</div></div>
+    <div class="song"><div class="no">09</div><div class="nm">MADOROMI</div></div>
+    <div class="song"><div class="no">10</div><div class="nm">シーソーゲーム</div></div>
+    <div class="song"><div class="no">11</div><div class="nm">主人公</div></div>
+    <div class="divider">ENCORE</div>
+    <div class="song"><div class="no">12</div><div class="nm">SHINY DAYS</div></div>
+  </div>
+  <div class="sign">ろりぽっぷ!!!!!!! 週刊まとめ（2026/9/1 〜 9/7）</div>
+</div>
+
+<!-- ============ 4. セトリカード 案B（公演ごと・プラム黒） ============ -->
+<div class="label">4. セトリカード 案B（公演ごと・プラム黒）</div>
+<div class="card dark" id="setlist-b">
+  <div class="head">
+    <div class="ev">『やぎくるみ生誕祭2026』</div>
+    <div class="meta">2026/9/6（日）・渋谷CYCLONE<br>本編11曲＋アンコール1曲</div>
+  </div>
+  <div class="songs">
+    <div class="song se"><div class="no"></div><div class="nm">SE</div></div>
+    <div class="song"><div class="no">01</div><div class="nm">始まりの宴</div></div>
+    <div class="song"><div class="no">02</div><div class="nm">ぽっぽ♪ポジティブ!!</div></div>
+    <div class="song"><div class="no">03</div><div class="nm">夏色ラムネ</div></div>
+    <div class="song mark"><div class="no">04</div><div class="nm">My Story<span class="badge">ソロ曲</span></div></div>
+    <div class="song mark"><div class="no">05</div><div class="nm">幸せなんだ<span class="badge">カバー</span></div></div>
+    <div class="song"><div class="no">06</div><div class="nm">Singularity</div></div>
+    <div class="song"><div class="no">07</div><div class="nm">サクラロード</div></div>
+    <div class="song"><div class="no">08</div><div class="nm">Unknown</div></div>
+    <div class="song"><div class="no">09</div><div class="nm">MADOROMI</div></div>
+    <div class="song"><div class="no">10</div><div class="nm">シーソーゲーム</div></div>
+    <div class="song"><div class="no">11</div><div class="nm">主人公</div></div>
+    <div class="divider">ENCORE</div>
+    <div class="song"><div class="no">12</div><div class="nm">SHINY DAYS</div></div>
+  </div>
+  <div class="sign">ろりぽっぷ!!!!!!! 週刊まとめ（2026/9/1 〜 9/7）</div>
+</div>
+
+<!-- ============ 5. セトリカード 週まとめ版 案A（白地） ============ -->
+<div class="label">5. セトリカード 週まとめ版 案A（白地・3公演で1枚）</div>
+<div class="card light" id="setlist-week-a">
+  <div class="band">
+    <div class="title">今週のセトリ</div>
+    <div class="period">ろりぽっぷ!!!!!!! ・ 2026/9/1 〜 9/7 ・ 3公演</div>
+  </div>
+  <div class="block">
+    <div class="bh">9/5（土）『白絵葵子生誕祭2026』</div>
+    <div class="bs">大塚FUTURE:</div>
+    <div class="songs">
+      <div class="song"><div class="no">01</div><div class="nm">未完成ヒロイン<span class="badge">コラボ</span></div></div>
+      <div class="song"><div class="no">02</div><div class="nm">HELLO</div></div>
+      <div class="song"><div class="no">03</div><div class="nm">夏色ラムネ</div></div>
+      <div class="song"><div class="no">04</div><div class="nm">SHINY DAYS</div></div>
+      <div class="song"><div class="no">05</div><div class="nm">推し事～女の子アイドルオタクあるある〜</div></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="bh">9/5（土）PLUMLIVE #125</div>
+    <div class="bs">新宿Zirco</div>
+    <div class="songs">
+      <div class="song"><div class="no">01</div><div class="nm">夏色ラムネ</div></div>
+      <div class="song"><div class="no">02</div><div class="nm">アタックサイン</div></div>
+      <div class="song"><div class="no">03</div><div class="nm">シーソーゲーム</div></div>
+      <div class="song"><div class="no">04</div><div class="nm">始まりの宴!!!!!!!</div></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="bh">9/6（日）『やぎくるみ生誕祭2026』</div>
+    <div class="bs">渋谷CYCLONE</div>
+    <div class="songs">
+      <div class="song"><div class="no">01</div><div class="nm">始まりの宴</div></div>
+      <div class="song"><div class="no">02</div><div class="nm">ぽっぽ♪ポジティブ!!</div></div>
+      <div class="song"><div class="no">03</div><div class="nm">夏色ラムネ</div></div>
+      <div class="song"><div class="no">04</div><div class="nm">My Story</div></div>
+      <div class="song"><div class="no">05</div><div class="nm">幸せなんだ</div></div>
+      <div class="song"><div class="no">06</div><div class="nm">Singularity</div></div>
+      <div class="song"><div class="no">07</div><div class="nm">サクラロード</div></div>
+      <div class="song"><div class="no">08</div><div class="nm">Unknown</div></div>
+      <div class="song"><div class="no">09</div><div class="nm">MADOROMI</div></div>
+      <div class="song"><div class="no">10</div><div class="nm">シーソーゲーム</div></div>
+      <div class="song"><div class="no">11</div><div class="nm">主人公</div></div>
+      <div class="song"><div class="no">12</div><div class="nm">SHINY DAYS（アンコール）</div></div>
+    </div>
+  </div>
+  <div class="sign">ろりぽっぷ!!!!!!! 週刊まとめ</div>
+</div>
+
+<!-- ============ 6. セトリカード 週まとめ版 案B（プラム黒） ============ -->
+<div class="label">6. セトリカード 週まとめ版 案B（プラム黒・3公演で1枚）</div>
+<div class="card dark" id="setlist-week-b">
+  <div class="band">
+    <div class="title">今週のセトリ</div>
+    <div class="period">ろりぽっぷ!!!!!!! ・ 2026/9/1 〜 9/7 ・ 3公演</div>
+  </div>
+  <div class="block">
+    <div class="bh">9/5（土）『白絵葵子生誕祭2026』</div>
+    <div class="bs">大塚FUTURE:</div>
+    <div class="songs">
+      <div class="song"><div class="no">01</div><div class="nm">未完成ヒロイン<span class="badge">コラボ</span></div></div>
+      <div class="song"><div class="no">02</div><div class="nm">HELLO</div></div>
+      <div class="song"><div class="no">03</div><div class="nm">夏色ラムネ</div></div>
+      <div class="song"><div class="no">04</div><div class="nm">SHINY DAYS</div></div>
+      <div class="song"><div class="no">05</div><div class="nm">推し事～女の子アイドルオタクあるある〜</div></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="bh">9/5（土）PLUMLIVE #125</div>
+    <div class="bs">新宿Zirco</div>
+    <div class="songs">
+      <div class="song"><div class="no">01</div><div class="nm">夏色ラムネ</div></div>
+      <div class="song"><div class="no">02</div><div class="nm">アタックサイン</div></div>
+      <div class="song"><div class="no">03</div><div class="nm">シーソーゲーム</div></div>
+      <div class="song"><div class="no">04</div><div class="nm">始まりの宴!!!!!!!</div></div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="bh">9/6（日）『やぎくるみ生誕祭2026』</div>
+    <div class="bs">渋谷CYCLONE</div>
+    <div class="songs">
+      <div class="song"><div class="no">01</div><div class="nm">始まりの宴</div></div>
+      <div class="song"><div class="no">02</div><div class="nm">ぽっぽ♪ポジティブ!!</div></div>
+      <div class="song"><div class="no">03</div><div class="nm">夏色ラムネ</div></div>
+      <div class="song"><div class="no">04</div><div class="nm">My Story</div></div>
+      <div class="song"><div class="no">05</div><div class="nm">幸せなんだ</div></div>
+      <div class="song"><div class="no">06</div><div class="nm">Singularity</div></div>
+      <div class="song"><div class="no">07</div><div class="nm">サクラロード</div></div>
+      <div class="song"><div class="no">08</div><div class="nm">Unknown</div></div>
+      <div class="song"><div class="no">09</div><div class="nm">MADOROMI</div></div>
+      <div class="song"><div class="no">10</div><div class="nm">シーソーゲーム</div></div>
+      <div class="song"><div class="no">11</div><div class="nm">主人公</div></div>
+      <div class="song"><div class="no">12</div><div class="nm">SHINY DAYS（アンコール）</div></div>
+    </div>
+  </div>
+  <div class="sign">ろりぽっぷ!!!!!!! 週刊まとめ</div>
+</div>
+
+</body>
+</html>

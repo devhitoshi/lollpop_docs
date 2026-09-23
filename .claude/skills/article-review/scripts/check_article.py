@@ -366,6 +366,27 @@ def check_byline(body, kind, start, end, rep):
         rep.warn('BYLINE', "本文で二重に名乗っている（名乗りは冒頭の1回だけ）")
 
 
+EMBED_RE = re.compile(r'^https?://(?:x|twitter)\.com/[^/\s]+/status/\d+/?$')
+
+
+def check_embeds(body, kind, rep):
+    """本文に置いた X の投稿の埋め込み（weekly.md「埋め込みの置き方」）。
+
+    note は URL を単独行に貼ると埋め込みになる。出典節の URL 一覧は数に入れない。
+    """
+    if kind != 'weekly':
+        return
+    body = re.sub(r'<!--.*?-->', '', body, flags=re.S)
+    main = re.split(r'^##\s*出典', body, flags=re.M)[0]
+    n = sum(1 for l in main.split('\n') if EMBED_RE.match(l.strip()))
+    if n == 0:
+        rep.warn('EMBED', "本文に X の投稿の埋め込みが無い（単独行の URL で置く）")
+    elif n > 8:
+        rep.warn('EMBED', f"埋め込みが {n} 本（6〜8本まで。多いと note の表示が重くなる）")
+    else:
+        rep.info('EMBED', f"埋め込み {n} 本")
+
+
 def check_structure(body, memo, kind, rep):
     paras = [p for p in re.split(r'\n\s*\n', body) if p.strip() and not p.lstrip().startswith(('#', '-', '*', '|', '>'))]
     long_paras = [p for p in paras if count_sentences(p) > 4]
@@ -400,6 +421,7 @@ def main():
     rep = Report()
 
     check_byline(body, kind, start, end, rep)
+    check_embeds(body, kind, rep)
     check_note_constraints(body, rep)
     check_group_name(plain, rep)
     check_style(plain, kind, songs, rep)
