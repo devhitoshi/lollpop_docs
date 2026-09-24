@@ -64,7 +64,7 @@ GitHub の差分画面・PR 画面は開かれない前提で応答を組み立�
 | デザイン定義の変更 | `design.md` を先に直し、`resources/css/style.css` に反映 |
 | 公開HTML | `resources/`（design.md のバンド原則に従う） |
 | 機械が作る成果物（エゴサの判定・件数・要約） | `data/x/`（追跡する。他人の投稿の原文は置かない）。**収集→保管の流れは [`data/README.md`](./data/README.md)** |
-| X の取得データ（他人の投稿の原文） | `work/x_fetch/`（追跡しない）。セッションの終わりに `.claude/skills/x-data-sync` で非公開リポジトリ `lollpop_data` へ退避し、始めに復元する |
+| X の取得データ（他人の投稿の原文） | `work/x_fetch/`（追跡しない）。非公開リポジトリ `lollpop_data` へ退避し、始めに復元する（`.claude/skills/x-data-sync`）。毎日取得の分は毎朝のタスクが自動で退避する。セッション中に手で取った分はセッションの終わりに退避する |
 | 一時的な作業ファイル | `work/`（恒久化が決まったらドメインへ運び出す。**基本は空**） |
 | 旧版・役目を終えたもの | `archive/` |
 

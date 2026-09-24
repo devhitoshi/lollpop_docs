@@ -16,8 +16,15 @@ description: X の取得データ（work/x_fetch/*.jsonl。公式・メンバー
 | 何 | どこ | 追跡 |
 | --- | --- | --- |
 | 投稿の原文（全項目） | `work/x_fetch/*.jsonl` | しない（消えてよい） |
-| 投稿の原文（必要項目・gzip） | `lollpop_data/x/*.jsonl.gz` | 非公開リポジトリ |
+| 投稿の原文（必要項目・gzip） | `lollpop_data/x/`（アカウント別は `<handle>/YYYY-MM.jsonl.gz`、エゴサ・タグは `<name>.jsonl.gz`） | 非公開リポジトリ |
 | 判定・件数・要約 | `data/x/` | lollpop_docs |
+
+## 置き方と積み増し（2026-09-24〜）
+
+- **毎朝 6:00 のタスク `lollpop_daily_fetch` が、取得のあとに自動で `push` する**（ローカルの Windows。`x-account-fetch` の「毎日の自動取得」）。ログは `work/x_fetch/logs/daily_data_push.log`。lollpop_data は PR を作らず main に直接 push する
+- **push は上書きではなく ID での和集合。**データ側の既存行 ＋ `work/x_fetch/` の行を合わせて書くので、退避で行が減らない（同じ ID は work 側を採る）。push の前に `git pull --ff-only` で他のセッションの push を取り込む
+- **アカウント別ファイルは投稿月ごとに分けて置く。**過去の月は変わらないので、毎日のコミットは当月分とタグだけになる。gzip は時刻を入れずに書き、中身が同じファイルは書き換えない
+- `pull` は月ごとのファイルを結合して、従来どおり `work/x_fetch/<handle>.jsonl` に戻す（下流のスクリプトは変更不要）
 
 ## 前提
 
