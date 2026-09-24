@@ -22,7 +22,7 @@ description: X の取得データ（work/x_fetch/*.jsonl。公式・メンバー
 ## 置き方と積み増し（2026-09-24〜）
 
 - **毎朝 6:00 のタスク `lollpop_daily_fetch` が、取得のあとに自動で `push` する**（ローカルの Windows。`x-account-fetch` の「毎日の自動取得」）。ログは `work/x_fetch/logs/daily_data_push.log`。lollpop_data は PR を作らず main に直接 push する
-- **push は上書きではなく ID での和集合。**データ側の既存行 ＋ `work/x_fetch/` の行を合わせて書くので、退避で行が減らない（同じ ID は work 側を採る）。push の前に `git pull --ff-only` で他のセッションの push を取り込む
+- **push は上書きではなく ID での和集合。**データ側の既存行 ＋ `work/x_fetch/` の行を合わせて書くので、退避で行が減らない（同じ ID は表示回数が大きい方＝後から取った方を採る。取り直した数値が翌朝に古い値へ逆戻りしないように）。push の前に `git pull --ff-only` で他のセッションの push を取り込む
 - **アカウント別ファイルは投稿月ごとに分けて置く。**過去の月は変わらないので、毎日のコミットは当月分とタグだけになる。gzip は時刻を入れずに書き、中身が同じファイルは書き換えない
 - `pull` は月ごとのファイルを結合して、従来どおり `work/x_fetch/<handle>.jsonl` に戻す（下流のスクリプトは変更不要）
 

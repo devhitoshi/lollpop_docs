@@ -12,7 +12,8 @@
   - 名前に期間が入っていないファイル（公式・メンバーのアカウント別）は月ごとに分ける: x/<handle>/YYYY-MM.jsonl.gz
     毎朝の自動退避（タスクスケジューラ）で毎日 push するため。過去の月は変わらないので、毎日コミットされるのは当月分だけ
   - egosearch_<期間> / hashtags_YYYY-MM は既に期間で分かれているので x/<name>.jsonl.gz のまま
-  - push は上書きではなく「データ側の既存行 ＋ work の行」の ID での和集合。同じ ID は work 側を採る。退避で行は減らない
+  - push は上書きではなく「データ側の既存行 ＋ work の行」の ID での和集合。退避で行は減らない。
+    同じ ID は表示回数（viewCount）が大きい方を採る（同じなら work 側）。取り直した新しい数値が古い数値で逆戻りしないように
   - gzip は時刻を入れずに書き、中身が同じなら書き換えない（変わっていないファイルをコミットしないため）
 
 データリポジトリの場所は環境変数 LOLLPOP_DATA_DIR（既定: リポジトリの隣の ../lollpop_data）。
@@ -105,6 +106,13 @@ def sort_key(s):
     # ID はスノーフレーク（時系列に増える数値）。並びを毎回同じにして、書き直しても差分が出ないようにする
     i = str(s.get('id') or '')
     return (len(i), i)
+
+
+def views(s):
+    try:
+        return int(s.get('viewCount') or 0)
+    except (TypeError, ValueError):
+        return 0
 
 
 def read_gz(path):
@@ -204,7 +212,11 @@ def merge_one(d, name, work_path):
             if not s.get('id'):
                 no_id += 1
                 continue
-            rows[str(s['id'])] = s  # 同じ ID は work 側（取得し直した新しい数値）を採る
+            key = str(s['id'])
+            # 同じ ID は表示回数が大きい方（＝後から取った方）を採る。表示回数は減らないので、どちらが新しいかの目安になる。
+            # 常に work 側を採ると、クラウドで取り直した新しい数値を、手元の古い数値が翌朝に上書きして逆戻りさせる
+            if key not in rows or views(s) >= views(rows[key]):
+                rows[key] = s
     if no_id:
         print(f"  {name}: ID の無い行 {no_id} 件は保存しない")
     ordered = sorted(rows.values(), key=sort_key)
