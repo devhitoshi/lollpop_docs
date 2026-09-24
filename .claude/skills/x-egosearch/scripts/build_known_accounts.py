@@ -55,7 +55,7 @@ def load_existing():
             continue
         m = ROW.match(line)
         if m and m.group(4).rstrip().endswith('# fixed'):
-            fixed['@' + m.group(1)] = m.group(4).rstrip()
+            fixed['@' + m.group(1)] = (m.group(4).rstrip(), int(m.group(2)), int(m.group(3)))
     return fixed
 
 
@@ -112,6 +112,10 @@ def main():
 
     fixed = load_existing()
     rows = [(h, v) for h, v in tally.items() if v['adopt'] >= args.min_adopt]
+    # `# fixed` の行は、生データが欠けて数えられないアカウントでも前回の件数のまま残す
+    for h, (_, adopt, reject) in fixed.items():
+        if h not in tally:
+            rows.append((h, {'adopt': adopt, 'reject': reject, 'memos': []}))
     rows.sort(key=lambda kv: (-kv[1]['adopt'], kv[0]))
 
     os.makedirs(DATA_DIR, exist_ok=True)
@@ -123,7 +127,7 @@ def main():
         f.write('# メモに「# fixed」と書いておくと、再生成しても上書きしない（手で書いた説明を残すため）\n')
         f.write('# 他人の投稿の原文はここに入れない。\n')
         for h, v in rows:
-            memo = fixed.get(h) or '／'.join(v['memos'])
+            memo = fixed[h][0] if h in fixed else '／'.join(v['memos'])
             f.write(f"{h}\tadopt={v['adopt']} reject={v['reject']}\t{memo}\n")
 
     print(f'{len(rows)} アカウント → {KNOWN_PATH}')
