@@ -103,11 +103,11 @@ GitHub の差分画面・PR 画面は開かれない前提で応答を組み立�
   - **linkco.re（TuneCore配信ページ）はネットワークポリシーで到達不可。** 歌詞はユーザーにスクリーンショットかテキストで貼ってもらい、転記する。原文の表記揺れは正規化せず、歌詞ファイル末尾のHTMLコメント（転記メモ）に記録して、ユーザーにレビューを依頼する。
   - **公開用の画像を撮る前に、必ず `bash resources/install_capture_font.sh` を実行する。入れずに撮ると漢字が中国語フォントの字形になる**（2026-09-04に実際にやらかした）。コンテナのヘッドレスChromiumは `fonts.googleapis.com` に到達できず、日本語フォントは IPAGothic と WenQuanYi しか無い。**CSSの指定と実際に描画されたフォントは別物。** 画像にする前に CDP の `CSS.getPlatformFontsForNode` で実物を確認する（`resources/capture_call_sheet.py` は Noto Sans JP でなければ中断する）。コンテナは使い捨てなので、セッションが変わるたびに入れ直す。
   - **Playwright はコンテナに未インストール。`pip install playwright` で入れる。** ブラウザは `/opt/pw-browsers` にあり、`playwright install` は不要（禁止）。`executable_path="/opt/pw-browsers/chromium-1194/chrome-linux/chrome"`（実際のディレクトリ名を確認する）と `args=["--no-sandbox"]` を渡す。
-  - `lollpop_video` は GitHub に無い（ローカルのみ）。動画のレンダリングや Remotion の実装はクラウドに投げても進まない。
+  - `lollpop_video` は `devhitoshi/lollpop_video`（private、2026-09-24〜）。ただし写真・音声・BGM は `.gitignore` 済みでリポジトリに無いので、クラウドでレンダリングまではできない。
 - **共通**:
   - **記事系のPRは、作成後そのままマージしてよい**（オーナー方針・2026年9月確認）。それ以外の PR は本文を提示して承認を得る。マージ後は作業ブランチを origin/main に揃え直す。
   - **PR 本文の末尾に `## 判断待ち` 節を必ず書く。**オーナーが決めないと進まないことを箇条書きにする。**無ければ「なし」と明記する**（書き忘れと区別するため）。
     残タスクは `devhitoshi/claude-work`（private）の Issues に集約していて、**この節が唯一の回収口**。クラウドセッションは会話ログが残らず、PR 本文とコミットだけが引き継ぎ面になる。
     過去に #18（許諾の範囲）・#20（未push コミットの扱い）・#21（コール表未整備・`x_cache/`）が PR 本文に書かれたまま誰にも拾われず、いまも未対応で残っている。
     `claude-work` に直接書き込める環境なら `gh issue create -R devhitoshi/claude-work` でもよい（権限が無ければ PR 本文だけでよい。ローカルの週次走査が拾う）。
-  - **hooks（`.claude/settings.json`、2026-09-02〜）が3つ動く。** 起動時に現状サマリを出す `session_start.sh`、`git add -f` と `.env`／`work/x_fetch/`／音源を含むコミットを止める `guard_git.py`、`events/data_event.csv` を編集したら集計と整合性チェックを自動で回す `after_event_csv.py`。止められたときは理由が表示されるので、無理に回避せずユーザーに確認する。
+  - **hooks（`.claude/settings.json`、2026-09-02〜）が4つ動く。** 起動時に現状サマリを出す `session_start.sh`、`git add -f` と `.env`／`work/x_fetch/`／音源を含むコミットを止める `guard_git.py`、`.env` の表示・キーの環境変数の参照・キーの値を含む入力（全ツール）を止める `guard_secrets.py`（2026-09-24〜。キーが要る処理はスキルのスクリプトに任せる。テストは `python3 .claude/hooks/test_guard_secrets.py`）、`events/data_event.csv` を編集したら集計と整合性チェックを自動で回す `after_event_csv.py`。止められたときは理由が表示されるので、無理に回避せずユーザーに確認する。
