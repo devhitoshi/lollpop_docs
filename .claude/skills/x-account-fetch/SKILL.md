@@ -81,6 +81,7 @@ Claude を起動しないので、Claude の利用枠は使わない。
 - **状態とログ**: `work/x_fetch/.daily_state.json`（`covered_from`〜`last_until` が途切れずに取れている範囲）と
   `work/x_fetch/logs/daily_fetch.log`。起動時サマリに「毎日取得: 〜まで取得済み（成功/失敗）」が出る。
   失敗したら状態を進めないので、次の実行で同じ期間から取り直す
+- **退避**: 同じタスクの最後に `x-data-sync` の `push --log work/x_fetch/logs/daily_data_push.log` を回し、非公開リポジトリ `lollpop_data` の main へ毎朝積み増す（2026-09-24〜。取得 → セトリ PR → 退避の順）
 - **週刊との関係**: `run_weekly.py --stage collect` は、毎日取得が取り終えた日の公式・メンバー投稿を取り直さない（`--refresh` 時を除く）
 - **費用の目安**: 公式・メンバーが月 600 件前後（約 $0.09）、タグが 1 日 10 件前後（月 約 $0.05）。
   初回（2026-09-17、9/8〜9/16 の 9 日分）は 26 コール・約 5,000 クレジット
@@ -94,7 +95,7 @@ Claude を起動しないので、Claude の利用枠は使わない。
   python .claude/skills/x-account-fetch/scripts/daily_fetch.py --dry-run                                   # 期間・タグ・検索文だけ表示
   ```
 
-- クラウドでは回さない（コンテナが使い捨てで、twitterapi.io に届かない環境もある）。退避は今まで通りセッションの終わりに `x-data-sync`
+- クラウドでは回さない（コンテナが使い捨てで、twitterapi.io に届かない環境もある）。毎日取得の分は自動で退避されるが、セッション中に手で取ったもの（エゴサ・遡り取得）は今まで通りセッションの終わりに `x-data-sync`
 
 ## 制約・注意点（禁止事項に対応）
 
