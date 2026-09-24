@@ -31,6 +31,8 @@ LABELS = {
     ("2026-09-23", "SHIBUYA CYCLONE"): ("9/23 水祝", "渋谷"),
 }
 ORDER = list(LABELS)
+# ろりぽっぷ!!!!!!!の披露に数えない曲（日付, 曲順）。9/20 の 06・07 は主役のなのマネージャーのソロ曲
+EXCLUDE = {("2026-09-20", 6), ("2026-09-20", 7)}
 
 
 def load():
@@ -41,7 +43,7 @@ def load():
             songs = []
             for item in r["setlist"].split(";"):
                 item = item.strip()
-                if item[:2].isdigit():
+                if item[:2].isdigit() and (r["date"], int(item[:2])) not in EXCLUDE:
                     songs.append((int(item[:2]), item[3:].strip()))
             shows[key] = songs
     return [shows[k] for k in ORDER]
@@ -107,7 +109,7 @@ td.cnt b {{ color:var(--ink); font-size:17px; vertical-align:middle; }}
 <p class="lead">ろりぽっぷ!!!!!!!　2026年9月19日〜23日の5公演・のべ{total}曲。丸の中の数字はその日の曲順。</p>
 <table><thead><tr><th class="song"></th>{head}<th class="cnt">披露回数</th></tr></thead>
 <tbody>{''.join(rows)}</tbody></table>
-<p class="foot">9/21（月祝）の出演予定は台風の影響でイベント中止。9/20 の単独ライブは日向なのマネージャーの生誕編で、なのちゃんとのコラボ曲を含む。<br>
+<p class="foot">9/21（月祝）の出演予定は台風の影響でイベント中止。9/20 の単独ライブはなのマネージャーの生誕編。曲順 06・07 はなのちゃんのソロ曲なので除いた。<br>
 出典: 公式 X（@lollipop_1116）のセトリ投稿をまとめた events/data_event.csv。曲名はセトリ投稿の表記のまま。</p>
 </div></body></html>"""
 
