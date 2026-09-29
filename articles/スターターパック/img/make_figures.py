@@ -84,7 +84,7 @@ header("03_header.png", "STARTER PACK 3 / 3", ["ライブに行って、", "特�
 
 # ---------------------------------------------------------------- 01 年表
 def timeline():
-    im, d = canvas(1280, 990)
+    im, d = canvas(1280, 860)
     text(d, (80, 60), "ろりぽっぷ!!!!!!! の歩み", f(46), C["ink"])
     text(d, (80, 122), "2024年11月のデビューから、2周年SPライブまで", f(26, False), C["muted"])
 
@@ -97,7 +97,6 @@ def timeline():
         ("2026.06.06", "3rdワンマン「全力疾走」新宿ReNY", False),
         ("2026.08.15", "苺花なつみが卒業", False),
         ("2026.08.22", "5人体制が始動（「ガラストロメ!!」）", True),
-        ("2026.09.20", "新曲「また会う日まで」を初披露（単独ライブvol.19）", False),
         ("2026.11.06", "2周年SPライブ YOANI Live Station（予定）", True),
     ]
     x_line = 300
@@ -114,9 +113,6 @@ def timeline():
         text(d, (x_line + 34, y), label, f(28, hi), C["ink"] if hi else C["body"], anchor="lm")
         y += step
 
-    rect(d, (80, 912, 1200, 916), fill=C["hairline"])
-    text(d, (80, 934), "会場は 代官山UNIT → 赤羽ReNY alpha → 新宿ReNY と大きくなっている",
-         f(24, False), C["muted"])
     save(im, "01_timeline.png")
 timeline()
 
