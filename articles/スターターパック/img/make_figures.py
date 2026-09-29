@@ -84,9 +84,9 @@ header("03_header.png", "STARTER PACK 3 / 3", ["ライブに行って、", "特�
 
 # ---------------------------------------------------------------- 01 年表
 def timeline():
-    im, d = canvas(1280, 820)
+    im, d = canvas(1280, 990)
     text(d, (80, 60), "ろりぽっぷ!!!!!!! の歩み", f(46), C["ink"])
-    text(d, (80, 122), "2024年11月のデビューから、5人体制の始動まで", f(26, False), C["muted"])
+    text(d, (80, 122), "2024年11月のデビューから、2周年SPライブまで", f(26, False), C["muted"])
 
     rows = [
         ("2024.11.16", "サウンドノート秋葉原でデビューライブ", False),
@@ -97,6 +97,8 @@ def timeline():
         ("2026.06.06", "3rdワンマン「全力疾走」新宿ReNY", False),
         ("2026.08.15", "苺花なつみが卒業", False),
         ("2026.08.22", "5人体制が始動（「ガラストロメ!!」）", True),
+        ("2026.09.20", "新曲「また会う日まで」を初披露（単独ライブvol.19）", False),
+        ("2026.11.06", "2周年SPライブ YOANI Live Station（予定）", True),
     ]
     x_line = 300
     y = 200
@@ -112,8 +114,8 @@ def timeline():
         text(d, (x_line + 34, y), label, f(28, hi), C["ink"] if hi else C["body"], anchor="lm")
         y += step
 
-    rect(d, (80, 740, 1200, 744), fill=C["hairline"])
-    text(d, (80, 762), "会場は 代官山UNIT → 赤羽ReNY alpha → 新宿ReNY と大きくなっている",
+    rect(d, (80, 912, 1200, 916), fill=C["hairline"])
+    text(d, (80, 934), "会場は 代官山UNIT → 赤羽ReNY alpha → 新宿ReNY と大きくなっている",
          f(24, False), C["muted"])
     save(im, "01_timeline.png")
 timeline()
@@ -121,14 +123,15 @@ timeline()
 
 # ---------------------------------------------------------------- 01 ルーツ
 def roots():
-    im, d = canvas(1280, 800)
+    im, d = canvas(1280, 840)
     text(d, (80, 56), "曲は3つの出どころに分かれる", f(46), C["ink"])
     text(d, (80, 118), "ライブ中に「あ、これはストクレの曲だな」と分かるようになります", f(26, False), C["muted"])
 
     cols = [
         (C["chart_orig"], "オリジナル曲", "ろりぽっぷ!!!!!!! 名義", "結成後に作られた曲",
          ["ろりぽっぷ!!!!!!!", "ぽっぽ♪ポジティブ！！", "始まりの宴!!!!!!!", "乙女ロック", "Unknown",
-          "約束!!!!!!!", "主人公!!!!!!!", "未完成ヒロイン", "シーソーゲーム", "メイク☆マイダンス", "夏色ラムネ"]),
+          "約束!!!!!!!", "主人公!!!!!!!", "未完成ヒロイン", "シーソーゲーム", "メイク☆マイダンス", "夏色ラムネ",
+          "また会う日まで"]),
         (C["chart_stk"], "ストクレ曲", "元 STRAY SHEEP CLAYMORE", "かっこいい系が多め",
          ["SHINY DAYS", "HELLO", "MY DREAM MY LIFE", "むげんの☆Lambie", "ほか"]),
         (C["chart_hpst"], "ハピスト曲", "元 ハピ☆スト", "かわいい系が多め",
@@ -137,7 +140,7 @@ def roots():
     x = 80
     w = 360
     for col, title, sub, desc, songs in cols:
-        rect(d, (x, 190, x + w, 750), fill=C["surface_soft"])
+        rect(d, (x, 190, x + w, 790), fill=C["surface_soft"])
         rect(d, (x, 190, x + w, 198), fill=col)
         text(d, (x + 28, 226), title, f(34), col)
         text(d, (x + 28, 274), sub, f(22, False), C["muted"])
