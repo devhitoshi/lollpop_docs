@@ -149,7 +149,7 @@ def date_variants(iso):
 
 # ---------- 各チェック ----------
 
-DISCLAIMER = 'Xの投稿を中心にAIで分析して限界オタクの性格づけして本記事を書き上げてます。'
+DISCLAIMER = '> ※Xの投稿を中心にAIで分析して限界オタクの性格づけして本記事を書き上げてます。'
 
 
 def check_disclaimer(body, rep):
@@ -161,8 +161,8 @@ def check_disclaimer(body, rep):
         return
     first = next((l.strip() for l in lines[idx + 1:] if l.strip()), '')
     if first != DISCLAIMER:
-        rep.error('DISCLAIMER', f"タイトル直後に注意書き「{DISCLAIMER}」が無い（文面は変えない）")
-    elif body.count(DISCLAIMER) > 1:
+        rep.error('DISCLAIMER', f"タイトル直後に注意書き「{DISCLAIMER}」が無い（引用ブロック `> ※` で、文面は変えない）")
+    elif body.count(DISCLAIMER[3:]) > 1:
         rep.warn('DISCLAIMER', "注意書きが2回以上ある（冒頭の1回だけ）")
 
 

@@ -37,7 +37,7 @@ description: note 記事（articles/ 配下）を公開・マージする前に�
 
 | コード | 内容 | 根拠 |
 | --- | --- | --- |
-| DISCLAIMER | タイトル直後に冒頭の注意書き（定型の1文）が無い、2回以上ある | style_ai_poppar.md（冒頭の注意書き） |
+| DISCLAIMER | タイトル直後に冒頭の注意書き（`> ※` で始まる定型の1文）が無い、2回以上ある | style_ai_poppar.md（冒頭の注意書き） |
 | NOTE_TABLE / NOTE_HEADING | 表組み、3階層以上の見出し | note の制約（週刊 README） |
 | GROUP_NAME | 「ろりぽっぷ」の「!」が7個でない | CLAUDE.md 表記ルール |
 | EXCLAMATION / KAOMOJI / OTAKU_WORDS | 「!」の連打、顔文字、オタク語彙の回数 | style_ai_poppar.md |
