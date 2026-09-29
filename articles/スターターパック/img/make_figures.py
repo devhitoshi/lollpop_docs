@@ -157,15 +157,15 @@ roots()
 def ranking():
     im, d = canvas(1280, 700)
     text(d, (80, 56), "よく演奏される曲 トップ6", f(46), C["ink"])
-    text(d, (80, 118), "2024年11月16日〜2026年8月31日／326公演・のべ1,607回の集計", f(26, False), C["muted"])
+    text(d, (80, 118), "2024年11月16日〜2026年9月26日／338公演・のべ1,712回の集計", f(26, False), C["muted"])
 
-    data = [("ろりぽっぷ!!!!!!!", 185, "orig"), ("ぽっぽ♪ポジティブ！！", 166, "orig"),
-            ("始まりの宴!!!!!!!", 143, "orig"), ("SHINY DAYS", 118, "stk"),
-            ("推し事〜女の子アイドルオタクあるある〜", 105, "hpst"), ("HELLO", 101, "stk")]
+    data = [("ろりぽっぷ!!!!!!!", 191, "orig"), ("ぽっぽ♪ポジティブ！！", 173, "orig"),
+            ("始まりの宴!!!!!!!", 152, "orig"), ("SHINY DAYS", 127, "stk"),
+            ("推し事〜女の子アイドルオタクあるある〜", 108, "hpst"), ("HELLO", 108, "stk")]
     kind = {"orig": C["chart_orig"], "stk": C["chart_stk"], "hpst": C["chart_hpst"]}
     x0, bar_max, y = 560, 560, 210
     for name, v, k in data:
-        w = int(bar_max * v / 185)
+        w = int(bar_max * v / 191)
         text(d, (x0 - 24, y + 22), name, f(26), C["body_strong"], anchor="rm")
         rect(d, (x0, y, x0 + w, y + 44), fill=kind[k])
         text(d, (x0 + w + 16, y + 22), str(v), f(30), kind[k], anchor="lm")
