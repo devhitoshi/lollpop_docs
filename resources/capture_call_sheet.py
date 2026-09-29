@@ -39,6 +39,8 @@ ROOT = Path(__file__).resolve().parent.parent
 PAGE = ROOT / "resources" / "call_sheet.html"
 CARDS_PAGE = ROOT / "resources" / "call_sheet_cards.html"
 OUT_DIR = ROOT / "resources" / "img"
+# 出力ファイル名の頭。曲ごとに変えないと別の曲の画像を上書きする（--stem で指定）
+STEM = "call_sheet"
 LANDSCAPE_WIDTH = 1440
 LANDSCAPE_RATIO = 9 / 16
 # 実寸の倍率。3段構成にして縦が伸びたので、2倍だと高さが8000pxを超えて
@@ -63,7 +65,9 @@ async def check_font(page, selector: str) -> None:
         font["familyName"]
         for font in (await cdp.send("CSS.getPlatformFontsForNode", {"nodeId": node["nodeId"]}))["fonts"]
     ]
-    if FONT not in used:
+    # Windows に入っている可変フォント版（NotoSansJP-VF）は既定インスタンス名の
+    # 「Noto Sans JP Thin」で報告される。字形は同じ Noto Sans JP なので前方一致で見る
+    if not any(name.startswith(FONT) for name in used):
         sys.exit(
             f"描画に使われたフォントが {FONT} ではない（{'、'.join(used) or '取得できず'}）。\n"
             f"このまま撮ると字形の違う画像になるので中断した。{FONT} を入れてから撮り直す:\n"
@@ -101,7 +105,7 @@ async def capture_portrait(browser) -> list[Path]:
                 f"カード（幅{round(box['width'])}）がビューポート（幅{viewport_width}）に収まっていない。"
                 "このまま撮ると切れた画像になる。"
             )
-        path = OUT_DIR / f"call_sheet_{key}.png"
+        path = OUT_DIR / f"{STEM}_{key}.png"
         await card.screenshot(path=path)
         written.append(path)
     await page.close()
@@ -130,7 +134,7 @@ async def capture_landscape(browser) -> list[Path]:
             }""",
             round(LANDSCAPE_WIDTH * LANDSCAPE_RATIO),
         )
-        path = OUT_DIR / f"call_sheet_{key}.png"
+        path = OUT_DIR / f"{STEM}_{key}.png"
         await band.screenshot(path=path)
         await band.evaluate(
             "el => { el.style.minHeight = el.style.display = el.style.justifyContent = ''; }"
@@ -170,7 +174,12 @@ def main() -> None:
     parser.add_argument(
         "--chromium", default=None, help="Chromium の実行ファイル（Playwright の既定を使わないとき）"
     )
+    parser.add_argument(
+        "--stem", default="call_sheet", help="出力ファイル名の頭（例: call_sheet_utage → call_sheet_utage_white.png）"
+    )
     args = parser.parse_args()
+    global STEM
+    STEM = args.stem
 
     needed = [CARDS_PAGE] if args.format == "portrait" else [PAGE]
     if args.format == "both":
