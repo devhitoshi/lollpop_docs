@@ -301,13 +301,13 @@ def check_songs(body, songs, rep):
 
 
 def check_image_rights(body, rep):
-    """メンバー写真の直貼り疑い。pbs.twimg.com / video.twimg.com などの直リンクは、
-    Markdown画像（![]()）でも生URLでも検出する。X 埋め込み（裸URL単独行）や自作図版に差し替える。
+    """twimg.com の直リンクの疑い。pbs.twimg.com / video.twimg.com などは、Markdown画像（![]()）でも生URLでも検出する。
+    メンバー写真は載せてよい（2026-09-29 改訂）が、直リンクは元の投稿が消えると画像も消えるので、保存して note に上げる。
     """
     for m in TWIMG_RE.finditer(body):
         rep.warn('IMAGE_RIGHTS',
-                  f"twimg.com の画像URLを直接貼っている疑い（メンバー写真は事務所の著作物。"
-                  f"X 埋め込みか自作図版に差し替える）: …{snippet(body, m.start())}…")
+                  f"twimg.com の画像URLを直リンクしている疑い（写真は載せてよいが、保存して note にアップロードする。"
+                  f"クレジット ©FLAP entertainment も忘れずに）: …{snippet(body, m.start())}…")
 
 
 def check_events(body, kind, start, end, rep):

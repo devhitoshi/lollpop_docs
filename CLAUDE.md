@@ -12,7 +12,7 @@
 
 - **表記**: 曲名・イベント名は資料の表記をそのまま使う（「!」の数、「☆」「★」を正規化しない）。グループ名は「ろりぽっぷ!!!!!!!」（!が7個）。
 - **文体と表現規約**: note 用記事は [`prompts/write/style_ai_poppar.md`](./prompts/write/style_ai_poppar.md)（AIぽっぱー）に従う。note は表組み不可・見出しは2階層まで。
-  同ファイル末尾の「使わない言葉・使い方」（**「地下アイドル」と言わない／「レア曲」と書かない／メンバー写真を直貼りしない／おすすめ曲は通算と直近を併記**）は記事・動画・字幕・キャプション・ハッシュタグすべてに適用する。
+  同ファイル末尾の「使わない言葉・使い方」（**「地下アイドル」と言わない／「レア曲」と書かない／メンバー写真は載せてよいがクレジット必須（2026-09-29〜、直リンクは不可）／おすすめ曲は通算と直近を併記**）は記事・動画・字幕・キャプション・ハッシュタグすべてに適用する。
 - **メンバー情報**: 基本情報の正は [`members/members.md`](./members/members.md)。人物像は [`members/`](./members/) のデータに根拠がある範囲だけ書く。卒業メンバーの卒業後の活動・私生活には踏み込まない。運営の意図・体調・人間関係の推測は書かない。
 - **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計・公演データの整合性チェック・セトリ白書の図表は `.claude/skills/setlist-analysis`、曲調解析は `.claude/skills/music-analysis`、公式・メンバーのX投稿取得は `.claude/skills/x-account-fetch`、周囲の反応（エゴサーチ）は `.claude/skills/x-egosearch`（**候補を人がスワイプで仕分けるなら `.claude/skills/x-egosearch-review`**）、週刊・月刊の下書きは `.claude/skills/weekly-monthly-draft`（**収集〜仕上げを一本で回すなら `.claude/skills/weekly-pipeline`**。前回実行の翌日から今日までを既定期間にするので、毎週同じ曜日でなくてよい）、posfie（Xポストを並べるまとめ）は `.claude/skills/posfie-summary`、メンバーの人物像の更新は `.claude/skills/member-profile-refresh` の手順に従う（**節の定義と禁止事項の正は [`members/README.md`](./members/README.md)。書く前に読む**）。コール表のSNS画像はスキルにしていないので、[`resources/call_sheet_requirements.md`](./resources/call_sheet_requirements.md) を読んでから作る。
 - **調査・分析**: 戦略の定点観測（フォロワー数・UGC・公式の発信量）は `.claude/skills/strategy-metrics`、Web 調査（市場・競合・業界）は `.claude/skills/web-research`。出典と確認日を付け、評価語を書かない。調査メモは `strategy/research_YYYY-MM-DD_<題名>.md`。
