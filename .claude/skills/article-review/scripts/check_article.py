@@ -149,6 +149,23 @@ def date_variants(iso):
 
 # ---------- 各チェック ----------
 
+DISCLAIMER = 'Xの投稿を中心にAIで分析して限界オタクの性格づけして本記事を書き上げてます。'
+
+
+def check_disclaimer(body, rep):
+    """タイトル直後の注意書き（style_ai_poppar.md「冒頭の注意書き」）。"""
+    lines = body.splitlines()
+    idx = next((i for i, l in enumerate(lines) if l.startswith('# ')), None)
+    if idx is None:
+        rep.warn('DISCLAIMER', "H1 見出しが無いので注意書きの位置を判定できない")
+        return
+    first = next((l.strip() for l in lines[idx + 1:] if l.strip()), '')
+    if first != DISCLAIMER:
+        rep.error('DISCLAIMER', f"タイトル直後に注意書き「{DISCLAIMER}」が無い（文面は変えない）")
+    elif body.count(DISCLAIMER) > 1:
+        rep.warn('DISCLAIMER', "注意書きが2回以上ある（冒頭の1回だけ）")
+
+
 def check_note_constraints(body, rep):
     lines = body.splitlines()
     table_lines = [i + 1 for i, l in enumerate(lines) if l.strip().startswith('|')]
@@ -367,6 +384,7 @@ def main():
     members = load_members()
     rep = Report()
 
+    check_disclaimer(body, rep)
     check_note_constraints(body, rep)
     check_group_name(plain, rep)
     check_style(plain, kind, songs, rep)
