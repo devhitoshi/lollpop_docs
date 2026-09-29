@@ -10,7 +10,8 @@
 2. 外で読みたくなったらコミットする（コミット済み＝リポジトリ上のドラフト）
 3. 公開・マージの前に `.claude/skills/article-review`（機械チェック＋校閲エージェント）を通す
 4. 良いものだけ note に投稿する。**公開したら各シリーズの README（単発はこの索引）に公開日を記録する**
-   note にまとめて貼った直後は X の URL がリンクのままなので、ブックマークレット「X埋め込み」（[`note_embed_x/`](./note_embed_x/README.md)）でカードにしてから下書き保存する
+   **Claude がブラウザで投稿・更新するときは必ず [`.claude/skills/note-publish`](../.claude/skills/note-publish/SKILL.md) の手順に従う。**
+   オーナーが手で貼った場合は X の URL がリンクのままなので、ブックマークレット「X埋め込み」（[`note_embed_x/`](./note_embed_x/README.md)）でカードにしてから下書き保存する
 
 - 新しいシリーズを始めるときは `articles/` 直下に日本語名のディレクトリを切る（例: `articles/歌詞考察/`）
 - 単発記事は `articles/単発/` に置く
