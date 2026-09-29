@@ -18,6 +18,7 @@
 - **調査・分析**: 戦略の定点観測（フォロワー数・UGC・公式の発信量）は `.claude/skills/strategy-metrics`、Web 調査（市場・競合・業界）は `.claude/skills/web-research`。出典と確認日を付け、評価語を書かない。調査メモは `strategy/research_YYYY-MM-DD_<題名>.md`。
 - **記事の公開前レビュー**: note 記事を書き終えたら、PR を作る前に `.claude/skills/article-review`（機械チェック＋読み取り専用エージェント `article-review`）を通す。手戻りの多い「公演の抜け」「公演数の誤り」「表記ゆれ」「文体の崩れ」を資料と突き合わせて拾う。
 - **公開済み note の更新**: `.claude/skills/article-refresh`（差分検知→改稿→レビュー→貼り替え手順書。公開 URL と最終同期日は `articles/公開一覧.md`）。
+- **note への投稿・更新（ブラウザ操作）は必ず `.claude/skills/note-publish` の手順に従う。** 原稿の流し込み・カード化・図版・見出し画像・公開済み記事の差し替えまで、実際に踏んだ失敗と回避策が載っている。手探りでやらない。「公開」「更新する」はオーナーの OK をもらってから押す。
 - **セッションの終わり**: `.claude/skills/session-handoff` の手順で、各シリーズ README の「未解決」と CLAUDE.md の進行中セクションを更新してからコミット・push する。
 - **デザイン**: `resources/` のHTMLを触るときは [`design.md`](./design.md)（色・タイポ・バンド構成の正）に従う。実装は `resources/css/style.css`。単一ファイル完結のHTML（セトリ白書・成長戦略）には同じトークン値が転記されている。
 - **手動修正中のファイル**: オーナーが「いま手で直している」と言ったファイル（例: `songs/call_list.md`）は、確定の連絡まで編集も依存もしない。着手前に `git status` で他セッションの未コミット変更を見る。
@@ -44,7 +45,7 @@ GitHub の差分画面・PR 画面は開かれない前提で応答を組み立�
   修正したときは「何をどう変えたか」を必ずチャットで要約する（差分画面を見ないので、これが唯一の変更確認手段）。
   時間のかかる処理は、着手したことを先に返してから始め、終わったら通知する。
 - **スキルのルーティング**: 動画の制作依頼（台本づくり・動画化・テロップ修正など）は `.claude/skills/video-production`、
-  記事の制作・レビューは `.claude/skills/article-review` と `.claude/skills/article-refresh` を使う。
+  記事の制作・レビューは `.claude/skills/article-review` と `.claude/skills/article-refresh`、note への投稿・更新は `.claude/skills/note-publish` を使う。
 
 ## 資源配置ルール（何をどこに置くか）
 
