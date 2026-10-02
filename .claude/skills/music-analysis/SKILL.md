@@ -87,6 +87,7 @@ python3 .claude/skills/music-analysis/scripts/analyze_audio.py audio/主人公.m
 ```
 
 尺・BPM・キー・区間ごとの音量が `songs/analysis/[曲名].md` と `song_features.csv` に出る。
+曲全体の音量は音圧で張り付いて展開が見えない。**楽器ごとの出入りや、歌詞の行ごとの時刻を見たいときは `.claude/skills/song-anatomy`**（音源を 4 つに分けて追う。読み解き図もそちら）。
 **BPM とキーは参考値で、記事には書かない。**尺と、区間の大まかな並びだけが当てになる。
 
 ## 入出力
