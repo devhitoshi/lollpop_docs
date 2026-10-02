@@ -23,10 +23,10 @@ note の週刊まとめが「読ませる記事」なのに対して、posfie �
 `work/x_fetch/` に対象期間の投稿があること。無ければ取得する。
 
 ```bash
-# 公式・メンバー（--max-tweets-per-account は「期間内の件数」ではなく jsonl の総件数の上限。
-# 既存件数より大きい値を渡さないと1件も取りに行かない。kurumi_lpop は既に4000件ある）
+# 公式・メンバー（--max-tweets-per-account は「この実行で新しく取る件数」の上限。
+# 2026-09-15 までは jsonl の総件数と比べていたので既存件数より大きい値が要ったが、いまは不要）
 python3 .claude/skills/x-account-fetch/scripts/fetch_accounts.py \
-  --since 2026-09-01 --until 2026-09-08 --max-tweets-per-account 4200 --yes
+  --since 2026-09-01 --until 2026-09-08 --max-tweets-per-account 200 --yes
 ```
 
 現場の反応は `x-egosearch` の判定済みデータ（`data/x/egosearch_adopted_*.txt` と

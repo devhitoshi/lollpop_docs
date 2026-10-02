@@ -149,6 +149,23 @@ def date_variants(iso):
 
 # ---------- 各チェック ----------
 
+DISCLAIMER = '> ※Xの投稿を中心にAIで分析して限界オタクの性格づけして本記事を書き上げてます。'
+
+
+def check_disclaimer(body, rep):
+    """タイトル直後の注意書き（style_ai_poppar.md「冒頭の注意書き」）。"""
+    lines = body.splitlines()
+    idx = next((i for i, l in enumerate(lines) if l.startswith('# ')), None)
+    if idx is None:
+        rep.warn('DISCLAIMER', "H1 見出しが無いので注意書きの位置を判定できない")
+        return
+    first = next((l.strip() for l in lines[idx + 1:] if l.strip()), '')
+    if first != DISCLAIMER:
+        rep.error('DISCLAIMER', f"タイトル直後に注意書き「{DISCLAIMER}」が無い（引用ブロック `> ※` で、文面は変えない）")
+    elif body.count(DISCLAIMER[3:]) > 1:
+        rep.warn('DISCLAIMER', "注意書きが2回以上ある（冒頭の1回だけ）")
+
+
 def check_note_constraints(body, rep):
     lines = body.splitlines()
     table_lines = [i + 1 for i, l in enumerate(lines) if l.strip().startswith('|')]
@@ -284,13 +301,13 @@ def check_songs(body, songs, rep):
 
 
 def check_image_rights(body, rep):
-    """メンバー写真の直貼り疑い。pbs.twimg.com / video.twimg.com などの直リンクは、
-    Markdown画像（![]()）でも生URLでも検出する。X 埋め込み（裸URL単独行）や自作図版に差し替える。
+    """twimg.com の直リンクの疑い。pbs.twimg.com / video.twimg.com などは、Markdown画像（![]()）でも生URLでも検出する。
+    メンバー写真は載せてよい（2026-09-29 改訂）が、直リンクは元の投稿が消えると画像も消えるので、保存して note に上げる。
     """
     for m in TWIMG_RE.finditer(body):
         rep.warn('IMAGE_RIGHTS',
-                  f"twimg.com の画像URLを直接貼っている疑い（メンバー写真は事務所の著作物。"
-                  f"X 埋め込みか自作図版に差し替える）: …{snippet(body, m.start())}…")
+                  f"twimg.com の画像URLを直リンクしている疑い（写真は載せてよいが、保存して note にアップロードする。"
+                  f"クレジット ©FLAP entertainment も忘れずに）: …{snippet(body, m.start())}…")
 
 
 def check_events(body, kind, start, end, rep):
@@ -367,6 +384,7 @@ def main():
     members = load_members()
     rep = Report()
 
+    check_disclaimer(body, rep)
     check_note_constraints(body, rep)
     check_group_name(plain, rep)
     check_style(plain, kind, songs, rep)

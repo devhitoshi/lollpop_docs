@@ -1,6 +1,6 @@
 ---
 name: weekly-pipeline
-description: 週刊まとめ記事の「収集→素材化→仕上げ」を一本で連結する。x-account-fetch・x-egosearch・weekly-monthly-draft・setlist-analysis・article-review・x-data-sync の実行順・引数・鮮度確認・件数表示をまとめて引き受け、既存6スキルの責務は変えない。「週刊を最初から最後まで」「先週分を取り直して」「週刊の続きから」「データを最新化して」「いいね数を最新にして」と言われたとき、または実行頻度が不定で前回からの空き期間が分からないときに使う。
+description: 週刊まとめ記事の「収集→素材化→仕上げ」を一本で連結する。x-account-fetch・x-egosearch・weekly-monthly-draft・setlist-analysis・article-review・x-data-sync の実行順・引数・鮮度確認・件数表示をまとめて引き受け、既存6スキルの責務は変えない。「週刊を最初から最後まで」「先週分を取り直して」「週刊の続きから」「いいね数を最新にして」と言われたとき、または実行頻度が不定で前回からの空き期間が分からないときに使う。
 ---
 
 # 週刊パイプライン（収集〜仕上げの連結）
@@ -32,7 +32,11 @@ description: 週刊まとめ記事の「収集→素材化→仕上げ」を一�
      削除前に `work/x_fetch_bak_<今日の日付>/` へバックアップする（2026-09-07 に手作業で行ったのと同じ運用）。
      **本番キャッシュを消す操作なので、実行前にバックアップ先を確認する**
    - `fetch_accounts.py` → `fetch_egosearch.py` → `triage_egosearch.py`（初回・`--decisions` 無し）の順に呼ぶ。
-     `--max` は両方の上限引数（`--max-tweets-per-account` / `--max-tweets-per-query`）に渡る（既定 200）
+     `--max` は両方の上限引数（`--max-tweets-per-account` / `--max-tweets-per-query`）に渡る（既定 200）。
+     どちらも **今回の新規取得分** に対する上限で、既存 jsonl に何件溜まっていても既定のままでよい
+   - 毎日取得（`x-account-fetch` の `daily_fetch.py`）が取り終えた日は、公式・メンバーの投稿を取り直さない
+     （重複は保存時に捨てられるが API の料金はかかるため）。期間全体が取得済みなら API を叩かずドラフトだけ作り直す。
+     `--refresh` のときは今まで通り期間全体を取り直す。フル・エゴサは毎日取得と関係なく期間全体を取る
    - 最後に3段階の件数（生データ→候補→機械仕分け内訳）を表示する
    - **人がやる判断**: `work/x_fetch/egosearch_triage_<since>_<until>_review.txt` を読み、
      `data/x/egosearch_decisions_<since>_<until>.txt` に `<id> adopt|reject [メモ]` で判定を書く

@@ -1,4 +1,5 @@
-# 曲調解析に必要なライブラリ。
+# Libraries for the music-analysis skill. Keep this file ASCII-only:
+# pip on Windows reads it as cp932 and fails on Japanese comments.
 #     python3 -m pip install -r .claude/skills/music-analysis/scripts/requirements.txt
 librosa>=0.10
 soundfile>=0.12
