@@ -1,6 +1,6 @@
 ---
 name: note-publish
-description: note（https://note.com/1116_fan）への記事の投稿・下書き作成・公開済み記事の更新を、Claude in Chrome のブラウザ操作で行う手順書。原稿（articles/ の Markdown）を note に流し込む、X や note の URL を埋め込みカードにする、図版を入れる、見出し画像を設定する、公開済み記事の本文を差し替える、ときは必ずこのスキルに従う。「note に投稿して」「下書きを作って」「note に貼って」「公開済みの記事を更新して」「貼り替えて」と言われたときに使う。
+description: note（https://note.com/1116_fan）への記事の投稿・下書き作成・公開済み記事の更新を、Claude in Chrome のブラウザ操作で行う手順書。原稿（articles/ の Markdown）を note に流し込む、X や note の URL を埋め込みカードにする、図版を入れる、見出し画像を設定する、公開済み記事の本文を差し替える、ときは必ずこのスキルに従う。「note に投稿して」「note に下書きを作って」「note に貼って」「公開済みの記事を更新して」「貼り替えて」と言われたときに使う。
 ---
 
 # note への投稿（ブラウザ操作）
@@ -48,6 +48,10 @@ python .claude/skills/note-publish/scripts/md2note.py articles/…/原稿.md > "
 await window.__note.pasteBody(HTML)   // HTML は md2note.py の html
 await window.__note.fixQuote()        // 先頭の注意書きを引用枠に入れ直す
 ```
+
+HTML を javascript_tool の引数に手で写すと写し間違える。**JSON ファイルごとページに渡す**（2026-10-02〜）:
+`aria-label` を付けた `input[type=file]` をページに足す → `find` → `file_upload` で `md2note.py` の出力 JSON を渡す →
+`JSON.parse(await input.files[0].text()).html` を `pasteBody` に渡す。終わったらその input を消す。
 
 ### 4. URL をカードにする
 
@@ -149,3 +153,4 @@ window.__note.status()                 // 注意書き・カード数・画像�
 | 全楽曲解説 | n849cd83c1bb4 | 全文差し替え |
 | 旧スターターパック | n3d4fe835603f | 冒頭に誘導文＋カード（公開はオーナーが手動） |
 | 【コール表】まずはこの3曲 | nd2cb50c690f2 | この手順で新規作成 |
+| 12曲の地図 | n13c85d209346 | この手順で新規作成（下書きまで。HTML は JSON ファイルで渡した） |

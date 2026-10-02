@@ -80,7 +80,7 @@ GitHub の差分画面・PR 画面は開かれない前提で応答を組み立�
 - **歌詞考察**: 正は [`articles/歌詞考察/README.md`](./articles/歌詞考察/README.md)。1曲1記事＋横断考察。**オリジナル11曲すべて単独記事を書き終えた**（2026-09-20）。ルーツ曲1・横断01/02 まで済。次は次の新曲かルーツ曲。
   **曲調に触れてよいのは `songs/analysis/song_character.md` に載っている範囲だけ**（確認済みの説明と位置。BPM・キーは参考値で書かない。線引きの正は [`songs/analysis/README.md`](./songs/analysis/README.md)。2026-10-01 改訂）。
 - **曲の印象（曲調）**: 正は [`songs/analysis/README.md`](./songs/analysis/README.md)。2026-10-01 にオリジナル12曲の位置（かわいい↔かっこいい × 湧き↔エモい）を、Antigravity に聴かせた採点＋オーナーの確認で作った（一覧は `songs/analysis/song_character.md`）。
-  記事 `articles/単発/18_12曲の地図/`（図2枚つき）は下書きまで。**note の下書きは未作成**（変換済み HTML は `work/note_body_18.json`。ブラウザ操作ができるセッションで `note-publish` の手順 2 から）。
+  記事 `articles/単発/18_12曲の地図/`（図2枚つき）は **note の下書きまで作成済み**（2026-10-02。key `n13c85d209346`、本文・カード2枚・図2枚。見出し画像は未設定）。公開はオーナーの確認待ち（`note-publish` の手順 8）。
   未着手: 全楽曲解説・歌詞考察の各記事に曲の印象を足す改稿（オーナーが検討中）。ストクレ曲・ハピスト曲は音源が無く対象外。
 - **週刊・月刊まとめ**: 正は [`articles/週刊まとめ/README.md`](./articles/週刊まとめ/README.md)・[`articles/月刊まとめ/README.md`](./articles/月刊まとめ/README.md)。8月分まで公開済み。**週刊 9/1〜9/7 号は 2026-09-07 作成・未コミット（オーナー確認待ち）**。
   X 収集は API 一本化済み（2026-09-02〜。Grok 版 `prompts/collect/x_collect.md` は予備）。取得データは `work/x_fetch/`、退避は `x-data-sync`。
