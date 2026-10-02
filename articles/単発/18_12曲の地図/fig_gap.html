@@ -1,0 +1,84 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<style>
+:root { --primary:#d6006e; --blue:#2a6fd6; --ink:#1d1216; --body:#45383e; --muted:#71646b; --muted-soft:#998a92;
+  --axis:#dcc8d2; --canvas:#ffffff; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--canvas); font-family:"Noto Sans JP",sans-serif; color:var(--body); }
+#fig { width:1280px; padding:56px 64px 44px; background:var(--canvas); }
+.eyebrow { color:var(--primary); font-weight:700; font-size:15px; letter-spacing:.08em; }
+h1 { color:var(--ink); font-size:34px; font-weight:700; letter-spacing:-.015em; margin:6px 0 8px; }
+.lead { font-size:16px; color:var(--muted); margin-bottom:18px; }
+.legend { display:flex; gap:28px; font-size:16px; color:var(--body); margin-bottom:18px; }
+.legend span { display:inline-flex; align-items:center; gap:8px; }
+.key { display:inline-block; width:16px; height:16px; border-radius:50%; }
+.key.sound { background:var(--primary); } .key.lyrics { background:var(--blue); width:13px; height:13px; }
+svg { display:block; }
+.axis { stroke:var(--axis); stroke-width:2; }
+.end { font-size:22px; font-weight:700; fill:var(--body); }
+.corner { font-size:16px; font-weight:500; fill:var(--muted-soft); letter-spacing:.04em; }
+.dot { stroke:var(--canvas); stroke-width:3; }
+.dot.sound { fill:var(--primary); } .dot.lyrics { fill:var(--blue); }
+.dot.near { opacity:.38; }
+.leader { stroke:var(--muted-soft); stroke-width:2; }
+.link { stroke-linecap:round; }
+.link.near { stroke:var(--axis); stroke-width:2; }
+.link.far { stroke:var(--ink); stroke-width:3; }
+.name { font-size:25px; font-weight:700; fill:var(--ink); paint-order:stroke; stroke:var(--canvas); stroke-width:7px; stroke-linejoin:round; }
+.foot { margin-top:22px; font-size:13px; color:var(--muted); line-height:1.7; }
+</style></head><body><div id="fig">
+<div class="eyebrow">SOUND × LYRICS</div>
+<h1>音と歌詞は、同じ場所にいるか</h1>
+<p class="lead">ピンクが音、青が歌詞。線が長いほど、音の印象と歌詞の内容が離れています。濃いのは離れている 2 曲、薄いのは近い 10 曲。</p>
+<div class="legend"><span><i class="key sound"></i>音（聴いた印象）</span><span><i class="key lyrics"></i>歌詞（読んだ印象）</span></div>
+<svg viewBox="0 0 1152 920" width="1152" height="920">
+<line class="axis" x1="0" y1="460.0" x2="1152" y2="460.0"/>
+<line class="axis" x1="576.0" y1="0" x2="576.0" y2="920"/>
+<text class="end" x="0" y="444.0" text-anchor="start">← かわいい</text>
+<text class="end" x="1152" y="444.0" text-anchor="end">かっこいい →</text>
+<text class="end" x="590.0" y="28" text-anchor="start">↑ エモい</text>
+<text class="end" x="590.0" y="912" text-anchor="start">↓ 湧き</text>
+<text class="corner" x="0" y="24" text-anchor="start">かわいくてエモい</text>
+<text class="corner" x="1152" y="24" text-anchor="end">かっこよくてエモい</text>
+<text class="corner" x="0" y="912" text-anchor="start">かわいくて湧く</text>
+<text class="corner" x="1152" y="912" text-anchor="end">かっこよくて湧く</text>
+<line class="link near" x1="975.4" y1="225.7" x2="883.2" y2="225.7"/>
+<circle class="dot lyrics near" cx="883.2" cy="225.7" r="7"/>
+<circle class="dot sound near" cx="975.4" cy="225.7" r="8"/>
+<line class="link near" x1="115.2" y1="811.4" x2="115.2" y2="694.3"/>
+<circle class="dot lyrics near" cx="115.2" cy="694.3" r="7"/>
+<circle class="dot sound near" cx="115.2" cy="811.4" r="8"/>
+<line class="link near" x1="560.6" y1="260.9" x2="422.4" y2="225.7"/>
+<circle class="dot lyrics near" cx="422.4" cy="225.7" r="7"/>
+<circle class="dot sound near" cx="560.6" cy="260.9" r="8"/>
+<line class="link near" x1="176.6" y1="764.6" x2="155.1" y2="827.8"/>
+<circle class="dot lyrics near" cx="155.1" cy="827.8" r="7"/>
+<circle class="dot sound near" cx="176.6" cy="764.6" r="8"/>
+<line class="link near" x1="122.9" y1="788.0" x2="195.1" y2="844.2"/>
+<circle class="dot lyrics near" cx="195.1" cy="844.2" r="7"/>
+<circle class="dot sound near" cx="122.9" cy="788.0" r="8"/>
+<line class="link near" x1="883.2" y1="190.6" x2="729.6" y2="108.6"/>
+<circle class="dot lyrics near" cx="729.6" cy="108.6" r="7"/>
+<circle class="dot sound near" cx="883.2" cy="190.6" r="8"/>
+<line class="link near" x1="330.2" y1="600.6" x2="422.4" y2="577.1"/>
+<circle class="dot lyrics near" cx="422.4" cy="577.1" r="7"/>
+<circle class="dot sound near" cx="330.2" cy="600.6" r="8"/>
+<line class="link near" x1="376.3" y1="747.0" x2="422.4" y2="811.4"/>
+<circle class="dot lyrics near" cx="422.4" cy="811.4" r="7"/>
+<circle class="dot sound near" cx="376.3" cy="747.0" r="8"/>
+<line class="link near" x1="729.6" y1="225.7" x2="769.5" y2="125.0"/>
+<circle class="dot lyrics near" cx="769.5" cy="125.0" r="7"/>
+<circle class="dot sound near" cx="729.6" cy="225.7" r="8"/>
+<line class="link near" x1="453.1" y1="682.6" x2="268.8" y2="694.3"/>
+<circle class="dot lyrics near" cx="268.8" cy="694.3" r="7"/>
+<circle class="dot sound near" cx="453.1" cy="682.6" r="8"/>
+<line class="link far" x1="729.6" y1="577.1" x2="769.5" y2="242.1"/>
+<circle class="dot lyrics far" cx="769.5" cy="242.1" r="10"/>
+<circle class="dot sound far" cx="729.6" cy="577.1" r="12"/>
+<line class="link far" x1="291.8" y1="342.9" x2="268.8" y2="108.6"/>
+<circle class="dot lyrics far" cx="268.8" cy="108.6" r="10"/>
+<circle class="dot sound far" cx="291.8" cy="342.9" r="12"/>
+<text class="name" x="753.6" y="585.3" text-anchor="start">シーソーゲーム</text>
+<text class="name" x="315.8" y="351.0" text-anchor="start">夏色ラムネ</text>
+</svg>
+<p class="foot">音の位置は、音声を聴ける AI に曲名を伏せて 2 回聴かせ、食い違った所を人が耳で確かめたもの。測定値ではなく印象です。ファンによる非公式の見立てで、公式の分類ではありません。対象は配信されているオリジナル曲 12 曲（2026年10月1日時点）。歌詞の位置は歌詞だけを読んで付けたもの。点が重なる所は少しずらして描いています。作図: AIぽっぱー</p>
+</div></body></html>

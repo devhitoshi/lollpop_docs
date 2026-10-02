@@ -1,0 +1,72 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<style>
+:root { --primary:#d6006e; --blue:#2a6fd6; --ink:#1d1216; --body:#45383e; --muted:#71646b; --muted-soft:#998a92;
+  --axis:#dcc8d2; --canvas:#ffffff; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--canvas); font-family:"Noto Sans JP",sans-serif; color:var(--body); }
+#fig { width:1280px; padding:56px 64px 44px; background:var(--canvas); }
+.eyebrow { color:var(--primary); font-weight:700; font-size:15px; letter-spacing:.08em; }
+h1 { color:var(--ink); font-size:34px; font-weight:700; letter-spacing:-.015em; margin:6px 0 8px; }
+.lead { font-size:16px; color:var(--muted); margin-bottom:18px; }
+.legend { display:flex; gap:28px; font-size:16px; color:var(--body); margin-bottom:18px; }
+.legend span { display:inline-flex; align-items:center; gap:8px; }
+.key { display:inline-block; width:16px; height:16px; border-radius:50%; }
+.key.sound { background:var(--primary); } .key.lyrics { background:var(--blue); width:13px; height:13px; }
+svg { display:block; }
+.axis { stroke:var(--axis); stroke-width:2; }
+.end { font-size:22px; font-weight:700; fill:var(--body); }
+.corner { font-size:16px; font-weight:500; fill:var(--muted-soft); letter-spacing:.04em; }
+.dot { stroke:var(--canvas); stroke-width:3; }
+.dot.sound { fill:var(--primary); } .dot.lyrics { fill:var(--blue); }
+.dot.near { opacity:.38; }
+.leader { stroke:var(--muted-soft); stroke-width:2; }
+.link { stroke-linecap:round; }
+.link.near { stroke:var(--axis); stroke-width:2; }
+.link.far { stroke:var(--ink); stroke-width:3; }
+.name { font-size:25px; font-weight:700; fill:var(--ink); paint-order:stroke; stroke:var(--canvas); stroke-width:7px; stroke-linejoin:round; }
+.foot { margin-top:22px; font-size:13px; color:var(--muted); line-height:1.7; }
+</style></head><body><div id="fig">
+<div class="eyebrow">SONG MAP</div>
+<h1>ろりぽっぷ!!!!!!! 12曲の地図</h1>
+<p class="lead">横は「かわいい ↔ かっこいい」、縦は「湧き ↔ エモい」。音を聴いた印象で並べました。</p>
+
+<svg viewBox="0 0 1152 920" width="1152" height="920">
+<line class="axis" x1="0" y1="460.0" x2="1152" y2="460.0"/>
+<line class="axis" x1="576.0" y1="0" x2="576.0" y2="920"/>
+<text class="end" x="0" y="444.0" text-anchor="start">← かわいい</text>
+<text class="end" x="1152" y="444.0" text-anchor="end">かっこいい →</text>
+<text class="end" x="590.0" y="28" text-anchor="start">↑ エモい</text>
+<text class="end" x="590.0" y="912" text-anchor="start">↓ 湧き</text>
+<text class="corner" x="0" y="24" text-anchor="start">かわいくてエモい</text>
+<text class="corner" x="1152" y="24" text-anchor="end">かっこよくてエモい</text>
+<text class="corner" x="0" y="912" text-anchor="start">かわいくて湧く</text>
+<text class="corner" x="1152" y="912" text-anchor="end">かっこよくて湧く</text>
+<line class="leader" x1="115.2" y1="811.4" x2="151.2" y2="856.6"/>
+<line class="leader" x1="122.9" y1="788.0" x2="172.9" y2="793.1"/>
+<circle class="dot sound" cx="975.4" cy="225.7" r="12"/>
+<circle class="dot sound" cx="115.2" cy="811.4" r="12"/>
+<circle class="dot sound" cx="560.6" cy="260.9" r="12"/>
+<circle class="dot sound" cx="176.6" cy="764.6" r="12"/>
+<circle class="dot sound" cx="729.6" cy="577.1" r="12"/>
+<circle class="dot sound" cx="122.9" cy="788.0" r="12"/>
+<circle class="dot sound" cx="883.2" cy="190.6" r="12"/>
+<circle class="dot sound" cx="330.2" cy="600.6" r="12"/>
+<circle class="dot sound" cx="291.8" cy="342.9" r="12"/>
+<circle class="dot sound" cx="376.3" cy="747.0" r="12"/>
+<circle class="dot sound" cx="729.6" cy="225.7" r="12"/>
+<circle class="dot sound" cx="453.1" cy="682.6" r="12"/>
+<text class="name" x="999.4" y="233.8" text-anchor="start">Unknown</text>
+<text class="name" x="145.2" y="865.6" text-anchor="start">ぽっぽ♪ポジティブ！！</text>
+<text class="name" x="584.6" y="269.0" text-anchor="start">また会う日まで</text>
+<text class="name" x="176.6" y="737.1" text-anchor="middle">ろりぽっぷ!!!!!!!</text>
+<text class="name" x="753.6" y="585.3" text-anchor="start">シーソーゲーム</text>
+<text class="name" x="166.9" y="802.1" text-anchor="start">メイク☆マイダンス</text>
+<text class="name" x="907.2" y="198.7" text-anchor="start">主人公</text>
+<text class="name" x="354.2" y="608.7" text-anchor="start">乙女ロック</text>
+<text class="name" x="315.8" y="351.0" text-anchor="start">夏色ラムネ</text>
+<text class="name" x="400.3" y="755.1" text-anchor="start">始まりの宴!!!!!!!</text>
+<text class="name" x="753.6" y="233.8" text-anchor="start">未完成ヒロイン</text>
+<text class="name" x="429.1" y="690.7" text-anchor="end">約束!!!!!!!</text>
+</svg>
+<p class="foot">音の位置は、音声を聴ける AI に曲名を伏せて 2 回聴かせ、食い違った所を人が耳で確かめたもの。測定値ではなく印象です。ファンによる非公式の見立てで、公式の分類ではありません。対象は配信されているオリジナル曲 12 曲（2026年10月1日時点）。作図: AIぽっぱー</p>
+</div></body></html>
