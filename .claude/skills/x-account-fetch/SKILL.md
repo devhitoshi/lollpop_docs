@@ -35,6 +35,9 @@ description: 「ろりぽっぷ!!!!!!!」の公式・メンバーアカウント
      --max-tweets-per-account 100
    ```
 
+   `--max-tweets-per-account` は **この実行で新しく取る件数** の上限で、既存 jsonl の累計件数とは関係しない。
+   何件溜まっていても 100〜200 程度でよい（1週間分ならメンバー1人あたり 100 件前後）。
+
    `--accounts` を省略すると公式＋現メンバー5人が対象になる。元メンバー（卒業済み）を含めたい場合は
    `--accounts lollipop_1116:公式,mana_lpop:愛月まな,...,asaka_lpop:姫杏朝香` のように明示する
    （ハンドルは `prompts/collect/x_collect.md` の「収集対象アカウント」を参照）。
@@ -62,9 +65,44 @@ description: 「ろりぽっぷ!!!!!!!」の公式・メンバーアカウント
    `work/x_fetch/*.jsonl` は追跡しないので、退避しないと次のセッションで消える。取得には費用と時間がかかるので、
    **セッションを終える前に必ず実行する**（`.claude/skills/session-handoff` の手順にも入っている）。
 
+## 毎日の自動取得（ローカルの Windows のみ・2026-09-17〜）
+
+`scripts/daily_fetch.py` を Windows のタスクスケジューラで毎朝 06:00 に回す（タスク名 `lollpop_daily_fetch`）。
+Claude を起動しないので、Claude の利用枠は使わない。
+
+- **取るもの**: 公式＋現メンバー5人の投稿（`work/x_fetch/<handle>.jsonl` に追記）と、
+  **ハッシュタグだけのエゴサ**（`work/x_fetch/hashtags_YYYY-MM.jsonl`。どのタグに当たったかは `_tags`）
+  - タグは `#ろりぽっぷ` ＋ 各メンバーの X プロフィールに書かれたタグ。取得済み投稿の `author.profile_bio` から毎回拾うので、
+    プロフィールが変わっても追従する（取れないときはスクリプト内の予備リスト。2026-09-09 時点で
+    `#まなてぃータイム` `#くるみるく` `#くるみんとKP` `#餃子のおまゆ` `#まんてんあみてん` `#まうだよ`）
+  - 週刊用のフル・エゴサ（メンバー名・カタカナ表記など）は回さない。それは `x-egosearch`／`weekly-pipeline` のとき
+- **期間**: 前回取り終えた日の翌日〜昨日。今日は取らない（途中で取ると翌日に取り直して二重に課金されるため）。
+  PC が止まっていた日は次の実行でまとめて取る。空きが 31 日を超えたら取らずに止まる（`--since` で手動実行）
+- **状態とログ**: `work/x_fetch/.daily_state.json`（`covered_from`〜`last_until` が途切れずに取れている範囲）と
+  `work/x_fetch/logs/daily_fetch.log`。起動時サマリに「毎日取得: 〜まで取得済み（成功/失敗）」が出る。
+  失敗したら状態を進めないので、次の実行で同じ期間から取り直す
+- **退避**: 同じタスクの最後に `x-data-sync` の `push --log work/x_fetch/logs/daily_data_push.log` を回し、非公開リポジトリ `lollpop_data` の main へ毎朝積み増す（2026-09-24〜。取得 → セトリ PR → 退避の順）
+- **週刊との関係**: `run_weekly.py --stage collect` は、毎日取得が取り終えた日の公式・メンバー投稿を取り直さない（`--refresh` 時を除く）
+- **費用の目安**: 公式・メンバーが月 600 件前後（約 $0.09）、タグが 1 日 10 件前後（月 約 $0.05）。
+  初回（2026-09-17、9/8〜9/16 の 9 日分）は 26 コール・約 5,000 クレジット
+- **登録・確認・解除**:
+
+  ```powershell
+  powershell -ExecutionPolicy Bypass -File .claude\skills\x-account-fetch\scripts\register_daily_task.ps1   # 登録（-At 07:30 で時刻変更）
+  Start-ScheduledTask -TaskName lollpop_daily_fetch                                                        # 今すぐ動かす
+  Get-ScheduledTaskInfo -TaskName lollpop_daily_fetch                                                      # LastTaskResult 0 が成功
+  Unregister-ScheduledTask -TaskName lollpop_daily_fetch -Confirm:$false                                   # 解除
+  python .claude/skills/x-account-fetch/scripts/daily_fetch.py --dry-run                                   # 期間・タグ・検索文だけ表示
+  ```
+
+- クラウドでは回さない（コンテナが使い捨てで、twitterapi.io に届かない環境もある）。毎日取得の分は自動で退避されるが、セッション中に手で取ったもの（エゴサ・遡り取得）は今まで通りセッションの終わりに `x-data-sync`
+
 ## 制約・注意点（禁止事項に対応）
 
-- `--max-tweets-per-account` は必須（デフォルトなし）。省略するとエラーで止まる
+- `--max-tweets-per-account` は必須（デフォルトなし）。省略するとエラーで止まる。
+  数えるのは **今回の新規取得分**（2026-09-15 に修正）。それ以前は既存 jsonl の累計件数と比べていたので、
+  **累計が上限を超えているアカウントは API を1回も叩かず「新規0件」で終わっていた**
+  （上限200・既存815件のアカウントが素通りした）。古い挙動を思い出して上限を盛らなくてよい
 - 未課金は 0.2 QPS。**逐次のみ・並列化しない**（アカウント間も5秒空ける）
 - 429/5xx はジッタ付き指数バックオフでリトライ
 - 取得済みJSONLからIDを復元し、再実行時は重複取得しない（中断・再開対応）

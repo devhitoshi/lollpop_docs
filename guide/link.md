@@ -30,6 +30,9 @@
   - [Spotify](https://open.spotify.com/artist/07sr1MtDyS64q8m0eHBNYW)
 
 ## メンバー個別リンク
+
+メンバーそれぞれの人となりや、特典会で話しかけるときのネタは、スターターパックの（2）にまとめています。
+https://note.com/1116_fan/n/nf09312b594be
 - **やぎ くるみ**
   - X: https://x.com/kurumi_lpop
   - lit.link: https://lit.link/kurumi628ssc

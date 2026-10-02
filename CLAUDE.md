@@ -12,15 +12,40 @@
 
 - **表記**: 曲名・イベント名は資料の表記をそのまま使う（「!」の数、「☆」「★」を正規化しない）。グループ名は「ろりぽっぷ!!!!!!!」（!が7個）。
 - **文体と表現規約**: note 用記事は [`prompts/write/style_ai_poppar.md`](./prompts/write/style_ai_poppar.md)（AIぽっぱー）に従う。note は表組み不可・見出しは2階層まで。
-  同ファイル末尾の「使わない言葉・使い方」（**「地下アイドル」と言わない／「レア曲」と書かない／メンバー写真を直貼りしない／おすすめ曲は通算と直近を併記**）は記事・動画・字幕・キャプション・ハッシュタグすべてに適用する。
+  同ファイル末尾の「使わない言葉・使い方」（**「地下アイドル」と言わない／「レア曲」と書かない／メンバー写真は載せてよいがクレジット必須（2026-09-29〜、直リンクは不可）／おすすめ曲は通算と直近を併記**）は記事・動画・字幕・キャプション・ハッシュタグすべてに適用する。
 - **メンバー情報**: 基本情報の正は [`members/members.md`](./members/members.md)。人物像は [`members/`](./members/) のデータに根拠がある範囲だけ書く。卒業メンバーの卒業後の活動・私生活には踏み込まない。運営の意図・体調・人間関係の推測は書かない。
-- **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計・公演データの整合性チェック・セトリ白書の図表は `.claude/skills/setlist-analysis`、曲調解析は `.claude/skills/music-analysis`、公式・メンバーのX投稿取得は `.claude/skills/x-account-fetch`、周囲の反応（エゴサーチ）は `.claude/skills/x-egosearch`、週刊・月刊の下書きは `.claude/skills/weekly-monthly-draft`（**収集〜仕上げを一本で回すなら `.claude/skills/weekly-pipeline`**。前回実行の翌日から今日までを既定期間にするので、毎週同じ曜日でなくてよい）、メンバーの人物像の更新は `.claude/skills/member-profile-refresh` の手順に従う。コール表のSNS画像はスキルにしていないので、[`resources/call_sheet_requirements.md`](./resources/call_sheet_requirements.md) を読んでから作る。
+- **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計・公演データの整合性チェック・セトリ白書の図表は `.claude/skills/setlist-analysis`、曲調解析（どんな曲かの説明。Antigravity に聴かせてオーナーが確認する）は `.claude/skills/music-analysis`、公式・メンバーのX投稿取得は `.claude/skills/x-account-fetch`、周囲の反応（エゴサーチ）は `.claude/skills/x-egosearch`（**候補を人がスワイプで仕分けるなら `.claude/skills/x-egosearch-review`**）、週刊・月刊の下書きは `.claude/skills/weekly-monthly-draft`（**収集〜仕上げを一本で回すなら `.claude/skills/weekly-pipeline`**。前回実行の翌日から今日までを既定期間にするので、毎週同じ曜日でなくてよい）、posfie（Xポストを並べるまとめ）は `.claude/skills/posfie-summary`、メンバーの人物像の更新は `.claude/skills/member-profile-refresh` の手順に従う（**節の定義と禁止事項の正は [`members/README.md`](./members/README.md)。書く前に読む**）。コール表のSNS画像はスキルにしていないので、[`resources/call_sheet_requirements.md`](./resources/call_sheet_requirements.md) を読んでから作る。
 - **調査・分析**: 戦略の定点観測（フォロワー数・UGC・公式の発信量）は `.claude/skills/strategy-metrics`、Web 調査（市場・競合・業界）は `.claude/skills/web-research`。出典と確認日を付け、評価語を書かない。調査メモは `strategy/research_YYYY-MM-DD_<題名>.md`。
 - **記事の公開前レビュー**: note 記事を書き終えたら、PR を作る前に `.claude/skills/article-review`（機械チェック＋読み取り専用エージェント `article-review`）を通す。手戻りの多い「公演の抜け」「公演数の誤り」「表記ゆれ」「文体の崩れ」を資料と突き合わせて拾う。
 - **公開済み note の更新**: `.claude/skills/article-refresh`（差分検知→改稿→レビュー→貼り替え手順書。公開 URL と最終同期日は `articles/公開一覧.md`）。
+- **note への投稿・更新（ブラウザ操作）は必ず `.claude/skills/note-publish` の手順に従う。** 原稿の流し込み・カード化・図版・見出し画像・公開済み記事の差し替えまで、実際に踏んだ失敗と回避策が載っている。手探りでやらない。「公開」「更新する」はオーナーの OK をもらってから押す。
 - **セッションの終わり**: `.claude/skills/session-handoff` の手順で、各シリーズ README の「未解決」と CLAUDE.md の進行中セクションを更新してからコミット・push する。
 - **デザイン**: `resources/` のHTMLを触るときは [`design.md`](./design.md)（色・タイポ・バンド構成の正）に従う。実装は `resources/css/style.css`。単一ファイル完結のHTML（セトリ白書・成長戦略）には同じトークン値が転記されている。
 - **手動修正中のファイル**: オーナーが「いま手で直している」と言ったファイル（例: `songs/call_list.md`）は、確定の連絡まで編集も依存もしない。着手前に `git status` で他セッションの未コミット変更を見る。
+
+## Discord 経由の運用（OpenACP）
+
+Discord のスレッドから指示を受けて作業することがある。**利用者はスマートフォンの Discord アプリから読む。**
+GitHub の差分画面・PR 画面は開かれない前提で応答を組み立てる。
+
+- **応答言語**: 常に日本語。
+- **ワークツリー**: 新規スレッド＝1タスク＝**1ワークツリー＝1ブランチ**。スレッドの最初に `EnterWorktree` で
+  `<video|article|review>/<YYYYMMDD>-<内容スラッグ>` という名前のワークツリーを作り、以降の作業はその中で行う
+  （ブランチは `worktree-` を冠した名前で自動的に作られる）。3人が別スレッドで同時に作業するため、
+  **共有のチェックアウトでブランチを切り替えると他のスレッドの作業ツリーを奪う。**
+  **最初の応答でワークツリー名とブランチ名を明示する**（セッションが切れても、その1行があれば再開できる）。
+  そのスレッド内の変更はすべて同じブランチに積む。
+- **完了時**: PR を作ってマージし、そのあと `ExitWorktree`（`action: "remove"`）でワークツリーを畳む。
+  Discord 経由のセッションは終了時に後始末を促されないので、明示的に消さないと残り続ける。
+  **main への直接コミットと force push は禁止。**
+- **コミット**: メッセージ末尾に `requested-by: @<依頼者の Discord 表示名>` を入れる。
+  ホストの git 設定上コミット作者は全員同じ名義になるので、これが依頼者を判別する唯一の手段。
+- **応答の作り方**: 台本・記事の本文はチャットに直接貼る（1メッセージ 2000 文字。超えたら分割する）。
+  併せてファイルの GitHub URL も返す。**URL は推測で組み立てず `gh browse --no-browser --branch <ブランチ> <パス>` の出力を使う。**
+  修正したときは「何をどう変えたか」を必ずチャットで要約する（差分画面を見ないので、これが唯一の変更確認手段）。
+  時間のかかる処理は、着手したことを先に返してから始め、終わったら通知する。
+- **スキルのルーティング**: 動画の制作依頼（台本づくり・動画化・テロップ修正など）は `.claude/skills/video-production`、
+  記事の制作・レビューは `.claude/skills/article-review` と `.claude/skills/article-refresh`、note への投稿・更新は `.claude/skills/note-publish` を使う。
 
 ## 資源配置ルール（何をどこに置くか）
 
@@ -29,16 +54,18 @@
 | 作るもの | 置き場 |
 | --- | --- |
 | 新しい歌詞 | `songs/lyrics/[曲名].md`（公式表記のまま） |
-| 曲調データ | `songs/analysis/[曲名].md`＋全曲比較 `songs/analysis/song_features.csv`（スキルが自動生成） |
+| 曲調データ | 曲の印象は `songs/analysis/song_character.md`（AI の採点＋オーナーの確認。元データは `songs/analysis/character/`）、数値は `songs/analysis/[曲名].md`＋`song_features.csv`（スキルが自動生成） |
 | note記事（シリーズ・単発とも） | `articles/`（シリーズは専用ディレクトリ、単発は `articles/単発/`。詳細は `articles/README.md`） |
+| posfie まとめ（Xポストを並べる形式） | `articles/posfie/<開始日>_<終了日>.md`（貼るポストと順番の設計図。posfie 上の実体は別。詳細は `articles/posfie/README.md`） |
 | 公演・セトリのデータ | `events/data_event.csv`（一次データ）。集計は `events/monthly_setlist_ranking.csv`。入れ方と TimeTree の使い方は [`events/README.md`](./events/README.md) |
+| ライブ以外の露出（メディア・MC・チェキ会・客演） | `events/data_appearance.csv`（列と語彙は [`events/README.md`](./events/README.md)）。`data_event.csv` には入れない |
 | 戦略・定点観測 | `strategy/`（観測結果は `strategy/metrics_YYYY-MM-DD.md`、調査メモは `strategy/research_*.md`） |
 | 縦動画の運用設計・型定義・量産フロー | `strategy/short_video_playbook.md`（運用の正）と [`strategy/video/`](./strategy/video/)（型定義 A〜G、量産フロー、台本の部品、流行調査）。制作ツールは別リポジトリ `lollpop_video`（F・G）とこのリポジトリの `x-media-collect/scripts/make_vertical.py`（A〜E） |
 | ファン向け入口文書 | `guide/`。メンバー情報は `members/` |
 | デザイン定義の変更 | `design.md` を先に直し、`resources/css/style.css` に反映 |
 | 公開HTML | `resources/`（design.md のバンド原則に従う） |
 | 機械が作る成果物（エゴサの判定・件数・要約） | `data/x/`（追跡する。他人の投稿の原文は置かない）。**収集→保管の流れは [`data/README.md`](./data/README.md)** |
-| X の取得データ（他人の投稿の原文） | `work/x_fetch/`（追跡しない）。セッションの終わりに `.claude/skills/x-data-sync` で非公開リポジトリ `lollpop_data` へ退避し、始めに復元する |
+| X の取得データ（他人の投稿の原文） | `work/x_fetch/`（追跡しない）。非公開リポジトリ `lollpop_data` へ退避し、始めに復元する（`.claude/skills/x-data-sync`）。毎日取得の分は毎朝のタスクが自動で退避する。セッション中に手で取った分はセッションの終わりに退避する |
 | 一時的な作業ファイル | `work/`（恒久化が決まったらドメインへ運び出す。**基本は空**） |
 | 旧版・役目を終えたもの | `archive/` |
 
@@ -50,15 +77,27 @@
 
 ## 進行中（要約のみ。詳細は各 README）
 
-- **歌詞考察**: 正は [`articles/歌詞考察/README.md`](./articles/歌詞考察/README.md)。1曲1記事＋横断考察。オリジナル9曲・ルーツ曲1・横断01 まで済。待ち: 「未完成ヒロイン」「夏色ラムネ」の歌詞資料。
-  **曲調に触れてよいのは `songs/analysis/[曲名].md` がある曲だけ**（BPM・キーは推定値。断定しない）。
+- **歌詞考察**: 正は [`articles/歌詞考察/README.md`](./articles/歌詞考察/README.md)。1曲1記事＋横断考察。**オリジナル11曲すべて単独記事を書き終えた**（2026-09-20）。ルーツ曲1・横断01/02 まで済。次は次の新曲かルーツ曲。
+  **曲調に触れてよいのは `songs/analysis/song_character.md` に載っている範囲だけ**（確認済みの説明と位置。BPM・キーは参考値で書かない。線引きの正は [`songs/analysis/README.md`](./songs/analysis/README.md)。2026-10-01 改訂）。
+- **曲の印象（曲調）**: 正は [`songs/analysis/README.md`](./songs/analysis/README.md)。2026-10-01 にオリジナル12曲の位置（かわいい↔かっこいい × 湧き↔エモい）を、Antigravity に聴かせた採点＋オーナーの確認で作った（一覧は `songs/analysis/song_character.md`）。
+  記事 `articles/単発/18_12曲の地図/`（図2枚つき）は **note の下書きまで作成済み**（2026-10-02。key `n13c85d209346`、本文・カード2枚・図2枚。見出し画像は未設定）。公開はオーナーの確認待ち（`note-publish` の手順 8）。
+  未着手: 全楽曲解説・歌詞考察の各記事に曲の印象を足す改稿（オーナーが検討中）。ストクレ曲・ハピスト曲は音源が無く対象外。
 - **週刊・月刊まとめ**: 正は [`articles/週刊まとめ/README.md`](./articles/週刊まとめ/README.md)・[`articles/月刊まとめ/README.md`](./articles/月刊まとめ/README.md)。8月分まで公開済み。**週刊 9/1〜9/7 号は 2026-09-07 作成・未コミット（オーナー確認待ち）**。
   X 収集は API 一本化済み（2026-09-02〜。Grok 版 `prompts/collect/x_collect.md` は予備）。取得データは `work/x_fetch/`、退避は `x-data-sync`。
 - **スターターパック・全楽曲解説（公開済み note の保守）**: 正は [`articles/スターターパック/README.md`](./articles/スターターパック/README.md)（公開 URL の表あり）。2026-09-02〜04 に 3 本立て化と全楽曲解説の最新化を実施。
-  `guide/starter_pack.md` より `articles/スターターパック/` が正（2026-09-03 に反転）。次に陳腐化したら「差分検知→改稿→article-review→貼り替え手順書」の型で更新する（スキル `article-refresh` を作る予定）。
+  `guide/starter_pack.md` より `articles/スターターパック/` が正（2026-09-03 に反転）。次に陳腐化したら「差分検知→改稿→article-review→貼り替え手順書」の型で更新する（スキル `article-refresh`）。
+- **メンバーのパーソナリティ**: 正は [`members/README.md`](./members/README.md)。2026-09-09〜10 に、なりきりプロンプト由来の記述から
+  **人格心理学の3層（傾向／動機・価値観／自己物語）＋アイドル固有の2層（特典会用の話題の在庫／舞台での見え方）の6節構成**へ全面改稿。
+  現メンバー5人は完了（デビュー 2024-11-16 以降・約11,900件が根拠。手順は `.claude/skills/member-profile-refresh`）。
+  **元メンバー2人は旧構成のまま凍結する**（オーナー判断・2026-09-10。取得もしない）。
+  「やぎくるみ＝リーダー」表記は削除済み（ストクレ時代の経験。現グループに役職は無い。claude-work #17）。
+- **エゴサーチの精度**: 正は [`.claude/skills/x-egosearch/SKILL.md`](./.claude/skills/x-egosearch/SKILL.md)。2026-09-15 に 2-2「カタカナ・英字」を廃止（3期間で打率0.3%）、
+  愛称（くるみん等）は文脈語との併用を必須に、**過去に採用したアカウントを加点**（`data/x/known_accounts.txt`。打率97% vs 6%）。
+  人が捌く工程は `.claude/skills/x-egosearch-review` に分離（スワイプアプリ → Artifact 公開 → 判定の書き戻し。原文を含むので共有しない）。
 - **縦動画**: 運用の正は [`strategy/short_video_playbook.md`](./strategy/short_video_playbook.md)、型定義と量産フローは [`strategy/video/`](./strategy/video/README.md)。
   2026-09-07 に型体系を A〜E＋F・G に一本化（主力は A 反応集と F/G メンバーエピソードの両輪、月 10〜12 本。ファン投稿の引用は 7.3 の作法で可。コール講座は不採用→入門コンテンツをバックログ）。
   素材の索引・許諾・組み立ては `.claude/skills/x-media-collect` と [`data/README.md`](./data/README.md)。**他人の素材は `data/x/media_permissions.md` に「OK」がある分だけ。クレジットは必ず入れる。**
+  2026-09-09 に**開示（誰かを明かす瞬間）の言い方を「ろりぽっぷ!!!!!!!というアイドルグループの◯◯だよ」に統一**（台本全般。略さない。正は `strategy/video/formats/00_テンプレート.md`「開示の言い方」）。G-001 は承認済みで写真待ち。
   2026-09-09 に F の VOICEVOX 話者を冥鳴ひまりに決定（G は春日部つむぎ×冥鳴ひまり）。**F-001「放水ライブの後悔」の台本を承認**（次の待ちはスクショ撮影）。
   未解決: 運営・メンバーの許諾条件（改変・クレジット・期限。playbook 11章）が未確認で、クレジット文面を `make_vertical.py` が決め打ちしている。
 
@@ -67,14 +106,15 @@
 - **ローカル（Windows）**: このリポジトリで起動する（`work/` から起動すると hooks・スキル・専用メモリが効かない。PowerShell の `cl` で起動できる）。`python3` はシムで `python` 3.10 に解決する（2026-09-07〜）。
 - **クラウド（リモート環境）**:
   - **twitterapi.io は環境によって到達可否が変わる。** 信頼モードでは403、フルアクセス環境では到達可能（2026-09-01確認）。APIキーは環境変数 `TWITTERAPI_IO_KEY` かルートの `.env`（`.gitignore` 済み）から読む。**キーをチャットに貼らせない。** 取得した投稿データ（`work/x_fetch/`）は他人の著作物なのでコミットしない（`.gitignore` 済み）。
+  - **YouTube の動画本体はクラウドから落とせない**（2026-09-09確認）。`googlevideo.com` には到達できるが、データセンターIPのため YouTube が GVS PO トークン（BotGuard）を要求し、`Sign in to confirm you're not a bot` と映像URLへの `HTTP 403` で止まる。メタデータ（題名・投稿者・尺）と形式一覧は `yt-dlp --js-runtimes node:/opt/node22/bin/node --extractor-args "youtube:player_client=web_embedded"` で取れるが、**本体は手元（Windows）で落とす。**
   - **linkco.re（TuneCore配信ページ）はネットワークポリシーで到達不可。** 歌詞はユーザーにスクリーンショットかテキストで貼ってもらい、転記する。原文の表記揺れは正規化せず、歌詞ファイル末尾のHTMLコメント（転記メモ）に記録して、ユーザーにレビューを依頼する。
   - **公開用の画像を撮る前に、必ず `bash resources/install_capture_font.sh` を実行する。入れずに撮ると漢字が中国語フォントの字形になる**（2026-09-04に実際にやらかした）。コンテナのヘッドレスChromiumは `fonts.googleapis.com` に到達できず、日本語フォントは IPAGothic と WenQuanYi しか無い。**CSSの指定と実際に描画されたフォントは別物。** 画像にする前に CDP の `CSS.getPlatformFontsForNode` で実物を確認する（`resources/capture_call_sheet.py` は Noto Sans JP でなければ中断する）。コンテナは使い捨てなので、セッションが変わるたびに入れ直す。
   - **Playwright はコンテナに未インストール。`pip install playwright` で入れる。** ブラウザは `/opt/pw-browsers` にあり、`playwright install` は不要（禁止）。`executable_path="/opt/pw-browsers/chromium-1194/chrome-linux/chrome"`（実際のディレクトリ名を確認する）と `args=["--no-sandbox"]` を渡す。
-  - `lollpop_video` は GitHub に無い（ローカルのみ）。動画のレンダリングや Remotion の実装はクラウドに投げても進まない。
+  - `lollpop_video` は `devhitoshi/lollpop_video`（private、2026-09-24〜）。ただし写真・音声・BGM は `.gitignore` 済みでリポジトリに無いので、クラウドでレンダリングまではできない。
 - **共通**:
   - **記事系のPRは、作成後そのままマージしてよい**（オーナー方針・2026年9月確認）。それ以外の PR は本文を提示して承認を得る。マージ後は作業ブランチを origin/main に揃え直す。
   - **PR 本文の末尾に `## 判断待ち` 節を必ず書く。**オーナーが決めないと進まないことを箇条書きにする。**無ければ「なし」と明記する**（書き忘れと区別するため）。
     残タスクは `devhitoshi/claude-work`（private）の Issues に集約していて、**この節が唯一の回収口**。クラウドセッションは会話ログが残らず、PR 本文とコミットだけが引き継ぎ面になる。
     過去に #18（許諾の範囲）・#20（未push コミットの扱い）・#21（コール表未整備・`x_cache/`）が PR 本文に書かれたまま誰にも拾われず、いまも未対応で残っている。
     `claude-work` に直接書き込める環境なら `gh issue create -R devhitoshi/claude-work` でもよい（権限が無ければ PR 本文だけでよい。ローカルの週次走査が拾う）。
-  - **hooks（`.claude/settings.json`、2026-09-02〜）が3つ動く。** 起動時に現状サマリを出す `session_start.sh`、`git add -f` と `.env`／`work/x_fetch/`／音源を含むコミットを止める `guard_git.py`、`events/data_event.csv` を編集したら集計と整合性チェックを自動で回す `after_event_csv.py`。止められたときは理由が表示されるので、無理に回避せずユーザーに確認する。
+  - **hooks（`.claude/settings.json`、2026-09-02〜）が4つ動く。** 起動時に現状サマリを出す `session_start.sh`、`git add -f` と `.env`／`work/x_fetch/`／音源を含むコミットを止める `guard_git.py`、`.env` の表示・キーの環境変数の参照・キーの値を含む入力（全ツール）を止める `guard_secrets.py`（2026-09-24〜。キーが要る処理はスキルのスクリプトに任せる。テストは `python3 .claude/hooks/test_guard_secrets.py`）、`events/data_event.csv` を編集したら集計と整合性チェックを自動で回す `after_event_csv.py`。止められたときは理由が表示されるので、無理に回避せずユーザーに確認する。

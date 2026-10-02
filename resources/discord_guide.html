@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discord で記事と動画をつくる — 使い方</title>
+<meta name="description" content="Discord のスレッドから、ろりぽっぷ!!!!!!! の記事と動画をつくるための使い方ガイド。">
+<meta name="theme-color" content="#ffffff">
+<meta name="robots" content="noindex, nofollow">
+<!-- ポータル（index.html）からは辿らせない内部向け文書。公開 URL では開けるが検索には載せない -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+/* =====================================================================
+   Discord で記事と動画をつくる — 利用者向けガイド
+   デザインの正はリポジトリルートの design.md（実装: resources/css/style.css）。
+   単一ファイル完結のため、同じトークン値をここに転記している。
+   フルブリードのバンド構成。カードなし・影なし・角丸は操作要素のみ。
+   スマートフォンで読まれる前提なので、既定を 1 カラムに置き、
+   広い画面でだけ多カラムへ展開する（モバイルファースト）。
+   ===================================================================== */
+:root{
+  color-scheme: light;
+  --primary:#d6006e; --primary-active:#b0005b; --primary-on-dark:#ff9ecb; --on-primary:#ffffff;
+  --canvas:#ffffff; --surface-soft:#fff5f9; --surface-blush:#fbe7f0; --surface-blush-strong:#f6d3e3;
+  --surface-dark:#1a1113; --surface-dark-elevated:#2a1a24;
+  --ink:#1d1216; --body:#45383e; --body-strong:#2a2026; --muted:#71646b; --muted-soft:#998a92;
+  --on-dark:#fff5f9; --on-dark-soft:#d9c4ce;
+  --hairline:#f2e2ea; --hairline-soft:#faeef4;
+  /* メンバーカラー（装飾専用。リンクやボタンには使わない） */
+  --mc-kurumi:#cc0000; --mc-mayu:#f5c400; --mc-mau:#7fd4e8; --mc-ami:#2e9e5b; --mc-mana:#ffffff;
+  --success:#2e9e5b; --warning:#b45309; --error:#cf3a3a;
+  --r-sm:6px; --r-md:8px; --r-pill:9999px;
+  --s-xxs:4px; --s-xs:8px; --s-sm:12px; --s-md:16px; --s-lg:24px; --s-xl:32px; --s-xxl:48px;
+  --s-band:64px; --s-section:96px;
+  --font:"Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic Medium",Meiryo,sans-serif;
+  --font-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--canvas); color:var(--body);
+  font-family:var(--font); font-size:16px; font-weight:400; line-height:1.85; letter-spacing:.01em;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{margin:0; color:var(--ink); font-weight:700; line-height:1.4; text-wrap:balance}
+p{margin:0}
+a{color:var(--primary); text-decoration-thickness:1px; text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--primary); outline-offset:3px; border-radius:2px}
+code{font-family:var(--font-mono); font-size:.92em}
+
+/* ---------- top nav（白。ヘアライン下線は許可された線） ---------- */
+.top-nav{
+  position:sticky; top:0; z-index:30;
+  display:flex; align-items:center; justify-content:space-between; gap:var(--s-md);
+  height:56px; padding:0 var(--s-lg);
+  background:var(--canvas); border-bottom:1px solid var(--hairline);
+  font-size:13px; font-weight:500; line-height:1;
+}
+.top-nav__brand{color:var(--ink); text-decoration:none; font-weight:700}
+.top-nav__meta{color:var(--muted-soft); font-size:12px; letter-spacing:.06em}
+
+/* ---------- バンド ---------- */
+.band{padding:var(--s-band) var(--s-lg)}
+.band__inner{max-width:720px; margin:0 auto}
+.band--white{background:var(--canvas)}
+.band--blush{background:var(--surface-blush)}
+.band--dark{background:var(--surface-dark); color:var(--on-dark-soft)}
+.band--dark h1,.band--dark h2,.band--dark h3{color:var(--on-dark)}
+.band--dark a{color:var(--primary-on-dark)}
+.band--pink{background:var(--primary); color:var(--on-primary)}
+.band--pink h2{color:var(--on-primary)}
+.band__eyebrow{
+  display:block; margin-bottom:var(--s-sm);
+  font-size:12px; font-weight:700; letter-spacing:.06em; color:var(--muted-soft);
+}
+.band--dark .band__eyebrow{color:var(--muted-soft)}
+.band--pink .band__eyebrow{color:var(--on-primary)}
+.band__title{font-size:28px; letter-spacing:-.015em}
+.band__lead{margin-top:var(--s-md); font-size:17px; line-height:1.75; color:var(--body-strong)}
+.band--dark .band__lead{color:var(--on-dark-soft)}
+.band--pink .band__lead{color:var(--on-primary)}
+
+/* hero */
+.hero{padding-top:var(--s-xxl); padding-bottom:var(--s-xxl)}
+.hero h1{font-size:34px; letter-spacing:-.02em}
+.hero .band__lead{font-size:18px}
+.hero__dots{display:flex; gap:var(--s-xs); margin-top:var(--s-lg)}
+.hero__dots span{width:10px; height:10px; border-radius:var(--r-pill)}
+/* mc-mana は白。design.md の例外どおり輪郭線を必須にする */
+.hero__dots .hero__dots--outline{border:1px solid var(--hairline)}
+
+/* ---------- アイテムのグリッド（余白がグルーピングを担う） ---------- */
+.grid{display:grid; gap:var(--s-xl); margin-top:var(--s-xl)}
+.item__title{font-size:17px; margin-bottom:var(--s-xxs)}
+.item__desc{font-size:15px; line-height:1.8; color:var(--muted)}
+.band--dark .item__desc{color:var(--on-dark-soft)}
+.item__glyph{display:block; font-size:28px; line-height:1; margin-bottom:var(--s-sm)}
+
+/* ---------- 手順（番号は情報。枠では囲わない） ---------- */
+.steps{margin-top:var(--s-xl); display:grid; gap:var(--s-xl)}
+.step{display:grid; grid-template-columns:36px 1fr; gap:var(--s-md); align-items:start}
+.step__no{
+  width:36px; height:36px; border-radius:var(--r-pill);
+  background:var(--primary); color:var(--on-primary);
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px; font-weight:700; line-height:1; font-variant-numeric:tabular-nums;
+}
+.band--dark .step__no{background:var(--primary-on-dark); color:var(--surface-dark)}
+.band--blush .step__no{background:var(--primary); color:var(--on-primary)}
+.step__title{font-size:17px; margin-bottom:var(--s-xxs)}
+.step__desc{font-size:15px; line-height:1.8; color:var(--muted)}
+.band--dark .step__desc{color:var(--on-dark-soft)}
+
+/* ---------- 会話の見本（図版として扱う。床は白） ---------- */
+.chat{margin-top:var(--s-xl); background:var(--canvas); padding:var(--s-lg); border-radius:var(--r-md)}
+.band--white .chat{padding:0}
+.chat__row{display:grid; gap:var(--s-xxs); padding:var(--s-sm) 0}
+.chat__row + .chat__row{border-top:1px solid var(--hairline)}
+.chat__who{font-size:12px; font-weight:700; letter-spacing:.06em; color:var(--muted-soft)}
+.chat__who--bot{color:var(--primary)}
+.chat__msg{font-size:15px; line-height:1.75; color:var(--body)}
+.chat__msg code{
+  display:inline-block; background:var(--surface-blush); color:var(--body-strong);
+  padding:1px 6px; border-radius:var(--r-sm);
+}
+
+/* ---------- 言い方の見本 ---------- */
+.say{margin-top:var(--s-xl); display:grid; gap:var(--s-lg)}
+.say__label{font-size:12px; font-weight:700; letter-spacing:.06em; color:var(--muted-soft); margin-bottom:var(--s-xxs)}
+.say__quote{
+  font-size:16px; line-height:1.75; color:var(--body-strong);
+  background:var(--canvas); padding:var(--s-sm) var(--s-md); border-radius:var(--r-md);
+}
+
+/* ---------- 注意（警告色は面ではなく縦線で示す） ---------- */
+.note{margin-top:var(--s-xl); padding-left:var(--s-md); border-left:3px solid var(--primary)}
+.band--dark .note{border-left-color:var(--primary-on-dark)}
+.note__title{font-size:15px; font-weight:700; color:var(--ink); margin-bottom:var(--s-xxs)}
+.band--dark .note__title{color:var(--on-dark)}
+.note p{font-size:15px; line-height:1.8; color:var(--muted)}
+.band--dark .note p{color:var(--on-dark-soft)}
+
+/* ---------- レコード行（行が独立したレコードなので線を引いてよい） ---------- */
+.rows{margin-top:var(--s-xl)}
+.row{display:grid; gap:var(--s-xxs); padding:var(--s-md) 0; border-bottom:1px solid var(--hairline)}
+.band--dark .row{border-bottom-color:var(--surface-dark-elevated)}
+.row:first-child{border-top:1px solid var(--hairline)}
+.band--dark .row:first-child{border-top-color:var(--surface-dark-elevated)}
+.row__q{font-size:16px; font-weight:700; color:var(--ink)}
+.band--dark .row__q{color:var(--on-dark)}
+.row__a{font-size:15px; line-height:1.8; color:var(--muted)}
+.band--dark .row__a{color:var(--on-dark-soft)}
+
+/* ---------- バッジ ---------- */
+.badge{
+  display:inline-block; padding:2px 10px; border-radius:var(--r-pill);
+  background:var(--surface-blush-strong); color:var(--body-strong);
+  font-size:13px; font-weight:500; line-height:1.5;
+}
+
+/* ---------- フッター ---------- */
+.footer{padding:var(--s-band) var(--s-lg); background:var(--surface-dark); color:var(--on-dark-soft)}
+.footer__inner{max-width:720px; margin:0 auto; font-size:14px; line-height:1.8}
+.footer a{color:var(--primary-on-dark)}
+
+/* ---------- 広い画面 ---------- */
+@media (min-width:720px){
+  .band{padding:var(--s-section) var(--s-xl)}
+  .hero h1{font-size:48px}
+  .band__title{font-size:36px; letter-spacing:-.02em}
+  .grid--3{grid-template-columns:repeat(3,1fr)}
+  .grid--2{grid-template-columns:repeat(2,1fr)}
+  .say{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+
+<body>
+
+<nav class="top-nav">
+  <a class="top-nav__brand" href="#top">🍭 ろりぽっぷ!!!!!!! Docs</a>
+  <span class="top-nav__meta">使い方ガイド</span>
+</nav>
+
+<main id="top">
+
+  <!-- 白: ヒーロー -->
+  <section class="band band--white hero">
+    <div class="band__inner">
+      <span class="band__eyebrow">DISCORD</span>
+      <h1>Discord から、<br>記事と動画をつくる</h1>
+      <p class="band__lead">
+        スレッドを立てて、話しかけるだけ。<br>
+        台本を書き、直し、動画にするところまで、ぜんぶチャットで進みます。
+      </p>
+      <div class="hero__dots" aria-hidden="true">
+        <span style="background:var(--mc-kurumi)"></span>
+        <span style="background:var(--mc-mayu)"></span>
+        <span style="background:var(--mc-mau)"></span>
+        <span style="background:var(--mc-ami)"></span>
+        <span class="hero__dots--outline" style="background:var(--mc-mana)"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ブラッシュ: 覚えることは3つだけ -->
+  <section class="band band--blush">
+    <div class="band__inner">
+      <span class="band__eyebrow">RULES</span>
+      <h2 class="band__title">覚えることは、3つだけ</h2>
+      <div class="grid grid--3">
+        <div>
+          <span class="item__glyph" aria-hidden="true">🧵</span>
+          <h3 class="item__title">1スレッド＝1つの仕事</h3>
+          <p class="item__desc">
+            別の動画・別の記事は、必ず新しいスレッドを立てる。
+            同じスレッドの中では、前の話を覚えたまま続きができます。
+          </p>
+        </div>
+        <div>
+          <span class="item__glyph" aria-hidden="true">✅</span>
+          <h3 class="item__title">ボタンが出たら押す</h3>
+          <p class="item__desc">
+            ファイルを書き換えるときやコマンドを実行するとき、確認のボタンが出ます。
+            押さないと先に進みません。
+          </p>
+        </div>
+        <div>
+          <span class="item__glyph" aria-hidden="true">🎬</span>
+          <h3 class="item__title">動画は、言うまで作られない</h3>
+          <p class="item__desc">
+            台本ができても勝手に動画にはなりません。
+            納得してから「動画にして」と言ってください。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 白: はじめかた -->
+  <section class="band band--white">
+    <div class="band__inner">
+      <span class="band__eyebrow">START</span>
+      <h2 class="band__title">はじめかた</h2>
+      <p class="band__lead">最初の1回だけ、少し手順があります。2回目からは1と2だけ。</p>
+
+      <div class="steps">
+        <div class="step">
+          <span class="step__no">1</span>
+          <div>
+            <h3 class="step__title"><code>#openacp-sessions</code> を開く</h3>
+            <p class="step__desc">このチャンネルが入口です。ここ以外では反応しません。</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step__no">2</span>
+          <div>
+            <h3 class="step__title">新しいスレッドを立てる</h3>
+            <p class="step__desc">
+              「🆕 New Session」のボタンを押すか、<code>/new</code> と打ちます。
+              どのフォルダで作業するか聞かれたら <code>projects/lollpop_docs</code> を選びます。
+            </p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step__no">3</span>
+          <div>
+            <h3 class="step__title">やりたいことを、そのまま書く</h3>
+            <p class="step__desc">
+              コマンドを覚える必要はありません。ふだんの言葉で大丈夫です。
+              スレッドの名前は、最初のひとことから自動でつきます。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="note">
+        <p class="note__title">最初の返事に出てくる「ブランチ名」は控えておく</p>
+        <p>
+          <code>video/20260910-単独ライブ告知</code> のような名前が返ってきます。
+          時間が空いて話が通じなくなったときも、この名前を伝えれば続きから再開できます。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 黒: パターンA -->
+  <section class="band band--dark">
+    <div class="band__inner">
+      <span class="band__eyebrow">PATTERN A</span>
+      <h2 class="band__title">ゼロから、台本と動画をつくる</h2>
+      <p class="band__lead">いちばん多い流れです。台本で納得してから、動画に進みます。</p>
+
+      <div class="steps">
+        <div class="step">
+          <span class="step__no">1</span>
+          <div>
+            <h3 class="step__title">「〇〇の動画を作るので、台本を作って」</h3>
+            <p class="step__desc">どんな動画にしたいかを書きます。素材があるなら、その場所も添えます。</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step__no">2</span>
+          <div>
+            <h3 class="step__title">台本の本文が、チャットに貼られる</h3>
+            <p class="step__desc">
+              リンクを開かなくても、その場で全部読めます。長いときは何通かに分かれます。
+              あわせて GitHub のリンクも返ってきます（後から読み返す用）。
+            </p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step__no">3</span>
+          <div>
+            <h3 class="step__title">気になったところを、そのまま書く</h3>
+            <p class="step__desc">
+              「3つ目が長い」「もっと軽い言い方に」でかまいません。直したあと、
+              <strong>どこをどう変えたか</strong>が要約で返ってきます。
+            </p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step__no">4</span>
+          <div>
+            <h3 class="step__title">納得したら「これでOK、動画にして」</h3>
+            <p class="step__desc">
+              ここではじめて動画づくりが始まります。数分かかるので、
+              先に「作りはじめます」と返事が来て、できたら知らせが来ます。
+            </p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step__no">5</span>
+          <div>
+            <h3 class="step__title">Google ドライブのリンクが返る</h3>
+            <p class="step__desc">スマホでそのまま再生できます。直したいところは次の節の書き方で伝えます。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 白: パターンB -->
+  <section class="band band--white">
+    <div class="band__inner">
+      <span class="band__eyebrow">PATTERN B</span>
+      <h2 class="band__title">すでにあるものを、直してもらう</h2>
+      <p class="band__lead">
+        台本・記事・動画のレビューから始めるときは、<strong>どれのことか</strong>が伝わればOKです。
+        あとの往復はパターンAと同じ。
+      </p>
+
+      <div class="chat">
+        <div class="chat__row">
+          <span class="chat__who">あなた</span>
+          <p class="chat__msg"><code>strategy/video/台本/F-003_リハの日の話.md</code> をレビューして</p>
+        </div>
+        <div class="chat__row">
+          <span class="chat__who">あなた</span>
+          <p class="chat__msg">ドライブの「20260904_くるみちゃん紹介動画」の動画、後半のテンポが遅い</p>
+        </div>
+        <div class="chat__row">
+          <span class="chat__who chat__who--bot">返ってくるもの</span>
+          <p class="chat__msg">
+            作業ブランチの名前 → 直した内容の要約 → 更新後のリンク。この3つがセットで返ります。
+          </p>
+        </div>
+      </div>
+
+      <div class="note">
+        <p class="note__title">ファイル名がわからなくても大丈夫</p>
+        <p>
+          「先週作ったくるみちゃんの動画」のように、覚えている言い方で伝えれば探してくれます。
+          間違ったものを直さないよう、確認が返ってくることがあります。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ブラッシュ: 言い方の見本 -->
+  <section class="band band--blush">
+    <div class="band__inner">
+      <span class="band__eyebrow">EXAMPLES</span>
+      <h2 class="band__title">言い方の見本</h2>
+      <p class="band__lead">迷ったら、このまま真似して送ってください。</p>
+
+      <div class="say">
+        <div>
+          <p class="say__label">台本をたのむ</p>
+          <p class="say__quote">9/20 の単独ライブの告知動画を作りたい。台本を作って</p>
+        </div>
+        <div>
+          <p class="say__label">型を指定する</p>
+          <p class="say__quote">反応集（A）の型で、8月のライブの反応を集めた動画の台本を作って</p>
+        </div>
+        <div>
+          <p class="say__label">台本を直す</p>
+          <p class="say__quote">3つ目のブロックが長い。半分にして</p>
+        </div>
+        <div>
+          <p class="say__label">動画に進む</p>
+          <p class="say__quote">これでOK、動画にして</p>
+        </div>
+        <div>
+          <p class="say__label">動画を直す</p>
+          <p class="say__quote">0:12 のテロップが画面から切れてる。直して</p>
+        </div>
+        <div>
+          <p class="say__label">今どうなってるか聞く</p>
+          <p class="say__quote">いまどこまで進んでる？</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 白: 動画への指摘 -->
+  <section class="band band--white">
+    <div class="band__inner">
+      <span class="band__eyebrow">FEEDBACK</span>
+      <h2 class="band__title">動画の直しは、時間で伝える</h2>
+      <p class="band__lead">
+        「あのへん」ではなく <span class="badge">0:12</span> <span class="badge">1:05から</span>
+        のように、動画の先頭からの経過時間で伝えてください。そこがいちばん速く直ります。
+      </p>
+
+      <div class="grid grid--2">
+        <div>
+          <h3 class="item__title">伝わりやすい</h3>
+          <p class="item__desc">
+            「0:12 のテロップが切れてる」<br>
+            「1:05 から音が大きい」<br>
+            「0:30 の写真を別のものに」
+          </p>
+        </div>
+        <div>
+          <h3 class="item__title">伝わりにくい</h3>
+          <p class="item__desc">
+            「後半がなんか違う」<br>
+            「テロップ全体を直して」<br>
+            「もっと良い感じに」
+          </p>
+        </div>
+      </div>
+
+      <div class="note">
+        <p class="note__title">作り直した動画は、別の名前で届きます</p>
+        <p>
+          <code>_v2</code> のように名前が変わります。スマホに残っている古い動画と
+          見分けがつくようにするためです。最新かどうか迷ったら、いちばん新しいリンクを開いてください。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 黒: 困ったとき -->
+  <section class="band band--dark">
+    <div class="band__inner">
+      <span class="band__eyebrow">TROUBLE</span>
+      <h2 class="band__title">うまくいかないとき</h2>
+
+      <div class="rows">
+        <div class="row">
+          <p class="row__q">返事が来ない</p>
+          <p class="row__a">
+            確認のボタンが出たまま止まっていませんか。上にスクロールして探してみてください。
+            <strong>ボタンは10分で自動的にキャンセル</strong>されるので、その場合はもう一度お願いし直します。
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__q">まったく反応がない</p>
+          <p class="row__a">
+            スレッドの中で話しかけているか確認してください。チャンネルに直接書いても反応しません。
+            それでも無反応なら、管理者（オーナー）に連絡を。PC側が止まっている可能性があります。
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__q">ドライブのリンクが開けない</p>
+          <p class="row__a">
+            「アクセス権が必要です」と出たら、フォルダの共有がまだです。管理者に自分の Google アカウントを伝えてください。
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__q">話が通じなくなった</p>
+          <p class="row__a">
+            時間が空くと、それまでの流れを忘れていることがあります。
+            最初の返事に出ていた<strong>ブランチ名</strong>を伝えると、続きから戻れます。
+          </p>
+        </div>
+        <div class="row">
+          <p class="row__q">途中でやめたい</p>
+          <p class="row__a"><code>/cancel</code> と打つと、そのスレッドの作業が止まります。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ピンク: 1ページに1回だけのCTA -->
+  <section class="band band--pink">
+    <div class="band__inner">
+      <span class="band__eyebrow">GO</span>
+      <h2 class="band__title">まずは1本、頼んでみる</h2>
+      <p class="band__lead">
+        うまく言えなくて大丈夫です。ざっくり書いて、返ってきたものを見てから直していくほうが、
+        結果的に速く終わります。
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <p>ろりぽっぷ!!!!!!! Docs — Discord 利用者向けガイド</p>
+    <p>
+      設定・運用のことは <a href="./discord_admin.html">管理者向けの説明</a> に。
+      文書の正はリポジトリの <code>CLAUDE.md</code> と <code>SETUP_DISCORD.md</code>。
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

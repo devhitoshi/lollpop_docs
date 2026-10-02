@@ -1,6 +1,6 @@
 ---
 name: article-review
-description: note 記事（articles/ 配下）を公開・マージする前にレビューする。機械チェック（note の制約、曲名・グループ名の表記、メンバーの担当カラー、期間内の公演の抜け、文体ルール）と、読み取り専用エージェント article-review による読解レビューの2段構え。記事を書き終えたとき、「記事をチェックして」「レビューして」「公開前に見て」と言われたとき、記事系の PR を作る前に必ず使う。
+description: note 記事（articles/ 配下）を公開・マージする前にレビューする。機械チェック（note の制約、曲名・グループ名の表記、メンバーの担当カラー、期間内の公演の抜け、文体ルール）と、読み取り専用エージェント article-review による読解レビューの2段構え。記事を書き終えたとき、「記事をチェックして」「記事をレビューして」「公開前に見て」と言われたとき、記事系の PR を作る前に必ず使う。
 ---
 
 # 記事レビュー
@@ -37,13 +37,14 @@ description: note 記事（articles/ 配下）を公開・マージする前に�
 
 | コード | 内容 | 根拠 |
 | --- | --- | --- |
+| DISCLAIMER | タイトル直後に冒頭の注意書き（`> ※` で始まる定型の1文）が無い、2回以上ある | style_ai_poppar.md（冒頭の注意書き） |
 | NOTE_TABLE / NOTE_HEADING | 表組み、3階層以上の見出し | note の制約（週刊 README） |
 | GROUP_NAME | 「ろりぽっぷ」の「!」が7個でない | CLAUDE.md 表記ルール |
 | EXCLAMATION / KAOMOJI / OTAKU_WORDS | 「!」の連打、顔文字、オタク語彙の回数 | style_ai_poppar.md |
 | MEMBER_EMOJI / NICKNAME_FIRST | 担当カラーの絵文字違い、月刊で愛称の初出に本名が無い | members.md / monthly.md |
 | GRADUATED / SENSITIVE / SPECULATION | 卒業メンバー・数字・運営・体調・推測表現への言及（要判断） | style_ai_poppar.md / CLAUDE.md |
 | SONG_NOTATION | 同じ曲の表記が記事内で揺れている、楽曲一覧との違い | songs/楽曲一覧.md |
-| IMAGE_RIGHTS | pbs.twimg.com / video.twimg.com など twimg.com の画像URLを直貼りしている疑い | style_ai_poppar.md（メンバー写真を直貼りしない） |
+| IMAGE_RIGHTS | pbs.twimg.com / video.twimg.com など twimg.com の画像URLを直リンクしている疑い | style_ai_poppar.md（写真は載せてよいが直リンクは不可・クレジット必須。2026-09-29 改訂） |
 | MISSING_EVENT / DATE_NOT_IN_CSV / EVENT_COUNT | CSV にある公演が記事に無い、記事の公演数が CSV と違う | events/data_event.csv |
 | JARGON / PARAGRAPH / SOURCES / MEMO | 月刊の注釈、段落の長さ、出典節、編集メモ | monthly.md / style / articles README |
 

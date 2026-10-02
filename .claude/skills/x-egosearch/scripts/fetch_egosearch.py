@@ -33,15 +33,27 @@ from fetch_accounts import (  # noqa: E402
 )
 
 JST = timezone(timedelta(hours=9))
-OWN_HANDLES = {h for h, _ in DEFAULT_ACCOUNTS} | {'asaka_lpop', 'natsumi_lpop'}
+# 元メンバー2人と、マネージャーの日向なの（@nanotabiyori）。関係者の投稿は「外部の反応」ではないので候補から外す。
+OWN_HANDLES = {h for h, _ in DEFAULT_ACCOUNTS} | {'asaka_lpop', 'natsumi_lpop', 'nanotabiyori'}
 OUT_DIR = 'work/x_fetch'
 
 # x_collect.md の 2-1〜2-3 をそのまま
 BASE_QUERIES = {
     '2-1 基本形': '("ろりぽっぷ" OR "#ろりぽっぷ" OR "ろりぽ" OR @lollipop_1116)',
-    '2-2 カタカナ・英字': '("ロリポップ" OR "ロリポ" OR "lollipop") (アイドル OR ライブ OR 対バン OR セトリ OR 特典会 OR チェキ OR 現場)',
-    '2-3 メンバー名': '("愛月まな" OR "まなてぃー" OR "やぎくるみ" OR "くるみん" OR "夏川茉夢" OR "おまゆ" OR "松川愛美" OR "あみてん" '
+    # 2-2「カタカナ・英字」は 2026-09-15 に外した。3期間（2026-08-01〜09-15）で候補633件・採用2件（0.3%）で、
+    # 中身はレンタルサーバー「ロリポップ!」とお菓子と Lollipop Chainsaw だった。
+    # ファンがカタカナで書くときも「ろりぽ」を併記することがほとんどで、2-1 が拾えている。
+    # 復活させるなら BASE_QUERIES に戻すだけでよい（打率は data/x/egosearch_triage_*_summary.txt で測れる）。
+    # 本名・ハンドルは一意なのでそのまま引く
+    '2-3 メンバー名': '("愛月まな" OR "やぎくるみ" OR "夏川茉夢" OR "松川愛美" '
                   'OR @mana_lpop OR @kurumi_lpop OR @mayu_lpop OR @ami_lpop OR @mau_lpop)',
+    # 愛称は一般語とぶつかるので、2-2 と同じく文脈語との併用を要求する。
+    # 2026-09-15 の実測（2026-09-07〜09-15）: 愛称を裸で引いた 2-3 は候補119件・採用15件（打率12.6%）で、
+    # 「くるみん」だけで81件・採用4件（4.9%）。しかも「出てくるみんな」のような部分一致まで拾っていた
+    # （別人の @kurumi_takase への言及が9/14〜15に82件なだれ込み、要判定の7割がこれで埋まった）。
+    # この条件にすると候補が103件減り、**その週に採用した投稿は1件も落ちなかった**。
+    '2-3b 愛称': '("まなてぃー" OR "くるみん" OR "おまゆ" OR "あみてん" OR "まうちゃん") '
+              '(ろりぽ OR アイドル OR ライブ OR 対バン OR セトリ OR 特典会 OR チェキ OR 現場 OR 生誕)',
 }
 NOISE_WORDS = re.compile(r'サーバー|サーバ|ドメイン|WordPress|ムームー|障害|契約|レンタル|ホスティング|チェーンソー|キャンディ|飴|ペロペロ|lollipop chainsaw', re.I)
 SIGNAL_WORDS = re.compile(r'ろりぽっぷ!|#ろりぽっぷ|アイドル|ライブ|対バン|セトリ|特典会|チェキ|現場|生誕|ワンマン|lollipop_1116|_lpop')

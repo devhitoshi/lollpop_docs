@@ -84,9 +84,9 @@ header("03_header.png", "STARTER PACK 3 / 3", ["ライブに行って、", "特�
 
 # ---------------------------------------------------------------- 01 年表
 def timeline():
-    im, d = canvas(1280, 820)
+    im, d = canvas(1280, 860)
     text(d, (80, 60), "ろりぽっぷ!!!!!!! の歩み", f(46), C["ink"])
-    text(d, (80, 122), "2024年11月のデビューから、5人体制の始動まで", f(26, False), C["muted"])
+    text(d, (80, 122), "2024年11月のデビューから、2周年SPライブまで", f(26, False), C["muted"])
 
     rows = [
         ("2024.11.16", "サウンドノート秋葉原でデビューライブ", False),
@@ -97,6 +97,7 @@ def timeline():
         ("2026.06.06", "3rdワンマン「全力疾走」新宿ReNY", False),
         ("2026.08.15", "苺花なつみが卒業", False),
         ("2026.08.22", "5人体制が始動（「ガラストロメ!!」）", True),
+        ("2026.11.06", "2周年SPライブ YOANI Live Station（予定）", True),
     ]
     x_line = 300
     y = 200
@@ -112,23 +113,21 @@ def timeline():
         text(d, (x_line + 34, y), label, f(28, hi), C["ink"] if hi else C["body"], anchor="lm")
         y += step
 
-    rect(d, (80, 740, 1200, 744), fill=C["hairline"])
-    text(d, (80, 762), "会場は 代官山UNIT → 赤羽ReNY alpha → 新宿ReNY と大きくなっている",
-         f(24, False), C["muted"])
     save(im, "01_timeline.png")
 timeline()
 
 
 # ---------------------------------------------------------------- 01 ルーツ
 def roots():
-    im, d = canvas(1280, 800)
+    im, d = canvas(1280, 840)
     text(d, (80, 56), "曲は3つの出どころに分かれる", f(46), C["ink"])
     text(d, (80, 118), "ライブ中に「あ、これはストクレの曲だな」と分かるようになります", f(26, False), C["muted"])
 
     cols = [
         (C["chart_orig"], "オリジナル曲", "ろりぽっぷ!!!!!!! 名義", "結成後に作られた曲",
          ["ろりぽっぷ!!!!!!!", "ぽっぽ♪ポジティブ！！", "始まりの宴!!!!!!!", "乙女ロック", "Unknown",
-          "約束!!!!!!!", "主人公!!!!!!!", "未完成ヒロイン", "シーソーゲーム", "メイク☆マイダンス", "夏色ラムネ"]),
+          "約束!!!!!!!", "主人公!!!!!!!", "未完成ヒロイン", "シーソーゲーム", "メイク☆マイダンス", "夏色ラムネ",
+          "また会う日まで"]),
         (C["chart_stk"], "ストクレ曲", "元 STRAY SHEEP CLAYMORE", "かっこいい系が多め",
          ["SHINY DAYS", "HELLO", "MY DREAM MY LIFE", "むげんの☆Lambie", "ほか"]),
         (C["chart_hpst"], "ハピスト曲", "元 ハピ☆スト", "かわいい系が多め",
@@ -137,7 +136,7 @@ def roots():
     x = 80
     w = 360
     for col, title, sub, desc, songs in cols:
-        rect(d, (x, 190, x + w, 750), fill=C["surface_soft"])
+        rect(d, (x, 190, x + w, 790), fill=C["surface_soft"])
         rect(d, (x, 190, x + w, 198), fill=col)
         text(d, (x + 28, 226), title, f(34), col)
         text(d, (x + 28, 274), sub, f(22, False), C["muted"])
@@ -154,15 +153,15 @@ roots()
 def ranking():
     im, d = canvas(1280, 700)
     text(d, (80, 56), "よく演奏される曲 トップ6", f(46), C["ink"])
-    text(d, (80, 118), "2024年11月16日〜2026年8月31日／326公演・のべ1,607回の集計", f(26, False), C["muted"])
+    text(d, (80, 118), "2024年11月16日〜2026年9月26日／338公演・のべ1,712回の集計", f(26, False), C["muted"])
 
-    data = [("ろりぽっぷ!!!!!!!", 185, "orig"), ("ぽっぽ♪ポジティブ！！", 166, "orig"),
-            ("始まりの宴!!!!!!!", 143, "orig"), ("SHINY DAYS", 118, "stk"),
-            ("推し事〜女の子アイドルオタクあるある〜", 105, "hpst"), ("HELLO", 101, "stk")]
+    data = [("ろりぽっぷ!!!!!!!", 191, "orig"), ("ぽっぽ♪ポジティブ！！", 173, "orig"),
+            ("始まりの宴!!!!!!!", 152, "orig"), ("SHINY DAYS", 127, "stk"),
+            ("推し事〜女の子アイドルオタクあるある〜", 108, "hpst"), ("HELLO", 108, "stk")]
     kind = {"orig": C["chart_orig"], "stk": C["chart_stk"], "hpst": C["chart_hpst"]}
     x0, bar_max, y = 560, 560, 210
     for name, v, k in data:
-        w = int(bar_max * v / 185)
+        w = int(bar_max * v / 191)
         text(d, (x0 - 24, y + 22), name, f(26), C["body_strong"], anchor="rm")
         rect(d, (x0, y, x0 + w, y + 44), fill=kind[k])
         text(d, (x0 + w + 16, y + 22), str(v), f(30), kind[k], anchor="lm")
@@ -188,18 +187,18 @@ def members():
          f(26, False), C["muted"])
 
     rows = [
-        ("kurumi", "やぎ くるみ", "くるみん", "赤", "リーダー／群馬県", "群馬の話"),
-        ("mana",   "愛月 まな",   "まなてぃー", "白", "癒し系／鹿児島県", "猫の話"),
-        ("mau",    "まう",       "まう〜",   "水色", "自由奔放／鹿児島県", "グミの話"),
-        ("mayu",   "夏川 茉夢",   "おまゆ",   "黄色", "お姉さん肌／静岡県", "餃子と静岡"),
-        ("ami",    "松川 愛美",   "あみてん", "緑", "2025年加入／東京都", "ライブの感想"),
+        ("kurumi", "やぎ くるみ", "くるみん", "赤", "しっかり者で天然／群馬県", "群馬の話・餃子"),
+        ("mana",   "愛月 まな",   "まなてぃー", "白", "癒し系／鹿児島県", "K-POP・キティ"),
+        ("mau",    "まう",       "まう〜",   "水色", "自由奔放／鹿児島県", "アニメ・デコチェキ"),
+        ("mayu",   "夏川 茉夢",   "おまゆ",   "黄色", "お姉さん肌／静岡県", "餃子・アニメ"),
+        ("ami",    "松川 愛美",   "あみてん", "緑", "汗っかき・愛犬家／東京都", "愛犬ぽぽの話"),
     ]
     # ヘッダ行
     hy = 196
     text(d, (200, hy), "名前", f(24), C["muted"])
     text(d, (470, hy), "あだ名", f(24), C["muted"])
     text(d, (650, hy), "特徴・出身", f(24), C["muted"])
-    text(d, (960, hy), "話しかけるなら", f(24), C["muted"])
+    text(d, (975, hy), "話しかけるなら", f(24), C["muted"])
     rect(d, (80, hy + 40, 1200, hy + 42), fill=C["hairline"])
 
     y = 264
@@ -211,8 +210,8 @@ def members():
         text(d, (200, y), name, f(32), C["ink"])
         text(d, (200, y + 44), "", f(20), C["muted"])
         text(d, (470, y + 12), nick, f(28), C["body_strong"])
-        text(d, (650, y + 12), feat, f(25, False), C["body"])
-        text(d, (960, y + 12), topic, f(26), C["primary"])
+        text(d, (650, y + 14), feat, f(23, False), C["body"])
+        text(d, (975, y + 12), topic, f(25), C["primary"])
         y += 106
 
     text(d, (80, 800), "推しは1回で決めなくて大丈夫。グループ全体を推す「箱推し」もこのグループでは多数派です。",

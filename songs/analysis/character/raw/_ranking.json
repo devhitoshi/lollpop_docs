@@ -1,0 +1,119 @@
+{
+  "toolAction": "Submitting analysis results",
+  "toolSummary": "Finish audio analysis",
+  "tracks": [
+    {
+      "bright_dark": 0.2,
+      "cute_cool": 0.9,
+      "file": "track01.mp3",
+      "note": "きらびやかなシンセリードと歪んだエレキギターが疾走する王道バンドサウンドに、サビ前のブレイクやシンガロング調の合唱パートが組み込まれたアッパーなロック曲。",
+      "tempo_rank": 7,
+      "waki_emo": 0.4,
+      "song": "Unknown"
+    },
+    {
+      "bright_dark": -2.5,
+      "cute_cool": -2.6,
+      "file": "track02.mp3",
+      "note": "ピコピコした8bitゲーム風の音色と「ポ・ポ・ポジティブ」のコミカルなリフレインが耳に残る、極めてキャッチーで愛らしい電波系チップチューン。",
+      "tempo_rank": 4,
+      "waki_emo": -0.3,
+      "song": "ぽっぽ♪ポジティブ！！"
+    },
+    {
+      "bright_dark": 0.8,
+      "cute_cool": -0.1,
+      "file": "track03.mp3",
+      "note": "哀愁を帯びた切ないメロディに四つ打ちのキックとサイドチェインでうねるシンセドロップを融合させた、夏のエモーショナルなFuture Bass調ダンスポップ。",
+      "tempo_rank": 3,
+      "waki_emo": 1.7,
+      "song": "また会う日まで"
+    },
+    {
+      "bright_dark": -1.7,
+      "cute_cool": -2.2,
+      "file": "track04.mp3",
+      "note": "華やかなブラスセクションとスウィング感のある跳ねるリズムがテーマパークのショーを思わせる、セリフや合いの手が満載の賑やかなポップス。",
+      "tempo_rank": 8,
+      "waki_emo": -2.2,
+      "song": "ろりぽっぷ!!!!!!!"
+    },
+    {
+      "bright_dark": 2.6,
+      "cute_cool": 2.7,
+      "file": "track05.mp3",
+      "note": "ダウンチューニングされた重低音ギターのジェント風刻みリフとツーバス連打、激しい咆哮コールが炸裂する攻撃的なラウドロック／メタル曲。",
+      "tempo_rank": 12,
+      "waki_emo": -0.8,
+      "song": "シーソーゲーム"
+    },
+    {
+      "bright_dark": -2.8,
+      "cute_cool": -2.9,
+      "file": "track06.mp3",
+      "note": "めまぐるしく展開する超高速の打ち込みビートとアーケード風の電子音に乗せ、息もつかせぬ早口ボーカルと「ハイ！」のコールが飛び交うハイパー電波ソング。",
+      "tempo_rank": 10,
+      "waki_emo": -2.6,
+      "song": "メイク☆マイダンス"
+    },
+    {
+      "bright_dark": 1.3,
+      "cute_cool": 2,
+      "file": "track07.mp3",
+      "note": "クラシカルなピアノと雄大なストリングスがドラマティックに盛り上げ、力強く伸びやかな歌声が胸を打つアンセム調の本格派シンフォニックロック。",
+      "tempo_rank": 2,
+      "waki_emo": 2.3,
+      "song": "主人公"
+    },
+    {
+      "bright_dark": -1.3,
+      "cute_cool": -1.2,
+      "file": "track08.mp3",
+      "note": "爽快なギターカッティングとストレートなエイトビートに乗せ、「せーの！」などの呼びかけで客席との一体感を生み出すストレートな青春アイドルロック。",
+      "tempo_rank": 6,
+      "waki_emo": -1.4,
+      "song": "乙女ロック"
+    },
+    {
+      "bright_dark": -0.9,
+      "cute_cool": -1.7,
+      "file": "track09.mp3",
+      "note": "アコースティックギターの軽快なストロークと涼しげなグロッケンの音色が響く、甘酸っぱく爽やかな風を感じさせる正統派サマーポップ。",
+      "tempo_rank": 5,
+      "waki_emo": 1,
+      "song": "夏色ラムネ"
+    },
+    {
+      "bright_dark": -2.1,
+      "cute_cool": -0.6,
+      "file": "track10.mp3",
+      "note": "大地を揺らす力強い和太鼓の連打と軽快な三味線、「ソイヤ」「ワッショイ」といった威勢のいい掛け声で狂騒を巻き起こす和風お祭りアッパーチューン。",
+      "tempo_rank": 9,
+      "waki_emo": -2.9,
+      "song": "始まりの宴!!!!!!!"
+    },
+    {
+      "bright_dark": 1.9,
+      "cute_cool": 1.4,
+      "file": "track11.mp3",
+      "note": "アコースティックギターとピアノの静謐なアルペジオから始まり、次第に熱を帯びるストリングスと共に涙声のような切迫感で歌い上げる感涙必至のバラード。",
+      "tempo_rank": 1,
+      "waki_emo": 2.8,
+      "song": "未完成ヒロイン"
+    },
+    {
+      "bright_dark": -0.4,
+      "cute_cool": 0.4,
+      "file": "track12.mp3",
+      "note": "パンキッシュな疾走ドラムと手拍子（クラップ）、マーチング風のファンファーレがパレードのように高揚感を煽る賑やかなポップパンクアンセム。",
+      "tempo_rank": 11,
+      "waki_emo": -1.8,
+      "song": "約束!!!!!!!"
+    }
+  ],
+  "unheard": [],
+  "_meta": {
+    "conversation_id": "2d74ab56-4a52-4d93-b7ac-bb6cb0fc25c7",
+    "recovered_from": "transcript_full.jsonl"
+  }
+}

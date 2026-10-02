@@ -1,4 +1,11 @@
 {
+  "permissions": {
+    "deny": [
+      "Bash(cat .env*)",
+      "Bash(cat ./.env*)",
+      "PowerShell(Get-Content .env*)"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {
@@ -18,6 +25,16 @@
           {
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/guard_git.py",
+            "timeout": 20
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|PowerShell|WebFetch|Write|Edit|mcp__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/guard_secrets.py",
             "timeout": 20
           }
         ]

@@ -34,5 +34,9 @@ if ls work/x_fetch/*.jsonl >/dev/null 2>&1; then
 else
   echo "取得済み X 投稿: なし（週刊なら weekly-pipeline の --stage collect から）"
 fi
+# 毎日取得（タスクスケジューラ・daily_fetch.py）は失敗しても気づきにくいので、最終結果を出す
+if [ -f work/x_fetch/.daily_state.json ]; then
+  PYTHONIOENCODING=utf-8 python3 -c "import json;s=json.load(open('work/x_fetch/.daily_state.json',encoding='utf-8'));print(f\"毎日取得: {s.get('last_until','未取得')} まで取得済み（最終実行 {s.get('last_run_at','?')}・{s.get('last_result','?')}）\")" 2>/dev/null
+fi
 echo "引き継ぎの正: articles/*/README.md の「未解決」節と CLAUDE.md の進行中セクション（終わりに session-handoff で更新）"
 exit 0
