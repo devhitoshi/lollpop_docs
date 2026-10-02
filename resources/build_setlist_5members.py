@@ -387,7 +387,7 @@ dt:first-of-type { margin-top: 0; }
 
 BODY = r'''<header class="band" id="top">
   <div class="wrap">
-    <p class="eyebrow">5-MEMBER ERA / 2026-08-22 → 2026-09-06</p>
+    <p class="eyebrow">5-MEMBER ERA / 2026-08-22 → {{LAST_ISO}}</p>
     <h1>5人体制のセトリ<br>持ち曲{{N_SONGS}}曲のうち{{N_DONE}}曲</h1>
     <p class="lead">
       ろりぽっぷ!!!!!!!が5人体制で迎えた最初の{{N_SHOWS}}公演を、
@@ -396,7 +396,7 @@ BODY = r'''<header class="band" id="top">
     </p>
     <p class="note">
       ファンが公式のセットリスト投稿を写しとって数えている<strong>非公式</strong>のページです。
-      集計は2026年9月6日の公演まで。{{N_SHOWS}}公演ぶんなので、1公演の増減で割合が大きく動きます。
+      集計は{{LAST_JA}}の公演まで。{{N_SHOWS}}公演ぶんなので、1公演の増減で割合が大きく動きます。
     </p>
   </div>
 </header>
@@ -495,13 +495,13 @@ BODY = r'''<header class="band" id="top">
     <h2>数えかた</h2>
     <dl>
       <dt>期間</dt>
-      <dd>2026年8月22日〜2026年9月6日。8月15日「POPGALAXY2026」を最後に6人体制が終わり、
+      <dd>2026年8月22日〜{{LAST_JA}}。8月15日「POPGALAXY2026」を最後に6人体制が終わり、
         次の公演である8月22日「ガラストロメ!!」から5人体制になりました。</dd>
       <dt>出どころ</dt>
       <dd>公式のセットリスト投稿を写した <code>events/data_event.csv</code>（全{{N_ALLSHOWS}}公演）。
         曲名の表記ゆれは <code>.claude/skills/setlist-analysis</code> の名寄せルールで揃えています。</dd>
       <dt>持ち曲{{N_SONGS}}曲</dt>
-      <dd><code>songs/楽曲一覧.md</code> の内訳。オリジナル11曲・ストクレ10曲・ハピスト5曲。
+      <dd><code>songs/楽曲一覧.md</code> の内訳。{{ROOT_BREAKDOWN}}。
         ソロ曲とカバー曲は持ち曲に数えていません。</dd>
       <dt>のべ回数</dt>
       <dd>1公演で2回披露された曲は2回として数えます（8/26 2部の「夏色ラムネ」）。
@@ -593,6 +593,11 @@ def build():
     performed = set(counts)
     n_shows, n_pre, n_all = len(era), len(before), len(rows)
     n_total = sum(counts.values())
+    # 集計の終わりの日と持ち曲の内訳は、本文に直書きせずデータから出す（公演や曲が増えても文面がずれない）。
+    last = max(r['date'] for r in era)
+    y, m, d = (int(x) for x in last.split('-'))
+    by_root = collections.Counter(roots.get(s) for s in canon)
+    breakdown = '・'.join('%s%d曲' % (k, by_root[k]) for k in ROOT_KEY)
     ranked = sorted(counts.items(), key=lambda kv: (-kv[1], canon.index(kv[0])))
 
     # 同じ日に2公演あるときは ①② を付けて区別する。
@@ -723,6 +728,7 @@ def build():
         ('{{N_DONE}}', len(performed)), ('{{N_LEFT}}', len(canon) - len(performed)),
         ('{{PCT}}', round(len(performed) / len(canon) * 100)),
         ('{{N_ALLSHOWS}}', n_all), ('{{N_PRESHOWS}}', n_pre),
+        ('{{LAST_ISO}}', last), ('{{LAST_JA}}', '%d年%d月%d日' % (y, m, d)), ('{{ROOT_BREAKDOWN}}', breakdown),
     ]:
         body = body.replace(key, str(value))
     if '{{' in body:
@@ -738,7 +744,7 @@ def build():
             'family=Noto+Sans+JP:wght@400;500;700&display=swap">\n</head>\n<body>\n'
             '<nav class="top-nav"><a href="./index.html">🍭 ろりぽっぷ!!!!!!! Docs</a></nav>\n'
             '<style>\n%s</style>\n%s\n</body>\n</html>\n' % (e(TITLE), e(desc), CSS, body))
-    OUT.write_text(page, encoding='utf-8')
+    OUT.write_text(page, encoding='utf-8', newline='\n')  # Windows でも LF で書く（差分を増やさない）
     print('%s を書きました（%d公演 / 持ち曲%d曲 / 披露%d曲 / のべ%d回）'
           % (OUT.relative_to(PROJECT_ROOT), n_shows, len(canon), len(performed), n_total))
 
