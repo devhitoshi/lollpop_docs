@@ -1,6 +1,6 @@
 ---
 name: weekly-pipeline
-description: 週刊まとめ記事の「収集→素材化→仕上げ」を一本で連結する。x-account-fetch・x-egosearch・weekly-monthly-draft・setlist-analysis・article-review・x-data-sync の実行順・引数・鮮度確認・件数表示をまとめて引き受け、既存6スキルの責務は変えない。「週刊を最初から最後まで」「先週分を取り直して」「週刊の続きから」「データを最新化して」「いいね数を最新にして」と言われたとき、または実行頻度が不定で前回からの空き期間が分からないときに使う。
+description: 週刊まとめ記事の「収集→素材化→仕上げ」を一本で連結する。x-account-fetch・x-egosearch・weekly-monthly-draft・setlist-analysis・article-review・x-data-sync の実行順・引数・鮮度確認・件数表示をまとめて引き受け、既存6スキルの責務は変えない。「週刊を最初から最後まで」「先週分を取り直して」「週刊の続きから」「いいね数を最新にして」と言われたとき、または実行頻度が不定で前回からの空き期間が分からないときに使う。
 ---
 
 # 週刊パイプライン（収集〜仕上げの連結）
