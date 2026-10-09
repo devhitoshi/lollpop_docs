@@ -33,6 +33,8 @@ def use_threshold(story: dict) -> None:
 THEME_MIX = 0.06  # 背景に混ぜる曲の色の割合
 ROWS = [("vocals", "歌"), ("drums", "ドラム"), ("bass", "ベース"), ("other", "その他の楽器")]
 COLORS = {k: c for k, _, c in fig.STEMS}
+# 和音の段の色。役割ごと。楽器の色（ピンク・墨・青・緑）と取り違えない色にする
+FUNC_COLORS = {"home": "#c48a00", "float": "#8db4e6", "tension": "#e36a2e", "sad": "#7a5cc4", "other": "#c9bfc4"}
 LYRICS = common.LYRICS
 
 
@@ -54,13 +56,23 @@ def on_runs(values: list[float], hop: float, duration: float) -> list[tuple[int,
     return runs
 
 
+def load_chords(song: str, story: dict) -> dict | None:
+    """chords.json があれば読み、story.json の keys（区間のキーの指定）を当てて、度数と役割を入れ直す。"""
+    path = common.data_dir(song) / "chords.json"
+    if not path.exists():
+        return None
+    ch = json.loads(path.read_text(encoding="utf-8"))
+    common.apply_keys(ch, story.get("keys", {}))
+    return ch
+
+
 def split_points(points: list[dict]) -> tuple[list[dict], list[dict]]:
     """出来事を時間順に、上・下・上…と振り分ける。隣どうしの解説が同じ側で詰まらないようにするため。"""
     ordered = sorted(points, key=lambda p: p["span"][0])
     return ordered[0::2], ordered[1::2]
 
 
-def build_map(a: dict, story: dict) -> str:
+def build_map(a: dict, story: dict, ch: dict | None = None) -> str:
     e = html.escape
     dur = a["duration_sec"]
     x = lambda t: LEFT + (W - LEFT) * t / dur
@@ -92,6 +104,22 @@ def build_map(a: dict, story: dict) -> str:
         parts.append(f'<text class="rowname" x="{LEFT - 14}" y="{y + 19}" text-anchor="end" fill="{COLORS[key]}">{label}</text>')
         row_box[key] = (y, y + 26)
         y += 36
+    if ch:
+        # 和音の段。2 拍ごとの役割を色で塗る。家（Ⅰ）に着く所が濃い金色で見える
+        parts.append(f'<rect class="track" x="{LEFT}" y="{y + 7}" width="{W - LEFT}" height="12" rx="6"/>')
+        runs: list[list] = []  # 同じ役割が続く所は 1 本にまとめる（2 拍ごとに切ると縞になって読めない）
+        for h in ch["halfbars"]:
+            if runs and runs[-1][2] == h["function"] and abs(runs[-1][1] - h["t0"]) < 0.05:
+                runs[-1][1] = h["t1"]
+            else:
+                runs.append([h["t0"], h["t1"], h["function"]])
+        for t0, t1, f in runs:
+            if f == "none":
+                continue
+            parts.append(f'<rect x="{x(t0) + 1:.1f}" y="{y}" width="{max(x(t1) - x(t0) - 2, 1):.1f}" height="26" rx="3" fill="{FUNC_COLORS[f]}"/>')
+        parts.append(f'<text class="rowname" x="{LEFT - 14}" y="{y + 19}" text-anchor="end" fill="var(--ink)">和音</text>')
+        row_box["chords"] = (y, y + 26)
+        y += 36
     rows_bottom = y - 10
     height = rows_bottom + LINK
 
@@ -119,6 +147,14 @@ def build_map(a: dict, story: dict) -> str:
             # 帯そのものを囲む出来事の枠と点は、帯より手前に出す
             (band if p["target"] == "band" else parts).append(f'<circle class="dot" cx="{cx:.1f}" cy="{cy}" r="7"/>')
     return f'<svg viewBox="0 0 {W} {height}" width="{W}" height="{height}">' + "\n".join(parts + band) + "</svg>"
+
+
+def chord_legend(ch: dict | None) -> str:
+    if not ch:
+        return ""
+    e = html.escape
+    items = "".join(f'<span><i class="sw" style="background:{FUNC_COLORS[k]}"></i><b>{e(name)}</b>{e(desc)}</span>' for k, (name, desc) in common.FUNCTIONS.items())
+    return f'<div class="legend chords"><span><b>和音の段</b>2 拍ごとの和音を、役割で色分け（機械の推定）</span><span class="sep"></span>{items}</div>'
 
 
 def card(p: dict, side: str) -> str:
@@ -179,7 +215,8 @@ svg { display:block; }
 .legend span { display:inline-flex; align-items:center; gap:8px; }
 .legend i { font-style:normal; font-size:13px; font-weight:700; padding:1px 10px; }
 .legend .f { border:1.5px solid var(--ink); color:var(--ink); } .legend .r { background:var(--primary); color:#fff; }
-.legend b { color:var(--ink); } .legend .sep { width:1px; height:18px; background:var(--axis); }
+.legend b { color:var(--ink); }
+.legend.chords { margin-top:10px; } .legend .sw { width:22px; height:14px; padding:0; border-radius:2px; } .legend .sep { width:1px; height:18px; background:var(--axis); }
 .foot { margin-top:14px; padding-top:14px; border-top:1px solid var(--axis); font-size:13px; color:var(--muted); line-height:1.8; }
 """
 
@@ -189,6 +226,7 @@ def build(song: str) -> str:
     a = fig.load(song)
     story = json.loads((common.data_dir(song) / "story.json").read_text(encoding="utf-8"))
     use_threshold(story)
+    ch = load_chords(song, story)
     top, bottom = split_points(story["points"])
     glossary = "".join(f"<span><b>{e(g['term'])}</b>{e(g['meaning'])}</span>" for g in story["glossary"])
     foot = " ".join(story["notes"]) + f" 歌詞の引用は説明に必要な範囲の部分引用です。ファンによる非公式の図です。解析日: {a['analyzed_at']}。作図: AIぽっぱー"
@@ -204,15 +242,30 @@ def build(song: str) -> str:
   <p class="lead">{e(story["lead"])}</p>
 </div>
 <div class="cards upper">{"".join(card(p, "top") for p in top)}</div>
-{build_map(a, story)}
+{build_map(a, story, ch)}
 <div class="cards">{"".join(card(p, "bottom") for p in bottom)}</div>
 <div class="legend"><span><i class="f">音</i>データで確かめた、音で起きていること</span><span><i class="r">読み</i>そこから考えたこと（解釈）</span><span class="sep"></span>
 <span>真ん中の帯は曲の流れ（横が時間、0:00〜{fig.mmss(a["duration_sec"])}）。色の帯は、その楽器が鳴っている所</span><span class="sep"></span>{glossary}</div>
+{chord_legend(ch)}
 <p class="foot">{e(foot)}</p>
 </div></body></html>"""
 
 
-def run_check(c: dict, a: dict) -> bool:
+def degree_core(h: dict) -> str:
+    """度数を、根音＋（短調の和音なら m）だけにそろえる。7th・sus4・分数（/ベース）は見ない。"""
+    roman = h["degree"].split("/")[0]
+    base = next(r for r in sorted(common.ROMAN, key=len, reverse=True) if roman.startswith(r))
+    return base + ("m" if h["quality"] in common.MINOR else "")
+
+
+def section_halfbars(ch: dict, name: str) -> list[dict]:
+    secs = [s for s in ch["sections"] if s["name"] == name]
+    if not secs:
+        raise SystemExit(f"chords.json に区間が無い: {name}")
+    return [h for s in secs for h in ch["halfbars"] if s["start"] - 0.3 <= h["t0"] < s["end"] - 0.3]
+
+
+def run_check(c: dict, a: dict, ch: dict | None = None) -> bool:
     """story.json の checks の 1 項目を、データから確かめる。書き方は data/README の「checks」。"""
     L, hop = a["_loudness"], a["_hop"]
     sec = lambda k, t: sum(L[k][int(t / hop) : int((t + 1) / hop)]) * hop
@@ -250,6 +303,27 @@ def run_check(c: dict, a: dict) -> bool:
         return lines[c["line_contains"]]["start"] < c["t"] < lines[c["line_contains"]]["end"]
     if "line_starts_within" in c:
         return 0 <= lines[c["line_starts_within"]]["start"] - c["after"] < c["sec"]
+    if any(k in c for k in ("chord_seq", "home_in", "key_shift", "function_at")) and ch is None:
+        raise SystemExit("和音の check があるのに chords.json が無い。先に chords.py を回す")
+    if "chord_seq" in c:
+        # 区間の中に、度数の並びがそのまま（同じ和音の続きは 1 つにまとめて）出てくる
+        seq = [degree_core(h) for h in section_halfbars(ch, c["chord_seq"]) if h["degree"]]
+        seq = [d for i, d in enumerate(seq) if i == 0 or d != seq[i - 1]]
+        want = c["degrees"]
+        return any(seq[i : i + len(want)] == want for i in range(len(seq)))
+    if "home_in" in c:
+        # 区間で家（Ⅰ）に着くか。none＝一度も着かない、some＝着く
+        n = sum(h["function"] == "home" for h in section_halfbars(ch, c["home_in"]))
+        return n == 0 if c["state"] == "none" else n > 0
+    if "function_at" in c:
+        # その秒の和音の役割
+        h = next(h for h in ch["halfbars"] if h["t0"] <= c["function_at"] < h["t1"])
+        return h["function"] == c["is"]
+    if "key_shift" in c:
+        # 2 つの区間のキーの差（半音の数。上がるが正）
+        k = {s["name"]: s["key_tonic"] for s in ch["sections"]}
+        d = (common.NOTES.index(k[c["key_shift"][1]]) - common.NOTES.index(k[c["key_shift"][0]])) % 12
+        return (d if d <= 6 else d - 12) == c["semitones"]
     raise SystemExit(f"知らない種類の check: {c}")
 
 
@@ -258,6 +332,7 @@ def check(song: str) -> bool:
     a = fig.load(song)
     story = json.loads((common.data_dir(song) / "story.json").read_text(encoding="utf-8"))
     use_threshold(story)
+    ch = load_chords(song, story)
     raw = (LYRICS / f"{song}.md").read_text(encoding="utf-8").splitlines()
     tests = {}
     for p in story["points"]:
@@ -265,7 +340,7 @@ def check(song: str) -> bool:
         if not p.get("checks"):
             tests[f"{tag}: 事実を確かめる checks が書いてある"] = False
         for c in p.get("checks", []):
-            tests[f"{tag}: {c['say']}"] = run_check(c, a)
+            tests[f"{tag}: {c['say']}"] = run_check(c, a, ch)
         for q in p["quotes"]:
             tests[f"{tag}: 引用「{q['text']}」が歌詞 {q['line_no']} 行目のとおり"] = raw[q["line_no"] - 1].strip() == q["text"]
         tests[f"{tag}: 場面の時刻が {p['section']} の中"] = any(x["name"] == p["section"] and x["start"] - 0.01 <= p["time"] < x["end"] for x in a["sections"])

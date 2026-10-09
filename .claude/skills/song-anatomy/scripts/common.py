@@ -81,3 +81,59 @@ def mmss(t: float) -> str:
 
 def compact(text: str) -> str:
     return re.sub(r"\s+", "", text)
+
+
+# 和音（chords.json）。図のスクリプトからも使うので、ここに置く（標準ライブラリだけ）
+NOTES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+ROMAN = ["Ⅰ", "♭Ⅱ", "Ⅱ", "♭Ⅲ", "Ⅲ", "Ⅳ", "♯Ⅳ", "Ⅴ", "♭Ⅵ", "Ⅵ", "♭Ⅶ", "Ⅶ"]
+MINOR = ("m", "m7")
+# 和音の役割。初心者向けの言い方と、図の凡例に出す一行説明
+FUNCTIONS = {
+    "home": ("家", "Ⅰ。落ち着く場所。ここに来ると終わった感じがする"),
+    "float": ("浮く", "Ⅳ。家から少し離れて、ふわっと浮く"),
+    "tension": ("張る", "Ⅴ。家に帰りたくなる、張りつめた和音"),
+    "sad": ("切ない", "Ⅵm・Ⅲm・Ⅱm。暗く、切ない側の和音"),
+    "other": ("そのほか", "上のどれでもない和音（借りてきた和音など）"),
+}
+
+
+def chord_function(interval: int, quality: str) -> str:
+    """主音から数えた半音の数と和音の形から、役割（FUNCTIONS の鍵）を返す。"""
+    if interval == 0 and quality not in MINOR:
+        return "home"
+    if interval == 5 and quality not in MINOR:
+        return "float"
+    if interval == 7 and quality not in MINOR:
+        return "tension"
+    if interval in (2, 4, 9) and quality in MINOR:
+        return "sad"
+    return "other"
+
+
+def apply_keys(chords: dict, keys: dict[str, str]) -> None:
+    """区間のキーを決め（keys で上書き。鍵は構成名、値は長調の主音）、半小節ごとの度数・役割とキーの動きを入れ直す。
+
+    同じ名前の区間（「間奏」など）は、名前だけで書くと全部に効く。1 つだけ変えるときは「間奏#2」（2 回目の間奏）と書く。
+    """
+    seen: dict[str, int] = {}
+    for s in chords["sections"]:
+        seen[s["name"]] = seen.get(s["name"], 0) + 1
+        nth = f'{s["name"]}#{seen[s["name"]]}'
+        if nth in keys or s["name"] in keys:
+            s["key_tonic"], s["key_source"] = keys.get(nth, keys.get(s["name"])), "story"
+    for h in chords["halfbars"]:
+        sec = next((s for s in chords["sections"] if s["start"] - 0.3 <= h["t0"] < s["end"] - 0.3), None)
+        h["key_tonic"] = sec["key_tonic"] if sec else None
+        if h["root"] is None or sec is None:
+            h["degree"], h["function"] = None, ("none" if h["root"] is None else "other")
+            continue
+        tonic = NOTES.index(sec["key_tonic"])
+        iv = (NOTES.index(h["root"]) - tonic) % 12
+        h["degree"] = ROMAN[iv] + h["quality"] + (f"/{ROMAN[(NOTES.index(h['bass']) - tonic) % 12]}" if h["bass"] else "")
+        h["function"] = chord_function(iv, h["quality"])
+    changes = []
+    for p, q in zip(chords["sections"], chords["sections"][1:]):
+        d = (NOTES.index(q["key_tonic"]) - NOTES.index(p["key_tonic"])) % 12
+        if d:
+            changes.append({"from_section": p["name"], "to_section": q["name"], "at": q["start"], "semitones": d if d <= 6 else d - 12})
+    chords["key_changes"] = changes
