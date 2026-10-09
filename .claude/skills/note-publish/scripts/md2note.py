@@ -8,7 +8,7 @@
 
 変換の決めごと（2026-09-29 に note の編集画面で確かめた挙動に合わせてある）:
 - 先頭の `# ` がタイトル。本文には入れない（タイトル欄に別で入れる）
-- HTML コメント（入稿メモ）と「## 編集メモ」以降は落とす
+- HTML コメント（入稿メモ）と、行頭の「編集メモ」以降は落とす（見出しの有無・階層は問わない）
 - `> ` は引用ブロック。全記事共通の注意書きもこれ
 - 単独行の URL は <p>URL</p> のまま残す（あとで embedBatch がカードにする）
 - 【画像…】の行は <p> のまま残す（あとで pasteImgAt が画像に差し替える）
@@ -36,7 +36,8 @@ def inline(t: str) -> str:
 
 def convert(src: str, header_mark: str) -> tuple[str, str]:
     src = re.sub(r'<!--.*?-->', '', src, flags=re.S)
-    src = re.split(r'^## 編集メモ', src, flags=re.M)[0]
+    # 原稿によって「## 編集メモ」「### 編集メモ」「編集メモ（note には載せない）」（見出しなし）と書き方が違う
+    src = re.split(r'^(?:#{1,6} +)?編集メモ', src, flags=re.M)[0]
     lines = src.split('\n')
     h1 = next(i for i, l in enumerate(lines) if l.startswith('# '))
     title = lines[h1][2:].strip()
