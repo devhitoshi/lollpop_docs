@@ -14,7 +14,7 @@
 - **文体と表現規約**: note 用記事は [`prompts/write/style_ai_poppar.md`](./prompts/write/style_ai_poppar.md)（AIぽっぱー）に従う。note は表組み不可・見出しは2階層まで。
   同ファイル末尾の「使わない言葉・使い方」（**「地下アイドル」と言わない／「レア曲」と書かない／メンバー写真は載せてよいがクレジット必須（2026-09-29〜、直リンクは不可）／おすすめ曲は通算と直近を併記**）は記事・動画・字幕・キャプション・ハッシュタグすべてに適用する。
 - **メンバー情報**: 基本情報の正は [`members/members.md`](./members/members.md)。人物像は [`members/`](./members/) のデータに根拠がある範囲だけ書く。卒業メンバーの卒業後の活動・私生活には踏み込まない。運営の意図・体調・人間関係の推測は書かない。
-- **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計・公演データの整合性チェック・セトリ白書の図表は `.claude/skills/setlist-analysis`、曲調解析（どんな曲かの説明。Antigravity に聴かせてオーナーが確認する）は `.claude/skills/music-analysis`、公式・メンバーのX投稿取得は `.claude/skills/x-account-fetch`、周囲の反応（エゴサーチ）は `.claude/skills/x-egosearch`（**候補を人がスワイプで仕分けるなら `.claude/skills/x-egosearch-review`**）、週刊・月刊の下書きは `.claude/skills/weekly-monthly-draft`（**収集〜仕上げを一本で回すなら `.claude/skills/weekly-pipeline`**。前回実行の翌日から今日までを既定期間にするので、毎週同じ曜日でなくてよい）、posfie（Xポストを並べるまとめ）は `.claude/skills/posfie-summary`、メンバーの人物像の更新は `.claude/skills/member-profile-refresh` の手順に従う（**節の定義と禁止事項の正は [`members/README.md`](./members/README.md)。書く前に読む**）。コール表のSNS画像はスキルにしていないので、[`resources/call_sheet_requirements.md`](./resources/call_sheet_requirements.md) を読んでから作る。
+- **定型作業**: 歌詞ドキュメント作成は `.claude/skills/lyrics-management`、セトリ集計・公演データの整合性チェック・セトリ白書の図表は `.claude/skills/setlist-analysis`、曲調解析（どんな曲かの説明。Antigravity に聴かせてオーナーが確認する）は `.claude/skills/music-analysis`、曲の読み解き図・解剖図（1 曲を楽器ごとに分けて、音の事実と読みを 6 つの場面で見せる図。**曲の色は作る前にオーナーに聞く**）は `.claude/skills/song-anatomy`、公式・メンバーのX投稿取得は `.claude/skills/x-account-fetch`、周囲の反応（エゴサーチ）は `.claude/skills/x-egosearch`（**候補を人がスワイプで仕分けるなら `.claude/skills/x-egosearch-review`**）、週刊・月刊の下書きは `.claude/skills/weekly-monthly-draft`（**収集〜仕上げを一本で回すなら `.claude/skills/weekly-pipeline`**。前回実行の翌日から今日までを既定期間にするので、毎週同じ曜日でなくてよい）、posfie（Xポストを並べるまとめ）は `.claude/skills/posfie-summary`、メンバーの人物像の更新は `.claude/skills/member-profile-refresh` の手順に従う（**節の定義と禁止事項の正は [`members/README.md`](./members/README.md)。書く前に読む**）。コール表のSNS画像はスキルにしていないので、[`resources/call_sheet_requirements.md`](./resources/call_sheet_requirements.md) を読んでから作る。
 - **調査・分析**: 戦略の定点観測（フォロワー数・UGC・公式の発信量）は `.claude/skills/strategy-metrics`、Web 調査（市場・競合・業界）は `.claude/skills/web-research`。出典と確認日を付け、評価語を書かない。調査メモは `strategy/research_YYYY-MM-DD_<題名>.md`。
 - **記事の公開前レビュー**: note 記事を書き終えたら、PR を作る前に `.claude/skills/article-review`（機械チェック＋読み取り専用エージェント `article-review`）を通す。手戻りの多い「公演の抜け」「公演数の誤り」「表記ゆれ」「文体の崩れ」を資料と突き合わせて拾う。
 - **公開済み note の更新**: `.claude/skills/article-refresh`（差分検知→改稿→レビュー→貼り替え手順書。公開 URL と最終同期日は `articles/公開一覧.md`）。
@@ -55,6 +55,7 @@ GitHub の差分画面・PR 画面は開かれない前提で応答を組み立�
 | --- | --- |
 | 新しい歌詞 | `songs/lyrics/[曲名].md`（公式表記のまま） |
 | 曲調データ | 曲の印象は `songs/analysis/song_character.md`（AI の採点＋オーナーの確認。元データは `songs/analysis/character/`）、数値は `songs/analysis/[曲名].md`＋`song_features.csv`（スキルが自動生成） |
+| 曲の読み解き図・解剖データ | `songs/analysis/anatomy/[曲名]/`（図・文面 `story.json`・楽器ごとの時系列データ。スキル `song-anatomy` が作る）。分離した音は `audio/stems/`、確認ページは `work/anatomy/`（どちらも追跡しない） |
 | note記事（シリーズ・単発とも） | `articles/`（シリーズは専用ディレクトリ、単発は `articles/単発/`。詳細は `articles/README.md`） |
 | posfie まとめ（Xポストを並べる形式） | `articles/posfie/<開始日>_<終了日>.md`（貼るポストと順番の設計図。posfie 上の実体は別。詳細は `articles/posfie/README.md`） |
 | 公演・セトリのデータ | `events/data_event.csv`（一次データ）。集計は `events/monthly_setlist_ranking.csv`。入れ方と TimeTree の使い方は [`events/README.md`](./events/README.md) |
@@ -82,6 +83,10 @@ GitHub の差分画面・PR 画面は開かれない前提で応答を組み立�
 - **曲の印象（曲調）**: 正は [`songs/analysis/README.md`](./songs/analysis/README.md)。2026-10-01 にオリジナル12曲の位置（かわいい↔かっこいい × 湧き↔エモい）を、Antigravity に聴かせた採点＋オーナーの確認で作った（一覧は `songs/analysis/song_character.md`）。
   記事 `articles/単発/18_12曲の地図/`（図2枚つき）は **2026-10-04 に公開済み**（`n13c85d209346`。URL は `articles/公開一覧.md`）。
   未着手: 全楽曲解説・歌詞考察の各記事に曲の印象を足す改稿（オーナーが検討中）。ストクレ曲・ハピスト曲は音源が無く対象外。
+  **読み解き図**（2026-10-02）: 「シーソーゲーム」「ろりぽっぷ!!!!!!!」の 2 曲で型を作り、スキル `song-anatomy` にした（`songs/analysis/anatomy/`）。
+  同日に残り 10 曲も図まで作り、**オリジナル 12 曲すべて下書きがある**（曲の色は 12 曲ともオーナーが選択。表は `song-anatomy/SKILL.md`）。
+  12 曲とも**オーナーの耳での確認待ち**（構成の境目・読み。`story.json` の `status` が `draft`）。確認前は記事・動画に使わない。曲ごとの要確認点は `claude-work/20261002_読み解き図残り10曲/README.md`。
+  **コード進行**（2026-10-09 試行）: シーソーゲーム 1 曲で、分離音源から自作の推定を試した（サビは王道進行、A・B メロ→サビで半音上がる。後者はオーナーの耳で確認）。記録は `claude-work/20261009_コード進行の試し/`。
 - **週刊・月刊まとめ**: 正は [`articles/週刊まとめ/README.md`](./articles/週刊まとめ/README.md)・[`articles/月刊まとめ/README.md`](./articles/月刊まとめ/README.md)。週刊は8月分までと 9/29〜10/5 号（2026-10-06）が公開済み。月刊は7月号〜9月号まで公開済み（7月号の note には「外からの反応」の未実施の節が残る。オーナー判断でそのまま）。週刊 9/1〜9/7 号は note に題名未設定の下書き（2026-09-10）があるだけで未公開。
   X 収集は API 一本化済み（2026-09-02〜。Grok 版 `prompts/collect/x_collect.md` は予備）。取得データは `work/x_fetch/`、退避は `x-data-sync`。
 - **スターターパック・全楽曲解説（公開済み note の保守）**: 正は [`articles/スターターパック/README.md`](./articles/スターターパック/README.md)（公開 URL の表あり）。2026-09-02〜04 に 3 本立て化と全楽曲解説の最新化を実施。

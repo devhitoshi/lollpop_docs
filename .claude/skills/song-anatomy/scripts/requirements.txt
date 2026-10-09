@@ -1,0 +1,11 @@
+# Libraries for the song-anatomy skill (separate.py / align.py / extract.py).
+# Keep this file ASCII-only: pip on Windows reads it as cp932 and fails on Japanese comments.
+# Install into the skill's own venv, NOT the system Python (torch versions would clash):
+#     python -m venv .claude/skills/song-anatomy/.venv
+#     .claude/skills/song-anatomy/.venv/Scripts/python -m pip install torch==2.5.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cpu
+#     .claude/skills/song-anatomy/.venv/Scripts/python -m pip install -r .claude/skills/song-anatomy/scripts/requirements.txt
+# The figure scripts (build_*.py) need only playwright and run on the system Python.
+demucs>=4.0
+stable-ts>=2.19
+librosa>=0.10
+soundfile>=0.12
