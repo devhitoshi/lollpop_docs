@@ -14,6 +14,27 @@ Grok でやっていた `x_collect.md` の手順2を、API で「漏れなく集
 - 残高の確認: `curl -s -H "x-api-key: $TWITTERAPI_IO_KEY" https://api.twitterapi.io/oapi/my/info`。1,000ツイート＝15,000クレジット（$0.15）
 - **クレジットの購入・自動チャージ登録は承認なしに行わない**（x-account-fetch と同じ）
 
+## 週刊は 3 種類だけ（2026-10-13〜）
+
+**週刊の「現場の反応」は、`#ろりぽっぷ`・メンバー固有のタグ・メンバーの返信先の 3 種類だけから選ぶ**（オーナー決定「エゴサは A」）。
+下の手順（3 クエリの広い検索＋判定）は**月刊と定点観測（反応の件数を数えるとき）だけ**で回す。
+
+```bash
+python .claude/skills/x-egosearch/scripts/weekly_reactions.py --since <since> --until <until> --dry-run   # 取る件数と費用
+python .claude/skills/x-egosearch/scripts/weekly_reactions.py --since <since> --until <until> --yes
+```
+
+- タグは毎日取得（`x-account-fetch` の `daily_fetch.py`）の `hashtags_YYYY-MM.jsonl` を使う。毎日取得がまだ取っていない日だけ同じ検索で取り足す
+- 返信先は、公式・メンバーの取得データの返信（`inReplyToId`）から拾い、手元に無い分だけ ID 指定（`/twitter/tweets`）で取る。返信の数そのものも数える
+- 出力: `work/x_fetch/reactions3_<since>_<until>.md`（日時順・本文つき。コミットしない）と `data/x/reactions3_<since>_<until>_summary.txt`（件数だけ）
+- 判定ファイルは書かない（3 種類はほぼ誤爆が無い）。読んで記事に使うものを選ぶだけ。オーナー本人と見られるアカウントには `〔引用しない〕` が付く
+- 期間より前の投稿への返信（週の初日に前の週の投稿へ返したもの）は一覧から外し、件数だけ summary に残す
+- **返信先は、メンバーの取得データの完全さに頼る。** 毎日取得には取りこぼしがある（10/11 の午前が 5 人分まとめて 31 件欠けていた。2026-10-13 発見）。
+  返信の数がおかしいと感じたら、`fetch_accounts.py` でその期間を取り直してから回す
+- 週刊パイプライン（`weekly-pipeline`）の `--stage collect` が既定でこれを呼ぶ。広い検索にしたいときは `--full-egosearch`
+- 経緯: 9/29〜10/5 号・10/6〜10/12 号で、広い検索の 9 割近くが別人の「くるみん」・同名の店・お菓子・同人サークルで、読む手間に対して記事に使える投稿が少なかった。
+  10/6〜10/12 号を 3 種類で書いたところ、141 件・46 人で記事が書けた
+
 ## 手順
 
 1. **集める**

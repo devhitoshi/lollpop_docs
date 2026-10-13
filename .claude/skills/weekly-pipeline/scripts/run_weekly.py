@@ -4,8 +4,10 @@
 毎回書き直されていたワンライナー（鮮度確認、いいね数を最新化するための行削除、3段階の件数表示）
 だけを引き受ける。各段階の実体は必ず本物のスクリプトを subprocess で呼ぶ（import しない）。
 
-  --stage collect  : 鮮度表示 → (--refresh) → fetch_accounts.py → fetch_egosearch.py → triage_egosearch.py（初回）
-  --stage material : triage_egosearch.py（--decisions・最終）→ build_material.py → check_event_consistency.py
+  --stage collect  : 鮮度表示 → (--refresh) → fetch_accounts.py → weekly_reactions.py（反応の候補は 3 種類）
+  --stage material : build_material.py → check_event_consistency.py
+  （--full-egosearch を付けると、反応を従来の広い検索で集める: collect は fetch_egosearch.py → triage_egosearch.py、
+    material は先に triage_egosearch.py --decisions を回す）
   --stage finish   : check_article.py → analyze_monthly_setlist.py → sync_x_data.py push → (article-refresh/check_stale.py があれば)
 
 期間の既定は「前回実行の翌日〜今日」。状態は work/x_fetch/.pipeline_state.json に持つ（無ければ
@@ -16,6 +18,9 @@ work/x_fetch/*.jsonl の最新投稿日から推定し、確認を求める）�
     python .claude/skills/weekly-pipeline/scripts/run_weekly.py --stage collect --since 2026-09-01 --until 2026-09-07 --yes
     python .claude/skills/weekly-pipeline/scripts/run_weekly.py --stage material --since 2026-09-01 --until 2026-09-07
     python .claude/skills/weekly-pipeline/scripts/run_weekly.py --stage finish --since 2026-09-01 --until 2026-09-07
+
+週刊の「現場の反応」は 2026-10-13 から 3 種類（#ろりぽっぷ・メンバー固有のタグ・メンバーの返信先）で集める（オーナー決定）。
+広い検索（x-egosearch の 3 クエリ）は月刊と定点観測に残し、週刊では --full-egosearch のときだけ回す。
 """
 import argparse
 import glob
@@ -312,6 +317,20 @@ def stage_collect(args, since, until):
         )
     run(fetch_accounts_cmd, args.dry_run)
 
+    if not args.full_egosearch:
+        # 週刊の既定: 反応の候補は 3 種類（#ろりぽっぷ・メンバーのタグ・メンバーの返信先）。
+        # dry-run でも見積もりを出したいので実際に呼ぶ（--dry-run を渡すので API は叩かない）
+        reactions_cmd = py(
+            '.claude/skills/x-egosearch/scripts/weekly_reactions.py',
+            '--since', since, '--until', until,
+        ) + (['--dry-run'] if args.dry_run else ['--yes'])
+        run(reactions_cmd, False)
+        if not args.dry_run:
+            save_state(until, 'collect')
+        reactions_md = os.path.join(X_FETCH_DIR, f'reactions3_{since}_{until}.md')
+        print(f"\n次: {reactions_md} を読んで記事に使う反応を選び、--stage material")
+        return
+
     fetch_egosearch_cmd = py(
         '.claude/skills/x-egosearch/scripts/fetch_egosearch.py',
         '--since', since, '--until', until,
@@ -348,7 +367,23 @@ def find_orphan_section(material_path):
     return m.group(0) if m else None
 
 
+def print_reactions3_counts(since, until):
+    path = os.path.join(DATA_X_DIR, f'reactions3_{since}_{until}_summary.txt')
+    if os.path.exists(path):
+        print("\n" + open(path, encoding='utf-8').read().rstrip())
+    else:
+        print(f"\n注意: {path} が無い（--stage collect を先に回す）")
+
+
 def stage_material(args, since, until):
+    if args.full_egosearch:
+        material_full_egosearch(args, since, until)
+    elif not args.dry_run:
+        print_reactions3_counts(since, until)
+    build_and_check(args, since, until)
+
+
+def material_full_egosearch(args, since, until):
     decisions_path = os.path.join(DATA_X_DIR, f'egosearch_decisions_{since}_{until}.txt')
     if not os.path.exists(decisions_path):
         msg = f"判定ファイルが無い: {decisions_path}\n先に data/x/egosearch_decisions_{since}_{until}.txt を書いてから material に進む。"
@@ -369,6 +404,8 @@ def stage_material(args, since, until):
     else:
         print_egosearch_counts(since, until, 'material')
 
+
+def build_and_check(args, since, until):
     material_out = os.path.join(X_FETCH_DIR, f'draft_material_{since}_{until}.md')
     build_cmd = py(
         '.claude/skills/weekly-monthly-draft/scripts/build_material.py',
@@ -455,6 +492,8 @@ def parse_args():
     p.add_argument('--dry-run', action='store_true',
                    help='実行するコマンドを表示するだけで、APIを叩かず状態ファイルも変えない')
     p.add_argument('--yes', action='store_true', help='確認プロンプトを省略する')
+    p.add_argument('--full-egosearch', action='store_true',
+                   help='反応を従来の広い検索（fetch_egosearch.py の 3 クエリ＋判定）で集める。既定は 3 種類（weekly_reactions.py）')
     p.add_argument('--article', help='finish: 記事のパス（省略時は articles/週刊まとめ/<since>_<until>.md）')
     return p.parse_args()
 
