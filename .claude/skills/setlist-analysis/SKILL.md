@@ -75,6 +75,12 @@ description: 「ろりぽっぷ!!!!!!!」のセットリストを月ごとに集
 `scripts/daily_setlist_pr.py` を、毎日取得（`x-account-fetch` の `daily_fetch.py`）の直後に
 タスクスケジューラから回す（同じタスク `lollpop_daily_fetch` の2番目のアクション）。
 
+- **専用ワークツリー `projects/lollpop_docs_wt_cron` から回す**（2026-10-13〜）。タスクは `scripts/run_latest.py --data-root <手元のチェックアウト>` を呼び、
+  これがワークツリーを `origin/main` に合わせてから `daily_setlist_pr.py` を実行する。手元のチェックアウトは別セッションがブランチを
+  切り替えて使うので、そこのスクリプトを呼ぶと main の修正が効かなかった（#85・#90 が効かなかった）。取得データとログは手元のまま
+- **専用ワークツリーでは作業しない**（毎回 `checkout --force` で戻すので変更は消える）。消してしまったら
+  `x-account-fetch/scripts/register_daily_task.ps1` を再実行すると作り直してタスクも登録し直す
+
 - **やること**: 公式のセトリ投稿を読み、`events/data_event.csv` の**セトリ列が空の行**を埋め、
   月次集計を回し、ブランチ `auto/setlist-YYYYMMDD` を push して **PR を作り、そのままマージする**
 - **自動でマージする**（2026-10-13〜、オーナー判断。claude-work#137）。人のマージ待ちで PR #79 が 9 日放置され、

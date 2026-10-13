@@ -239,7 +239,15 @@ def main():
     ap.add_argument('--dry-run', action='store_true', help='CSV も git も触らず、何をするかだけ出す')
     ap.add_argument('--repo', default='devhitoshi/lollpop_docs', help='PR を作るリポジトリ')
     ap.add_argument('--no-merge', action='store_true', help='PR を作るところで止め、マージしない')
+    ap.add_argument('--data-root', help='取得データ（work/x_fetch/）とログを置いているチェックアウト。'
+                    '既定はこのスクリプトのあるリポジトリ。毎朝のタスクは専用ワークツリーから手元のチェックアウトを指す（run_latest.py）')
     args = ap.parse_args()
+
+    global TWEETS, LOG_PATH
+    if args.data_root:
+        data_root = os.path.abspath(args.data_root)
+        TWEETS = os.path.join(data_root, 'work', 'x_fetch', 'lollipop_1116.jsonl')
+        LOG_PATH = os.path.join(data_root, 'work', 'x_fetch', 'logs', 'daily_setlist_pr.log')
 
     os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
     log = open(LOG_PATH, 'a', encoding='utf-8')
