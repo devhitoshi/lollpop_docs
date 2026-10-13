@@ -136,7 +136,9 @@ def tweet_jst_date(t):
 
 
 SETLIST_HINT = re.compile(r'(セトリ|setlist|set\s*list)', re.I)
-NUMBERED_LINE = re.compile(r'^\s*(SE|M\d|0?\d{1,2})[\s\.．:：、)）]', re.M)
+# 「16:30〜」のような時刻で始まる行は曲番号と数えない。9/27 に MC の時間訂正の投稿（時刻の行が3つ）を
+# セトリと取り違え、毎朝の自動取り込みが「投稿2本に対して行が1行」で止まったため（claude-work#137）
+NUMBERED_LINE = re.compile(r'^\s*(SE|M\d|0?\d{1,2})(?:[\s\.．、)）]|[:：](?!\s*\d))', re.M)
 
 
 ANNOUNCE_HINT = re.compile(r'ライブ情報|出演情報|出演決定|チケット|予約|OPEN|START', re.I)
