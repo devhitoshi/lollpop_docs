@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""公式のセトリ投稿から events/data_event.csv の空欄を埋め、PR を作るところまでを毎朝やる。
+"""公式のセトリ投稿から events/data_event.csv の空欄を埋め、PR を作ってマージするところまでを毎朝やる。
 
-**マージはしない。** 自動で main に入れず、朝に人が PR を見て判断する。公式投稿は自由文なので、
-同日2部制のどちらの行か・表記ゆれ・中止や順延の判断は機械では詰め切れないため。
+**PR はそのまま自動でマージする**（2026-10-13〜、オーナー判断。claude-work#137）。人のマージ待ちで PR が
+9日放置され、その間の取り込みが止まったため。触るのは投稿と行が対応づいたものだけで、判断が要るもの
+（行が無い・決めきれない・名寄せできない曲）は PR 本文とログに残るので、記録としてはそちらを見る。
+`--no-merge` を付けると PR を作るところで止まる（従来の動作）。
 
 - **同日2公演は全体の3分の1あるので、投稿を行に割り当てて埋める。**手がかりは会場（🍬の行）、
   何公演目か（1️⃣本目・2部）、公演名の類似度。どれを当てるか決めきれない日はその日ごと触らない
@@ -10,13 +12,15 @@
   PR 本文に「自動では触らなかったもの」として並べるだけで触らない
 - 作業は origin/main から作るテンポラリのワークツリーで行う。**手元の作業ツリーには触らない**
   （未コミットの変更を巻き込まないため。ローカルが毎日 main と同じとは限らない）
-- 未マージの auto/setlist-* が既にあるときは何もしない（PR が積み上がって競合するのを避ける）
+- 未マージの auto/setlist-* が残っていたら（前日のマージ失敗など）、閉じてから origin/main の現物で作り直す。
+  `--no-merge` のときだけは従来どおり何もしない（PR が積み上がって競合するのを避ける）
 - 状態ファイルを持たない。毎回「直近 --days 日の投稿」と CSV の現物を突き合わせて考える
 - ログは work/x_fetch/logs/daily_setlist_pr.log
 
 使い方:
     python .claude/skills/setlist-analysis/scripts/daily_setlist_pr.py --dry-run
     python .claude/skills/setlist-analysis/scripts/daily_setlist_pr.py
+    python .claude/skills/setlist-analysis/scripts/daily_setlist_pr.py --no-merge
 """
 
 import argparse
@@ -234,6 +238,7 @@ def main():
     ap.add_argument('--days', type=int, default=7, help='何日前までの投稿を見るか（既定: %(default)s）')
     ap.add_argument('--dry-run', action='store_true', help='CSV も git も触らず、何をするかだけ出す')
     ap.add_argument('--repo', default='devhitoshi/lollpop_docs', help='PR を作るリポジトリ')
+    ap.add_argument('--no-merge', action='store_true', help='PR を作るところで止め、マージしない')
     args = ap.parse_args()
 
     os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
@@ -312,12 +317,22 @@ def main():
         return 1
     run(['git', 'fetch', 'origin', 'main'], cwd=project_root)
     open_prs = run(['gh', 'pr', 'list', '-R', args.repo, '--state', 'open',
-                    '--json', 'headRefName', '-q', '.[].headRefName'], cwd=project_root)
-    if any(b.startswith(BRANCH_PREFIX) for b in open_prs.split()):
+                    '--json', 'number,headRefName', '-q', '.[] | "\\(.number) \\(.headRefName)"'],
+                   cwd=project_root)
+    stale = [l.split() for l in open_prs.splitlines() if len(l.split()) == 2 and l.split()[1].startswith(BRANCH_PREFIX)]
+    if stale and args.no_merge:
         print("未マージの %s* が残っている。積み上げないので今日は何もしない" % BRANCH_PREFIX)
         return 0
+    for num, head in stale:
+        # 中身は毎回 origin/main の現物から作り直すので、残っていた PR を閉じても失うものは無い
+        run(['gh', 'pr', 'close', num, '-R', args.repo, '--comment',
+             "自動マージできずに残っていた PR。今朝の実行が origin/main の現物から作り直すので閉じる"],
+            cwd=project_root, check=False)
+        run(['git', 'push', 'origin', '--delete', head], cwd=project_root, check=False)
+        print("残っていた自動 PR #%s（%s）を閉じた。作り直す" % (num, head))
 
     branch = BRANCH_PREFIX + date.today().strftime('%Y%m%d')
+    run(['git', 'branch', '-D', branch], cwd=project_root, check=False)  # 同じ日に回し直したときの残り
     wt = tempfile.mkdtemp(prefix='lollpop_setlist_')
     try:
         run(['git', 'worktree', 'add', '--detach', wt, 'origin/main'], cwd=project_root)
@@ -345,7 +360,9 @@ def main():
 
         days = '・'.join(sorted({f['date'] for f in applied}))
         body = ["公式X（@lollipop_1116）のセトリ投稿から、`events/data_event.csv` の空欄を埋めた。",
-                "**毎朝のタスクスケジューラが自動で作った PR。中身を人が確認してからマージする。**",
+                "**毎朝のタスクスケジューラが自動で作った PR。中身を人が確認してからマージする。**" if args.no_merge
+                else "**毎朝のタスクスケジューラが自動で作り、そのままマージした PR。**"
+                     "違っていたら、main で直接直すか、直す PR を別に作る。",
                 "", "## 埋めた公演", ""]
         for f in applied:
             body.append("- **%s「%s」**（%d 項目） %s"
@@ -357,10 +374,13 @@ def main():
                             % '、'.join(f['unknown']))
         body += ["", "## 自動では触らなかったもの", ""]
         body += [("- %s %s" % r) for r in review] if review else ["なし"]
-        body += ["", "## チェック結果", "", "```", checks.strip(), "```", "",
-                 "## 判断待ち", "",
-                 "- この内容でよければマージする。違っていれば直してからマージする",
-                 "- 「自動では触らなかったもの」の公演は、手で行を足すか埋める必要がある"]
+        body += ["", "## チェック結果", "", "```", checks.strip(), "```", "", "## 判断待ち", ""]
+        if args.no_merge:
+            body.append("- この内容でよければマージする。違っていれば直してからマージする")
+        if review:
+            body.append("- 「自動では触らなかったもの」の公演は、手で行を足すか埋める必要がある")
+        if not args.no_merge and not review:
+            body.append("なし")
 
         run(['git', 'switch', '-c', branch], cwd=wt)
         run(['git', 'add', EVENT_CSV, RANKING_CSV], cwd=wt)
@@ -376,10 +396,22 @@ def main():
                    '--title', "[自動] %s のセトリを取り込む" % days,
                    '--body', '\n'.join(body)], cwd=wt)
         print(out.strip())
-        print("PR を作った。マージはしない")
+        if args.no_merge:
+            print("PR を作った。--no-merge なのでマージはしない")
+            return 0
+        # -R で GitHub 側だけでマージする。手元の作業ツリーのブランチ切り替えをさせないため
+        merged = run(['gh', 'pr', 'merge', branch, '-R', args.repo, '--merge'], cwd=project_root, check=False)
+        state = run(['gh', 'pr', 'view', branch, '-R', args.repo, '--json', 'state', '-q', '.state'],
+                    cwd=project_root, check=False).strip()
+        if state != 'MERGED':
+            print("マージできなかった（%s）。PR は開いたまま。翌朝の実行が閉じて作り直す\n%s" % (state, merged.strip()))
+            return 1
+        run(['git', 'push', 'origin', '--delete', branch], cwd=project_root, check=False)
+        print("PR を作ってマージした")
         return 0
     finally:
         run(['git', 'worktree', 'remove', '--force', wt], cwd=project_root, check=False)
+        run(['git', 'branch', '-D', branch], cwd=project_root, check=False)
 
 
 if __name__ == '__main__':
