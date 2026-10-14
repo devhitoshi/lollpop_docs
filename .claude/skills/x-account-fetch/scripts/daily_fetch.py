@@ -27,7 +27,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, script_dir)
 from fetch_accounts import (  # noqa: E402  fetch_accounts が import 時にリポジトリルートへ chdir する
     CREDITS_PER_TWEET, DEFAULT_ACCOUNTS, MIN_CREDITS_PER_CALL, QUERY_PARAM, SEARCH_PATH, SECONDS_PER_CALL,
-    OutOfCredits, extract, fetch_account, load_api_key, request_json, tweet_date, tweet_id, usd,
+    OutOfCredits, extract, fetch_account, jst_window, load_api_key, request_json, tweet_date, tweet_id, usd,
 )
 
 OUT_DIR = os.path.join("work", "x_fetch")
@@ -125,7 +125,7 @@ def member_tags():
 
 def fetch_hashtags(tags, since, until_excl, max_tweets, api_key):
     """タグの OR 検索を全件取り、投稿日の月ごとのファイルに追記する。戻り値は (新規件数, 応答件数, コール数, クレジット)。"""
-    query = "(" + " OR ".join(f"#{t}" for t in tags) + f") since:{since} until:{until_excl}"
+    query = "(" + " OR ".join(f"#{t}" for t in tags) + f") {jst_window(since, until_excl)}"
     print(f"\n[タグ] {query}")
 
     seen = set()
@@ -218,8 +218,8 @@ def main():
 
     if args.dry_run:
         for handle, _ in DEFAULT_ACCOUNTS:
-            print(f"  from:{handle} since:{since} until:{until_excl}")
-        print(f"  ({' OR '.join('#' + t for t in tags)}) since:{since} until:{until_excl}")
+            print(f"  from:{handle} {jst_window(since.isoformat(), until_excl)}")
+        print(f"  ({' OR '.join('#' + t for t in tags)}) {jst_window(since.isoformat(), until_excl)}")
         return 0
 
     api_key = load_api_key(args.env)

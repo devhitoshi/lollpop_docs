@@ -29,7 +29,7 @@ os.chdir(project_root)
 sys.path.insert(0, os.path.join(project_root, '.claude/skills/x-account-fetch/scripts'))
 from fetch_accounts import (  # noqa: E402
     DEFAULT_ACCOUNTS, SEARCH_PATH, QUERY_PARAM, SECONDS_PER_CALL, CREDITS_PER_TWEET, MIN_CREDITS_PER_CALL,
-    OutOfCredits, load_api_key, request_json, extract, tweet_id, tweet_text, usd,
+    OutOfCredits, jst_window, load_api_key, request_json, extract, tweet_id, tweet_text, usd,
 )
 
 JST = timezone(timedelta(hours=9))
@@ -148,7 +148,7 @@ def save_progress(path, progress):
 
 
 def run_query(label, query, api_key, max_tweets, seen, out, since_api, until_api, sleep, progress, progress_path):
-    full = f"{query} since:{since_api} until:{until_api}"
+    full = f"{query} {jst_window(since_api, until_api)}"
     print(f"\n[{label}] {full}")
     state = progress.get(label) or {}
     cursor, page, new, calls, total = state.get('cursor'), 0, 0, state.get('calls', 0), state.get('total', 0)
@@ -208,12 +208,12 @@ def main():
 
     if args.dry_run:
         for label, q in queries.items():
-            print(f"[{label}] {q} since:{since_api} until:{until_api}")
+            print(f"[{label}] {q} {jst_window(since_api, until_api)}")
         return
 
     est_calls = len(queries) * max(1, args.max_tweets_per_query // 20)
     est_credits = len(queries) * args.max_tweets_per_query * CREDITS_PER_TWEET
-    print(f"クエリ {len(queries)} 本（固有名詞 {len(terms)} 語）、期間 {args.since}〜{args.until}（API: since:{since_api} until:{until_api}）")
+    print(f"クエリ {len(queries)} 本（固有名詞 {len(terms)} 語）、期間 {args.since}〜{args.until}（API: 日本時間 {since_api} 0:00〜{until_api} 0:00）")
     print(f"上限まで取った場合の概算: 最大 {est_credits:,} クレジット（約 ${usd(est_credits):.2f}）、最大 {est_calls} 回・約 {est_calls * SECONDS_PER_CALL / 60:.0f} 分")
     if not args.yes:
         if input("実行しますか？ [y/N] ").strip().lower() != 'y':

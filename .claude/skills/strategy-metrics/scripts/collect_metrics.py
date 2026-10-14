@@ -26,7 +26,7 @@ project_root = os.path.abspath(os.path.join(script_dir, '../../../../'))
 os.chdir(project_root)
 sys.path.insert(0, os.path.join(project_root, '.claude/skills/x-account-fetch/scripts'))
 from fetch_accounts import (  # noqa: E402
-    DEFAULT_ACCOUNTS, SEARCH_PATH, QUERY_PARAM, SECONDS_PER_CALL, OutOfCredits, load_api_key, request_json, extract,
+    DEFAULT_ACCOUNTS, jst_window, SEARCH_PATH, QUERY_PARAM, SECONDS_PER_CALL, OutOfCredits, load_api_key, request_json, extract,
     tweet_id, tweet_text, tweet_url,
 )
 
@@ -84,7 +84,7 @@ def has_video(t):
 
 def fetch_official(since, until_excl, api_key, cap=400):
     """公式の期間内の投稿を全件（リポストは除く）。"""
-    query = f"from:{OFFICIAL} since:{since} until:{until_excl}"
+    query = f"from:{OFFICIAL} {jst_window(since, until_excl)}"
     tweets, seen, cursor = [], set(), None
     while len(tweets) < cap:
         params = {QUERY_PARAM: query, 'queryType': 'Latest'}
