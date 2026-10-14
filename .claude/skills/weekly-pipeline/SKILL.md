@@ -31,17 +31,24 @@ description: 週刊まとめ記事の「収集→素材化→仕上げ」を一�
    - `--refresh` を付けると、期間内の既存行を削除してから取得し直す（いいね数などを最新化したいとき）。
      削除前に `work/x_fetch_bak_<今日の日付>/` へバックアップする（2026-09-07 に手作業で行ったのと同じ運用）。
      **本番キャッシュを消す操作なので、実行前にバックアップ先を確認する**
-   - `fetch_accounts.py` → `fetch_egosearch.py` → `triage_egosearch.py`（初回・`--decisions` 無し）の順に呼ぶ。
-     `--max` は両方の上限引数（`--max-tweets-per-account` / `--max-tweets-per-query`）に渡る（既定 200）。
-     どちらも **今回の新規取得分** に対する上限で、既存 jsonl に何件溜まっていても既定のままでよい
+   - `fetch_accounts.py` → `x-egosearch/scripts/weekly_reactions.py` の順に呼ぶ。
+     **週刊の「現場の反応」は 3 種類（`#ろりぽっぷ`・メンバー固有のタグ・メンバーの返信先）だけから選ぶ**（2026-10-13 オーナー決定）。
+     タグは毎日取得の `hashtags_YYYY-MM.jsonl` を使い、毎日取得がまだ取っていない日だけ取り足す。返信先は手元に無い分だけ ID 指定で取る
+     （どちらも数円）。広い検索（3 クエリ＋判定）は月刊と定点観測に残し、週刊では `--full-egosearch` のときだけ回す
+   - `--max` は `fetch_accounts.py` の上限（`--max-tweets-per-account`）と、`--full-egosearch` のときの
+     `fetch_egosearch.py` の上限（`--max-tweets-per-query`）に渡る（既定 200）。
+     **今回の新規取得分** に対する上限で、既存 jsonl に何件溜まっていても既定のままでよい。
+     ただし広い検索は 200 だと 3 クエリとも打ち切られて古い日が欠ける（9/29〜10/5 号・10/6〜10/12 号で実際に起きた）ので、`--max 1000` にする
    - 毎日取得（`x-account-fetch` の `daily_fetch.py`）が取り終えた日は、公式・メンバーの投稿を取り直さない
      （重複は保存時に捨てられるが API の料金はかかるため）。期間全体が取得済みなら API を叩かずドラフトだけ作り直す。
-     `--refresh` のときは今まで通り期間全体を取り直す。フル・エゴサは毎日取得と関係なく期間全体を取る
-   - 最後に3段階の件数（生データ→候補→機械仕分け内訳）を表示する
-   - **人がやる判断**: `work/x_fetch/egosearch_triage_<since>_<until>_review.txt` を読み、
-     `data/x/egosearch_decisions_<since>_<until>.txt` に `<id> adopt|reject [メモ]` で判定を書く
+     `--refresh` のときは今まで通り期間全体を取り直す
+   - 最後に件数（合計・タグ・返信先、メンバーの返信の数）を表示する。件数は `data/x/reactions3_<since>_<until>_summary.txt` にも残る
+   - **人がやる判断**: `work/x_fetch/reactions3_<since>_<until>.md`（日時順・本文つき）を読み、記事に使う反応を選ぶ。
+     3 種類はほぼ誤爆が無いので、採否の判定ファイルは書かない。オーナー本人と見られるアカウントには `〔引用しない〕` が付く
+   - `--full-egosearch` のときは従来どおり: `fetch_egosearch.py` → `triage_egosearch.py` のあと、
+     `work/x_fetch/egosearch_triage_<since>_<until>_review.txt` を読んで `data/x/egosearch_decisions_<since>_<until>.txt` に判定を書く
      （書式・判断基準は `.claude/skills/x-egosearch/SKILL.md` の手順3）
-   - **次に進む条件**: 判定ファイルを書き終えたら `--stage material`
+   - **次に進む条件**: 反応の一覧を読み終えたら（`--full-egosearch` なら判定ファイルを書き終えたら）`--stage material`
 
 2. **material（素材化）**
 
@@ -49,8 +56,8 @@ description: 週刊まとめ記事の「収集→素材化→仕上げ」を一�
    python .claude/skills/weekly-pipeline/scripts/run_weekly.py --stage material
    ```
 
-   - `triage_egosearch.py --decisions data/x/egosearch_decisions_<since>_<until>.txt`（最終）を実行し、
-     3段階の件数（生データ→候補→**採用**・最終）を表示する
+   - 反応の件数（collect で作った summary）を表示する。`--full-egosearch` のときは先に
+     `triage_egosearch.py --decisions data/x/egosearch_decisions_<since>_<until>.txt`（最終）を実行し、3段階の件数（生データ→候補→**採用**・最終）を表示する
    - `build_material.py` で素材ファイル（`work/x_fetch/draft_material_<since>_<until>.md`）を組み立てる。
      **「CSV に無い公演の疑い」が出たら exit 2 で止まる。** 表示された該当行を見て `events/data_event.csv` を直し、
      `--stage material` をやり直す
@@ -74,7 +81,9 @@ description: 週刊まとめ記事の「収集→素材化→仕上げ」を一�
    - 最後に「README とコミットは手作業」と表示する。`articles/週刊まとめ/README.md` の更新は
      `.claude/skills/session-handoff` の書き方に従う
 
-## 件数の読み方（3段階）
+## 件数の読み方（3段階。`--full-egosearch` のとき）
+
+3 種類（既定）は合計・タグ・返信先の件数をそのまま出す。以下は広い検索のときの読み方。
 
 2026-09-01 に「え、5件しか見つけられなかったの？」という誤解が起きた。**候補と採用は別の数字**なので、
 `collect` と `material` はどちらも次の3段階を必ず表示する。
@@ -86,7 +95,7 @@ description: 週刊まとめ記事の「収集→素材化→仕上げ」を一�
 
 ## 注意
 
-- API 呼び出し（`fetch_accounts.py` / `fetch_egosearch.py`）には費用がかかる。`--dry-run` でコマンド列だけ
+- API 呼び出し（`fetch_accounts.py` / `weekly_reactions.py` / `fetch_egosearch.py`）には費用がかかる。`--dry-run` でコマンド列だけ
   確認してから実行する。クレジットの購入・自動チャージ登録は承認なしに行わない（既存スキルと同じ）
 - `--refresh` は本番の `work/x_fetch/*.jsonl` を書き換える。実行前に表示される鮮度と、
   削除後にできる `work/x_fetch_bak_<日付>/` を確認する。誤って消したら同じ日付のバックアップから戻す

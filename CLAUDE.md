@@ -99,6 +99,7 @@ GitHub の差分画面・PR 画面は開かれない前提で応答を組み立�
 - **エゴサーチの精度**: 正は [`.claude/skills/x-egosearch/SKILL.md`](./.claude/skills/x-egosearch/SKILL.md)。2026-09-15 に 2-2「カタカナ・英字」を廃止（3期間で打率0.3%）、
   愛称（くるみん等）は文脈語との併用を必須に、**過去に採用したアカウントを加点**（`data/x/known_accounts.txt`。打率97% vs 6%）。
   人が捌く工程は `.claude/skills/x-egosearch-review` に分離（スワイプアプリ → Artifact 公開 → 判定の書き戻し。原文を含むので共有しない）。
+  **週刊の現場の反応は 2026-10-13 から「#ろりぽっぷ・メンバー固有のタグ・メンバーの返信先」の 3 種類だけ**（`x-egosearch/scripts/weekly_reactions.py`。オーナー決定）。広い検索は月刊と定点観測に残す。
 - **縦動画**: 運用の正は [`strategy/short_video_playbook.md`](./strategy/short_video_playbook.md)、型定義と量産フローは [`strategy/video/`](./strategy/video/README.md)。
   2026-09-07 に型体系を A〜E＋F・G に一本化（主力は A 反応集と F/G メンバーエピソードの両輪、月 10〜12 本。ファン投稿の引用は 7.3 の作法で可。コール講座は不採用→入門コンテンツをバックログ）。
   素材の索引・許諾・組み立ては `.claude/skills/x-media-collect` と [`data/README.md`](./data/README.md)。**他人の素材は `data/x/media_permissions.md` に「OK」がある分だけ。クレジットは必ず入れる。**
