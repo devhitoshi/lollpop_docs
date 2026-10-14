@@ -26,7 +26,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import date
+from datetime import date, datetime, timedelta, timezone
 
 # 既存スキル（setlist-analysis）と同じ流儀で、どこから実行してもリポジトリルートを基準にする。
 # スクリプトを別階層へ移した場合はこの階層数を直すこと。
@@ -150,17 +150,22 @@ def tweet_url(tweet, handle):
     return f"https://x.com/{handle}/status/{tid}" if tid else ""
 
 
+JST = timezone(timedelta(hours=9))
+
+
 def tweet_date(tweet):
+    """投稿日（日本時間の YYYY-MM-DD）。検索の期間（jst_window）と同じく日本時間で区切る。
+
+    以前は createdAt の UTC の日付をそのまま返していたため、`--refresh` で消す範囲（UTC）と取り直す範囲が
+    ずれ、日本時間 0〜9 時の投稿が別の日に数えられていた（2026-10-14 に jst_window と合わせて修正）。
+    """
     created = tweet.get("createdAt") or tweet.get("created_at") or ""
-    m = re.search(r"(\w{3}) (\w{3}) (\d{2}) .* (\d{4})", created)
-    if not m:
-        return created
-    months = {
-        "Jan": "01", "Feb": "02", "Mar": "03", "Apr": "04", "May": "05", "Jun": "06",
-        "Jul": "07", "Aug": "08", "Sep": "09", "Oct": "10", "Nov": "11", "Dec": "12",
-    }
-    _, mon, day, year = m.groups()
-    return f"{year}-{months.get(mon, '??')}-{day}"
+    for fmt in ("%a %b %d %H:%M:%S %z %Y", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%dT%H:%M:%S.%f%z"):
+        try:
+            return datetime.strptime(created.replace("Z", "+0000"), fmt).astimezone(JST).strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+    return created
 
 
 def usd(credits):
@@ -215,6 +220,19 @@ def refresh_period(out_dir, accounts, since, until):
     print(f"バックアップ: {backup_dir}")
 
 
+def jst_window(since, until_excl):
+    """検索の期間指定を「日本時間の since 0:00 〜 until_excl 0:00」の秒単位にする。
+
+    `since:YYYY-MM-DD until:YYYY-MM-DD` は日本時間ではなく米国東部時間（UTC-4）の日付の区切りとして扱われ、
+    1 日分の取得が「日本時間 13 時〜翌 13 時」になっていた。毎朝 6 時の毎日取得では 6〜13 時の投稿が
+    毎日抜けていた（2026-10-14 発見。9/17〜10/9 の日本時間 9〜12 時台の投稿が 0 件だった）。
+    `since_time:` / `until_time:`（UNIX 秒）なら時差の解釈に左右されない。
+    """
+    def epoch(d):
+        return int(datetime.strptime(d, "%Y-%m-%d").replace(tzinfo=JST).timestamp())
+    return f"since_time:{epoch(since)} until_time:{epoch(until_excl)}"
+
+
 def fetch_account(handle, since, until, max_tweets, out_dir, api_key):
     """1アカウント分を全件列挙して JSONL に保存する。中断・再開対応。
 
@@ -224,7 +242,7 @@ def fetch_account(handle, since, until, max_tweets, out_dir, api_key):
     課金の歯止めとしても、止めたいのは新規取得のコール数なので、新規件数で数えるのが正しい。
     """
     out_path = os.path.join(out_dir, f"{handle}.jsonl")
-    query = f"from:{handle} since:{since} until:{until}"
+    query = f"from:{handle} {jst_window(since, until)}"
 
     seen = set()
     if os.path.exists(out_path):
