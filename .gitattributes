@@ -1,1 +1,11 @@
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.mp4 binary
+*.m4a binary
+*.wav binary
+*.ttf binary
+*.pdf binary
 songs/analysis/anatomy/*/series/*.csv -diff linguist-generated
