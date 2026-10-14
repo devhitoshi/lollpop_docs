@@ -22,6 +22,7 @@ description: note（https://note.com/1116_fan）への記事の投稿・下書�
 4. タブは自分で新しく開く（`tabs_create_mcp`）。終わったら閉じる。**古いタブのまま保存しない**
    （オーナーが別のブラウザで同じ下書きを直していたら上書きしてしまう。心配なら新しいタブで開き直して中身を比べる）
 5. 公開・更新したら `articles/公開一覧.md` に URL・公開日・最終同期日を記録し、PR にする
+6. **見出しのある記事には目次を入れる**（2026-10-14 オーナー「note に目次を今後は追加して」）。置き場はリード文の後ろ、最初の見出しの前。入れ方は下の「6.5 目次を入れる」
 
 ## 手順：新しい記事を下書きまで作る
 
@@ -86,6 +87,24 @@ await window.__note.pasteImgAt('【画像②')   // 目印の段落が画像に�
 3. 出てきたメニューの「画像をアップロード」をクリック（スクショで位置を確かめる）
 4. `find` で「file input」→ id が `note-editor-eyecatch-input` のものに `file_upload`
 5. トリミング画面が出る → 画像全体が枠に収まっているのを確かめて「保存」をクリック
+
+### 6.5 目次を入れる
+
+note の目次は「＋」メニューの機能で、本文の大見出し・小見出しから自動で作られる（見出しを直すと目次も追従する）。2026-10-14 に週刊 10/6〜10/12 号の下書きで入れた手順:
+
+1. リード文の最後の段落の末尾にカーソルを置く（`javascript_tool` で段落を探して `Range` を末尾に置き、`.ProseMirror` に `focus()`）
+
+   ```js
+   const p = [...document.querySelectorAll('.ProseMirror p')].find(e => e.textContent.includes('<リード文の最後の段落の一部>'));
+   p.scrollIntoView({block: 'center'});
+   const r = document.createRange(); r.selectNodeContents(p); r.collapse(false);
+   getSelection().removeAllRanges(); getSelection().addRange(r);
+   document.querySelector('.ProseMirror').focus();
+   ```
+
+2. `computer` の `key` で `End Enter` → 空の行ができ、行頭に「＋」ボタンが出る（スクショで位置を確かめる）
+3. 「＋」をクリック → メニューの「目次」をクリック → 空の行が目次（`TABLE-OF-CONTENTS` 要素）に置き換わる（空の行は残らない）
+4. `[...document.querySelector('.ProseMirror').children].map(e => e.tagName)` で、リード文の段落の次が `TABLE-OF-CONTENTS`、その次が最初の `H2` になっているのを確かめる
 
 ### 7. 片付けて保存する
 
