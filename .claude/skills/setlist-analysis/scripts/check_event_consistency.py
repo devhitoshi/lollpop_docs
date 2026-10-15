@@ -141,6 +141,7 @@ SETLIST_HINT = re.compile(r'(セトリ|setlist|set\s*list)', re.I)
 NUMBERED_LINE = re.compile(r'^\s*(SE|M\d|0?\d{1,2})(?:[\s\.．、)）]|[:：](?!\s*\d))', re.M)
 
 
+SE_LINE = re.compile(r'^\s*(?:0?\d{1,2}[\s\.．:：]*)?SE\s*$', re.M | re.I)
 ANNOUNCE_HINT = re.compile(r'ライブ情報|出演情報|出演決定|チケット|予約|OPEN|START', re.I)
 
 
@@ -148,9 +149,13 @@ def looks_like_setlist(text):
     """ライブ後のセトリ投稿らしさ。「SE」「01 曲名」形式の行が3つ以上、または「セトリ」の語。
 
     告知（ライブ情報・チケット・OPEN/START）は、番号付きの出演順や「セトリ」の語を含んでも対象外。
+    ただし告知の語より前に「SE」の行と曲番号の行3つ以上があれば、セトリの後ろに次回告知が付いた投稿としてセトリに数える
+    （2026-10-15 の投稿がこの形で「ありがとう」も無く、告知と判定されて自動取り込みから漏れた。claude-work#137）
     """
-    if ANNOUNCE_HINT.search(text) and not re.search(r'ありがとう|お疲れ|楽しかった|セトリ|setlist', text, re.I):
-        return False
+    announce = ANNOUNCE_HINT.search(text)
+    if announce and not re.search(r'ありがとう|お疲れ|楽しかった|セトリ|setlist', text, re.I):
+        head = text[:announce.start()]
+        return bool(SE_LINE.search(head)) and len(NUMBERED_LINE.findall(head)) >= 3
     if SETLIST_HINT.search(text):
         return True
     return len(NUMBERED_LINE.findall(text)) >= 3
