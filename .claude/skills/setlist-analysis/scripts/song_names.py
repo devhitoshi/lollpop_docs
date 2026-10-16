@@ -23,9 +23,24 @@ def load_canonical_songs(path='songs/楽曲一覧.md'):
     return songs
 
 
+def is_unknown_setlist(setlist_str):
+    """セトリが分からない行なら True（集計の対象外。公演数にも入れない）。
+
+    空欄・「セトリ投稿確認」に加えて、公式投稿が画像だけ／詳細の投稿が無いと書いた行も除く。
+    曲が1曲も数えられないのに公演数（出現率の分母）に入ると、率が低めに出るため（2026-10-14）。
+    全曲カバーの公演のように、セトリが分かっていて持ち曲が0曲の行は除かない。
+    """
+    s = (setlist_str or '').strip()
+    if not s:
+        return True
+    return any(k in s for k in ('セトリ投稿確認', '詳細セトリ投稿なし')) or s.startswith('画像参照')
+
+
 def normalize_song_name(name, canonical_songs):
     """セトリの1項目を正表記に寄せる。寄せられなければ None。"""
     name = name.strip()
+    # 「メイク⭐︎マイダンス」のように絵文字の星で書かれることがある（2026-09 の公式投稿）。☆ に寄せる
+    name = re.sub('⭐[︎️]?', '☆', name)
     name = re.sub(r'^[0-9]+[\s\.]*', '', name)
     name = re.sub(r'🆕✨?', '', name)
     name = re.sub(r'❤️\s*', '', name)

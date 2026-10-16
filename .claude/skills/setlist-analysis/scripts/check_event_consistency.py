@@ -23,7 +23,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.abspath(os.path.join(script_dir, '../../../../'))
 os.chdir(project_root)
 sys.path.insert(0, script_dir)
-from song_names import load_canonical_songs, normalize_song_name, is_non_song_item, split_setlist  # noqa: E402
+from song_names import load_canonical_songs, normalize_song_name, is_non_song_item, is_unknown_setlist, split_setlist  # noqa: E402
 
 JST = timezone(timedelta(hours=9))
 EVENT_CSV = 'events/data_event.csv'
@@ -80,7 +80,7 @@ def check_songs(rows, canonical, since=None):
         if since and (row.get('date') or '') < since:
             continue
         setlist = row.get('setlist') or ''
-        if not setlist or 'セトリ投稿確認' in setlist:
+        if is_unknown_setlist(setlist):
             continue
         for items in split_setlist(setlist):
             for item in items:
