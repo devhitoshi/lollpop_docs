@@ -29,7 +29,8 @@
     ed().dispatchEvent(new ClipboardEvent('paste', { clipboardData: dt, bubbles: true, cancelable: true }));
   };
   const key = (k, code) => ed().dispatchEvent(new KeyboardEvent('keydown', { key: k, code: k, keyCode: code, bubbles: true, cancelable: true }));
-  const isEmpty = e => !e.innerText.trim() && !e.querySelector('img,iframe') && !e.hasAttribute('embedded-service');
+  // 目次（TABLE-OF-CONTENTS）は中身が空に見えるので除く。除かないと cleanupEmpty が Backspace で目次を消す（2026-10-15）
+  const isEmpty = e => e.tagName !== 'TABLE-OF-CONTENTS' && !e.innerText.trim() && !e.querySelector('img,iframe') && !e.hasAttribute('embedded-service');
   const isImageFig = e => e.tagName === 'FIGURE' && e.querySelector('img') && !e.hasAttribute('embedded-service');
 
   const N = {
