@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>単独ライブvol.20 の告知の伸び（スライド4枚）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Noto+Sans+JP:wght@400;500;700&display=block" rel="stylesheet">
+<style>
+  /* トークンは lollpop_docs/brand.md・design.md から転記（記事の図 fig_infographic.html と同じ値） */
+  :root {
+    --primary: #d6006e;
+    --ink: #1d1216; --body: #45383e; --muted: #71646b; --muted-soft: #998a92;
+    --hairline: #f2e2ea; --canvas: #ffffff; --blush: #fbe7f0;
+    --dark: #1a1113; --dark-el: #2a1a24; --on-dark: #fff5f9; --on-dark-soft: #d9c4ce;
+    --past: #d6c8cf; --past-line: #cdbdc5; --grid: #f0e2e9;
+    --mc-kurumi: #cc0000; --mc-mayu: #f5c400; --mc-mau: #7fd4e8; --mc-ami: #2e9e5b; --mc-mana: #ffffff;
+    --mc-asaka: #f172a3; --mc-natsumi: #2a6fd6;
+  }
+  @page { size: 1920px 1080px; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Noto Sans JP", sans-serif; color: var(--body); background: #e9e1e5;
+         font-feature-settings: "palt"; letter-spacing: .01em; }
+  .slide { width: 1920px; height: 1080px; background: var(--canvas); position: relative; overflow: hidden;
+           padding: 64px 104px 0; display: flex; flex-direction: column; break-after: page; }
+  .slide + .slide { margin-top: 40px; }
+  @media print { body { background: none; } .slide + .slide { margin-top: 0; } }
+
+  /* 上の帯: 区分ラベルとワードマーク */
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .eyebrow { font-size: 26px; font-weight: 700; letter-spacing: .08em; color: var(--primary); }
+  .wordmark { font-family: "Mochiy Pop One", sans-serif; font-size: 28px; color: var(--ink); letter-spacing: .02em; }
+  .wordmark .ex { letter-spacing: -.02em; }
+  .wordmark .ex.mana { color: #fff; -webkit-text-stroke: 1.5px var(--muted-soft); paint-order: stroke fill; }
+
+  /* 見出し（結論を1文で）と補足 */
+  h1 { font-size: 66px; font-weight: 700; line-height: 1.25; letter-spacing: -.015em; color: var(--ink); margin-top: 22px; }
+  .sub { font-size: 29px; line-height: 1.6; color: var(--body); margin-top: 14px; }
+  .rule { height: 2px; background: var(--hairline); margin-top: 30px; }
+  .content { flex: 1; display: flex; gap: 72px; align-items: stretch; padding: 40px 0 28px; min-height: 0; }
+
+  /* 下の帯: 出所・注・ページ */
+  .foot { border-top: 2px solid var(--hairline); padding: 18px 0 26px; display: flex; justify-content: space-between;
+          align-items: flex-end; gap: 40px; font-size: 19px; line-height: 1.6; color: var(--muted); }
+  .foot .page { white-space: nowrap; font-weight: 500; }
+
+  /* 大きな数字 */
+  .hero .k { font-size: 28px; font-weight: 700; color: var(--ink); }
+  .hero .n { font-size: 200px; font-weight: 700; color: var(--primary); line-height: 1; letter-spacing: -.03em; margin-top: 18px; }
+  .hero .n small { font-size: 64px; margin-left: 8px; letter-spacing: 0; }
+  .hero .vs { font-size: 28px; color: var(--body); margin-top: 18px; line-height: 1.6; }
+  .hero .vs b { color: var(--ink); }
+  .kpis { margin-top: 44px; border-top: 2px solid var(--hairline); }
+  .kpi { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding: 22px 0; border-bottom: 2px solid var(--hairline); }
+  .kpi .l { font-size: 25px; color: var(--body); }
+  .kpi .v { font-size: 40px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+  .kpi .v small { font-size: 22px; font-weight: 500; color: var(--muted); margin-left: 10px; }
+
+  svg text { font-family: "Noto Sans JP", sans-serif; }
+  .chart { flex: 1; min-width: 0; }
+  .legend { display: flex; gap: 36px; font-size: 22px; color: var(--body); align-items: center; }
+  .legend i { display: inline-block; vertical-align: middle; margin-right: 10px; border-radius: 2px; }
+
+  /* 2枚目の右の注記 */
+  .callouts { width: 470px; display: flex; flex-direction: column; justify-content: center; gap: 28px; }
+  .callout { border-left: 6px solid var(--primary); padding: 6px 0 6px 28px; }
+  .callout .k { font-size: 25px; font-weight: 700; color: var(--ink); }
+  .callout .n { font-size: 88px; font-weight: 700; color: var(--primary); line-height: 1.1; letter-spacing: -.02em; margin-top: 6px; }
+  .callout .n small { font-size: 34px; margin-left: 6px; }
+  .callout .d { font-size: 23px; line-height: 1.6; color: var(--body); margin-top: 6px; }
+
+  /* 3枚目: メンバー別の対の棒 */
+  .members { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 20px; }
+  .m { display: grid; grid-template-columns: 300px 1fr; align-items: center; gap: 24px; }
+  .m .who { font-size: 36px; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 16px; }
+  .dot { width: 26px; height: 26px; border-radius: 50%; flex: none; }
+  .dot.mana { box-shadow: inset 0 0 0 2px var(--muted-soft); }
+  .bars { display: flex; flex-direction: column; gap: 6px; }
+  .bar-row { display: flex; align-items: center; gap: 16px; }
+  .bar { border-radius: 0 4px 4px 0; }
+  .bar.past { height: 18px; background: var(--past); }
+  .bar.now { height: 38px; }
+  .bar.now.mana { box-shadow: inset 0 0 0 2px var(--muted-soft); }
+  .bar-row .val { font-size: 22px; color: var(--muted); white-space: nowrap; }
+  .bar-row .val.now { font-size: 34px; font-weight: 700; color: var(--ink); }
+  .bar-row .val.now small { font-size: 22px; font-weight: 500; color: var(--muted); margin-left: 8px; }
+
+  /* 4枚目: 数字の札と開催概要 */
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  .card { border-top: 6px solid var(--primary); background: #fdf5f9; padding: 28px 48px; display: flex; flex-direction: column; }
+  .card .k { font-size: 32px; font-weight: 700; color: var(--ink); }
+  .card .flow { display: flex; align-items: flex-end; gap: 32px; margin-top: 14px; }
+  .card .num { display: flex; flex-direction: column; }
+  .card .num .cap { font-size: 22px; color: var(--muted); margin-top: 6px; white-space: nowrap; }
+  .card .from { font-size: 72px; font-weight: 700; color: var(--muted-soft); letter-spacing: -.02em; }
+  .card .from small, .card .to small { font-size: 32px; margin-left: 4px; letter-spacing: 0; }
+  .card .arrow { font-size: 56px; color: var(--muted-soft); margin-bottom: 52px; }
+  .card .to { font-size: 132px; font-weight: 700; color: var(--primary); line-height: 1; letter-spacing: -.03em; }
+  .card .d { font-size: 25px; line-height: 1.6; color: var(--body); margin-top: auto; padding-top: 18px; border-top: 2px solid var(--hairline); }
+  .card .d b { color: var(--ink); }
+  .event { margin-top: 24px; background: var(--dark); color: var(--on-dark); padding: 26px 48px; display: grid;
+           grid-template-columns: 170px 1fr; gap: 6px 32px; align-items: baseline; }
+  .event .lab { font-size: 24px; font-weight: 700; color: var(--on-dark-soft); letter-spacing: .08em; grid-row: span 2; }
+  .event .t { font-size: 34px; font-weight: 700; }
+  .event .s { font-size: 25px; color: var(--on-dark-soft); }
+  .event .s b { color: var(--on-dark); }
+</style>
+</head>
+<body>
+
+<!-- 1枚目 -->
+<section class="slide" id="s1">
+  <div class="top"><div class="eyebrow">01｜告知量</div><div class="wordmark" data-wordmark></div></div>
+  <h1>告知数は過去最多の2.0倍に到達</h1>
+  <p class="sub">10/28 単独ライブvol.20 に向けたメンバー5名の X の告知は68件。過去最多だった vol.19（34件）の2.0倍。</p>
+  <div class="rule"></div>
+  <div class="content">
+    <div class="hero" style="width:560px">
+      <div class="k">vol.20 の告知数（5名の合計）</div>
+      <div class="n">68<small>件</small></div>
+      <div class="vs">過去10回は <b>8〜34件</b>（中央値15件）</div>
+      <div class="kpis">
+        <div class="kpi"><span class="l">1日あたり</span><span class="v">2.8件<small>過去 0.4〜1.2件</small></span></div>
+        <div class="kpi"><span class="l">告知があった日</span><span class="v">24日中23日</span></div>
+      </div>
+    </div>
+    <div class="chart">
+      <div class="legend"><span>単独ライブごとの告知数（告知開始〜公演前日）</span></div>
+      <svg id="c1" width="1076" height="560"></svg>
+    </div>
+  </div>
+  <div class="foot">
+    <div>出所：現メンバー5名の X 投稿を集計（2026/10/27 集計）。比較対象は単独ライブ vol.9〜19 の10回。<br>注：vol.20 は告知開始の 10/3 から 10/26 までの24日間（前日 10/27 分を含まない）。リポストは含まない。</div>
+    <div class="page">非公式のファン制作物｜1 / 4</div>
+  </div>
+</section>
+
+<!-- 2枚目 -->
+<section class="slide" id="s2">
+  <div class="top"><div class="eyebrow">02｜時期</div><div class="wordmark" data-wordmark></div></div>
+  <h1>直前集中型から、全期間継続型へ</h1>
+  <p class="sub">過去10回中9回は、告知の半数以上が直前1週間に集中（中央値7割）。vol.20 は告知開始の直後から積み上がった。</p>
+  <div class="rule"></div>
+  <div class="content">
+    <div class="chart">
+      <div class="legend">
+        <span><i style="width:40px;height:4px;background:var(--past-line)"></i>過去10回（vol.9〜19）</span>
+        <span><i style="width:40px;height:6px;background:var(--primary)"></i>vol.20</span>
+        <span><i style="width:28px;height:22px;background:var(--blush)"></i>直前1週間</span>
+      </div>
+      <svg id="c2" width="1170" height="540"></svg>
+    </div>
+    <div class="callouts">
+      <div class="callout">
+        <div class="k">公演14日前の時点で</div>
+        <div class="n">31<small>件</small></div>
+        <div class="d">過去10回中9回は、告知期間の合計でも<br>これより少ない</div>
+      </div>
+      <div class="callout">
+        <div class="k">直前1週間も</div>
+        <div class="n">19<small>件</small></div>
+        <div class="d">過去10回の直前1週間は4〜15件</div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>出所：現メンバー5名の X 投稿を集計（2026/10/27 集計）。比較対象は単独ライブ vol.9〜19 の10回。<br>注：告知数の累計（5名の合計）。vol.20 は 10/26（公演2日前）まで。直前1週間の vol.20 は 10/21〜10/26。</div>
+    <div class="page">非公式のファン制作物｜2 / 4</div>
+  </div>
+</section>
+
+<!-- 3枚目 -->
+<section class="slide" id="s3">
+  <div class="top"><div class="eyebrow">03｜メンバー別</div><div class="wordmark" data-wordmark></div></div>
+  <h1>メンバー5名全員が、個人の過去最多を更新</h1>
+  <p class="sub">メンバーごとの告知数を、過去10回でその人が最も多かった回と比較。</p>
+  <div class="rule"></div>
+  <div class="content" style="flex-direction:column; gap:20px">
+    <div class="legend">
+      <span><i style="width:40px;height:20px;background:var(--past)"></i>過去10回での自己最多</span>
+      <span><i style="width:40px;height:20px;background:linear-gradient(90deg,var(--mc-kurumi) 0 25%,var(--mc-mayu) 25% 50%,var(--mc-mau) 50% 75%,var(--mc-ami) 75%)"></i>vol.20（棒の色は各メンバーの担当カラー）</span>
+    </div>
+    <div class="members" id="c3"></div>
+  </div>
+  <div class="foot">
+    <div>出所：現メンバー5名の X 投稿を集計（2026/10/27 集計）。比較対象は単独ライブ vol.9〜19 の10回。<br>注：vol.20 は 10/26 まで。（　）内は告知があった日数。</div>
+    <div class="page">非公式のファン制作物｜3 / 4</div>
+  </div>
+</section>
+
+<!-- 4枚目 -->
+<section class="slide" id="s4">
+  <div class="top"><div class="eyebrow">04｜内容と形式</div><div class="wordmark" data-wordmark></div></div>
+  <h1>新規層向けの訴求が約4.8倍、動画告知は1件から21件へ</h1>
+  <p class="sub">告知の内容をキーワードで11種類に分類。うち10種類で過去最多を更新し、件数の伸びが最も大きかったのが「初めての人向け」（+34件）。</p>
+  <div class="rule"></div>
+  <div class="content" style="flex-direction:column; gap:0; padding-top:32px; padding-bottom:28px">
+    <div class="cards">
+      <div class="card">
+        <div class="k">「初めての人向け」の告知</div>
+        <div class="flow"><div class="num"><span class="from">9<small>件</small></span><span class="cap">過去10回の最多</span></div><span class="arrow">→</span><div class="num"><span class="to">43<small>件</small></span><span class="cap">vol.20</span></div></div>
+        <div class="d">単独ライブ初来場はチケット0円（2026年3月からの仕組み）。<br><b>増えたのは、メンバーがそれに触れた回数。</b></div>
+      </div>
+      <div class="card">
+        <div class="k">動画つきの告知</div>
+        <div class="flow"><div class="num"><span class="from">1<small>件</small></span><span class="cap">過去10回の合計</span></div><span class="arrow">→</span><div class="num"><span class="to">21<small>件</small></span><span class="cap">vol.20</span></div></div>
+        <div class="d">くるみん11件（10/4〜10/19）、おまゆ10件（10/5〜10/26）。<br><b>長さは13〜134秒。</b></div>
+      </div>
+    </div>
+    <div class="event">
+      <div class="lab">開催概要</div>
+      <div class="t">10/28（水）ろりぽっぷ!!!!!!!単独ライブvol.20｜池袋W:IKE329</div>
+      <div class="s">1部 17:30〜 ワンコインライブ（500円+1D）／2部 19:50〜 ハロウィンコスプレ公演｜<b>初めて単独ライブに来る人はチケット0円</b></div>
+    </div>
+  </div>
+  <div class="foot">
+    <div>出所：現メンバー5名の X 投稿を集計（2026/10/27 集計）、公式Xの告知（2026/2/25・10/3）。比較対象は単独ライブ vol.9〜19 の10回。<br>注：内容の分類はキーワード判定（1件が複数の種類に入ることがある）。約4.8倍は 43÷9。vol.20 は 10/26 まで。</div>
+    <div class="page">非公式のファン制作物｜4 / 4</div>
+  </div>
+</section>
+
+<script>
+// データは ../fig_infographic.html の定数から転記（集計の正は claude-work/20261027_単独ライブ告知の比較更新/）
+const TOTALS = [ // vol, 告知開始〜前日の5名計
+  [9, 14], [10, 8], [11, 12], [12, 23], [13, 24], [15, 8], [16, 16], [17, 14], [18, 19], [19, 34], [20, 68],
+];
+// 公演30日前〜前日の累計（30点。index 0 = 30日前、29 = 前日）。vol.20 の前日分は未集計なので 28（2日前）まで描く
+const CUM = {"9": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 6, 8, 14], "10": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 6, 8], "11": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 4, 4, 4, 4, 4, 6, 6, 6, 6, 6, 8, 12], "12": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 6, 7, 7, 7, 7, 7, 7, 7, 8, 8, 9, 11, 12, 15, 15, 17, 23], "13": [2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6, 7, 7, 7, 9, 9, 9, 9, 9, 9, 13, 14, 14, 14, 15, 18, 24], "15": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 7, 8], "16": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 5, 7, 7, 10, 11, 16], "17": [0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 7, 9, 14], "18": [0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 6, 6, 6, 7, 7, 8, 13, 19], "19": [6, 6, 6, 7, 13, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 17, 19, 19, 19, 21, 22, 22, 22, 24, 29, 34], "20": [0, 0, 0, 0, 0, 5, 10, 12, 16, 18, 22, 24, 24, 25, 28, 29, 31, 33, 38, 39, 42, 46, 49, 53, 57, 58, 60, 64, 68, 68]};
+const MEMBERS = [ // 愛称, 色, 過去10回の自己最多, vol.20, vol.20 の告知日数（並びは brand.md の現メンバー順）
+  ["くるみん", "kurumi", 10, 17, 17],
+  ["おまゆ",   "mayu",   9,  19, 18],
+  ["まう",     "mau",    7,  15, 12],
+  ["あみてん", "ami",    7,  12, 12],
+  ["まなてぃー", "mana", 3,  5,  5],
+];
+
+const NS = "http://www.w3.org/2000/svg";
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function s(tag, attrs, text) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (text != null) e.textContent = text;
+  return e;
+}
+
+// ワードマーク: 「ろりぽっぷ」はインク色、「!!!!!!!」はアー写の投稿順に7色（brand.md）
+for (const el of document.querySelectorAll("[data-wordmark]")) {
+  const order = ["kurumi", "asaka", "mayu", "natsumi", "mau", "ami", "mana"];
+  el.innerHTML = "ろりぽっぷ" + order.map(m => `<span class="ex ${m}" style="color:var(--mc-${m})">!</span>`).join("");
+}
+
+// 1枚目: 単独ライブごとの告知数（vol.20 だけ強調、過去の最多と中央値に注記）
+{
+  const svg = document.getElementById("c1");
+  const W = 1076, H = 560, L = 20, R = 20, T = 70, B = 70;
+  const max = 70, pw = W - L - R, ph = H - T - B, n = TOTALS.length;
+  const slot = pw / n, bw = 58;
+  const y = v => T + ph - (v / max) * ph;
+  const median = 15;
+  svg.append(s("line", { x1: L, x2: W - R, y1: y(0), y2: y(0), stroke: css("--muted-soft"), "stroke-width": 2 }));
+  TOTALS.forEach(([v, c], i) => {
+    const x = L + slot * i + (slot - bw) / 2, hl = v === 20;
+    const h = (c / max) * ph, r = 4;
+    // 上端だけ角を丸めた棒（基線側は四角）
+    svg.append(s("path", { d: `M${x},${y(0)} V${y(c) + r} Q${x},${y(c)} ${x + r},${y(c)} H${x + bw - r} Q${x + bw},${y(c)} ${x + bw},${y(c) + r} V${y(0)} Z`,
+      fill: hl ? css("--primary") : css("--past") }));
+    svg.append(s("text", { x: x + bw / 2, y: y(0) + 40, "text-anchor": "middle", "font-size": hl ? 24 : 22,
+      "font-weight": hl ? 700 : 400, fill: hl ? css("--ink") : css("--muted") }, `vol.${v}`));
+    if (v === 20 || v === 19) {
+      svg.append(s("text", { x: x + bw / 2, y: y(c) - 16, "text-anchor": "middle", "font-size": hl ? 40 : 28,
+        "font-weight": 700, fill: hl ? css("--ink") : css("--body") }, `${c}件`));
+    }
+  });
+  // 過去10回の中央値（実線の細線）
+  svg.append(s("line", { x1: L, x2: L + slot * 10, y1: y(median), y2: y(median), stroke: css("--muted-soft"), "stroke-width": 2 }));
+  svg.append(s("text", { x: L + 4, y: y(median) - 12, "font-size": 22, fill: css("--muted") }, "過去10回の中央値 15件"));
+}
+
+// 2枚目: 公演30日前〜前日の累計（過去10回は細い灰色、vol.20 は強調色）
+{
+  const svg = document.getElementById("c2");
+  const W = 1170, H = 540, L = 64, R = 40, T = 24, B = 64;
+  const max = 80, pw = W - L - R, ph = H - T - B;
+  const x = i => L + (i / 29) * pw, y = v => T + ph - (v / max) * ph;
+  // 直前1週間（7日前〜前日 = index 23〜29）の帯
+  svg.append(s("rect", { x: x(22.5), y: T, width: x(29) - x(22.5) + 12, height: ph, fill: css("--blush") }));
+  for (const v of [0, 20, 40, 60, 80]) {
+    svg.append(s("line", { x1: L, x2: W - R, y1: y(v), y2: y(v), stroke: v === 0 ? css("--muted-soft") : css("--grid"), "stroke-width": 2 }));
+    svg.append(s("text", { x: L - 14, y: y(v) + 8, "text-anchor": "end", "font-size": 22, fill: css("--muted") }, v));
+  }
+  for (const [d, label] of [[30, "30日前"], [21, "21日前"], [14, "14日前"], [7, "7日前"], [1, "前日"]]) {
+    svg.append(s("text", { x: x(30 - d), y: H - 22, "text-anchor": "middle", "font-size": 22, fill: css("--muted") }, label));
+  }
+  const path = arr => arr.map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+  for (const [k, arr] of Object.entries(CUM)) {
+    if (k === "20") continue;
+    svg.append(s("path", { d: path(arr), fill: "none", stroke: css("--past-line"), "stroke-width": 3, "stroke-linejoin": "round" }));
+  }
+  const v20 = CUM["20"].slice(0, 29);
+  svg.append(s("path", { d: path(v20), fill: "none", stroke: css("--primary"), "stroke-width": 6, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+  // 注記する2点（14日前の31件、2日前の68件）。点の周りに地の色の輪
+  for (const [i, label, dx, anchor] of [[16, "14日前 31件", -18, "end"], [28, "10/26 時点 68件", -22, "end"]]) {
+    const cx = x(i), cy = y(CUM["20"][i]);
+    svg.append(s("circle", { cx, cy, r: 11, fill: css("--primary"), stroke: css("--canvas"), "stroke-width": 4 }));
+    svg.append(s("text", { x: cx + dx, y: cy - 20, "text-anchor": anchor, "font-size": 28, "font-weight": 700, fill: css("--ink") }, label));
+  }
+  svg.append(s("text", { x: x(29) - 8, y: y(34) - 16, "text-anchor": "end", "font-size": 22, fill: css("--muted") }, "vol.19（過去最多）34件"));
+}
+
+// 3枚目: メンバー別（灰の細い棒 = 過去10回の自己最多、色の棒 = vol.20）
+{
+  const box = document.getElementById("c3"), max = 20, full = 1180;
+  for (const [name, key, past, now, days] of MEMBERS) {
+    const m = document.createElement("div");
+    m.className = "m";
+    m.innerHTML = `
+      <div class="who"><span class="dot ${key}" style="background:var(--mc-${key})"></span>${name}</div>
+      <div class="bars">
+        <div class="bar-row"><div class="bar past" style="width:${past / max * full}px"></div><span class="val">${past}件</span></div>
+        <div class="bar-row"><div class="bar now ${key}" style="width:${now / max * full}px;background:var(--mc-${key})"></div><span class="val now">${now}件<small>（${days}日）</small></span></div>
+      </div>`;
+    box.append(m);
+  }
+}
+</script>
+</body>
+</html>
