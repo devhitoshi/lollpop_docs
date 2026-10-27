@@ -24,7 +24,7 @@ if args.months:
     target_months = args.months.split(',')
 
 sys.path.insert(0, script_dir)
-from song_names import load_canonical_songs, normalize_song_name, is_non_song_item, split_setlist  # noqa: E402
+from song_names import load_canonical_songs, normalize_song_name, is_non_song_item, is_unknown_setlist, split_setlist  # noqa: E402
 
 # 曲名の正表記と名寄せルールは song_names.py に集約（check_event_consistency.py と共用）
 canonical_songs = load_canonical_songs()
@@ -36,7 +36,7 @@ with open('events/data_event.csv', 'r', encoding='utf-8') as f:
     for row in reader:
         date_str = row['date']
         setlist_str = row['setlist']
-        if not date_str or not setlist_str or 'セトリ投稿確認' in setlist_str: continue
+        if not date_str or is_unknown_setlist(setlist_str): continue
 
         m = re.match(r'^(\d{4}-\d{2})', date_str)
         if not m:

@@ -28,7 +28,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.abspath(os.path.join(script_dir, '../../../../'))
 os.chdir(project_root)
 sys.path.insert(0, script_dir)
-from song_names import load_canonical_songs, normalize_song_name, is_non_song_item, split_setlist  # noqa: E402
+from song_names import load_canonical_songs, normalize_song_name, is_non_song_item, is_unknown_setlist, split_setlist  # noqa: E402
 
 import matplotlib  # noqa: E402
 matplotlib.use('Agg')
@@ -93,7 +93,7 @@ def load_data(since, until):
     with open('events/data_event.csv', encoding='utf-8') as f:
         for row in csv.DictReader(f):
             d, sl = row['date'], row['setlist'] or ''
-            if not d or not sl or 'セトリ投稿確認' in sl:
+            if not d or is_unknown_setlist(sl):
                 continue
             if since and d < since or until and d > until:
                 continue

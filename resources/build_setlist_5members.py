@@ -18,7 +18,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / '.claude' / 'skills' / 'setlist-analysis' / 'scripts'))
 from song_names import (  # noqa: E402
-    is_non_song_item, load_canonical_songs, normalize_song_name, split_setlist,
+    is_non_song_item, is_unknown_setlist, load_canonical_songs, normalize_song_name, split_setlist,
 )
 
 # 5人体制の初公演。苺花なつみの卒業（2026-08-15「POPGALAXY2026」）の次の公演から。
@@ -543,7 +543,7 @@ def read_events():
     with open(PROJECT_ROOT / 'events' / 'data_event.csv', encoding='utf-8') as f:
         for row in csv.DictReader(f):
             setlist = row['setlist'].strip()
-            if not setlist or 'セトリ投稿確認' in setlist:
+            if is_unknown_setlist(setlist):
                 continue
             yield row
 

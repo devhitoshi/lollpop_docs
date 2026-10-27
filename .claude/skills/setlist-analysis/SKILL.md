@@ -105,4 +105,4 @@ description: 「ろりぽっぷ!!!!!!!」のセットリストを月ごとに集
   新曲を追加したら、まず `songs/楽曲一覧.md` に正表記を追加し、必要なら名寄せルールを足す。
 - `events/data_event.csv` を Claude Code で編集すると、hook（`.claude/hooks/after_event_csv.py`）が集計の再実行と
   `check_event_consistency.py --quiet` を自動で回し、結果を文脈に返す。手順1〜3を飛ばしてよいのはこの場合だけ。
-- `events/data_event.csv` の `setlist` が空、または「セトリ投稿確認」を含む行は集計対象外。
+- `events/data_event.csv` の `setlist` が空、「セトリ投稿確認」「詳細セトリ投稿なし」を含む、または「画像参照」で始まる行は集計対象外で、公演数にも入れない（判定は `song_names.is_unknown_setlist()`。2026-10-14〜）。全曲カバーの公演のようにセトリが分かっている行は残す。
