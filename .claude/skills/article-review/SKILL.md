@@ -39,7 +39,8 @@ description: note 記事（articles/ 配下）を公開・マージする前に�
 | --- | --- | --- |
 | DISCLAIMER | タイトル直後に冒頭の注意書き（`> ※` で始まる定型の1文）が無い、2回以上ある | style_ai_poppar.md（冒頭の注意書き） |
 | EMBED | 週刊で本文に X の投稿の埋め込み（単独行の URL）が無い、または 8 本を超える | weekly.md（埋め込みの置き方） |
-| NOTE_TABLE / NOTE_HEADING | 表組み、3階層以上の見出し | note の制約（週刊 README） |
+| NOTE_TABLE / NOTE_HEADING | 表組み、`####` 以下の見出し（本文は `##`・`###` の2段まで） | note の制約（週刊 README） |
+| PARAGRAPH / LONG_SENTENCE / QUOTE_DENSITY / PROSE_RUN | 120字を超える段落、60字を超える文が2割超、引用が3つ以上の段落、地の文が450字以上続く箇所 | style_ai_poppar.md（構成の目安） |
 | GROUP_NAME | 「ろりぽっぷ」の「!」が7個でない | CLAUDE.md 表記ルール |
 | EXCLAMATION / KAOMOJI / OTAKU_WORDS | 「!」の連打、顔文字、オタク語彙の回数（1記事合計3回まで） | style_ai_poppar.md |
 | BANNED_WORD | 「地下アイドル」「レア曲」（ERROR）、「リーダー」（WARN。前のグループの経歴なら可） | style_ai_poppar.md（使わない言葉） |
@@ -49,7 +50,7 @@ description: note 記事（articles/ 配下）を公開・マージする前に�
 | SONG_NOTATION | 同じ曲の表記が記事内で揺れている、楽曲一覧との違い | songs/楽曲一覧.md |
 | IMAGE_RIGHTS | pbs.twimg.com / video.twimg.com など twimg.com の画像URLを直リンクしている疑い | style_ai_poppar.md（写真は載せてよいが直リンクは不可・クレジット必須。2026-09-29 改訂） |
 | MISSING_EVENT / DATE_NOT_IN_CSV / EVENT_COUNT | CSV にある公演が記事に無い、記事の公演数が CSV と違う | events/data_event.csv |
-| JARGON / PARAGRAPH / SOURCES / MEMO | 月刊の注釈、段落の長さ、出典節、編集メモ | monthly.md / style / articles README |
+| JARGON / SOURCES / MEMO | 月刊の注釈、出典節、編集メモ | monthly.md / articles README |
 
 引用（「」『』）と URL の中は文体チェックの対象外にしている。メンバーの発言の引用に「？？？」があっても指摘しない。
 

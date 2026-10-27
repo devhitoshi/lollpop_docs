@@ -179,9 +179,10 @@ def check_note_constraints(body, rep):
     table_lines = [i + 1 for i, l in enumerate(lines) if l.strip().startswith('|')]
     if table_lines:
         rep.error('NOTE_TABLE', f"表組みがある（note は表を使えない。箇条書きに直す）: {table_lines[:5]} 行目")
-    deep = [(i + 1, l.strip()[:40]) for i, l in enumerate(lines) if re.match(r'^#{3,}\s', l)]
+    # 本文の見出しは ##（大見出し）と ###（小見出し）の2段まで。# はタイトル（2026-10-27 に読み直し）
+    deep = [(i + 1, l.strip()[:40]) for i, l in enumerate(lines) if re.match(r'^#{4,}\s', l)]
     if deep:
-        rep.error('NOTE_HEADING', f"見出しが3階層以上（note は2階層まで）: " + ', '.join(f"{n}行目「{t}」" for n, t in deep[:5]))
+        rep.error('NOTE_HEADING', f"`####` 以下の見出しがある（note の本文は ## と ### の2段まで）: " + ', '.join(f"{n}行目「{t}」" for n, t in deep[:5]))
 
 
 def check_group_name(plain, rep):
@@ -436,11 +437,70 @@ def check_monotone(plain, rep):
         rep.warn('MONOTONE', f"報告調（〜ました／〜です）が3文続く段落が {len(hits)} つ。出来事は伝聞（〜みたいです）や体言止めを混ぜて語る: 「{hits[0][:40]}…」")
 
 
-def check_structure(body, memo, kind, rep):
-    paras = [p for p in re.split(r'\n\s*\n', body) if p.strip() and not p.lstrip().startswith(('#', '-', '*', '|', '>'))]
-    long_paras = [p for p in paras if count_sentences(p) > 4]
+# 構成の目安（style_ai_poppar.md「構成の目安」。2026-10-27〜）
+PARA_MAX = 120         # 1段落の字数（スマホで約6行）
+SENT_MAX = 60          # 1文の字数
+LONG_SENT_SHARE = 0.2  # 60字を超える文の割合の上限
+QUOTES_PER_PARA = 2    # 1段落の引用の数
+PROSE_RUN_MAX = 450    # 地の文が途切れずに続く字数（スマホで約1画面）
+
+
+def prose_blocks(body):
+    """空行で区切ったブロックを、地の文（True）とそれ以外（見出し・箇条書き・URL・引用・区切り線）に分ける。"""
+    out = []
+    for blk in re.split(r'\n\s*\n', re.sub(r'<!--.*?-->', '', body, flags=re.S)):
+        b = blk.strip()
+        if not b:
+            continue
+        is_prose = not (b.startswith(('#', '-', '*', '|', '>', '【')) or re.match(r'^https?://\S+$', b))
+        out.append((is_prose, b.replace('**', '')))
+    return out
+
+
+def split_sentences(text):
+    """鉤括弧の中の句点では切らずに文に分ける（括弧の中も字数には数える）。"""
+    masked = re.sub(r'「[^「」]*」|『[^『』]*』', lambda m: '「' + 'x' * (len(m.group(0)) - 2) + '」', text)
+    sents, start = [], 0
+    for m in re.finditer(r'[。！？!?]+', masked):
+        sents.append(text[start:m.end()].strip())
+        start = m.end()
+    if text[start:].strip():
+        sents.append(text[start:].strip())
+    return [x for x in sents if len(x) >= 6]
+
+
+def check_structure(body, memo, kind, rep, songs=()):
+    blocks = prose_blocks(body)
+    paras = [b for is_p, b in blocks if is_p]
+    long_paras = [p for p in paras if len(p) > PARA_MAX]
     if long_paras:
-        rep.warn('PARAGRAPH', f"1段落が5文以上の段落が {len(long_paras)} つ（3〜4文まで）: 「{long_paras[0].strip()[:40]}…」")
+        rep.warn('PARAGRAPH', f"{PARA_MAX}字を超える段落が {len(long_paras)} / {len(paras)} 段落（スマホで6行超）: 「{long_paras[0][:40]}…」")
+    sents = [x for p in paras for x in split_sentences(p)]
+    long_sents = [x for x in sents if len(x) > SENT_MAX]
+    if sents and len(long_sents) / len(sents) > LONG_SENT_SHARE:
+        rep.warn('LONG_SENTENCE', f"{SENT_MAX}字を超える文が {len(long_sents)} / {len(sents)} 文（2割まで）。「〜と書いていて、」の所で切る: 「{long_sents[0][:40]}…」")
+    song_set = set(songs)
+
+    def n_quotes(p):
+        return sum(1 for q in re.findall(r'「([^「」]*)」', p) if q not in song_set)
+    dense = [p for p in paras if n_quotes(p) > QUOTES_PER_PARA]
+    if dense:
+        rep.warn('QUOTE_DENSITY', f"引用が {QUOTES_PER_PARA + 1} つ以上の段落が {len(dense)} つ（3つ目の言葉は次の段落へ）: 「{dense[0][:40]}…」")
+    runs, cur, head = [], 0, ''
+    for is_p, b in blocks:
+        if is_p:
+            if cur == 0:
+                head = b[:30]
+            cur += len(b)
+        else:
+            if cur:
+                runs.append((cur, head))
+            cur = 0
+    if cur:
+        runs.append((cur, head))
+    over = [r for r in runs if r[0] >= PROSE_RUN_MAX]
+    if over:
+        rep.warn('PROSE_RUN', f"地の文が {PROSE_RUN_MAX}字以上続く箇所が {len(over)} つ（最長 {max(over)[0]}字。小見出し・カード・箇条書き・区切り線で切る）: 「{max(over)[1]}…」")
     if kind in ('weekly', 'monthly'):
         if not re.search(r'^##\s*出典', body, re.M):
             rep.error('SOURCES', "「## 出典」節が無い")
@@ -484,7 +544,7 @@ def main():
     check_songs(body, songs, rep)
     check_image_rights(body, rep)
     check_events(body, kind, start, end, rep)
-    check_structure(body, memo, kind, rep)
+    check_structure(body, memo, kind, rep, songs)
 
     print(f"記事: {args.article}（種別: {kind}" + (f"、期間: {start}〜{end}" if start else '') + "）")
     for level in ('ERROR', 'WARN', 'INFO'):

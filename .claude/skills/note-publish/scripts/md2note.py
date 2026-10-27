@@ -10,6 +10,8 @@
 - 先頭の `# ` がタイトル。本文には入れない（タイトル欄に別で入れる）
 - HTML コメント（入稿メモ）と、行頭の「編集メモ」以降は落とす（見出しの有無・階層は問わない）
 - `> ` は引用ブロック。全記事共通の注意書きもこれ
+- `##` は大見出し（<h2>）、`###` は小見出し（<h3>）。どちらも note の目次に出る
+- 単独行の `---` は区切り線（<hr>）。本文の末尾に残る `---`（編集メモの手前）は落とす
 - 単独行の URL は <p>URL</p> のまま残す（あとで embedBatch がカードにする）
 - 【画像…】の行は <p> のまま残す（あとで pasteImgAt が画像に差し替える）
 - 【Xポスト埋め込み…】の行は落とす（直後の URL がカードになるので目印は不要）
@@ -75,8 +77,14 @@ def convert(src: str, header_mark: str) -> tuple[str, str]:
     for raw in body:
         l = raw.rstrip()
         s = l.strip()
-        if not s or s == '---':
+        if not s:
             flush_para(); flush_list(); continue
+        if s == '---':
+            # 区切り線。note は <hr> を区切り線として受け付ける（2026-10-27〜。それまでは段落の区切りとして捨てていた）
+            flush_para(); flush_list()
+            if out and out[-1] != '<hr>':
+                out.append('<hr>')
+            continue
         m = re.match(r'^(#{2,3}) (.*)', l)
         if m:
             flush_para(); flush_list()
@@ -103,10 +111,17 @@ def convert(src: str, header_mark: str) -> tuple[str, str]:
         flush_list()
         para.append(s)
     flush_para(); flush_list()
+    # 編集メモの手前の --- は区切り線にしない（本文の末尾に線だけ残るため）
+    while out and out[-1] == '<hr>':
+        out.pop()
     return title, ''.join(out)
 
 
 def main() -> None:
+    # Windows の既定（cp932）だと「‼」や絵文字の出力で落ちるので、UTF-8 に固定する
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, 'reconfigure'):
+            stream.reconfigure(encoding='utf-8')
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('markdown')
     ap.add_argument('--header-mark', default='【画像①: 見出し画像】', help='見出し画像の目印（本文から落とす行）')
