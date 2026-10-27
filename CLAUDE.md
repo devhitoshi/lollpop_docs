@@ -20,7 +20,7 @@
 - **公開済み note の更新**: `.claude/skills/article-refresh`（差分検知→改稿→レビュー→貼り替え手順書。公開 URL と最終同期日は `articles/公開一覧.md`）。
 - **note への投稿・更新（ブラウザ操作）は必ず `.claude/skills/note-publish` の手順に従う。** 原稿の流し込み・カード化・図版・見出し画像・公開済み記事の差し替えまで、実際に踏んだ失敗と回避策が載っている。手探りでやらない。「公開」「更新する」はオーナーの OK をもらってから押す。
 - **セッションの終わり**: `.claude/skills/session-handoff` の手順で、各シリーズ README の「未解決」と CLAUDE.md の進行中セクションを更新してからコミット・push する。
-- **デザイン**: `resources/` のHTMLを触るときは [`design.md`](./design.md)（色・タイポ・バンド構成の正）に従う。実装は `resources/css/style.css`。単一ファイル完結のHTML（セトリ白書・成長戦略）には同じトークン値が転記されている。
+- **デザイン**: ブランド全体（メンバーカラー・ワードマーク・書体の系統・並び順）の正は [`brand.md`](./brand.md)。動画・ゲーム・画像など Docs 以外を作るときもこれに従う。`resources/` のHTMLを触るときは [`design.md`](./design.md)（色・タイポ・バンド構成の正）に従う。実装は `resources/css/style.css`。単一ファイル完結のHTML（セトリ白書・成長戦略）には同じトークン値が転記されている。
 - **手動修正中のファイル**: オーナーが「いま手で直している」と言ったファイル（例: `songs/call_list.md`）は、確定の連絡まで編集も依存もしない。着手前に `git status` で他セッションの未コミット変更を見る。
 
 ## Discord 経由の運用（OpenACP）
