@@ -30,7 +30,8 @@
   };
   const key = (k, code) => ed().dispatchEvent(new KeyboardEvent('keydown', { key: k, code: k, keyCode: code, bubbles: true, cancelable: true }));
   // 目次（TABLE-OF-CONTENTS）は中身が空に見えるので除く。除かないと cleanupEmpty が Backspace で目次を消す（2026-10-15）
-  const isEmpty = e => e.tagName !== 'TABLE-OF-CONTENTS' && !e.innerText.trim() && !e.querySelector('img,iframe') && !e.hasAttribute('embedded-service');
+  // 区切り線（HR）も同じ。除かないと cleanupEmpty が区切り線を全部消す（2026-10-27、週刊 10/20 号で5本消えた）
+  const isEmpty = e => !['TABLE-OF-CONTENTS', 'HR'].includes(e.tagName) && !e.innerText.trim() && !e.querySelector('img,iframe') && !e.hasAttribute('embedded-service');
   const isImageFig = e => e.tagName === 'FIGURE' && e.querySelector('img') && !e.hasAttribute('embedded-service');
 
   const N = {
