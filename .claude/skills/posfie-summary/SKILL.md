@@ -54,7 +54,7 @@ python3 .claude/skills/posfie-summary/scripts/build_material.py \
 - コメントは要所だけ。全部に付けると読み手の目が滑る
 - 文体は [`prompts/write/style_ai_poppar.md`](../../../prompts/write/style_ai_poppar.md)。
   **「地下アイドル」「レア曲」を使わない、`!` は1文に1個、事実に感情を混ぜない、
-  メンバーの写真は貼らない（X の埋め込みのみ）**
+  posfie では写真を別に貼らず、X の埋め込みで見せる**（写真の掲載ルールの正は `style_ai_poppar.md`）
 - **外した投稿は理由とセットで素材 md の末尾に記録する。**同じ判断を毎回やり直さないため
 - 手作業でやりがちな取りこぼし: 同一アカウントの連投（1〜2件に絞る）、
   役職の誤記（現グループに「リーダー」は無い）、メンバーの本名に触れた投稿

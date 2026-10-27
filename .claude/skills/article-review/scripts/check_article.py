@@ -3,7 +3,7 @@
 記事1本を読み、リポジトリの資料と突き合わせて「人（またはエージェント）が判断すべき箇所」を列挙する。
 自動では直さない。判定の根拠になる資料:
 
-- prompts/write/style_ai_poppar.md  … 文体ルール（! の連打、オタク語彙の回数、絵文字）
+- prompts/write/style_ai_poppar.md  … 文体ルール（! の連打、オタク語彙の回数、絵文字、使わない言葉、常套句、言い過ぎ、文末の単調さ）
 - prompts/write/weekly.md / monthly.md … 構成と読者（月刊は愛称の初出に本名、専門用語に注釈）
 - articles/週刊まとめ/README.md     … note の制約（表組み不可・見出し2階層まで）
 - members/members.md                 … 名前・あだ名・担当カラー・卒業メンバー
@@ -34,6 +34,14 @@ JARGON = ['対バン', '特典会', '無銭', 'ワンマン', '生誕祭', 'チ�
 SENSITIVE = ['体調', '病', '療養', '入院', '休養', '運営', '事務所', '不仲', '揉め', '炎上',
              '動員', '売上', '集客', '勢い', '今行かないと', '後悔', '比べ']
 SPECULATION = ['だろう', 'かもしれない', 'と思われる', 'おそらく', '推測', 'はずだ', 'に違いない']
+# 使わない言葉（style_ai_poppar.md 末尾。全媒体で禁止）
+BANNED_WORDS = {'地下アイドル': '「アイドル」にする', 'レア曲': 'コールに触れるなら「コールが独特な曲」'}
+# 前のグループでの経歴として書くことはあるので、こちらは WARN で確認を促す
+CHECK_WORDS = {'リーダー': '現グループに役職は無い。前のグループの経歴として書くなら、そう分かる書き方か'}
+STOCK_PHRASES = ['まとめると', '結論から言うと']
+# 事実の言い過ぎ。データで確かめていれば使ってよいので WARN で確認を促すだけ
+OVERSTATEMENT = ['5人とも', '全員', 'そろって', '毎回', '必ず', 'いつも']
+OTAKU_LIMIT = 3  # 1記事の合計（全シリーズ共通）
 COLOR_EMOJI = {'赤': '❤️', '黄': '💛', '水色': '🩵', '緑': '💚', '白': '🤍', 'ピンク': '🩷', '青': '💙'}
 MEMBER_EMOJI = set(COLOR_EMOJI.values())
 URL_RE = re.compile(r'https?://\S+')
@@ -193,9 +201,20 @@ def loose_song_pattern(song):
     return pat
 
 
+def load_bang_names():
+    """公演名に出てくる「!」付きの語（他グループ名・イベント名。例: るるぱにっく!!）。表記ママなので連打の検査から外す。"""
+    names = set()
+    with open('events/data_event.csv', encoding='utf-8') as f:
+        for row in csv.DictReader(f):
+            names.update(re.findall(r'[^\s『』「」（）()/／・×,、]+[!！‼︎]{2,}', row.get('event', '')))
+    return sorted(names, key=len, reverse=True)
+
+
 def check_style(plain, kind, songs, rep):
-    # 曲名・グループ名の「!」は（表記ゆれも含めて）除外してから連打を探す
+    # 曲名・グループ名・公演名の「!」は（表記ゆれも含めて）除外してから連打を探す
     scrubbed = re.sub(r'ろりぽっぷ[!！‼︎]+', '', plain)
+    for name in load_bang_names():
+        scrubbed = scrubbed.replace(name, '')
     for s in sorted(songs, key=len, reverse=True):
         scrubbed = re.sub(loose_song_pattern(s), '', scrubbed)
     for m in re.finditer(r'[!！]{2,}', scrubbed):
@@ -208,32 +227,31 @@ def check_style(plain, kind, songs, rep):
             rep.warn('KAOMOJI', f"{label} は使わない: …{snippet(scrubbed, m.start())}…")
     counts = {w: plain.count(w) for w in OTAKU_WORDS}
     used = {w: n for w, n in counts.items() if n}
-    if kind == 'monthly':
-        total = sum(used.values())
-        if total > 4:
-            rep.warn('OTAKU_WORDS', f"月刊はオタク語彙を記事全体で3〜4回まで。現在 {total} 回: {used}")
-    else:
-        over = {w: n for w, n in used.items() if n >= 3}
-        if over:
-            rep.warn('OTAKU_WORDS', f"同じオタク語彙を3回以上使っている: {over}")
+    total = sum(used.values())
+    if total > OTAKU_LIMIT:
+        rep.warn('OTAKU_WORDS', f"オタク語彙は1記事に合計{OTAKU_LIMIT}回まで。現在 {total} 回: {used}")
     if used:
         rep.info('OTAKU_WORDS', f"オタク語彙の使用回数: {used}")
 
 
 def check_members(body, plain, kind, members, rep):
     emoji_alt = '(?:' + '|'.join(re.escape(e) for e in sorted(MEMBER_EMOJI, key=len, reverse=True)) + ')'
-    norm = lambda e: e.replace('\ufe0f', '')
+    # 2026-10-27〜 名前のあとに絵文字を付けない。引用の中は原文のままなので plain で見る。
+    # 愛称が重なる（まなてぃー／まな）ので、絵文字の位置で重複を除いて1記事1件にまとめる
+    emoji_hits = {}
     for mem in members:
         for alias in sorted(mem['aliases'], key=len, reverse=True):
             if not alias:
                 continue
-            for m in re.finditer(re.escape(alias) + r'\s*(' + emoji_alt + ')', body):
-                if mem['emoji'] and norm(m.group(1)) != norm(mem['emoji']):
-                    rep.error('MEMBER_EMOJI', f"{mem['name']} の担当カラーは {mem['emoji']}: …{snippet(body, m.start())}…")
+            for m in re.finditer(re.escape(alias) + r'\s*(' + emoji_alt + ')', plain):
+                emoji_hits.setdefault(m.start(1), m.start())
         if mem['graduated']:
             hits = [a for a in mem['aliases'] if a and len(a) >= 3 and a in plain]
             if hits:
                 rep.info('GRADUATED', f"卒業メンバー {mem['name']} への言及あり（在籍時の事実のみか、卒業後の活動・私生活に踏み込んでいないか読んで確認）")
+    if emoji_hits:
+        first = min(emoji_hits.values())
+        rep.warn('MEMBER_EMOJI', f"名前のあとに絵文字を付けない: {len(emoji_hits)} か所（初出 …{snippet(plain, first)}…）")
     if kind == 'monthly':
         for mem in members:
             if mem['graduated'] or not mem['nickname']:
@@ -372,6 +390,52 @@ def check_embeds(body, kind, rep):
         rep.info('EMBED', f"埋め込み {n} 本")
 
 
+def check_wording(plain, rep):
+    """使わない言葉・常套句・言い過ぎ（style_ai_poppar.md）。引用の中は見ない。"""
+    for w, why in BANNED_WORDS.items():
+        for m in re.finditer(re.escape(w), plain):
+            rep.error('BANNED_WORD', f"「{w}」は使わない（{why}）: …{snippet(plain, m.start())}…")
+    for w, why in CHECK_WORDS.items():
+        for m in re.finditer(re.escape(w), plain):
+            rep.warn('BANNED_WORD', f"「{w}」: {why}: …{snippet(plain, m.start())}…")
+    for w in STOCK_PHRASES:
+        for m in re.finditer(re.escape(w), plain):
+            rep.warn('STOCK_PHRASE', f"「{w}」で書き出さない。要点そのものから書く: …{snippet(plain, m.start())}…")
+    for w in OVERSTATEMENT:
+        for m in re.finditer(re.escape(w), plain):
+            rep.warn('OVERSTATEMENT', f"「{w}」: データで確かめた範囲か（1人の投稿を全員に広げていないか）: …{snippet(plain, m.start())}…")
+
+
+# 文末の分類。伝聞・語りかけで終わる文は「報告調」に数えない
+# 「〜と書いています」「〜と言っていました」は誰の投稿かを示す言い方なので、報告調に数えない
+HEARSAY_END = re.compile(r'((みたい|そう|らしい|とのこと|よう|ん)(です|でした)?|と(書い|言っ)て(い)?(ます|ました)|かも|ね|よ|な)$')
+REPORT_END = re.compile(r'(ました|でした|います|ます|です|た|だ)$')
+
+
+def report_run(paragraph):
+    """段落の中で、報告調（〜ました／〜です／〜た）の文が続く最大の数。体言止め・伝聞・問いで途切れる。"""
+    best = cur = 0
+    for sent in re.split(r'(?<=[。！!？?])', re.sub(r'。(?=[』」）\)])', '', paragraph)):
+        sent = re.sub(r'[。！!？?\s]+$', '', sent.strip())
+        if len(sent) < 6:
+            continue
+        if REPORT_END.search(sent) and not HEARSAY_END.search(sent):
+            cur += 1
+            best = max(best, cur)
+        else:
+            cur = 0
+    return best
+
+
+def check_monotone(plain, rep):
+    """報告調が3文続く段落（2026-10-27 オーナー指摘「てるてる坊主を作って待った」のような報告調が不自然）。"""
+    hits = [para.strip() for para in re.split(r'\n\s*\n', plain)
+            if para.strip() and not para.lstrip().startswith(('#', '-', '*', '|', '>', 'http', '<!--'))
+            and report_run(para) >= 3]
+    if hits:
+        rep.warn('MONOTONE', f"報告調（〜ました／〜です）が3文続く段落が {len(hits)} つ。出来事は伝聞（〜みたいです）や体言止めを混ぜて語る: 「{hits[0][:40]}…」")
+
+
 def check_structure(body, memo, kind, rep):
     paras = [p for p in re.split(r'\n\s*\n', body) if p.strip() and not p.lstrip().startswith(('#', '-', '*', '|', '>'))]
     long_paras = [p for p in paras if count_sentences(p) > 4]
@@ -390,6 +454,9 @@ def check_structure(body, memo, kind, rep):
 
 
 def main():
+    # Windows の既定（cp932）だと絵文字の出力で落ちるので、UTF-8 に固定する
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8')
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('article')
     p.add_argument('--type', choices=['weekly', 'monthly', 'lyrics', 'generic'], help='省略時はパスから判定')
@@ -412,6 +479,8 @@ def main():
     check_style(plain, kind, songs, rep)
     check_members(body, plain, kind, members, rep)
     check_content(plain, kind, rep)
+    check_wording(plain, rep)
+    check_monotone(plain, rep)
     check_songs(body, songs, rep)
     check_image_rights(body, rep)
     check_events(body, kind, start, end, rep)

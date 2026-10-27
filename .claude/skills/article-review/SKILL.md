@@ -41,8 +41,10 @@ description: note 記事（articles/ 配下）を公開・マージする前に�
 | EMBED | 週刊で本文に X の投稿の埋め込み（単独行の URL）が無い、または 8 本を超える | weekly.md（埋め込みの置き方） |
 | NOTE_TABLE / NOTE_HEADING | 表組み、3階層以上の見出し | note の制約（週刊 README） |
 | GROUP_NAME | 「ろりぽっぷ」の「!」が7個でない | CLAUDE.md 表記ルール |
-| EXCLAMATION / KAOMOJI / OTAKU_WORDS | 「!」の連打、顔文字、オタク語彙の回数 | style_ai_poppar.md |
-| MEMBER_EMOJI / NICKNAME_FIRST | 担当カラーの絵文字違い、月刊で愛称の初出に本名が無い | members.md / monthly.md |
+| EXCLAMATION / KAOMOJI / OTAKU_WORDS | 「!」の連打、顔文字、オタク語彙の回数（1記事合計3回まで） | style_ai_poppar.md |
+| BANNED_WORD | 「地下アイドル」「レア曲」（ERROR）、「リーダー」（WARN。前のグループの経歴なら可） | style_ai_poppar.md（使わない言葉） |
+| STOCK_PHRASE / OVERSTATEMENT / MONOTONE | 「まとめると」「結論から言うと」、言い過ぎの語（5人とも・毎回など。要確認）、同じ文末が3文続く | style_ai_poppar.md（型で書いた感じ／事実の扱い／出来事を語る文の温度） |
+| MEMBER_EMOJI / NICKNAME_FIRST | メンバー名のあとに絵文字がある（2026-10-27〜付けない）、月刊で愛称の初出に本名が無い | style_ai_poppar.md / monthly.md |
 | GRADUATED / SENSITIVE / SPECULATION | 卒業メンバー・数字・運営・体調・推測表現への言及（要判断） | style_ai_poppar.md / CLAUDE.md |
 | SONG_NOTATION | 同じ曲の表記が記事内で揺れている、楽曲一覧との違い | songs/楽曲一覧.md |
 | IMAGE_RIGHTS | pbs.twimg.com / video.twimg.com など twimg.com の画像URLを直リンクしている疑い | style_ai_poppar.md（写真は載せてよいが直リンクは不可・クレジット必須。2026-09-29 改訂） |

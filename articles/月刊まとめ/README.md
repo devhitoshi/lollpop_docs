@@ -4,7 +4,7 @@
 
 ## 運用方針
 
-- 構成は [`prompts/write/monthly.md`](../../prompts/write/monthly.md)、文体は [`prompts/write/style_ai_poppar.md`](../../prompts/write/style_ai_poppar.md)（ただしオタク度は一段下げる）に従う。
+- 構成は [`prompts/write/monthly.md`](../../prompts/write/monthly.md)、文体は [`prompts/write/style_ai_poppar.md`](../../prompts/write/style_ai_poppar.md)（週刊より一段落ち着かせる。`style_ai_poppar.md`「シリーズ別の温度」）に従う。
 - 読者は「ろりぽっぷをほとんど知らない人」。note の制約により表組みは使わず、見出しは2階層まで。
 - 記事末尾の編集メモ（`---` 以降）は note に載せない。
 
